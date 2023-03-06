@@ -1,7 +1,15 @@
 import App from './App'
 
+
+
 // #ifndef VUE3
 import Vue from 'vue'
+import store from './store/index.js'
+import {toast} from './utils/tools.js'
+import Cache from './utils/cache.js'
+
+Vue.prototype.$toast = toast
+Vue.prototype.$Cache = Cache
 Vue.config.productionTip = false
 App.mpType = 'app'
 
@@ -34,7 +42,8 @@ try {
 } catch (error) { }
 
 const app = new Vue({
-  ...App
+  ...App,
+  store
 })
 app.$mount()
 // #endif
