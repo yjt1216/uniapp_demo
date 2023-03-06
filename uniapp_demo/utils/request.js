@@ -1,3 +1,9 @@
+
+/**
+ @example 
+  https://github.com/ponjs/uni-ajax/tree/dev/example
+ */
+
 import ajax from '@/uni_modules/u-ajax'
 
 const service = axios.create({
