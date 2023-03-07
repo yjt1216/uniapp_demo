@@ -7,11 +7,15 @@ import Vue from 'vue'
 import store from './store/index.js'
 import {toast} from './utils/tools.js'
 import Cache from './utils/cache.js'
+import MescrollBody from "@/components/mescroll-uni/mescroll-body.vue"
 
 Vue.prototype.$toast = toast
 Vue.prototype.$Cache = Cache
 Vue.config.productionTip = false
+
+Vue.component('mescroll-body', MescrollBody)
 App.mpType = 'app'
+
 
 try {
   function isPromise(obj) {
