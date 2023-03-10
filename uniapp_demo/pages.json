@@ -11,6 +11,12 @@
 			"style": {
 				"navigationBarTitleText": "用户"
 			}
+		},
+		{
+			"path": "pages/text_auto/text_auto",
+			"style": {
+				"navigationBarTitleText": "文本"
+			}
 		}
 	],
 	"tabBar": {
@@ -29,8 +35,20 @@
 				"iconPath": "/static/images/tab_user.png",
 				"selectedIconPath": "/static/images/tab_user_s.png",
 				"text": "我的"
+			},
+			{
+				"pagePath": "pages/text_auto/text_auto",
+				"iconPath": "/static/images/tab_home.png",
+				"selectedIconPath": "/static/images/tab_home_s.png",
+				"text": "文本"
 			}
-		]
+		],
+		"midButton": {
+		    "iconPath": "static/images/icon_wechat.png",
+		    "text": "维修上报",
+		    "height": "70px",
+		    "iconWidth": "44px"
+		}
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
