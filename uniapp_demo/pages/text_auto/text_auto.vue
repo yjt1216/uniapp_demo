@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="Express">
+		<!-- <view class="Express">
 			<view class="info">
 				<view :class="{hide:!iSinfo}">
 					唐朝，可谓歌舞盛华，乐文辉煌。与此同时，女伎们的身价也推向了巅峰。青楼之市火爆，歌舞伎成了热门之业。沦落为青楼女子虽不光彩，但依然有很多人选择这一职业，在这些女子中，琴棋书画兼备的也大有人在长安城内，有一青楼，名为“玉满楼”，别名“玉月满花”，此中之女子皆是琴棋书画兼备，相传呐，那都是卖艺不卖身的存在。我们的故事就要从这玉满楼开始说起。在长安城内，有一青楼，名为“玉满楼”，别名“玉月满花”，此中之女子皆是琴棋书画兼备，相传呐，那都是卖艺不卖身的存在。我们的故事就要从这玉满楼开始说起。			
@@ -8,7 +8,21 @@
 				<text @tap="showinfo" v-if="!iSinfo">展开</text>
 			</view>
 			<text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text>
+		</view> -->
+		
+		
+		<view class="Express">
+			<view class="info">
+				<view :class="{hide:!iSinfo}">
+					唐朝，可谓歌舞盛华，乐文辉煌。与此同时，女伎们的身价也推向了巅峰。青楼之市火爆，歌舞伎成了热门之业。沦落为青楼女子虽不光彩，但依然有很多人选择这一职业，在这些女子中，琴棋书画兼备的也大有人在长安城内，有一青楼，名为“玉满楼”，别名“玉月满花”，此中之女子皆是琴棋书画兼备，相传呐，那都是卖艺不卖身的存在。我们的故事就要从这玉满楼开始说起。在长安城内，有一青楼，名为“玉满楼”，别名“玉月满花”，此中之女子皆是琴棋书画兼备，相传呐，那都是卖艺不卖身的存在。我们的故事就要从这玉满楼开始说起。		
+				</view>
+				<!-- <text @tap="showinfo" v-if="!iSinfo">展开</text> -->
+			</view>
+			<!-- <text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text> -->
+			<text @tap="showinfo"  class="hidebtn">{{autoShowText}}</text>
 		</view>
+		
+		
 	</view>
 </template>
 
@@ -16,12 +30,19 @@
 	export default {
 		data() {
 			return {
-				iSinfo: false
+				iSinfo: false,
+				autoShowText:'展开'
 			}
 		},
 		methods: {
 			showinfo() {
 				this.iSinfo = !this.iSinfo
+				if(this.iSinfo){
+					this.autoShowText = '收起'
+				}else {
+					this.autoShowText = '展开'
+				}
+				
 			}
 		}
 	}

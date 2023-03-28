@@ -8,6 +8,10 @@ const state = {
 	token: Cache.get(TOKEN) || null
 }
 
+const actions = {
+	
+}
+
 export default {
 	state
 }

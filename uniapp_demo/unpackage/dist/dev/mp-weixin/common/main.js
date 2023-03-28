@@ -25,7 +25,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 wx.__webpack_require_UNI_MP_PLUGIN__ = __webpack_require__;
 var MescrollBody = function MescrollBody() {
   Promise.all(/*! require.ensure | components/mescroll-uni/mescroll-body */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/mescroll-uni/mescroll-body")]).then((function () {
-    return resolve(__webpack_require__(/*! @/components/mescroll-uni/mescroll-body.vue */ 55));
+    return resolve(__webpack_require__(/*! @/components/mescroll-uni/mescroll-body.vue */ 63));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.prototype.$toast = _tools.toast;
