@@ -5,6 +5,13 @@
 			<text class="title">{{title}}</text>
 		</view>
 		<view>{{addStr}}</view>
+		<view class="now-city">
+		    <view class="city-tip">当前城市:</view>
+		    <view class="select-pos">
+		        <view class="re-pos" @click="openLocationSetting">重新定位</view>
+		    </view>
+			
+		</view>
 	</view>
 </template>
 
@@ -163,18 +170,63 @@
 						}
 					}
 				})
-			}
+			},
+			// 获取用户定位授权
+			getUserLocation() {
+				wx.showModal({
+				  title: '提示！',
+				  confirmText: '去设置',
+				  showCancel: false,
+				  content: e,
+				  success: function(res) {
+				    if (res.confirm) {
+				      this.openLocationSetting()
+				    }
+				  }
+				})
+				
+				// uni.authorize({
+				// 	scope:'scope.userLocation',
+				// 	success() {
+				// 		console.log('用户授权定位')
+				// 	},
+				// 	fail() {
+				// 		console.log('用户拒绝授权')
+				// 	}
+					
+				// })
+			},
+			  openLocationSetting () {
+			    const _this = this
+			    const setting = 'scope.userLocation'
+			    wx.openSetting({
+			      success (res) {
+			        console.log('原生设置页回调->', res)
+			        const { authSetting } = res || {}
+			        // 已开启位置授权
+			        if (authSetting.hasOwnProperty(setting) && authSetting[setting]) {
+			          console.log('已成功开启位置服务->But这里没有返回任何位置信息相关信息')
+			        }
+			      },
+			      fail () {
+			        toast('获取位置信息失败，按“右上菜单 - 关于\n - 右上菜单 - 设置 - 位置信息”授权')
+			      }
+			    })
+			  }
+			
+			
 		}
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 	}
+	
 
 	.logo {
 		height: 200rpx;
@@ -194,6 +246,44 @@
 		font-size: 36rpx;
 		color: #8f8f94;
 	}
+	
+	.now-city{
+	    background-color: #FFFFFF;
+	}
+	.city-tip{
+	    margin-top: 50rpx;
+	    font-size: 30rpx;
+	    margin-left: 20rpx;
+	    margin-bottom: 10rpx;
+	    color: #707070;
+	    font-weight: bold;
+	}
+	.now-pos-btn{
+	    background-color: #FA800A;
+	    border-radius: 40rpx;
+	    text-align: center;
+	    padding-top: 10rpx;
+	    padding-left: 20rpx;
+	    padding-right: 20rpx;
+	    padding-bottom: 10rpx;
+	    margin: 10rpx;
+	    color: #FFFFFF;
+	    font-size: 25rpx;
+	}
+	.select-pos{
+	    display: flex;
+	    flex-direction: row;
+	    justify-content: space-between;
+	    margin: 10rpx 20rpx 30rpx 20rpx;
+	}
+	.re-pos{
+	    text-align: center;
+	    width: 200rpx;
+	    font-size: 30rpx;
+	    align-self: center;
+	}
+	
+	
 </style>
 
  

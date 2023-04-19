@@ -1,5 +1,5 @@
 import App from './App'
-
+import hxNavbar from "@/components/hx-navbar/hx-navbar.nvue"
 
 
 // #ifndef VUE3
@@ -14,6 +14,7 @@ Vue.prototype.$Cache = Cache
 Vue.config.productionTip = false
 
 Vue.component('mescroll-body', MescrollBody)
+Vue.component('hx-navbar',hxNavbar)
 App.mpType = 'app'
 
 

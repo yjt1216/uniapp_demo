@@ -9,7 +9,11 @@
 			</view>
 			<text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text>
 		</view> -->
+		<hx-navbar :config="config"></hx-navbar>
 		
+		<!-- <ljs-top
+			title="textAuto" backgroundColor="linear-gradient(to top right, #CDDC39, #8BC34A, #FFEB3B)">
+		</ljs-top> -->
 		
 		<view class="Express">
 			<view class="info">
@@ -31,7 +35,12 @@
 		data() {
 			return {
 				iSinfo: false,
-				autoShowText:'展开'
+				autoShowText:'展开',
+				config:{
+					title: '这里是新疆',
+					color: '#ffffff',
+					backgroundColor: [1,['#a9a1ff','#6970ff','#ff55ff','#ff9999']]
+				}
 			}
 		},
 		methods: {

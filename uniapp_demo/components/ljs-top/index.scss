@@ -1,0 +1,73 @@
+.ljs-top{
+	width: 750upx;
+	.topZw{
+		width: 750upx;
+		.comStatus{
+			width: 750upx;
+			position: relative;
+		}
+		.topMain{
+			width: 750upx;
+		}
+	}
+	.top{
+		width: 750upx;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 1000;
+		.comStatus{
+			width: 750upx;
+			position: relative;
+		}
+		.topMain{
+			width: 750upx;
+			position: relative;
+			/* #ifdef APP-PLUS-NVUE || APP-NVUE */
+			display: flex;
+			align-items: center;
+			/* #endif */
+			.back{
+				width: 60upx;
+				height: 60upx;
+				box-sizing: border-box;
+				padding: 10upx;
+				position: absolute;
+				top: 10upx;
+				left: 20upx;
+				z-index: 2;
+				.img{
+					width: 40upx;
+					height: 40upx;
+					display: block;
+				}
+			}
+			.title{
+				flex: 1;
+				height: 58upx;
+				line-height: 58upx;
+				text-align: center;
+				/* #ifndef APP-PLUS-NVUE || APP-NVUE */
+				position: absolute;
+				top: 11upx;
+				left: 50%;
+				transform: translate(-50%, 0%);
+				z-index: 1;
+				/* #endif */
+				color: #FFF;
+				font-size: 32upx;
+			}
+		}
+	}
+	.yuanhu{
+		width: 750upx;
+		height: 30upx;
+		border-radius: 30upx 30upx 0 0;
+		background-color: #FFF;
+		opacity: 0.1;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		z-index: 1001;
+	}
+}

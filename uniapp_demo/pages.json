@@ -15,7 +15,20 @@
 		{
 			"path": "pages/text_auto/text_auto",
 			"style": {
-				"navigationBarTitleText": "文本"
+				// "navigationBarTitleText": "文本"
+				"navigationStyle": "custom" 
+			}
+		},
+		{
+			"path": "pages/message/message",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/server_explan/server_explan",
+			"style": {
+				"navigationBarTitleText": "服务协议"
 			}
 		}
 	],
@@ -37,10 +50,16 @@
 				"text": "我的"
 			},
 			{
-				"pagePath": "pages/text_auto/text_auto",
+				"pagePath": "pages/server_explan/server_explan",
 				"iconPath": "/static/images/tab_home.png",
 				"selectedIconPath": "/static/images/tab_home_s.png",
 				"text": "文本"
+			},
+			{
+				"pagePath": "pages/message/message",
+				"iconPath": "/static/images/tab_home.png",
+				"selectedIconPath": "/static/images/tab_home_s.png",
+				"text": "消息"
 			}
 		],
 		"midButton": {
