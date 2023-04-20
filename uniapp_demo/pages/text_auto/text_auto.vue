@@ -9,11 +9,11 @@
 			</view>
 			<text @tap="showinfo" v-if="iSinfo" class="hidebtn">收起</text>
 		</view> -->
-		<hx-navbar :config="config"></hx-navbar>
+		<!-- <hx-navbar :config="config"></hx-navbar> -->
 		
-		<!-- <ljs-top
+		<ljs-top
 			title="textAuto" backgroundColor="linear-gradient(to top right, #CDDC39, #8BC34A, #FFEB3B)">
-		</ljs-top> -->
+		</ljs-top>
 		
 		<view class="Express">
 			<view class="info">

@@ -80,5 +80,13 @@
     "uniStatistics" : {
         "enable" : false
     },
-    "vueVersion" : "2"
+    "vueVersion" : "2",
+	"h5": {
+		"router": {
+			"base": "/mobile",
+			"mode": "history"
+		},
+		"title": "加载中"
+		
+	}
 }

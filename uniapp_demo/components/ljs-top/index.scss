@@ -1,68 +1,68 @@
 .ljs-top{
-	width: 750upx;
+	width: 750rpx;
 	.topZw{
-		width: 750upx;
+		width: 750rpx;
 		.comStatus{
-			width: 750upx;
+			width: 750rpx;
 			position: relative;
 		}
 		.topMain{
-			width: 750upx;
+			width: 750rpx;
 		}
 	}
 	.top{
-		width: 750upx;
+		width: 750rpx;
 		position: fixed;
 		top: 0;
 		left: 0;
 		z-index: 1000;
 		.comStatus{
-			width: 750upx;
+			width: 750rpx;
 			position: relative;
 		}
 		.topMain{
-			width: 750upx;
+			width: 750rpx;
 			position: relative;
 			/* #ifdef APP-PLUS-NVUE || APP-NVUE */
 			display: flex;
 			align-items: center;
 			/* #endif */
 			.back{
-				width: 60upx;
-				height: 60upx;
+				width: 60rpx;
+				height: 60rpx;
 				box-sizing: border-box;
-				padding: 10upx;
+				padding: 10rpx;
 				position: absolute;
-				top: 10upx;
-				left: 20upx;
+				top: 10rpx;
+				left: 20rpx;
 				z-index: 2;
 				.img{
-					width: 40upx;
-					height: 40upx;
+					width: 40rpx;
+					height: 40rpx;
 					display: block;
 				}
 			}
 			.title{
 				flex: 1;
-				height: 58upx;
-				line-height: 58upx;
+				height: 58rpx;
+				line-height: 58rpx;
 				text-align: center;
 				/* #ifndef APP-PLUS-NVUE || APP-NVUE */
 				position: absolute;
-				top: 11upx;
+				top: 11rpx;
 				left: 50%;
 				transform: translate(-50%, 0%);
 				z-index: 1;
 				/* #endif */
 				color: #FFF;
-				font-size: 32upx;
+				font-size: 32rpx;
 			}
 		}
 	}
 	.yuanhu{
-		width: 750upx;
-		height: 30upx;
-		border-radius: 30upx 30upx 0 0;
+		width: 750rpx;
+		height: 30rpx;
+		border-radius: 30rpx 30rpx 0 0;
 		background-color: #FFF;
 		opacity: 0.1;
 		position: absolute;

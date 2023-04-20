@@ -9,7 +9,7 @@
 		{
 			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "用户"
+				"navigationStyle": "custom" 
 			}
 		},
 		{
@@ -29,6 +29,18 @@
 			"path": "pages/server_explan/server_explan",
 			"style": {
 				"navigationBarTitleText": "服务协议"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationStyle": "custom"
 			}
 		}
 	],
