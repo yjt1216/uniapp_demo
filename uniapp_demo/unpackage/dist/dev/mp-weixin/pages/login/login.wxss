@@ -1,41 +1,87 @@
-
-page{ background: #fff;
+.loginWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.login_img{ width: 100%; height: auto; margin-top: 90rpx;
+.loginWrap .imgWrap {
+  margin-top: 50rpx;
+  text-align: center;
 }
-.login_img image{ width: 170rpx; height: 170rpx; display: block; margin: 0px auto; border-radius: 50%;
+.loginWrap .sms-login-form {
+  margin-top: 50rpx;
+  width: 100%;
+  padding: 30rpx;
 }
-.login_from{ width: 100%; height: auto; box-sizing: border-box; padding: 20rpx 8%;
+.loginWrap .sms-login-form .loginbtn {
+  margin: 20rpx;
+  margin-top: 60rpx;
+  background: #2CA800;
+  color: #fff;
+  font-size: 30rpx;
 }
-.login_from_input{ width: 100%; height:auto; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px #eee solid; padding: 40rpx 0px; margin: 0px auto;
+.loginWrap .sms-login-form .uni-form-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1rpx solid #DCDCDC;
+  padding: 10rpx 30rpx;
+  margin: 20rpx;
 }
-.login_from_name{ width: 20%;
+.loginWrap .sms-login-form .uni-form-item u-input {
+  flex: 1;
 }
-.login_from_fun{ width: 80%; display: flex; flex-direction: row; justify-content: flex-end; align-items: center;
+.loginWrap .account-login-form {
+  margin-top: 50rpx;
+  width: 100%;
+  padding: 30rpx;
 }
-.login_from_fun input{ width: 100%; text-align: left; font-size: 14px;
+.loginWrap .account-login-form .uni-form-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1rpx solid #DCDCDC;
+  padding: 10rpx 30rpx;
+  margin: 20rpx;
 }
-.login_from_dl{ width: 100%; height: 50px; line-height: 50px; margin-top: 150rpx;
+.loginWrap .account-login-form .uni-form-item u-input {
+  flex: 1;
 }
-.login_from_dl button{ width: 100%; height: 50px; line-height: 50px; background: #FF3B00; color: #fff; border-radius: 50px;
+.loginWrap .account-login-form .uni-form-item .forgetText {
+  color: #C8C7CC;
 }
-.logo_xieyi{ width: 100%; height: 40px; line-height: 40px; display: flex; flex-direction: row; margin-top: 30rpx; align-items: center; color: #444; font-size: 14px; justify-content: center;
+.loginWrap .account-login-form .loginbtn {
+  margin: 20rpx;
+  margin-top: 60rpx;
+  background: #2CA800;
+  color: #fff;
+  font-size: 30rpx;
 }
-.logo_xieyi label{ font-size: 18px; margin-right: 1%; display: block; width: 15px; height: 15px;
+.loginWrap .action {
+  font-size: 28rpx;
 }
-.cuIcon-squarecheckfill{ color: #FF3B00;
+.loginWrap .wechatLogin {
+  margin-top: 60rpx;
+  font-size: 28rpx;
 }
-.logo_text text{ color: #FF3B00;
+.loginWrap .wechatLogin text {
+  color: #CCCCCC;
 }
-.getyzm{ width: 60%; display: flex; flex-direction: row; justify-content: flex-end; color: #FF3B00;
+.loginWrap .wechatLogin .wechatLoginBtn {
+  margin-top: 20rpx;
+  border: none;
+  width: 90rpx;
+  height: 90rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.cuicon{ font-size: 18px;
+.loginWrap .wechatLogin .wechatLoginBtn::after {
+  border: none;
 }
-.regFrom_tom_yzlabel{ width: 60%; text-align: right;
+.loginWrap .wechatLogin .logo-login {
+  width: 90rpx;
+  height: 90rpx;
 }
-.cuIcon-squarecheckfill{ background: #FF3B00; position: relative; border: 2px #ccc solid; box-sizing: border-box; border-radius: 3px;
-}
-.cuIcon-square{ background: #fff; border: 2px #ccc solid; box-sizing: border-box; border-radius: 3px;
-}
-
 

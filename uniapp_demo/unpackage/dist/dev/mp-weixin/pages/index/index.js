@@ -169,7 +169,7 @@ var _default = {
     };
   },
   onReady: function onReady() {
-    this.getCity();
+    // this.getCity()
   },
   methods: {
     getCity: function getCity() {

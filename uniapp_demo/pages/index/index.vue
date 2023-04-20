@@ -1,17 +1,17 @@
 <template>
 	<view class="content">
 		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
+		<!-- <view class="text-area">
 			<text class="title">{{title}}</text>
-		</view>
-		<view>{{addStr}}</view>
-		<view class="now-city">
+		</view> -->
+		<!-- <view>{{addStr}}</view> -->
+		<!-- <view class="now-city">
 		    <view class="city-tip">当前城市:</view>
 		    <view class="select-pos">
 		        <view class="re-pos" @click="openLocationSetting">重新定位</view>
 		    </view>
 			
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -27,7 +27,7 @@
 			}
 		},
 		onReady() {
-			this.getCity()
+			// this.getCity()
 		},
 		methods: {
 			getCity() {

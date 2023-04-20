@@ -1,173 +1,274 @@
-
 <template>
-	<view class="content">
-		<ljs-top
-			title="登录" backgroundColor="linear-gradient(to top right, #CDDC39, #8BC34A, #FFEB3B)">
-		</ljs-top>
+	<view class="loginWrap ">
 		
-		<view class="login_from">
-			
-			<view class="login_from_input">
-				<view class="login_from_name">手机号</view>
-				<view class="login_from_fun"><input type="text" placeholder="请输入手机号码"></view>
+		<nav-bar title="登录" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
+		
+		<view class="imgWrap">
+			<image class="logo" style="width: 100rpx;height: 100rpx;" src="../../static/logo.png" mode=""></image>
+		</view>
+		<!-- 账号密码登录 -->
+		<form v-if="loginWay == '短信验证登录'" class="account-login-form" @submit="formSubmit">
+			<view class="uni-form-item uni-column">
+				<u-input placeholder="请输入登录账号" v-model="value" type="number" clearable />
 			</view>
-
-			<view class="login_from_input">
-				<view class="login_from_name">密码</view>
-				<view class="login_from_fun"><input type="digit" password="true" placeholder="请输入登录密码"></view>
+			<view class="uni-form-item uni-column">
+				<u-input v-model="value" type="password"  password-icon="true" />
+				<text class="forgetText">忘记密码</text>
 			</view>
-
-			<view class="login_from_input">
-				<view class="login_from_name">验证码</view>
-				<view class="login_from_fun">
-					<input style="width: 40%; text-align: left" type="digit" maxlength="6" placeholder="验证码">
-					<label class="regFrom_tom_yzlabel" :style="{ color : QzyzmStare?'#cccccc':'#2ebbfe'}" @click="Qzyzm">{{Qztime}}{{Qztext}}</label>
-				</view>
+			<button form-type="submit" class="loginbtn" type="default">登录</button>
+		</form>
+		
+		<!-- 短信验证登录 -->
+		<form class="sms-login-form" v-if="loginWay == '账号密码登录'"  @submit="formSubmit">
+			<view class="uni-form-item uni-column">
+				<u-input placeholder="请输入登录账号" v-model="value" type="number" clearable />
 			</view>
-
-			<view class="login_from_input">
-				<view class="login_from_name">邀请码</view>
-				<view class="login_from_fun">
-					<input type="text" placeholder="请输入邀请码">
-					<label class="cuIcon-scan cuicon"></label>
-				</view>
+			<view class="uni-form-item uni-column">
+				<u-input placeholder="请输入验证码" v-model="value" type="number" />
 			</view>
-			
-			<!-- 地区选择 start 如需下拉选择请引入插件 https://ext.dcloud.net.cn/plugin?id=1111	 -->
-			<view class="login_from_input" @tap="handleTap('picker3')">
-				<view class="login_from_name">所属地区</view>
-				<view class="login_from_fun">
-					<input type="text" disabled="true" :value="label3" style="text-align: right;">
-					<label class="cuIcon-right cuicon"></label>
-				</view>
-				<lb-picker ref="picker3" v-model="value3" mode="multiSelector" :list="list1" :level="3"
-					:dataset="{ name: 'label3' }" @change="handleChange" @confirm="handleConfirm" @cancel="handleCancel">
-				</lb-picker>
-			</view>
-			<!-- 地区选择 end	 -->
-			
-			<view class="login_from_dl">
-				<button @click="denglu">注册</button>
-			</view>
-			
-			<view class="logo_xieyi">
-				<label @click="moutcl" :class="gouxSta?'cuIcon-squarecheckfill':'cuIcon-square'"></label>
-				<view class="logo_text">请勾选并阅读<text>《注册协议》</text>及<text>《隐私协议》</text></view>
-			</view>
-			
+			<button form-type="submit" class="loginbtn" type="default">登录</button>
+		</form>
+		
+		
+		
+		<view class="action center">
+			<text @click="changeLoginWay" style="color: #71B6F7;">{{loginWay}}</text>
+		</view>
+		<!-- 社交账号登录 -->
+		<view class="wechatLogin center" >
+			<text>————社交账号登录————</text>
+			<button class="wechatLoginBtn" open-type="getUserInfo"  @getuserinfo="wechatLogin" >
+				<image class="logo-login" :src="'../../static/images/icon_wechat.png'"
+				    @error="imageError"></image>
+			</button>
 		</view>
 		
 	</view>
 </template>
+ 
 <script>
-	
-   export default {
-
-	   data(){
-			return {
-				gouxSta:false,
-				Qztime:'',
-				QzyzmStare:false,
-				Qztext:'获取验证码'
+	export default{
+		data(){
+			return{
+				form:{
+					name:''
+				},
+				value: '',
+				loginWay: '短信验证登录',
+				seconds: 60,
+				tips: ''
 			}
 		},
-		onLoad(){
+		methods:{
+			//登录提交
+			formSubmit(){
+				console.log("页面跳转")
 			
-		},
-		methods: {
-			
-			moutcl(){
-				if( this.gouxSta == false){
-					this.gouxSta = true
-				}else{
-					this.gouxSta = false
-				}
 			},
-			
-			denglu(){
-				if( this.gouxSta == false){
-					uni.showToast({
-						"title":"请阅读并勾选用户协议",
-						"icon":'none'
-					})				
-				}else{
-					uni.showToast({
-						"title":"账号不存在",
-						"icon":'none'
+			//微信登录
+			wechatLogin(){		
+				let _that = this;
+				uni.getSetting({
+				 success(res) {
+					console.log("授权：",res);
+				   if (!res.authSetting['scope.userInfo']) {
+						//这里调用授权
+						console.log("当前未授权");
+				   } else {
+						//用户已经授权过了
+						console.log("当前已授权");
+						//#ifdef MP-WEIXIN
+						uni.getProvider({
+						  service: 'oauth',
+						  success: function (res) {
+							   console.log(res.provider)
+							if (~res.provider.indexOf('weixin')) {
+								uni.login({
+									provider: 'weixin',
+									success: (res2) => {
+										
+										uni.getUserInfo({
+											provider: 'weixin',
+											success: (info) => {//这里请求接口
+												console.log("登录返回信息",res2);
+												console.log("获取用户信息",info);
+												
+												_that.$store.commit('login',info.userInfo);
+												uni.redirectTo({
+												    url: '../index/index'
+												});
+											},
+											fail: () => {
+												uni.showToast({title:"微信登录授权失败",icon:"none"});
+											}
+										})
+								
+									},
+									fail: () => {
+										uni.showToast({title:"微信登录授权失败",icon:"none"});
+									}
+								})
+								
+							}else{
+								uni.showToast({
+									title: '请先安装微信或升级版本',
+									icon:"none"
+								});
+							}
+						  }
+						});
+						//#endif
+						
+						
+						
+				   }
+				 }
+			   })
+				 
+			},
+			//点击切换登录方式
+			changeLoginWay(){
+				if(this.loginWay == '短信验证登录'){
+					this.loginWay = '账号密码登录'
+					console.log("222")
+				}else if(this.loginWay == '账号密码登录'){
+					console.log("111111")
+					this.loginWay = '短信验证登录'
+				}
+				
+			},
+			//
+			codeChange(text) {
+				// console.log("codeChange",text)
+				this.tips = text;
+			},
+			//点击获取验证码倒计时
+			getCode(){
+				console.log("aa")
+				if(this.$refs.uCode.canGetCode) {
+					// 模拟向后端请求验证码
+					uni.showLoading({
+						title: '正在获取验证码'
 					})
-				}		
-			},
-			
-			
-			Qzyzm(){
-				var num = 60;
-				if(this.QzyzmStare == false){
-					this.Qztime ='60';
-					this.Qztext = 's后获取';
-					this.QzyzmStare = true;
-					var interval = setInterval(() =>{
-							--this.Qztime
-						},1000)
-					setTimeout(()=>{
-						clearInterval(interval)
-						this.Qztext = '获取验证码'
-						this.Qztime = ''
-						this.QzyzmStare = false
-					},60000)				
+					setTimeout(() => {
+						uni.hideLoading();
+						// 这里此提示会被this.start()方法中的提示覆盖
+						this.$u.toast('验证码已发送');
+						// 通知验证码组件内部开始倒计时
+						this.$refs.uCode.start();
+					}, 2000);
+				} else {
+					
+					this.$u.toast('倒计时结束后再发送');
 				}
 			},
-
-			// 所属地区选择 start
-			handleTap(picker) { this.$refs[picker].show() },
-			handleChange(e) { console.log('change::', e) },
-			handleConfirm(e) { console.log('confirm::', e)
-				if (e) {
-					const name = e.dataset.name
-					const label = e.item.map(m => m.label).join('-')
-					if (name && label) {
-						this[name] = label
-					}
-				}
+			end() {
+				this.$u.toast('倒计时结束');
 			},
-			handleCancel(e) { console.log('cancel::', e) }	
-			// 所属地区选择 end
-		 }
- }
+			start() {
+				console.log("aa1111111")
+				this.$u.toast('倒计时开始');
+			}
+			
+		}
+	}
 </script>
-
-<style>
-	
-	page{ background: #fff; }
-	
-	.login_img{ width: 100%; height: auto; margin-top: 90upx; }
-	.login_img image{ width: 170upx; height: 170upx; display: block; margin: 0px auto; border-radius: 50%; }
-	
-	.login_from{ width: 100%; height: auto; box-sizing: border-box; padding: 20upx 8%; }
-	
-	.login_from_input{ width: 100%; height:auto; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px #eee solid; padding: 40upx 0px; margin: 0px auto;  } 
-	
-	.login_from_name{ width: 20%; }
-	.login_from_fun{ width: 80%; display: flex; flex-direction: row; justify-content: flex-end; align-items: center;  }
-	.login_from_fun input{ width: 100%; text-align: left; font-size: 14px;  }
-	
-	
-	.login_from_dl{ width: 100%; height: 50px; line-height: 50px; margin-top: 150upx;   }
-	.login_from_dl button{ width: 100%; height: 50px; line-height: 50px; background: #FF3B00; color: #fff; border-radius: 50px; }
-	
-	.logo_xieyi{ width: 100%; height: 40px; line-height: 40px; display: flex; flex-direction: row; margin-top: 30upx; align-items: center; color: #444; font-size: 14px; justify-content: center; }
-	.logo_xieyi label{ font-size: 18px; margin-right: 1%; display: block; width: 15px; height: 15px; }
-	
-	.cuIcon-squarecheckfill{ color: #FF3B00; }
-	.logo_text text{ color: #FF3B00; }
-	
-	.getyzm{ width: 60%; display: flex; flex-direction: row; justify-content: flex-end; color: #FF3B00; }
-	.cuicon{ font-size: 18px; }  
-	
-	.regFrom_tom_yzlabel{ width: 60%; text-align: right; }
-	.cuIcon-squarecheckfill{ background: #FF3B00; position: relative; border: 2px #ccc solid; box-sizing: border-box; border-radius: 3px; }
-	.cuIcon-square{ background: #fff; border: 2px #ccc solid; box-sizing: border-box; border-radius: 3px; }
-	
+ 
+<style lang="less">
+		
+	.loginWrap {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		
+		.imgWrap {
+			margin-top: 50rpx;
+			text-align: center;
+			
+		}
+		.sms-login-form {
+			margin-top: 50rpx;
+			width: 100%;
+			padding: 30rpx;
+			
+			.loginbtn{
+				margin: 20rpx; 
+				margin-top: 60rpx;
+				background: #2CA800;
+				color: #fff;
+				font-size: 30rpx;
+			}
+			
+			.uni-form-item{
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				border-bottom: 1rpx solid #DCDCDC;
+				padding: 10rpx 30rpx;
+				margin: 20rpx;
+				u-input{
+					flex: 1;
+				}
+				
+			}
+		}
+		.account-login-form {
+			margin-top: 50rpx;
+			width: 100%;
+			padding: 30rpx;
+			
+			.uni-form-item{
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				border-bottom: 1rpx solid #DCDCDC;
+				padding: 10rpx 30rpx;
+				margin: 20rpx;
+				u-input{
+					flex: 1;
+				}
+				.forgetText{
+					color: #C8C7CC;
+				}
+				
+			}
+			
+			.loginbtn{
+				margin: 20rpx; 
+				margin-top: 60rpx;
+				background: #2CA800;
+				color: #fff;
+				font-size: 30rpx;
+			}
+		}
+		.action {
+			font-size: 28rpx;
+		}
+		.wechatLogin{
+			margin-top: 60rpx;
+			font-size: 28rpx;
+			text{
+				color: #CCCCCC;
+			}
+			.wechatLoginBtn{
+				margin-top: 20rpx;
+				border: none;
+				width: 90rpx;
+				height: 90rpx;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				&::after{
+					border: none;
+				}
+			}
+			.logo-login{
+				width: 90rpx;
+				height: 90rpx;
+				// margin-top: 30rpx;
+			}
+		}
+	}
 </style>
-
-
-

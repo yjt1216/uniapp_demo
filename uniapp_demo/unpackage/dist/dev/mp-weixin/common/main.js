@@ -27,17 +27,17 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 wx.__webpack_require_UNI_MP_PLUGIN__ = __webpack_require__;
 var MescrollBody = function MescrollBody() {
   Promise.all(/*! require.ensure | components/mescroll-uni/mescroll-body */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/mescroll-uni/mescroll-body")]).then((function () {
-    return resolve(__webpack_require__(/*! @/components/mescroll-uni/mescroll-body.vue */ 227));
+    return resolve(__webpack_require__(/*! @/components/mescroll-uni/mescroll-body.vue */ 229));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var routerLink = function routerLink() {
   __webpack_require__.e(/*! require.ensure | js_sdk/uni-simple-router/link */ "js_sdk/uni-simple-router/link").then((function () {
-    return resolve(__webpack_require__(/*! ./js_sdk/uni-simple-router/link.vue */ 239));
+    return resolve(__webpack_require__(/*! ./js_sdk/uni-simple-router/link.vue */ 241));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var hxNavbar = function hxNavbar() {
   __webpack_require__.e(/*! require.ensure | components/hx-navbar/hx-navbar */ "components/hx-navbar/hx-navbar").then((function () {
-    return resolve(__webpack_require__(/*! @/components/hx-navbar/hx-navbar.nvue */ 244));
+    return resolve(__webpack_require__(/*! @/components/hx-navbar/hx-navbar.nvue */ 246));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.component('mescroll-body', MescrollBody);
