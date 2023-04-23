@@ -3,9 +3,9 @@
 		
 		<nav-bar title="登录" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		
-		<view class="imgWrap">
+		<!-- <view class="imgWrap">
 			<image class="logo" style="width: 100rpx;height: 100rpx;" src="../../static/logo.png" mode=""></image>
-		</view>
+		</view> -->
 		<!-- 账号密码登录 -->
 		<form v-if="loginWay == '短信验证登录'" class="account-login-form" @submit="formSubmit">
 			<view class="uni-form-item uni-column">
@@ -41,6 +41,16 @@
 				<image class="logo-login" :src="'../../static/images/icon_wechat.png'"
 				    @error="imageError"></image>
 			</button>
+		</view>
+		
+		<!-- 服务政策 -->
+		<view >
+			<u-checkbox-group>
+				<label class="check-xieyi">
+					<u-checkbox shape="circle" v-model="isAgreement" icon-size="18rpx"></u-checkbox>
+					<view class="check_text">请勾选并阅读<text>《注册协议》</text>及<text>《隐私协议》</text></view>
+				</label>
+			</u-checkbox-group>
 		</view>
 		
 	</view>
@@ -195,7 +205,7 @@
 			.loginbtn{
 				margin: 20rpx; 
 				margin-top: 60rpx;
-				background: #2CA800;
+				background: #39C9BC;
 				color: #fff;
 				font-size: 30rpx;
 			}
@@ -237,7 +247,7 @@
 			.loginbtn{
 				margin: 20rpx; 
 				margin-top: 60rpx;
-				background: #2CA800;
+				background: #39C9BC;
 				color: #fff;
 				font-size: 30rpx;
 			}
@@ -268,6 +278,22 @@
 				width: 90rpx;
 				height: 90rpx;
 				// margin-top: 30rpx;
+			}
+		}
+		
+		.check-xieyi {
+			margin-top: 60rpx;
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			
+			.check_text {
+				font-size: 28rpx;
+			}
+			.check_text text{
+				color: #39C9BC;
 			}
 		}
 	}

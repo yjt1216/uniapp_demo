@@ -44,6 +44,20 @@
 			}
 		}
 	],
+	"subPackages": [
+		{
+			"root": "bundle",
+			"pages": [
+				{
+					"path": "pages/user_intro/user_intro",
+					"style": {
+						"navigationStyle": "custom" 
+					}
+				}
+			]
+		}
+		
+	],
 	"tabBar": {
 		"color": "#666",
 		"selectedColor": "#FF2C3C",

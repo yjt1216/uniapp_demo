@@ -65,13 +65,15 @@
 				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
 			</view>
 			<view class="divider"></view>
-			<view class="menu-item" @click="serviceObject">
-				<view class="u-r">
-					<image src="../../static/user/shezhi.png" class="img"></image>
-					<view class="menu-text u-m-l-20">个人设置</view>
+			<router-link to="/bundle/pages/user_intro/user_intro">
+				<view class="menu-item" @click="serviceObject">
+					<view class="u-r">
+						<image src="../../static/user/shezhi.png" class="img"></image>
+						<view class="menu-text u-m-l-20">个人介绍</view>
+					</view>
+					<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
 				</view>
-				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
-			</view>
+			</router-link>
 			<view class="divider"></view>
 			<view class="menu-item" @click="serviceObject">
 				<view class="u-r">
@@ -81,36 +83,30 @@
 				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
 			</view>
 			<view class="divider"></view>
-			<router-link to="/bundle/pages/user_help/user_help">
-				<view class="menu-item" >
-					<view class="u-r">
-						<image src="../../static/user/yonghubangzhu.png" class="img"></image>
-						<view class="menu-text u-m-l-20">用户帮助</view>
-					</view>
-					<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+			<view class="menu-item" >
+				<view class="u-r">
+					<image src="../../static/user/yonghubangzhu.png" class="img"></image>
+					<view class="menu-text u-m-l-20">用户帮助</view>
 				</view>
-			</router-link>
+				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+			</view>
 			<view class="divider"></view>
-			<router-link to="/bundle/pages/privacy_agreement/privacy_agreement">
-				<view class="menu-item" >
-					<view class="u-r">
-						<image src="../../static/user/yinsizhengce.png" class="img"></image>
-						<view class="menu-text u-m-l-20">隐私政策</view>
-					</view>
-					<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+			<view class="menu-item" >
+				<view class="u-r">
+					<image src="../../static/user/yinsizhengce.png" class="img"></image>
+					<view class="menu-text u-m-l-20">隐私政策</view>
 				</view>
-			</router-link>
+				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+			</view>
 			
 			<view class="divider"></view>
-			<router-link to="/bundle/pages/service_agreement/service_agreement">
-				<view class="menu-item" >
-					<view class="u-r">
-						<image src="../../static/user/yonghuxieyi.png" class="img"></image>
-						<view class="menu-text u-m-l-20">用户协议</view>
-					</view>
-					<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+			<view class="menu-item" >
+				<view class="u-r">
+					<image src="../../static/user/yonghuxieyi.png" class="img"></image>
+					<view class="menu-text u-m-l-20">用户协议</view>
 				</view>
-			</router-link>
+				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+			</view>
 			
 			<view class="divider"></view>
 			
