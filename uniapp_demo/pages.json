@@ -53,6 +53,12 @@
 					"style": {
 						"navigationStyle": "custom" 
 					}
+				},
+				{
+					"path": "pages/mescroll_swiper/mescroll_swiper",
+					"style": {
+						"navigationStyle": "custom" 
+					}
 				}
 			]
 		}

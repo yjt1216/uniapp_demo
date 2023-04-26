@@ -1,73 +1,56 @@
 <template>
-	<view>
-		<nav-bar title="登录" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
-		<view class="top-wrap">
-			<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
-		</view>
-		<mescroll-body @init="mescrollInit" top="100" @down="downCallback"
-		 :up="upOption" @up="upCallback">
-			<good-list :list="goods"></good-list>
-		 </mescroll-body>
+	<view class="index-page">
+		<nav-bar title="消息" :back="false"  backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
+		<view class="group-title">功能示例</view>
+		
+		<navigator url="/pages/text_auto/text_auto">
+			<view class="demo-li">段落展开缩放</view>
+		</navigator>
+		<navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
+			<view class="demo-li">sticky-scroll吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
+		</navigator>
+		
 	</view>
 </template>
 
 <script>
-	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
-	import { apiGoods } from '@/api/mock.js'
 	
 	export default {
-		mixins: [MescrollMixin],
-		data() {
-			return {
-				upOption: {
-					noMoreSize:4,
-					empty: {
-						tip: '暂无数据'
-					}
-				},
-				goods: [],
-				// tabs:[
-				// 	{name:'待评估'},
-				// 	{name:'待执行'},
-				// 	{name:'执行中'},
-				// 	{name:'已完成'}
-				// ],
-				tabs: [{name:'全部',type:'xx'}, {name:'奶粉',type:'xx'}, {name:'面膜',type:'xx'}, {name:'图书',type:'xx'}],
-				tabIndex: 0
-			}
-		},
-		methods: {
-			upCallback(page) {
-				
-				// console.log('mescroll.optUp.toTop ',this.mescroll.optUp.toTop)
-				
-				let curTab = this.tabs[this.tabIndex]
-				let keyword = curTab.name
-				apiGoods(page.num, page.size, keyword).then(res=>{
-					this.mescroll.endSuccess(res.list.lenght)
-					if(page.num == 1) this.goods = []
-					this.goods = this.goods.concat(res.list)
-				}).catch(()=>{
-					this.mescroll.endErr()
-				})
-			},
-			tabChange() {
-				this.goods = []
-				this.mescroll.resetUpScroll()
-			}
+		
+		onLoad() {
+			uni.setNavigationBarTitle({
+				title: 'mescroll ('+ uni.getSystemInfoSync().platform + ')'
+			})
 		}
 		
 	}
 </script>
 
 <style lang="scss">
-	.top-wrap{
-		z-index: 9990;
-		position: fixed;
-		top: --window-top;
-		/* left: 0; */
-		width: 100%;
-		height: 100rpx;
-		background-color: white;
+	.index-page {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
+	
+	.group-title {
+		font-size: 30upx;
+		padding: 24upx;
+		border-bottom: 1upx solid #eee;
+		color: red;
+	}
+	
+	.demo-li {
+		font-size: 28upx;
+		padding: 24upx;
+		border-bottom: 1upx solid #eee;
+		color: #18B4FE;
+	}
+	.demo-li .demo-tip {
+		float: right;
+		margin-top: 4upx;
+		font-size: 24upx;
+		color: gray;
+	}
+	
 </style>

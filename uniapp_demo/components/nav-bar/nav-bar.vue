@@ -17,9 +17,7 @@
 			<view class="comStatus" :style="'height: '+statusBarHeight+'px'"></view>
 			<view class="topMain" :style="'height: '+topHeight+'rpx'">
 				<!-- 返回 -->
-				<view @click="goBack" class="back" v-if="myback.show">
-					<!-- <view class="img">{{myback.imgUrl}}</view> -->
-					<!-- <image class="img" :src="myback.imgUrl"></image> -->
+				<view @click="goBack" class="back" v-if="back">
 					<u-icon name="arrow-left" color="#fff"></u-icon>
 				</view>
 				<slot></slot>
@@ -36,12 +34,8 @@
 		data() {
 			return {
 				statusBarHeight: 0, // 状态按钮高度
-				myback: {
-					// 是否显示返回按钮
-					show: true,
-					// 是否显示返回按钮
-					// imgUrl: require('../../static/images/ico_back.png')
-				},
+				// //默认显示 返回按钮
+				// showBack: true,
 				// top样式
 				topStyle: {}
 			}
@@ -56,15 +50,8 @@
 			},
 			// 返回按钮相关配置
 			back: {
-				type: Object,
-				default: function() {
-					return {
-						// 是否显示返回按钮，默认显示
-						show: true,
-						// 返回按钮的图片地址
-						// imgUrl: require('../../static/images/ico_back.png')
-					}
-				}
+				type: Boolean,
+				default: true
 			},
 			// 开启背景图片，未开启，使用背景颜色，开启backgroundImage为必填项
 			backgroundImageShow: {
@@ -108,9 +95,10 @@
 				}
 				// #endif
 				this.statusBarHeight = this.getSysInfo().statusBarHeight;
-				for (let key in this.back) {
-					this.myback[key] = this.back[key];
-				}
+				// this.showBack = this.back
+				// for (let key in this.back) {
+				// 	this.myback[key] = this.back[key];
+				// }
 			},
 			getSysInfo() {
 				return uni.getSystemInfoSync();

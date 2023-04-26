@@ -779,8 +779,8 @@ function populateParameters(result) {
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "3.7.9",
-    uniRuntimeVersion: "3.7.9",
+    uniCompileVersion: "3.7.10",
+    uniRuntimeVersion: "3.7.10",
     uniPlatform: undefined || "mp-weixin",
     deviceBrand: deviceBrand,
     deviceModel: model,
@@ -20897,7 +20897,7 @@ var router = (0, _uniSimpleRouter.createRouter)({
     router.$lockStatus = false;
   },
   debugger: false,
-  routes: [].concat((0, _toConsumableArray2.default)([{"path":"/pages/index/index","aliasPath":"/"},{"path":"/pages/user/user"},{"path":"/pages/text_auto/text_auto"},{"path":"/pages/message/message"},{"path":"/pages/server_explan/server_explan"},{"path":"/pages/login/login"},{"path":"/pages/register/register"},{"path":"/bundle/pages/user_intro/user_intro"}]), [{
+  routes: [].concat((0, _toConsumableArray2.default)([{"path":"/pages/index/index","aliasPath":"/"},{"path":"/pages/user/user"},{"path":"/pages/text_auto/text_auto"},{"path":"/pages/message/message"},{"path":"/pages/server_explan/server_explan"},{"path":"/pages/login/login"},{"path":"/pages/register/register"},{"path":"/bundle/pages/user_intro/user_intro"},{"path":"/bundle/pages/mescroll_swiper/mescroll_swiper"}]), [{
     path: '*',
     redirect: function redirect(to) {
       return {
@@ -22744,7 +22744,1005 @@ module.exports = function(module) {
 /* 175 */,
 /* 176 */,
 /* 177 */,
-/* 178 */
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */
+/*!************************************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js ***!
+  \************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+// mescroll-body 和 mescroll-uni 通用
+var MescrollMixin = {
+  data: function data() {
+    return {
+      mescroll: null //mescroll实例对象
+    };
+  },
+  // 注册系统自带的下拉刷新 (配置down.native为true时生效, 还需在pages配置enablePullDownRefresh:true;详请参考mescroll-native的案例)
+  onPullDownRefresh: function onPullDownRefresh() {
+    this.mescroll && this.mescroll.onPullDownRefresh();
+  },
+  // 注册列表滚动事件,用于判定在顶部可下拉刷新,在指定位置可显示隐藏回到顶部按钮 (此方法为页面生命周期,无法在子组件中触发, 仅在mescroll-body生效)
+  onPageScroll: function onPageScroll(e) {
+    this.mescroll && this.mescroll.onPageScroll(e);
+  },
+  // 注册滚动到底部的事件,用于上拉加载 (此方法为页面生命周期,无法在子组件中触发, 仅在mescroll-body生效)
+  onReachBottom: function onReachBottom() {
+    this.mescroll && this.mescroll.onReachBottom();
+  },
+  methods: {
+    // mescroll组件初始化的回调,可获取到mescroll对象
+    mescrollInit: function mescrollInit(mescroll) {
+      this.mescroll = mescroll;
+    },
+    // 下拉刷新的回调 (mixin默认resetUpScroll)
+    downCallback: function downCallback() {
+      var _this = this;
+      if (this.mescroll.optUp.use) {
+        this.mescroll.resetUpScroll();
+      } else {
+        setTimeout(function () {
+          _this.mescroll.endSuccess();
+        }, 500);
+      }
+    },
+    // 上拉加载的回调
+    upCallback: function upCallback() {
+      var _this2 = this;
+      // mixin默认延时500自动结束加载
+      setTimeout(function () {
+        _this2.mescroll.endErr();
+      }, 500);
+    }
+  }
+};
+var _default = MescrollMixin;
+exports.default = _default;
+
+/***/ }),
+/* 203 */
+/*!****************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/mock.js ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.apiGetTabs = apiGetTabs;
+exports.apiGoods = apiGoods;
+exports.apiMsgList = apiMsgList;
+exports.apiNewList = apiNewList;
+exports.apiWeiboList = apiWeiboList;
+var _goods = _interopRequireDefault(__webpack_require__(/*! ./goods.js */ 204));
+/*
+本地模拟接口请求, 仅demo演示用.
+实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+请参考官方写法: https://www.mescroll.com/uni.html?v=20200210#tagUpCallback
+* */
+
+// 模拟数据
+
+// 获取新闻列表
+function apiNewList(pageNum, pageSize) {
+  return new Promise(function (resolute, reject) {
+    //延时一秒,模拟联网
+    setTimeout(function () {
+      try {
+        var list = [];
+        if (!pageNum) {
+          //模拟下拉刷新返回的数据
+          var id = new Date().getTime();
+          var newObj = {
+            id: id,
+            title: "【新增新闻" + id + "】 标题",
+            content: "新增新闻的内容"
+          };
+          list.push(newObj);
+        } else {
+          //模拟上拉加载返回的数据
+          for (var i = 0; i < pageSize; i++) {
+            var upIndex = (pageNum - 1) * pageSize + i + 1;
+            var _newObj = {
+              id: upIndex,
+              title: "【新闻" + upIndex + "】 标题标题标题标题标题",
+              content: "内容内容内容内容内容内容内容内容内容"
+            };
+            list.push(_newObj);
+          }
+          console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
+        }
+        //模拟接口请求成功
+        resolute(list);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 1000);
+  });
+}
+
+// 搜索商品
+function apiGoods(pageNum, pageSize, keyword) {
+  return new Promise(function (resolute, reject) {
+    //延时一秒,模拟联网
+    setTimeout(function () {
+      try {
+        var data = {
+          list: [],
+          // 数据列表
+          totalCount: 0,
+          // 总数量
+          totalPage: 0,
+          // 总页数
+          hasNext: false // 是否有下一页
+        };
+
+        // 符合关键词的记录
+        var keywordList = [];
+        if (!keyword || keyword == "全部") {
+          // 搜索全部商品
+          keywordList = _goods.default;
+        } else {
+          // 关键词搜索
+          if (keyword == "母婴") keyword = "婴"; // 为这个关键词展示多几条数据
+          for (var i = 0; i < _goods.default.length; i++) {
+            var good = _goods.default[i];
+            if (good.goodName.indexOf(keyword) !== -1) {
+              keywordList.push(good);
+            }
+          }
+        }
+
+        // 分页
+        for (var _i = (pageNum - 1) * pageSize; _i < pageNum * pageSize; _i++) {
+          if (_i >= keywordList.length) break;
+          data.list.push(keywordList[_i]);
+        }
+
+        // 汇总数据
+        data.totalCount = keywordList.length;
+        data.totalPage = Math.ceil(data.totalCount / pageSize);
+        data.hasNext = pageNum < data.totalPage;
+
+        //模拟接口请求成功
+        console.log("pageNum=" + pageNum + ", pageSize=" + pageSize + ", data.list.length=" + data.list.length + ", totalCount=" + data.totalCount + ", totalPage=" + data.totalPage + ", hasNext=" + data.hasNext + (keyword ? ", keyword=" + keyword : ""));
+        resolute(data);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 1000);
+  });
+}
+
+// 获取微博列表
+function apiWeiboList(pageNum, pageSize) {
+  return new Promise(function (resolute, reject) {
+    //延时2秒,模拟联网
+    setTimeout(function () {
+      try {
+        var list = [];
+        if (!pageNum) {
+          //此处模拟下拉刷新返回的数据
+          var id = new Date().getTime();
+          var newObj = {
+            id: id,
+            title: "【新增微博" + id + "】 新增微博",
+            content: "新增微博的内容,新增微博的内容"
+          };
+          list.push(newObj);
+        } else {
+          //此处模拟上拉加载返回的数据
+          for (var i = 0; i < pageSize; i++) {
+            var upIndex = (pageNum - 1) * pageSize + i + 1;
+            var _newObj2 = {
+              id: upIndex,
+              title: "【微博" + upIndex + "】 标题标题标题标题标题标题",
+              content: "内容内容内容内容内容内容内容内容内容内容"
+            };
+            list.push(_newObj2);
+          }
+          console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
+        }
+        //模拟接口请求成功
+        resolute(list);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 2000);
+  });
+}
+
+// 获取消息列表(共5页消息)
+function apiMsgList(pageNum, pageSize) {
+  return new Promise(function (resolute, reject) {
+    //延时一秒,模拟联网
+    setTimeout(function () {
+      try {
+        var list = [];
+        //模拟下拉加载更多记录
+        for (var i = 0; i < pageSize; i++) {
+          var msgId = (pageNum - 1) * pageSize + i + 1;
+          var newObj = {
+            id: msgId,
+            title: "【消息" + msgId + "】",
+            content: "内容: 下拉获取聊天记录"
+          };
+          // 此处模拟只有5页的消息 (第5页只有3条)
+          if (pageNum >= 5 && i >= 3) {} else {
+            list.unshift(newObj);
+          }
+        }
+        console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
+        //模拟接口请求成功
+        resolute(list);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 1000);
+  });
+}
+
+// 获取tabs类目
+function apiGetTabs() {
+  return new Promise(function (resolute, reject) {
+    //延时,模拟联网
+    setTimeout(function () {
+      try {
+        var tabs = ['全部', '奶粉', '面膜', '图书', '果汁', '奶瓶', '美素', '花王', '韩蜜', '口红', '毛巾', '玩具', '衣服'];
+        //模拟接口请求成功
+        resolute(tabs);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 10);
+  });
+}
+
+/***/ }),
+/* 204 */
+/*!*****************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/goods.js ***!
+  \*****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var goods = [{
+  "id": "1",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd1.jpg",
+  "goodName": "【1】  六罐装荷兰美素佳儿金装2段900g",
+  "goodPrice": 1149.00,
+  "goodSold": 648
+}, {
+  "id": "2",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd2.jpg",
+  "goodName": "【2】  韩国Amore爱茉莉红吕洗发水套装修复受损发质",
+  "goodPrice": 89.00,
+  "goodSold": 128
+}, {
+  "id": "3",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd3.jpg",
+  "goodName": "【3】  Friso美素佳儿 金装婴儿配方奶粉3段900g",
+  "goodPrice": 195.00,
+  "goodSold": 968
+}, {
+  "id": "4",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd4.jpg",
+  "goodName": "【4】  Fisher goodPrice费雪 费雪三轮儿童滑行车",
+  "goodPrice": 299.00,
+  "goodSold": 85
+}, {
+  "id": "5",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd5.jpg",
+  "goodName": "【5】  Babylee巴布力 实木婴儿床 雷卡拉130*70cm",
+  "goodPrice": 1889.00,
+  "goodSold": 18
+}, {
+  "id": "6",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd6.jpg",
+  "goodName": "【6】  Pigeon贝亲 独立三层奶粉盒 送小罐奶粉1段200g",
+  "goodPrice": 70.00,
+  "goodSold": 658
+}, {
+  "id": "7",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd7.jpg",
+  "goodName": "【7】 TTBOO兔兔小布 肩纽扣套装",
+  "goodPrice": 268.00,
+  "goodSold": 128
+}, {
+  "id": "8",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd8.jpg",
+  "goodName": "【8】  Nuna璐拉 婴儿布里奇果精纯嫩肤沐浴露婴儿精纯芦荟胶",
+  "goodPrice": 140.00,
+  "goodSold": 366
+}, {
+  "id": "9",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd9.jpg",
+  "goodName": "【9】  illuma启赋 奶粉3段900g",
+  "goodPrice": 252.00,
+  "goodSold": 98
+}, {
+  "id": "10",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd10.jpg",
+  "goodName": "【10】  Abbott雅培乳蛋白部分水解婴儿配方奶粉3段820g",
+  "goodPrice": 89.00,
+  "goodSold": 128
+}, {
+  "id": "11",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd11.jpg",
+  "goodName": "【11】  韩蜜 酷炫唇蜜（礼盒套装）2.8g*4",
+  "goodPrice": 179.00,
+  "goodSold": 35
+}, {
+  "id": "12",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd12.jpg",
+  "goodName": "【12】  保税区直发【3包装】日本Merries花王纸尿裤NB90",
+  "goodPrice": 289.00,
+  "goodSold": 1928
+}, {
+  "id": "13",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd13.jpg",
+  "goodName": "【13】  Comotomo可么多么 硅胶奶瓶（0-3月奶嘴）150ml绿色",
+  "goodPrice": 203.00,
+  "goodSold": 87
+}, {
+  "id": "14",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd14.jpg",
+  "goodName": "【14】  香港直邮德国瑞德露Rival de Loop芦荟精华安瓶",
+  "goodPrice": 152.00,
+  "goodSold": 61
+}, {
+  "id": "15",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd15.jpg",
+  "goodName": "【15】  保税区直发药师堂尊马油香草味温和保湿无刺激面霜",
+  "goodPrice": 269.00,
+  "goodSold": 73
+}, {
+  "id": "16",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd16.jpg",
+  "goodName": "【16】  香港直邮日本Spatreatment眼膜保湿去细纹法令纹",
+  "goodPrice": 219.00,
+  "goodSold": 13
+}, {
+  "id": "17",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd17.jpg",
+  "goodName": "【17】  韩国MEDIHEALNMF可莱丝针剂睡眠面膜",
+  "goodPrice": 81.00,
+  "goodSold": 128
+}, {
+  "id": "18",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd18.jpg",
+  "goodName": "【18】  DHC蝶翠诗橄榄蜂蜜滋养洗脸手工皂90g",
+  "goodPrice": 123.00,
+  "goodSold": 77
+}, {
+  "id": "19",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd19.jpg",
+  "goodName": "【19】  日本资生堂CPB肌肤之钥新版隔离霜 清爽型 30ml",
+  "goodPrice": 429.00,
+  "goodSold": 36
+}, {
+  "id": "20",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd20.jpg",
+  "goodName": "【20】 Heinz亨氏 婴儿面条优加面条全素套餐组合3口味3盒",
+  "goodPrice": 39.00,
+  "goodSold": 61
+}, {
+  "id": "21",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd21.jpg",
+  "goodName": "【21】  Heinz亨氏 乐维滋果汁泥组合5口味15袋",
+  "goodPrice": 69.00,
+  "goodSold": 55
+}, {
+  "id": "22",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd22.jpg",
+  "goodName": "【22】  保税区直发澳大利亚Swisse高浓度蔓越莓胶囊30粒",
+  "goodPrice": 271.00,
+  "goodSold": 19
+}, {
+  "id": "23",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd23.jpg",
+  "goodName": "【23】  挪威Nordic Naturals小鱼婴幼儿鱼油DHA滴剂",
+  "goodPrice": 102.00,
+  "goodSold": 125
+}, {
+  "id": "24",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd24.jpg",
+  "goodName": "【24】  澳大利亚Bio island DHA for Pregnancy海藻油DHA",
+  "goodPrice": 289.00,
+  "goodSold": 28
+}, {
+  "id": "25",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd25.jpg",
+  "goodName": "【25】  澳大利亚Fatblaster Coconut Detox椰子水",
+  "goodPrice": 152.00,
+  "goodSold": 17
+}, {
+  "id": "26",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd26.jpg",
+  "goodName": "【26】  Suitsky舒比奇 高护极薄舒爽纸尿片尿不湿XL60",
+  "goodPrice": 99.00,
+  "goodSold": 181
+}, {
+  "id": "27",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd27.jpg",
+  "goodName": "【27】  英国JUST SOAP手工皂 玫瑰天竺葵蛋糕皂",
+  "goodPrice": 72.00,
+  "goodSold": 66
+}, {
+  "id": "28",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd28.jpg",
+  "goodName": "【28】  德国NUK 多色婴幼儿带盖学饮杯",
+  "goodPrice": 92.00,
+  "goodSold": 138
+}];
+var _default = goods;
+exports.default = _default;
+
+/***/ }),
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */,
+/* 225 */,
+/* 226 */,
+/* 227 */,
+/* 228 */,
+/* 229 */,
+/* 230 */,
+/* 231 */,
+/* 232 */,
+/* 233 */,
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/icons.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  'uicon-level': "\uE693",
+  'uicon-column-line': "\uE68E",
+  'uicon-checkbox-mark': "\uE807",
+  'uicon-folder': "\uE7F5",
+  'uicon-movie': "\uE7F6",
+  'uicon-star-fill': "\uE669",
+  'uicon-star': "\uE65F",
+  'uicon-phone-fill': "\uE64F",
+  'uicon-phone': "\uE622",
+  'uicon-apple-fill': "\uE881",
+  'uicon-chrome-circle-fill': "\uE885",
+  'uicon-backspace': "\uE67B",
+  'uicon-attach': "\uE632",
+  'uicon-cut': "\uE948",
+  'uicon-empty-car': "\uE602",
+  'uicon-empty-coupon': "\uE682",
+  'uicon-empty-address': "\uE646",
+  'uicon-empty-favor': "\uE67C",
+  'uicon-empty-permission': "\uE686",
+  'uicon-empty-news': "\uE687",
+  'uicon-empty-search': "\uE664",
+  'uicon-github-circle-fill': "\uE887",
+  'uicon-rmb': "\uE608",
+  'uicon-person-delete-fill': "\uE66A",
+  'uicon-reload': "\uE788",
+  'uicon-order': "\uE68F",
+  'uicon-server-man': "\uE6BC",
+  'uicon-search': "\uE62A",
+  'uicon-fingerprint': "\uE955",
+  'uicon-more-dot-fill': "\uE630",
+  'uicon-scan': "\uE662",
+  'uicon-share-square': "\uE60B",
+  'uicon-map': "\uE61D",
+  'uicon-map-fill': "\uE64E",
+  'uicon-tags': "\uE629",
+  'uicon-tags-fill': "\uE651",
+  'uicon-bookmark-fill': "\uE63B",
+  'uicon-bookmark': "\uE60A",
+  'uicon-eye': "\uE613",
+  'uicon-eye-fill': "\uE641",
+  'uicon-mic': "\uE64A",
+  'uicon-mic-off': "\uE649",
+  'uicon-calendar': "\uE66E",
+  'uicon-calendar-fill': "\uE634",
+  'uicon-trash': "\uE623",
+  'uicon-trash-fill': "\uE658",
+  'uicon-play-left': "\uE66D",
+  'uicon-play-right': "\uE610",
+  'uicon-minus': "\uE618",
+  'uicon-plus': "\uE62D",
+  'uicon-info': "\uE653",
+  'uicon-info-circle': "\uE7D2",
+  'uicon-info-circle-fill': "\uE64B",
+  'uicon-question': "\uE715",
+  'uicon-error': "\uE6D3",
+  'uicon-close': "\uE685",
+  'uicon-checkmark': "\uE6A8",
+  'uicon-android-circle-fill': "\uE67E",
+  'uicon-android-fill': "\uE67D",
+  'uicon-ie': "\uE87B",
+  'uicon-IE-circle-fill': "\uE889",
+  'uicon-google': "\uE87A",
+  'uicon-google-circle-fill': "\uE88A",
+  'uicon-setting-fill': "\uE872",
+  'uicon-setting': "\uE61F",
+  'uicon-minus-square-fill': "\uE855",
+  'uicon-plus-square-fill': "\uE856",
+  'uicon-heart': "\uE7DF",
+  'uicon-heart-fill': "\uE851",
+  'uicon-camera': "\uE7D7",
+  'uicon-camera-fill': "\uE870",
+  'uicon-more-circle': "\uE63E",
+  'uicon-more-circle-fill': "\uE645",
+  'uicon-chat': "\uE620",
+  'uicon-chat-fill': "\uE61E",
+  'uicon-bag-fill': "\uE617",
+  'uicon-bag': "\uE619",
+  'uicon-error-circle-fill': "\uE62C",
+  'uicon-error-circle': "\uE624",
+  'uicon-close-circle': "\uE63F",
+  'uicon-close-circle-fill': "\uE637",
+  'uicon-checkmark-circle': "\uE63D",
+  'uicon-checkmark-circle-fill': "\uE635",
+  'uicon-question-circle-fill': "\uE666",
+  'uicon-question-circle': "\uE625",
+  'uicon-share': "\uE631",
+  'uicon-share-fill': "\uE65E",
+  'uicon-shopping-cart': "\uE621",
+  'uicon-shopping-cart-fill': "\uE65D",
+  'uicon-bell': "\uE609",
+  'uicon-bell-fill': "\uE640",
+  'uicon-list': "\uE650",
+  'uicon-list-dot': "\uE616",
+  'uicon-zhihu': "\uE6BA",
+  'uicon-zhihu-circle-fill': "\uE709",
+  'uicon-zhifubao': "\uE6B9",
+  'uicon-zhifubao-circle-fill': "\uE6B8",
+  'uicon-weixin-circle-fill': "\uE6B1",
+  'uicon-weixin-fill': "\uE6B2",
+  'uicon-twitter-circle-fill': "\uE6AB",
+  'uicon-twitter': "\uE6AA",
+  'uicon-taobao-circle-fill': "\uE6A7",
+  'uicon-taobao': "\uE6A6",
+  'uicon-weibo-circle-fill': "\uE6A5",
+  'uicon-weibo': "\uE6A4",
+  'uicon-qq-fill': "\uE6A1",
+  'uicon-qq-circle-fill': "\uE6A0",
+  'uicon-moments-circel-fill': "\uE69A",
+  'uicon-moments': "\uE69B",
+  'uicon-qzone': "\uE695",
+  'uicon-qzone-circle-fill': "\uE696",
+  'uicon-baidu-circle-fill': "\uE680",
+  'uicon-baidu': "\uE681",
+  'uicon-facebook-circle-fill': "\uE68A",
+  'uicon-facebook': "\uE689",
+  'uicon-car': "\uE60C",
+  'uicon-car-fill': "\uE636",
+  'uicon-warning-fill': "\uE64D",
+  'uicon-warning': "\uE694",
+  'uicon-clock-fill': "\uE638",
+  'uicon-clock': "\uE60F",
+  'uicon-edit-pen': "\uE612",
+  'uicon-edit-pen-fill': "\uE66B",
+  'uicon-email': "\uE611",
+  'uicon-email-fill': "\uE642",
+  'uicon-minus-circle': "\uE61B",
+  'uicon-minus-circle-fill': "\uE652",
+  'uicon-plus-circle': "\uE62E",
+  'uicon-plus-circle-fill': "\uE661",
+  'uicon-file-text': "\uE663",
+  'uicon-file-text-fill': "\uE665",
+  'uicon-pushpin': "\uE7E3",
+  'uicon-pushpin-fill': "\uE86E",
+  'uicon-grid': "\uE673",
+  'uicon-grid-fill': "\uE678",
+  'uicon-play-circle': "\uE647",
+  'uicon-play-circle-fill': "\uE655",
+  'uicon-pause-circle-fill': "\uE654",
+  'uicon-pause': "\uE8FA",
+  'uicon-pause-circle': "\uE643",
+  'uicon-eye-off': "\uE648",
+  'uicon-eye-off-outline': "\uE62B",
+  'uicon-gift-fill': "\uE65C",
+  'uicon-gift': "\uE65B",
+  'uicon-rmb-circle-fill': "\uE657",
+  'uicon-rmb-circle': "\uE677",
+  'uicon-kefu-ermai': "\uE656",
+  'uicon-server-fill': "\uE751",
+  'uicon-coupon-fill': "\uE8C4",
+  'uicon-coupon': "\uE8AE",
+  'uicon-integral': "\uE704",
+  'uicon-integral-fill': "\uE703",
+  'uicon-home-fill': "\uE964",
+  'uicon-home': "\uE965",
+  'uicon-hourglass-half-fill': "\uE966",
+  'uicon-hourglass': "\uE967",
+  'uicon-account': "\uE628",
+  'uicon-plus-people-fill': "\uE626",
+  'uicon-minus-people-fill': "\uE615",
+  'uicon-account-fill': "\uE614",
+  'uicon-thumb-down-fill': "\uE726",
+  'uicon-thumb-down': "\uE727",
+  'uicon-thumb-up': "\uE733",
+  'uicon-thumb-up-fill': "\uE72F",
+  'uicon-lock-fill': "\uE979",
+  'uicon-lock-open': "\uE973",
+  'uicon-lock-opened-fill': "\uE974",
+  'uicon-lock': "\uE97A",
+  'uicon-red-packet-fill': "\uE690",
+  'uicon-photo-fill': "\uE98B",
+  'uicon-photo': "\uE98D",
+  'uicon-volume-off-fill': "\uE659",
+  'uicon-volume-off': "\uE644",
+  'uicon-volume-fill': "\uE670",
+  'uicon-volume': "\uE633",
+  'uicon-red-packet': "\uE691",
+  'uicon-download': "\uE63C",
+  'uicon-arrow-up-fill': "\uE6B0",
+  'uicon-arrow-down-fill': "\uE600",
+  'uicon-play-left-fill': "\uE675",
+  'uicon-play-right-fill': "\uE676",
+  'uicon-rewind-left-fill': "\uE679",
+  'uicon-rewind-right-fill': "\uE67A",
+  'uicon-arrow-downward': "\uE604",
+  'uicon-arrow-leftward': "\uE601",
+  'uicon-arrow-rightward': "\uE603",
+  'uicon-arrow-upward': "\uE607",
+  'uicon-arrow-down': "\uE60D",
+  'uicon-arrow-right': "\uE605",
+  'uicon-arrow-left': "\uE60E",
+  'uicon-arrow-up': "\uE606",
+  'uicon-skip-back-left': "\uE674",
+  'uicon-skip-forward-right': "\uE672",
+  'uicon-rewind-right': "\uE66F",
+  'uicon-rewind-left': "\uE671",
+  'uicon-arrow-right-double': "\uE68D",
+  'uicon-arrow-left-double': "\uE68C",
+  'uicon-wifi-off': "\uE668",
+  'uicon-wifi': "\uE667",
+  'uicon-empty-data': "\uE62F",
+  'uicon-empty-history': "\uE684",
+  'uicon-empty-list': "\uE68B",
+  'uicon-empty-page': "\uE627",
+  'uicon-empty-order': "\uE639",
+  'uicon-man': "\uE697",
+  'uicon-woman': "\uE69C",
+  'uicon-man-add': "\uE61C",
+  'uicon-man-add-fill': "\uE64C",
+  'uicon-man-delete': "\uE61A",
+  'uicon-man-delete-fill': "\uE66A",
+  'uicon-zh': "\uE70A",
+  'uicon-en': "\uE692"
+};
+exports.default = _default;
+
+/***/ }),
+/* 270 */
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/props.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 图标类名
+    name: {
+      type: String,
+      default: uni.$u.props.icon.name
+    },
+    // 图标颜色，可接受主题色
+    color: {
+      type: String,
+      default: uni.$u.props.icon.color
+    },
+    // 字体大小，单位px
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.icon.size
+    },
+    // 是否显示粗体
+    bold: {
+      type: Boolean,
+      default: uni.$u.props.icon.bold
+    },
+    // 点击图标的时候传递事件出去的index（用于区分点击了哪一个）
+    index: {
+      type: [String, Number],
+      default: uni.$u.props.icon.index
+    },
+    // 触摸图标时的类名
+    hoverClass: {
+      type: String,
+      default: uni.$u.props.icon.hoverClass
+    },
+    // 自定义扩展前缀，方便用户扩展自己的图标库
+    customPrefix: {
+      type: String,
+      default: uni.$u.props.icon.customPrefix
+    },
+    // 图标右边或者下面的文字
+    label: {
+      type: [String, Number],
+      default: uni.$u.props.icon.label
+    },
+    // label的位置，只能右边或者下边
+    labelPos: {
+      type: String,
+      default: uni.$u.props.icon.labelPos
+    },
+    // label的大小
+    labelSize: {
+      type: [String, Number],
+      default: uni.$u.props.icon.labelSize
+    },
+    // label的颜色
+    labelColor: {
+      type: String,
+      default: uni.$u.props.icon.labelColor
+    },
+    // label与图标的距离
+    space: {
+      type: [String, Number],
+      default: uni.$u.props.icon.space
+    },
+    // 图片的mode
+    imgMode: {
+      type: String,
+      default: uni.$u.props.icon.imgMode
+    },
+    // 用于显示图片小图标时，图片的宽度
+    width: {
+      type: [String, Number],
+      default: uni.$u.props.icon.width
+    },
+    // 用于显示图片小图标时，图片的高度
+    height: {
+      type: [String, Number],
+      default: uni.$u.props.icon.height
+    },
+    // 用于解决某些情况下，让图标垂直居中的用途
+    top: {
+      type: [String, Number],
+      default: uni.$u.props.icon.top
+    },
+    // 是否阻止事件传播
+    stop: {
+      type: Boolean,
+      default: uni.$u.props.icon.stop
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 271 */,
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */
+/*!********************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/components/ljs-top/index.js ***!
+  \********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default2 = {
+  data: function data() {
+    return {
+      statusBarHeight: 0,
+      // 状态按钮高度
+      myback: {
+        // 是否显示返回按钮
+        show: true,
+        // 是否显示返回按钮
+        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 279)
+      },
+      // top样式
+      topStyle: {}
+    };
+  },
+  props: {
+    // 标题内容
+    title: String,
+    // 标题颜色
+    titleColor: {
+      type: String,
+      default: '#FFFFFF'
+    },
+    // 返回按钮相关配置
+    back: {
+      type: Object,
+      default: function _default() {
+        return {
+          // 是否显示返回按钮，默认显示
+          show: true,
+          // 返回按钮的图片地址
+          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 279)
+        };
+      }
+    },
+    // 开启背景图片，未开启，使用背景颜色，开启backgroundImage为必填项
+    backgroundImageShow: {
+      type: Boolean,
+      default: false
+    },
+    // 背景颜色，支持渐变色，如：linear-gradient(to top right, #CDDC39, #8BC34A, #FFEB3B);
+    backgroundColor: {
+      type: String,
+      default: '#004799'
+    },
+    // 背景图片地址，使用前需配置backgroundImageShow为true。
+    backgroundImage: String,
+    // 高度（除状态栏）
+    topHeight: {
+      type: Number,
+      default: 108
+    }
+  },
+  mounted: function mounted() {
+    this.init();
+  },
+  methods: {
+    goBack: function goBack() {
+      uni.navigateBack();
+    },
+    init: function init() {
+      this.statusBarHeight = this.getSysInfo().statusBarHeight;
+      for (var key in this.back) {
+        this.myback[key] = this.back[key];
+      }
+    },
+    getSysInfo: function getSysInfo() {
+      return uni.getSystemInfoSync();
+    }
+  }
+};
+exports.default = _default2;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 279 */
+/*!*******************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/static/images/ico_back.png ***!
+  \*******************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3NpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmZmZjZDFmMS04MzM2LWE5NDMtODY4MC01NTM5NmZhODQzMmUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjNDRUQ2RjJCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjNDRUQ2RjFCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZmZmY2QxZjEtODMzNi1hOTQzLTg2ODAtNTUzOTZmYTg0MzJlIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmZmZmNkMWYxLTgzMzYtYTk0My04NjgwLTU1Mzk2ZmE4NDMyZSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pq6FkCUAAAErSURBVHja7NpBDsIgEAXQjvEc3sC1W28GHsUruPEIXsLEjZ4DIWmiaWxty0iZ75+EkLCgvJSGASohhAY5Vg14EEgggQQSSOA/A9daHYlIdh8xq9rFahPLJZa7ysBSqqZRFMbhwytOauOqAdjBpbhpjWvxbzDhYuU6zUfNByz2Bj+8udCCG/NTdAhnHvgNZxo4BmcWOBZnEjgFZw44FWcK2INzxZavXwLn4kwAc3DVA3NxVQM1cNUCtXBVAucsBSWA8EcWJaaoh5iiOVkLyjLhYYAaSMupmocB5iARtksOBjgHiXRk4WCAU5CIx4YOBjgGCXH5MoSEuV3qWyfRr88eUPtBEUmZzeGt6azWt9bPeEpX2PtYbVvgtSog/7IgkEACCSSQQAKLx1OAAQC3zNidKkNOVAAAAABJRU5ErkJggg=="
+
+/***/ }),
+/* 280 */,
+/* 281 */,
+/* 282 */,
+/* 283 */,
+/* 284 */,
+/* 285 */,
+/* 286 */,
+/* 287 */
 /*!*********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.js ***!
   \*********************************************************************************************************************************************/
@@ -23645,546 +24643,7 @@ MeScroll.prototype.preventDefault = function (e) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 179 */
-/*!****************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/mock.js ***!
-  \****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.apiGetTabs = apiGetTabs;
-exports.apiGoods = apiGoods;
-exports.apiMsgList = apiMsgList;
-exports.apiNewList = apiNewList;
-exports.apiWeiboList = apiWeiboList;
-var _goods = _interopRequireDefault(__webpack_require__(/*! ./goods.js */ 180));
-/*
-本地模拟接口请求, 仅demo演示用.
-实际项目以您服务器接口返回的数据为准,无需本地处理分页.
-请参考官方写法: https://www.mescroll.com/uni.html?v=20200210#tagUpCallback
-* */
-
-// 模拟数据
-
-// 获取新闻列表
-function apiNewList(pageNum, pageSize) {
-  return new Promise(function (resolute, reject) {
-    //延时一秒,模拟联网
-    setTimeout(function () {
-      try {
-        var list = [];
-        if (!pageNum) {
-          //模拟下拉刷新返回的数据
-          var id = new Date().getTime();
-          var newObj = {
-            id: id,
-            title: "【新增新闻" + id + "】 标题",
-            content: "新增新闻的内容"
-          };
-          list.push(newObj);
-        } else {
-          //模拟上拉加载返回的数据
-          for (var i = 0; i < pageSize; i++) {
-            var upIndex = (pageNum - 1) * pageSize + i + 1;
-            var _newObj = {
-              id: upIndex,
-              title: "【新闻" + upIndex + "】 标题标题标题标题标题",
-              content: "内容内容内容内容内容内容内容内容内容"
-            };
-            list.push(_newObj);
-          }
-          console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
-        }
-        //模拟接口请求成功
-        resolute(list);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 1000);
-  });
-}
-
-// 搜索商品
-function apiGoods(pageNum, pageSize, keyword) {
-  return new Promise(function (resolute, reject) {
-    //延时一秒,模拟联网
-    setTimeout(function () {
-      try {
-        var data = {
-          list: [],
-          // 数据列表
-          totalCount: 0,
-          // 总数量
-          totalPage: 0,
-          // 总页数
-          hasNext: false // 是否有下一页
-        };
-
-        // 符合关键词的记录
-        var keywordList = [];
-        if (!keyword || keyword == "全部") {
-          // 搜索全部商品
-          keywordList = _goods.default;
-        } else {
-          // 关键词搜索
-          if (keyword == "母婴") keyword = "婴"; // 为这个关键词展示多几条数据
-          for (var i = 0; i < _goods.default.length; i++) {
-            var good = _goods.default[i];
-            if (good.goodName.indexOf(keyword) !== -1) {
-              keywordList.push(good);
-            }
-          }
-        }
-
-        // 分页
-        for (var _i = (pageNum - 1) * pageSize; _i < pageNum * pageSize; _i++) {
-          if (_i >= keywordList.length) break;
-          data.list.push(keywordList[_i]);
-        }
-
-        // 汇总数据
-        data.totalCount = keywordList.length;
-        data.totalPage = Math.ceil(data.totalCount / pageSize);
-        data.hasNext = pageNum < data.totalPage;
-
-        //模拟接口请求成功
-        console.log("pageNum=" + pageNum + ", pageSize=" + pageSize + ", data.list.length=" + data.list.length + ", totalCount=" + data.totalCount + ", totalPage=" + data.totalPage + ", hasNext=" + data.hasNext + (keyword ? ", keyword=" + keyword : ""));
-        resolute(data);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 1000);
-  });
-}
-
-// 获取微博列表
-function apiWeiboList(pageNum, pageSize) {
-  return new Promise(function (resolute, reject) {
-    //延时2秒,模拟联网
-    setTimeout(function () {
-      try {
-        var list = [];
-        if (!pageNum) {
-          //此处模拟下拉刷新返回的数据
-          var id = new Date().getTime();
-          var newObj = {
-            id: id,
-            title: "【新增微博" + id + "】 新增微博",
-            content: "新增微博的内容,新增微博的内容"
-          };
-          list.push(newObj);
-        } else {
-          //此处模拟上拉加载返回的数据
-          for (var i = 0; i < pageSize; i++) {
-            var upIndex = (pageNum - 1) * pageSize + i + 1;
-            var _newObj2 = {
-              id: upIndex,
-              title: "【微博" + upIndex + "】 标题标题标题标题标题标题",
-              content: "内容内容内容内容内容内容内容内容内容内容"
-            };
-            list.push(_newObj2);
-          }
-          console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
-        }
-        //模拟接口请求成功
-        resolute(list);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 2000);
-  });
-}
-
-// 获取消息列表(共5页消息)
-function apiMsgList(pageNum, pageSize) {
-  return new Promise(function (resolute, reject) {
-    //延时一秒,模拟联网
-    setTimeout(function () {
-      try {
-        var list = [];
-        //模拟下拉加载更多记录
-        for (var i = 0; i < pageSize; i++) {
-          var msgId = (pageNum - 1) * pageSize + i + 1;
-          var newObj = {
-            id: msgId,
-            title: "【消息" + msgId + "】",
-            content: "内容: 下拉获取聊天记录"
-          };
-          // 此处模拟只有5页的消息 (第5页只有3条)
-          if (pageNum >= 5 && i >= 3) {} else {
-            list.unshift(newObj);
-          }
-        }
-        console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
-        //模拟接口请求成功
-        resolute(list);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 1000);
-  });
-}
-
-// 获取tabs类目
-function apiGetTabs() {
-  return new Promise(function (resolute, reject) {
-    //延时,模拟联网
-    setTimeout(function () {
-      try {
-        var tabs = ['全部', '奶粉', '面膜', '图书', '果汁', '奶瓶', '美素', '花王', '韩蜜', '口红', '毛巾', '玩具', '衣服'];
-        //模拟接口请求成功
-        resolute(tabs);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 10);
-  });
-}
-
-/***/ }),
-/* 180 */
-/*!*****************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/goods.js ***!
-  \*****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var goods = [{
-  "id": "1",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd1.jpg",
-  "goodName": "【1】  六罐装荷兰美素佳儿金装2段900g",
-  "goodPrice": 1149.00,
-  "goodSold": 648
-}, {
-  "id": "2",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd2.jpg",
-  "goodName": "【2】  韩国Amore爱茉莉红吕洗发水套装修复受损发质",
-  "goodPrice": 89.00,
-  "goodSold": 128
-}, {
-  "id": "3",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd3.jpg",
-  "goodName": "【3】  Friso美素佳儿 金装婴儿配方奶粉3段900g",
-  "goodPrice": 195.00,
-  "goodSold": 968
-}, {
-  "id": "4",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd4.jpg",
-  "goodName": "【4】  Fisher goodPrice费雪 费雪三轮儿童滑行车",
-  "goodPrice": 299.00,
-  "goodSold": 85
-}, {
-  "id": "5",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd5.jpg",
-  "goodName": "【5】  Babylee巴布力 实木婴儿床 雷卡拉130*70cm",
-  "goodPrice": 1889.00,
-  "goodSold": 18
-}, {
-  "id": "6",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd6.jpg",
-  "goodName": "【6】  Pigeon贝亲 独立三层奶粉盒 送小罐奶粉1段200g",
-  "goodPrice": 70.00,
-  "goodSold": 658
-}, {
-  "id": "7",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd7.jpg",
-  "goodName": "【7】 TTBOO兔兔小布 肩纽扣套装",
-  "goodPrice": 268.00,
-  "goodSold": 128
-}, {
-  "id": "8",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd8.jpg",
-  "goodName": "【8】  Nuna璐拉 婴儿布里奇果精纯嫩肤沐浴露婴儿精纯芦荟胶",
-  "goodPrice": 140.00,
-  "goodSold": 366
-}, {
-  "id": "9",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd9.jpg",
-  "goodName": "【9】  illuma启赋 奶粉3段900g",
-  "goodPrice": 252.00,
-  "goodSold": 98
-}, {
-  "id": "10",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd10.jpg",
-  "goodName": "【10】  Abbott雅培乳蛋白部分水解婴儿配方奶粉3段820g",
-  "goodPrice": 89.00,
-  "goodSold": 128
-}, {
-  "id": "11",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd11.jpg",
-  "goodName": "【11】  韩蜜 酷炫唇蜜（礼盒套装）2.8g*4",
-  "goodPrice": 179.00,
-  "goodSold": 35
-}, {
-  "id": "12",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd12.jpg",
-  "goodName": "【12】  保税区直发【3包装】日本Merries花王纸尿裤NB90",
-  "goodPrice": 289.00,
-  "goodSold": 1928
-}, {
-  "id": "13",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd13.jpg",
-  "goodName": "【13】  Comotomo可么多么 硅胶奶瓶（0-3月奶嘴）150ml绿色",
-  "goodPrice": 203.00,
-  "goodSold": 87
-}, {
-  "id": "14",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd14.jpg",
-  "goodName": "【14】  香港直邮德国瑞德露Rival de Loop芦荟精华安瓶",
-  "goodPrice": 152.00,
-  "goodSold": 61
-}, {
-  "id": "15",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd15.jpg",
-  "goodName": "【15】  保税区直发药师堂尊马油香草味温和保湿无刺激面霜",
-  "goodPrice": 269.00,
-  "goodSold": 73
-}, {
-  "id": "16",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd16.jpg",
-  "goodName": "【16】  香港直邮日本Spatreatment眼膜保湿去细纹法令纹",
-  "goodPrice": 219.00,
-  "goodSold": 13
-}, {
-  "id": "17",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd17.jpg",
-  "goodName": "【17】  韩国MEDIHEALNMF可莱丝针剂睡眠面膜",
-  "goodPrice": 81.00,
-  "goodSold": 128
-}, {
-  "id": "18",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd18.jpg",
-  "goodName": "【18】  DHC蝶翠诗橄榄蜂蜜滋养洗脸手工皂90g",
-  "goodPrice": 123.00,
-  "goodSold": 77
-}, {
-  "id": "19",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd19.jpg",
-  "goodName": "【19】  日本资生堂CPB肌肤之钥新版隔离霜 清爽型 30ml",
-  "goodPrice": 429.00,
-  "goodSold": 36
-}, {
-  "id": "20",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd20.jpg",
-  "goodName": "【20】 Heinz亨氏 婴儿面条优加面条全素套餐组合3口味3盒",
-  "goodPrice": 39.00,
-  "goodSold": 61
-}, {
-  "id": "21",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd21.jpg",
-  "goodName": "【21】  Heinz亨氏 乐维滋果汁泥组合5口味15袋",
-  "goodPrice": 69.00,
-  "goodSold": 55
-}, {
-  "id": "22",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd22.jpg",
-  "goodName": "【22】  保税区直发澳大利亚Swisse高浓度蔓越莓胶囊30粒",
-  "goodPrice": 271.00,
-  "goodSold": 19
-}, {
-  "id": "23",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd23.jpg",
-  "goodName": "【23】  挪威Nordic Naturals小鱼婴幼儿鱼油DHA滴剂",
-  "goodPrice": 102.00,
-  "goodSold": 125
-}, {
-  "id": "24",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd24.jpg",
-  "goodName": "【24】  澳大利亚Bio island DHA for Pregnancy海藻油DHA",
-  "goodPrice": 289.00,
-  "goodSold": 28
-}, {
-  "id": "25",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd25.jpg",
-  "goodName": "【25】  澳大利亚Fatblaster Coconut Detox椰子水",
-  "goodPrice": 152.00,
-  "goodSold": 17
-}, {
-  "id": "26",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd26.jpg",
-  "goodName": "【26】  Suitsky舒比奇 高护极薄舒爽纸尿片尿不湿XL60",
-  "goodPrice": 99.00,
-  "goodSold": 181
-}, {
-  "id": "27",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd27.jpg",
-  "goodName": "【27】  英国JUST SOAP手工皂 玫瑰天竺葵蛋糕皂",
-  "goodPrice": 72.00,
-  "goodSold": 66
-}, {
-  "id": "28",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd28.jpg",
-  "goodName": "【28】  德国NUK 多色婴幼儿带盖学饮杯",
-  "goodPrice": 92.00,
-  "goodSold": 138
-}];
-var _default = goods;
-exports.default = _default;
-
-/***/ }),
-/* 181 */,
-/* 182 */,
-/* 183 */,
-/* 184 */,
-/* 185 */,
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */,
-/* 193 */,
-/* 194 */,
-/* 195 */,
-/* 196 */,
-/* 197 */,
-/* 198 */,
-/* 199 */,
-/* 200 */,
-/* 201 */,
-/* 202 */,
-/* 203 */
-/*!************************************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js ***!
-  \************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-// mescroll-body 和 mescroll-uni 通用
-var MescrollMixin = {
-  data: function data() {
-    return {
-      mescroll: null //mescroll实例对象
-    };
-  },
-  // 注册系统自带的下拉刷新 (配置down.native为true时生效, 还需在pages配置enablePullDownRefresh:true;详请参考mescroll-native的案例)
-  onPullDownRefresh: function onPullDownRefresh() {
-    this.mescroll && this.mescroll.onPullDownRefresh();
-  },
-  // 注册列表滚动事件,用于判定在顶部可下拉刷新,在指定位置可显示隐藏回到顶部按钮 (此方法为页面生命周期,无法在子组件中触发, 仅在mescroll-body生效)
-  onPageScroll: function onPageScroll(e) {
-    this.mescroll && this.mescroll.onPageScroll(e);
-  },
-  // 注册滚动到底部的事件,用于上拉加载 (此方法为页面生命周期,无法在子组件中触发, 仅在mescroll-body生效)
-  onReachBottom: function onReachBottom() {
-    this.mescroll && this.mescroll.onReachBottom();
-  },
-  methods: {
-    // mescroll组件初始化的回调,可获取到mescroll对象
-    mescrollInit: function mescrollInit(mescroll) {
-      this.mescroll = mescroll;
-    },
-    // 下拉刷新的回调 (mixin默认resetUpScroll)
-    downCallback: function downCallback() {
-      var _this = this;
-      if (this.mescroll.optUp.use) {
-        this.mescroll.resetUpScroll();
-      } else {
-        setTimeout(function () {
-          _this.mescroll.endSuccess();
-        }, 500);
-      }
-    },
-    // 上拉加载的回调
-    upCallback: function upCallback() {
-      var _this2 = this;
-      // mixin默认延时500自动结束加载
-      setTimeout(function () {
-        _this2.mescroll.endErr();
-      }, 500);
-    }
-  }
-};
-var _default = MescrollMixin;
-exports.default = _default;
-
-/***/ }),
-/* 204 */,
-/* 205 */,
-/* 206 */,
-/* 207 */,
-/* 208 */,
-/* 209 */,
-/* 210 */,
-/* 211 */,
-/* 212 */,
-/* 213 */,
-/* 214 */,
-/* 215 */,
-/* 216 */,
-/* 217 */,
-/* 218 */,
-/* 219 */,
-/* 220 */,
-/* 221 */,
-/* 222 */,
-/* 223 */,
-/* 224 */,
-/* 225 */,
-/* 226 */,
-/* 227 */,
-/* 228 */,
-/* 229 */,
-/* 230 */,
-/* 231 */,
-/* 232 */,
-/* 233 */,
-/* 234 */,
-/* 235 */,
-/* 236 */,
-/* 237 */,
-/* 238 */,
-/* 239 */,
-/* 240 */,
-/* 241 */,
-/* 242 */,
-/* 243 */,
-/* 244 */,
-/* 245 */,
-/* 246 */,
-/* 247 */,
-/* 248 */,
-/* 249 */,
-/* 250 */,
-/* 251 */,
-/* 252 */,
-/* 253 */,
-/* 254 */,
-/* 255 */,
-/* 256 */,
-/* 257 */,
-/* 258 */,
-/* 259 */,
-/* 260 */,
-/* 261 */,
-/* 262 */
+/* 288 */
 /*!****************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni-option.js ***!
   \****************************************************************************************************************************************************/
@@ -24282,7 +24741,7 @@ var _default = GlobalOption;
 exports.default = _default;
 
 /***/ }),
-/* 263 */
+/* 289 */
 /*!**********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-i18n.js ***!
   \**********************************************************************************************************************************************/
@@ -24314,7 +24773,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 264 */
+/* 290 */
 /*!*******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/wxs/mixins.js ***!
   \*******************************************************************************************************************************************/
@@ -24438,465 +24897,6 @@ var _default = WxsMixin;
 exports.default = _default;
 
 /***/ }),
-/* 265 */,
-/* 266 */,
-/* 267 */,
-/* 268 */,
-/* 269 */,
-/* 270 */,
-/* 271 */,
-/* 272 */,
-/* 273 */,
-/* 274 */
-/*!****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/icons.js ***!
-  \****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  'uicon-level': "\uE693",
-  'uicon-column-line': "\uE68E",
-  'uicon-checkbox-mark': "\uE807",
-  'uicon-folder': "\uE7F5",
-  'uicon-movie': "\uE7F6",
-  'uicon-star-fill': "\uE669",
-  'uicon-star': "\uE65F",
-  'uicon-phone-fill': "\uE64F",
-  'uicon-phone': "\uE622",
-  'uicon-apple-fill': "\uE881",
-  'uicon-chrome-circle-fill': "\uE885",
-  'uicon-backspace': "\uE67B",
-  'uicon-attach': "\uE632",
-  'uicon-cut': "\uE948",
-  'uicon-empty-car': "\uE602",
-  'uicon-empty-coupon': "\uE682",
-  'uicon-empty-address': "\uE646",
-  'uicon-empty-favor': "\uE67C",
-  'uicon-empty-permission': "\uE686",
-  'uicon-empty-news': "\uE687",
-  'uicon-empty-search': "\uE664",
-  'uicon-github-circle-fill': "\uE887",
-  'uicon-rmb': "\uE608",
-  'uicon-person-delete-fill': "\uE66A",
-  'uicon-reload': "\uE788",
-  'uicon-order': "\uE68F",
-  'uicon-server-man': "\uE6BC",
-  'uicon-search': "\uE62A",
-  'uicon-fingerprint': "\uE955",
-  'uicon-more-dot-fill': "\uE630",
-  'uicon-scan': "\uE662",
-  'uicon-share-square': "\uE60B",
-  'uicon-map': "\uE61D",
-  'uicon-map-fill': "\uE64E",
-  'uicon-tags': "\uE629",
-  'uicon-tags-fill': "\uE651",
-  'uicon-bookmark-fill': "\uE63B",
-  'uicon-bookmark': "\uE60A",
-  'uicon-eye': "\uE613",
-  'uicon-eye-fill': "\uE641",
-  'uicon-mic': "\uE64A",
-  'uicon-mic-off': "\uE649",
-  'uicon-calendar': "\uE66E",
-  'uicon-calendar-fill': "\uE634",
-  'uicon-trash': "\uE623",
-  'uicon-trash-fill': "\uE658",
-  'uicon-play-left': "\uE66D",
-  'uicon-play-right': "\uE610",
-  'uicon-minus': "\uE618",
-  'uicon-plus': "\uE62D",
-  'uicon-info': "\uE653",
-  'uicon-info-circle': "\uE7D2",
-  'uicon-info-circle-fill': "\uE64B",
-  'uicon-question': "\uE715",
-  'uicon-error': "\uE6D3",
-  'uicon-close': "\uE685",
-  'uicon-checkmark': "\uE6A8",
-  'uicon-android-circle-fill': "\uE67E",
-  'uicon-android-fill': "\uE67D",
-  'uicon-ie': "\uE87B",
-  'uicon-IE-circle-fill': "\uE889",
-  'uicon-google': "\uE87A",
-  'uicon-google-circle-fill': "\uE88A",
-  'uicon-setting-fill': "\uE872",
-  'uicon-setting': "\uE61F",
-  'uicon-minus-square-fill': "\uE855",
-  'uicon-plus-square-fill': "\uE856",
-  'uicon-heart': "\uE7DF",
-  'uicon-heart-fill': "\uE851",
-  'uicon-camera': "\uE7D7",
-  'uicon-camera-fill': "\uE870",
-  'uicon-more-circle': "\uE63E",
-  'uicon-more-circle-fill': "\uE645",
-  'uicon-chat': "\uE620",
-  'uicon-chat-fill': "\uE61E",
-  'uicon-bag-fill': "\uE617",
-  'uicon-bag': "\uE619",
-  'uicon-error-circle-fill': "\uE62C",
-  'uicon-error-circle': "\uE624",
-  'uicon-close-circle': "\uE63F",
-  'uicon-close-circle-fill': "\uE637",
-  'uicon-checkmark-circle': "\uE63D",
-  'uicon-checkmark-circle-fill': "\uE635",
-  'uicon-question-circle-fill': "\uE666",
-  'uicon-question-circle': "\uE625",
-  'uicon-share': "\uE631",
-  'uicon-share-fill': "\uE65E",
-  'uicon-shopping-cart': "\uE621",
-  'uicon-shopping-cart-fill': "\uE65D",
-  'uicon-bell': "\uE609",
-  'uicon-bell-fill': "\uE640",
-  'uicon-list': "\uE650",
-  'uicon-list-dot': "\uE616",
-  'uicon-zhihu': "\uE6BA",
-  'uicon-zhihu-circle-fill': "\uE709",
-  'uicon-zhifubao': "\uE6B9",
-  'uicon-zhifubao-circle-fill': "\uE6B8",
-  'uicon-weixin-circle-fill': "\uE6B1",
-  'uicon-weixin-fill': "\uE6B2",
-  'uicon-twitter-circle-fill': "\uE6AB",
-  'uicon-twitter': "\uE6AA",
-  'uicon-taobao-circle-fill': "\uE6A7",
-  'uicon-taobao': "\uE6A6",
-  'uicon-weibo-circle-fill': "\uE6A5",
-  'uicon-weibo': "\uE6A4",
-  'uicon-qq-fill': "\uE6A1",
-  'uicon-qq-circle-fill': "\uE6A0",
-  'uicon-moments-circel-fill': "\uE69A",
-  'uicon-moments': "\uE69B",
-  'uicon-qzone': "\uE695",
-  'uicon-qzone-circle-fill': "\uE696",
-  'uicon-baidu-circle-fill': "\uE680",
-  'uicon-baidu': "\uE681",
-  'uicon-facebook-circle-fill': "\uE68A",
-  'uicon-facebook': "\uE689",
-  'uicon-car': "\uE60C",
-  'uicon-car-fill': "\uE636",
-  'uicon-warning-fill': "\uE64D",
-  'uicon-warning': "\uE694",
-  'uicon-clock-fill': "\uE638",
-  'uicon-clock': "\uE60F",
-  'uicon-edit-pen': "\uE612",
-  'uicon-edit-pen-fill': "\uE66B",
-  'uicon-email': "\uE611",
-  'uicon-email-fill': "\uE642",
-  'uicon-minus-circle': "\uE61B",
-  'uicon-minus-circle-fill': "\uE652",
-  'uicon-plus-circle': "\uE62E",
-  'uicon-plus-circle-fill': "\uE661",
-  'uicon-file-text': "\uE663",
-  'uicon-file-text-fill': "\uE665",
-  'uicon-pushpin': "\uE7E3",
-  'uicon-pushpin-fill': "\uE86E",
-  'uicon-grid': "\uE673",
-  'uicon-grid-fill': "\uE678",
-  'uicon-play-circle': "\uE647",
-  'uicon-play-circle-fill': "\uE655",
-  'uicon-pause-circle-fill': "\uE654",
-  'uicon-pause': "\uE8FA",
-  'uicon-pause-circle': "\uE643",
-  'uicon-eye-off': "\uE648",
-  'uicon-eye-off-outline': "\uE62B",
-  'uicon-gift-fill': "\uE65C",
-  'uicon-gift': "\uE65B",
-  'uicon-rmb-circle-fill': "\uE657",
-  'uicon-rmb-circle': "\uE677",
-  'uicon-kefu-ermai': "\uE656",
-  'uicon-server-fill': "\uE751",
-  'uicon-coupon-fill': "\uE8C4",
-  'uicon-coupon': "\uE8AE",
-  'uicon-integral': "\uE704",
-  'uicon-integral-fill': "\uE703",
-  'uicon-home-fill': "\uE964",
-  'uicon-home': "\uE965",
-  'uicon-hourglass-half-fill': "\uE966",
-  'uicon-hourglass': "\uE967",
-  'uicon-account': "\uE628",
-  'uicon-plus-people-fill': "\uE626",
-  'uicon-minus-people-fill': "\uE615",
-  'uicon-account-fill': "\uE614",
-  'uicon-thumb-down-fill': "\uE726",
-  'uicon-thumb-down': "\uE727",
-  'uicon-thumb-up': "\uE733",
-  'uicon-thumb-up-fill': "\uE72F",
-  'uicon-lock-fill': "\uE979",
-  'uicon-lock-open': "\uE973",
-  'uicon-lock-opened-fill': "\uE974",
-  'uicon-lock': "\uE97A",
-  'uicon-red-packet-fill': "\uE690",
-  'uicon-photo-fill': "\uE98B",
-  'uicon-photo': "\uE98D",
-  'uicon-volume-off-fill': "\uE659",
-  'uicon-volume-off': "\uE644",
-  'uicon-volume-fill': "\uE670",
-  'uicon-volume': "\uE633",
-  'uicon-red-packet': "\uE691",
-  'uicon-download': "\uE63C",
-  'uicon-arrow-up-fill': "\uE6B0",
-  'uicon-arrow-down-fill': "\uE600",
-  'uicon-play-left-fill': "\uE675",
-  'uicon-play-right-fill': "\uE676",
-  'uicon-rewind-left-fill': "\uE679",
-  'uicon-rewind-right-fill': "\uE67A",
-  'uicon-arrow-downward': "\uE604",
-  'uicon-arrow-leftward': "\uE601",
-  'uicon-arrow-rightward': "\uE603",
-  'uicon-arrow-upward': "\uE607",
-  'uicon-arrow-down': "\uE60D",
-  'uicon-arrow-right': "\uE605",
-  'uicon-arrow-left': "\uE60E",
-  'uicon-arrow-up': "\uE606",
-  'uicon-skip-back-left': "\uE674",
-  'uicon-skip-forward-right': "\uE672",
-  'uicon-rewind-right': "\uE66F",
-  'uicon-rewind-left': "\uE671",
-  'uicon-arrow-right-double': "\uE68D",
-  'uicon-arrow-left-double': "\uE68C",
-  'uicon-wifi-off': "\uE668",
-  'uicon-wifi': "\uE667",
-  'uicon-empty-data': "\uE62F",
-  'uicon-empty-history': "\uE684",
-  'uicon-empty-list': "\uE68B",
-  'uicon-empty-page': "\uE627",
-  'uicon-empty-order': "\uE639",
-  'uicon-man': "\uE697",
-  'uicon-woman': "\uE69C",
-  'uicon-man-add': "\uE61C",
-  'uicon-man-add-fill': "\uE64C",
-  'uicon-man-delete': "\uE61A",
-  'uicon-man-delete-fill': "\uE66A",
-  'uicon-zh': "\uE70A",
-  'uicon-en': "\uE692"
-};
-exports.default = _default;
-
-/***/ }),
-/* 275 */
-/*!****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/props.js ***!
-  \****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 图标类名
-    name: {
-      type: String,
-      default: uni.$u.props.icon.name
-    },
-    // 图标颜色，可接受主题色
-    color: {
-      type: String,
-      default: uni.$u.props.icon.color
-    },
-    // 字体大小，单位px
-    size: {
-      type: [String, Number],
-      default: uni.$u.props.icon.size
-    },
-    // 是否显示粗体
-    bold: {
-      type: Boolean,
-      default: uni.$u.props.icon.bold
-    },
-    // 点击图标的时候传递事件出去的index（用于区分点击了哪一个）
-    index: {
-      type: [String, Number],
-      default: uni.$u.props.icon.index
-    },
-    // 触摸图标时的类名
-    hoverClass: {
-      type: String,
-      default: uni.$u.props.icon.hoverClass
-    },
-    // 自定义扩展前缀，方便用户扩展自己的图标库
-    customPrefix: {
-      type: String,
-      default: uni.$u.props.icon.customPrefix
-    },
-    // 图标右边或者下面的文字
-    label: {
-      type: [String, Number],
-      default: uni.$u.props.icon.label
-    },
-    // label的位置，只能右边或者下边
-    labelPos: {
-      type: String,
-      default: uni.$u.props.icon.labelPos
-    },
-    // label的大小
-    labelSize: {
-      type: [String, Number],
-      default: uni.$u.props.icon.labelSize
-    },
-    // label的颜色
-    labelColor: {
-      type: String,
-      default: uni.$u.props.icon.labelColor
-    },
-    // label与图标的距离
-    space: {
-      type: [String, Number],
-      default: uni.$u.props.icon.space
-    },
-    // 图片的mode
-    imgMode: {
-      type: String,
-      default: uni.$u.props.icon.imgMode
-    },
-    // 用于显示图片小图标时，图片的宽度
-    width: {
-      type: [String, Number],
-      default: uni.$u.props.icon.width
-    },
-    // 用于显示图片小图标时，图片的高度
-    height: {
-      type: [String, Number],
-      default: uni.$u.props.icon.height
-    },
-    // 用于解决某些情况下，让图标垂直居中的用途
-    top: {
-      type: [String, Number],
-      default: uni.$u.props.icon.top
-    },
-    // 是否阻止事件传播
-    stop: {
-      type: Boolean,
-      default: uni.$u.props.icon.stop
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 276 */,
-/* 277 */,
-/* 278 */,
-/* 279 */,
-/* 280 */,
-/* 281 */,
-/* 282 */,
-/* 283 */
-/*!********************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/components/ljs-top/index.js ***!
-  \********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default2 = {
-  data: function data() {
-    return {
-      statusBarHeight: 0,
-      // 状态按钮高度
-      myback: {
-        // 是否显示返回按钮
-        show: true,
-        // 是否显示返回按钮
-        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 284)
-      },
-      // top样式
-      topStyle: {}
-    };
-  },
-  props: {
-    // 标题内容
-    title: String,
-    // 标题颜色
-    titleColor: {
-      type: String,
-      default: '#FFFFFF'
-    },
-    // 返回按钮相关配置
-    back: {
-      type: Object,
-      default: function _default() {
-        return {
-          // 是否显示返回按钮，默认显示
-          show: true,
-          // 返回按钮的图片地址
-          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 284)
-        };
-      }
-    },
-    // 开启背景图片，未开启，使用背景颜色，开启backgroundImage为必填项
-    backgroundImageShow: {
-      type: Boolean,
-      default: false
-    },
-    // 背景颜色，支持渐变色，如：linear-gradient(to top right, #CDDC39, #8BC34A, #FFEB3B);
-    backgroundColor: {
-      type: String,
-      default: '#004799'
-    },
-    // 背景图片地址，使用前需配置backgroundImageShow为true。
-    backgroundImage: String,
-    // 高度（除状态栏）
-    topHeight: {
-      type: Number,
-      default: 108
-    }
-  },
-  mounted: function mounted() {
-    this.init();
-  },
-  methods: {
-    goBack: function goBack() {
-      uni.navigateBack();
-    },
-    init: function init() {
-      this.statusBarHeight = this.getSysInfo().statusBarHeight;
-      for (var key in this.back) {
-        this.myback[key] = this.back[key];
-      }
-    },
-    getSysInfo: function getSysInfo() {
-      return uni.getSystemInfoSync();
-    }
-  }
-};
-exports.default = _default2;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 284 */
-/*!*******************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/static/images/ico_back.png ***!
-  \*******************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3NpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmZmZjZDFmMS04MzM2LWE5NDMtODY4MC01NTM5NmZhODQzMmUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjNDRUQ2RjJCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjNDRUQ2RjFCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZmZmY2QxZjEtODMzNi1hOTQzLTg2ODAtNTUzOTZmYTg0MzJlIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmZmZmNkMWYxLTgzMzYtYTk0My04NjgwLTU1Mzk2ZmE4NDMyZSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pq6FkCUAAAErSURBVHja7NpBDsIgEAXQjvEc3sC1W28GHsUruPEIXsLEjZ4DIWmiaWxty0iZ75+EkLCgvJSGASohhAY5Vg14EEgggQQSSOA/A9daHYlIdh8xq9rFahPLJZa7ysBSqqZRFMbhwytOauOqAdjBpbhpjWvxbzDhYuU6zUfNByz2Bj+8udCCG/NTdAhnHvgNZxo4BmcWOBZnEjgFZw44FWcK2INzxZavXwLn4kwAc3DVA3NxVQM1cNUCtXBVAucsBSWA8EcWJaaoh5iiOVkLyjLhYYAaSMupmocB5iARtksOBjgHiXRk4WCAU5CIx4YOBjgGCXH5MoSEuV3qWyfRr88eUPtBEUmZzeGt6azWt9bPeEpX2PtYbVvgtSog/7IgkEACCSSQQAKLx1OAAQC3zNidKkNOVAAAAABJRU5ErkJggg=="
-
-/***/ }),
-/* 285 */,
-/* 286 */,
-/* 287 */,
-/* 288 */,
-/* 289 */,
-/* 290 */,
 /* 291 */,
 /* 292 */,
 /* 293 */,
@@ -24912,7 +24912,8 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACo
 /* 303 */,
 /* 304 */,
 /* 305 */,
-/* 306 */
+/* 306 */,
+/* 307 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-input/props.js ***!
   \*****************************************************************************************************************************/
@@ -25117,14 +25118,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 307 */,
 /* 308 */,
 /* 309 */,
 /* 310 */,
 /* 311 */,
 /* 312 */,
 /* 313 */,
-/* 314 */
+/* 314 */,
+/* 315 */
 /*!**************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox-group/props.js ***!
   \**************************************************************************************************************************************/
@@ -25221,14 +25222,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 315 */,
 /* 316 */,
 /* 317 */,
 /* 318 */,
 /* 319 */,
 /* 320 */,
 /* 321 */,
-/* 322 */
+/* 322 */,
+/* 323 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox/props.js ***!
   \********************************************************************************************************************************/
@@ -25315,14 +25316,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 323 */,
 /* 324 */,
 /* 325 */,
 /* 326 */,
 /* 327 */,
 /* 328 */,
 /* 329 */,
-/* 330 */
+/* 330 */,
+/* 331 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-textarea/props.js ***!
   \********************************************************************************************************************************/

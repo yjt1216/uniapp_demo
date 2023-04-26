@@ -1,6 +1,6 @@
 <template>
 	<view class="message">
-		<nav-bar title="登录" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
+		<nav-bar title="消息" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		 <mescroll-body @init="mescrollInit" @down="downCallback" @up="upCallback">
 			<!-- <view class="notice">mescroll的极简示例,大部分情况就是这么用</view> -->
 			<good-list :list="goods"></good-list>
