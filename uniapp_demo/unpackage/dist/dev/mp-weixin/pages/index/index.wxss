@@ -25,61 +25,13 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50rpx;
-}
-.text-area {
-  display: flex;
-  justify-content: center;
-}
-.title {
-  font-size: 36rpx;
-  color: #8f8f94;
-}
-.now-city {
-  background-color: #FFFFFF;
-}
-.city-tip {
-  margin-top: 50rpx;
-  font-size: 30rpx;
-  margin-left: 20rpx;
-  margin-bottom: 10rpx;
-  color: #707070;
-  font-weight: bold;
-}
-.now-pos-btn {
-  background-color: #FA800A;
-  border-radius: 40rpx;
-  text-align: center;
-  padding-top: 10rpx;
-  padding-left: 20rpx;
-  padding-right: 20rpx;
-  padding-bottom: 10rpx;
-  margin: 10rpx;
-  color: #FFFFFF;
-  font-size: 25rpx;
-}
-.select-pos {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 10rpx 20rpx 30rpx 20rpx;
-}
-.re-pos {
-  text-align: center;
-  width: 200rpx;
-  font-size: 30rpx;
-  align-self: center;
+.top-wrap {
+  z-index: 9990;
+  position: fixed;
+  top: --window-top;
+  /* left: 0; */
+  width: 100%;
+  height: 100rpx;
+  background-color: white;
 }
 

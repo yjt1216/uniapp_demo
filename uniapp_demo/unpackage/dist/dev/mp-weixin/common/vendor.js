@@ -22745,1904 +22745,6 @@ module.exports = function(module) {
 /* 176 */,
 /* 177 */,
 /* 178 */
-/*!************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/static/js/qqmap-wx-jssdk.min.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(wx) {var _classCallCheck = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23);
-var _createClass = __webpack_require__(/*! @babel/runtime/helpers/createClass */ 24);
-var ERROR_CONF = {
-  KEY_ERR: 311,
-  KEY_ERR_MSG: 'key格式错误',
-  PARAM_ERR: 310,
-  PARAM_ERR_MSG: '请求参数信息有误',
-  SYSTEM_ERR: 600,
-  SYSTEM_ERR_MSG: '系统错误',
-  WX_ERR_CODE: 1000,
-  WX_OK_CODE: 200
-};
-var BASE_URL = 'https://apis.map.qq.com/ws/';
-var URL_SEARCH = BASE_URL + 'place/v1/search';
-var URL_SUGGESTION = BASE_URL + 'place/v1/suggestion';
-var URL_GET_GEOCODER = BASE_URL + 'geocoder/v1/';
-var URL_CITY_LIST = BASE_URL + 'district/v1/list';
-var URL_AREA_LIST = BASE_URL + 'district/v1/getchildren';
-var URL_DISTANCE = BASE_URL + 'distance/v1/';
-var URL_DIRECTION = BASE_URL + 'direction/v1/';
-var MODE = {
-  driving: 'driving',
-  transit: 'transit'
-};
-var EARTH_RADIUS = 6378136.49;
-var Utils = {
-  safeAdd: function safeAdd(x, y) {
-    var lsw = (x & 0xffff) + (y & 0xffff);
-    var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-    return msw << 16 | lsw & 0xffff;
-  },
-  bitRotateLeft: function bitRotateLeft(num, cnt) {
-    return num << cnt | num >>> 32 - cnt;
-  },
-  md5cmn: function md5cmn(q, a, b, x, s, t) {
-    return this.safeAdd(this.bitRotateLeft(this.safeAdd(this.safeAdd(a, q), this.safeAdd(x, t)), s), b);
-  },
-  md5ff: function md5ff(a, b, c, d, x, s, t) {
-    return this.md5cmn(b & c | ~b & d, a, b, x, s, t);
-  },
-  md5gg: function md5gg(a, b, c, d, x, s, t) {
-    return this.md5cmn(b & d | c & ~d, a, b, x, s, t);
-  },
-  md5hh: function md5hh(a, b, c, d, x, s, t) {
-    return this.md5cmn(b ^ c ^ d, a, b, x, s, t);
-  },
-  md5ii: function md5ii(a, b, c, d, x, s, t) {
-    return this.md5cmn(c ^ (b | ~d), a, b, x, s, t);
-  },
-  binlMD5: function binlMD5(x, len) {
-    x[len >> 5] |= 0x80 << len % 32;
-    x[(len + 64 >>> 9 << 4) + 14] = len;
-    var i;
-    var olda;
-    var oldb;
-    var oldc;
-    var oldd;
-    var a = 1732584193;
-    var b = -271733879;
-    var c = -1732584194;
-    var d = 271733878;
-    for (i = 0; i < x.length; i += 16) {
-      olda = a;
-      oldb = b;
-      oldc = c;
-      oldd = d;
-      a = this.md5ff(a, b, c, d, x[i], 7, -680876936);
-      d = this.md5ff(d, a, b, c, x[i + 1], 12, -389564586);
-      c = this.md5ff(c, d, a, b, x[i + 2], 17, 606105819);
-      b = this.md5ff(b, c, d, a, x[i + 3], 22, -1044525330);
-      a = this.md5ff(a, b, c, d, x[i + 4], 7, -176418897);
-      d = this.md5ff(d, a, b, c, x[i + 5], 12, 1200080426);
-      c = this.md5ff(c, d, a, b, x[i + 6], 17, -1473231341);
-      b = this.md5ff(b, c, d, a, x[i + 7], 22, -45705983);
-      a = this.md5ff(a, b, c, d, x[i + 8], 7, 1770035416);
-      d = this.md5ff(d, a, b, c, x[i + 9], 12, -1958414417);
-      c = this.md5ff(c, d, a, b, x[i + 10], 17, -42063);
-      b = this.md5ff(b, c, d, a, x[i + 11], 22, -1990404162);
-      a = this.md5ff(a, b, c, d, x[i + 12], 7, 1804603682);
-      d = this.md5ff(d, a, b, c, x[i + 13], 12, -40341101);
-      c = this.md5ff(c, d, a, b, x[i + 14], 17, -1502002290);
-      b = this.md5ff(b, c, d, a, x[i + 15], 22, 1236535329);
-      a = this.md5gg(a, b, c, d, x[i + 1], 5, -165796510);
-      d = this.md5gg(d, a, b, c, x[i + 6], 9, -1069501632);
-      c = this.md5gg(c, d, a, b, x[i + 11], 14, 643717713);
-      b = this.md5gg(b, c, d, a, x[i], 20, -373897302);
-      a = this.md5gg(a, b, c, d, x[i + 5], 5, -701558691);
-      d = this.md5gg(d, a, b, c, x[i + 10], 9, 38016083);
-      c = this.md5gg(c, d, a, b, x[i + 15], 14, -660478335);
-      b = this.md5gg(b, c, d, a, x[i + 4], 20, -405537848);
-      a = this.md5gg(a, b, c, d, x[i + 9], 5, 568446438);
-      d = this.md5gg(d, a, b, c, x[i + 14], 9, -1019803690);
-      c = this.md5gg(c, d, a, b, x[i + 3], 14, -187363961);
-      b = this.md5gg(b, c, d, a, x[i + 8], 20, 1163531501);
-      a = this.md5gg(a, b, c, d, x[i + 13], 5, -1444681467);
-      d = this.md5gg(d, a, b, c, x[i + 2], 9, -51403784);
-      c = this.md5gg(c, d, a, b, x[i + 7], 14, 1735328473);
-      b = this.md5gg(b, c, d, a, x[i + 12], 20, -1926607734);
-      a = this.md5hh(a, b, c, d, x[i + 5], 4, -378558);
-      d = this.md5hh(d, a, b, c, x[i + 8], 11, -2022574463);
-      c = this.md5hh(c, d, a, b, x[i + 11], 16, 1839030562);
-      b = this.md5hh(b, c, d, a, x[i + 14], 23, -35309556);
-      a = this.md5hh(a, b, c, d, x[i + 1], 4, -1530992060);
-      d = this.md5hh(d, a, b, c, x[i + 4], 11, 1272893353);
-      c = this.md5hh(c, d, a, b, x[i + 7], 16, -155497632);
-      b = this.md5hh(b, c, d, a, x[i + 10], 23, -1094730640);
-      a = this.md5hh(a, b, c, d, x[i + 13], 4, 681279174);
-      d = this.md5hh(d, a, b, c, x[i], 11, -358537222);
-      c = this.md5hh(c, d, a, b, x[i + 3], 16, -722521979);
-      b = this.md5hh(b, c, d, a, x[i + 6], 23, 76029189);
-      a = this.md5hh(a, b, c, d, x[i + 9], 4, -640364487);
-      d = this.md5hh(d, a, b, c, x[i + 12], 11, -421815835);
-      c = this.md5hh(c, d, a, b, x[i + 15], 16, 530742520);
-      b = this.md5hh(b, c, d, a, x[i + 2], 23, -995338651);
-      a = this.md5ii(a, b, c, d, x[i], 6, -198630844);
-      d = this.md5ii(d, a, b, c, x[i + 7], 10, 1126891415);
-      c = this.md5ii(c, d, a, b, x[i + 14], 15, -1416354905);
-      b = this.md5ii(b, c, d, a, x[i + 5], 21, -57434055);
-      a = this.md5ii(a, b, c, d, x[i + 12], 6, 1700485571);
-      d = this.md5ii(d, a, b, c, x[i + 3], 10, -1894986606);
-      c = this.md5ii(c, d, a, b, x[i + 10], 15, -1051523);
-      b = this.md5ii(b, c, d, a, x[i + 1], 21, -2054922799);
-      a = this.md5ii(a, b, c, d, x[i + 8], 6, 1873313359);
-      d = this.md5ii(d, a, b, c, x[i + 15], 10, -30611744);
-      c = this.md5ii(c, d, a, b, x[i + 6], 15, -1560198380);
-      b = this.md5ii(b, c, d, a, x[i + 13], 21, 1309151649);
-      a = this.md5ii(a, b, c, d, x[i + 4], 6, -145523070);
-      d = this.md5ii(d, a, b, c, x[i + 11], 10, -1120210379);
-      c = this.md5ii(c, d, a, b, x[i + 2], 15, 718787259);
-      b = this.md5ii(b, c, d, a, x[i + 9], 21, -343485551);
-      a = this.safeAdd(a, olda);
-      b = this.safeAdd(b, oldb);
-      c = this.safeAdd(c, oldc);
-      d = this.safeAdd(d, oldd);
-    }
-    return [a, b, c, d];
-  },
-  binl2rstr: function binl2rstr(input) {
-    var i;
-    var output = '';
-    var length32 = input.length * 32;
-    for (i = 0; i < length32; i += 8) {
-      output += String.fromCharCode(input[i >> 5] >>> i % 32 & 0xff);
-    }
-    return output;
-  },
-  rstr2binl: function rstr2binl(input) {
-    var i;
-    var output = [];
-    output[(input.length >> 2) - 1] = undefined;
-    for (i = 0; i < output.length; i += 1) {
-      output[i] = 0;
-    }
-    var length8 = input.length * 8;
-    for (i = 0; i < length8; i += 8) {
-      output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << i % 32;
-    }
-    return output;
-  },
-  rstrMD5: function rstrMD5(s) {
-    return this.binl2rstr(this.binlMD5(this.rstr2binl(s), s.length * 8));
-  },
-  rstrHMACMD5: function rstrHMACMD5(key, data) {
-    var i;
-    var bkey = this.rstr2binl(key);
-    var ipad = [];
-    var opad = [];
-    var hash;
-    ipad[15] = opad[15] = undefined;
-    if (bkey.length > 16) {
-      bkey = this.binlMD5(bkey, key.length * 8);
-    }
-    for (i = 0; i < 16; i += 1) {
-      ipad[i] = bkey[i] ^ 0x36363636;
-      opad[i] = bkey[i] ^ 0x5c5c5c5c;
-    }
-    hash = this.binlMD5(ipad.concat(this.rstr2binl(data)), 512 + data.length * 8);
-    return this.binl2rstr(this.binlMD5(opad.concat(hash), 512 + 128));
-  },
-  rstr2hex: function rstr2hex(input) {
-    var hexTab = '0123456789abcdef';
-    var output = '';
-    var x;
-    var i;
-    for (i = 0; i < input.length; i += 1) {
-      x = input.charCodeAt(i);
-      output += hexTab.charAt(x >>> 4 & 0x0f) + hexTab.charAt(x & 0x0f);
-    }
-    return output;
-  },
-  str2rstrUTF8: function str2rstrUTF8(input) {
-    return unescape(encodeURIComponent(input));
-  },
-  rawMD5: function rawMD5(s) {
-    return this.rstrMD5(this.str2rstrUTF8(s));
-  },
-  hexMD5: function hexMD5(s) {
-    return this.rstr2hex(this.rawMD5(s));
-  },
-  rawHMACMD5: function rawHMACMD5(k, d) {
-    return this.rstrHMACMD5(this.str2rstrUTF8(k), str2rstrUTF8(d));
-  },
-  hexHMACMD5: function hexHMACMD5(k, d) {
-    return this.rstr2hex(this.rawHMACMD5(k, d));
-  },
-  md5: function md5(string, key, raw) {
-    if (!key) {
-      if (!raw) {
-        return this.hexMD5(string);
-      }
-      return this.rawMD5(string);
-    }
-    if (!raw) {
-      return this.hexHMACMD5(key, string);
-    }
-    return this.rawHMACMD5(key, string);
-  },
-  getSig: function getSig(requestParam, sk, feature, mode) {
-    var sig = null;
-    var requestArr = [];
-    Object.keys(requestParam).sort().forEach(function (key) {
-      requestArr.push(key + '=' + requestParam[key]);
-    });
-    if (feature == 'search') {
-      sig = '/ws/place/v1/search?' + requestArr.join('&') + sk;
-    }
-    if (feature == 'suggest') {
-      sig = '/ws/place/v1/suggestion?' + requestArr.join('&') + sk;
-    }
-    if (feature == 'reverseGeocoder') {
-      sig = '/ws/geocoder/v1/?' + requestArr.join('&') + sk;
-    }
-    if (feature == 'geocoder') {
-      sig = '/ws/geocoder/v1/?' + requestArr.join('&') + sk;
-    }
-    if (feature == 'getCityList') {
-      sig = '/ws/district/v1/list?' + requestArr.join('&') + sk;
-    }
-    if (feature == 'getDistrictByCityId') {
-      sig = '/ws/district/v1/getchildren?' + requestArr.join('&') + sk;
-    }
-    if (feature == 'calculateDistance') {
-      sig = '/ws/distance/v1/?' + requestArr.join('&') + sk;
-    }
-    if (feature == 'direction') {
-      sig = '/ws/direction/v1/' + mode + '?' + requestArr.join('&') + sk;
-    }
-    sig = this.md5(sig);
-    return sig;
-  },
-  location2query: function location2query(data) {
-    if (typeof data == 'string') {
-      return data;
-    }
-    var query = '';
-    for (var i = 0; i < data.length; i++) {
-      var d = data[i];
-      if (!!query) {
-        query += ';';
-      }
-      if (d.location) {
-        query = query + d.location.lat + ',' + d.location.lng;
-      }
-      if (d.latitude && d.longitude) {
-        query = query + d.latitude + ',' + d.longitude;
-      }
-    }
-    return query;
-  },
-  rad: function rad(d) {
-    return d * Math.PI / 180.0;
-  },
-  getEndLocation: function getEndLocation(location) {
-    var to = location.split(';');
-    var endLocation = [];
-    for (var i = 0; i < to.length; i++) {
-      endLocation.push({
-        lat: parseFloat(to[i].split(',')[0]),
-        lng: parseFloat(to[i].split(',')[1])
-      });
-    }
-    return endLocation;
-  },
-  getDistance: function getDistance(latFrom, lngFrom, latTo, lngTo) {
-    var radLatFrom = this.rad(latFrom);
-    var radLatTo = this.rad(latTo);
-    var a = radLatFrom - radLatTo;
-    var b = this.rad(lngFrom) - this.rad(lngTo);
-    var distance = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLatFrom) * Math.cos(radLatTo) * Math.pow(Math.sin(b / 2), 2)));
-    distance = distance * EARTH_RADIUS;
-    distance = Math.round(distance * 10000) / 10000;
-    return parseFloat(distance.toFixed(0));
-  },
-  getWXLocation: function getWXLocation(success, fail, complete) {
-    wx.getLocation({
-      type: 'gcj02',
-      success: success,
-      fail: fail,
-      complete: complete
-    });
-  },
-  getLocationParam: function getLocationParam(location) {
-    if (typeof location == 'string') {
-      var locationArr = location.split(',');
-      if (locationArr.length === 2) {
-        location = {
-          latitude: location.split(',')[0],
-          longitude: location.split(',')[1]
-        };
-      } else {
-        location = {};
-      }
-    }
-    return location;
-  },
-  polyfillParam: function polyfillParam(param) {
-    param.success = param.success || function () {};
-    param.fail = param.fail || function () {};
-    param.complete = param.complete || function () {};
-  },
-  checkParamKeyEmpty: function checkParamKeyEmpty(param, key) {
-    if (!param[key]) {
-      var errconf = this.buildErrorConfig(ERROR_CONF.PARAM_ERR, ERROR_CONF.PARAM_ERR_MSG + key + '参数格式有误');
-      param.fail(errconf);
-      param.complete(errconf);
-      return true;
-    }
-    return false;
-  },
-  checkKeyword: function checkKeyword(param) {
-    return !this.checkParamKeyEmpty(param, 'keyword');
-  },
-  checkLocation: function checkLocation(param) {
-    var location = this.getLocationParam(param.location);
-    if (!location || !location.latitude || !location.longitude) {
-      var errconf = this.buildErrorConfig(ERROR_CONF.PARAM_ERR, ERROR_CONF.PARAM_ERR_MSG + ' location参数格式有误');
-      param.fail(errconf);
-      param.complete(errconf);
-      return false;
-    }
-    return true;
-  },
-  buildErrorConfig: function buildErrorConfig(errCode, errMsg) {
-    return {
-      status: errCode,
-      message: errMsg
-    };
-  },
-  handleData: function handleData(param, data, feature) {
-    if (feature == 'search') {
-      var searchResult = data.data;
-      var searchSimplify = [];
-      for (var i = 0; i < searchResult.length; i++) {
-        searchSimplify.push({
-          id: searchResult[i].id || null,
-          title: searchResult[i].title || null,
-          latitude: searchResult[i].location && searchResult[i].location.lat || null,
-          longitude: searchResult[i].location && searchResult[i].location.lng || null,
-          address: searchResult[i].address || null,
-          category: searchResult[i].category || null,
-          tel: searchResult[i].tel || null,
-          adcode: searchResult[i].ad_info && searchResult[i].ad_info.adcode || null,
-          city: searchResult[i].ad_info && searchResult[i].ad_info.city || null,
-          district: searchResult[i].ad_info && searchResult[i].ad_info.district || null,
-          province: searchResult[i].ad_info && searchResult[i].ad_info.province || null
-        });
-      }
-      param.success(data, {
-        searchResult: searchResult,
-        searchSimplify: searchSimplify
-      });
-    } else if (feature == 'suggest') {
-      var suggestResult = data.data;
-      var suggestSimplify = [];
-      for (var i = 0; i < suggestResult.length; i++) {
-        suggestSimplify.push({
-          adcode: suggestResult[i].adcode || null,
-          address: suggestResult[i].address || null,
-          category: suggestResult[i].category || null,
-          city: suggestResult[i].city || null,
-          district: suggestResult[i].district || null,
-          id: suggestResult[i].id || null,
-          latitude: suggestResult[i].location && suggestResult[i].location.lat || null,
-          longitude: suggestResult[i].location && suggestResult[i].location.lng || null,
-          province: suggestResult[i].province || null,
-          title: suggestResult[i].title || null,
-          type: suggestResult[i].type || null
-        });
-      }
-      param.success(data, {
-        suggestResult: suggestResult,
-        suggestSimplify: suggestSimplify
-      });
-    } else if (feature == 'reverseGeocoder') {
-      var reverseGeocoderResult = data.result;
-      var reverseGeocoderSimplify = {
-        address: reverseGeocoderResult.address || null,
-        latitude: reverseGeocoderResult.location && reverseGeocoderResult.location.lat || null,
-        longitude: reverseGeocoderResult.location && reverseGeocoderResult.location.lng || null,
-        adcode: reverseGeocoderResult.ad_info && reverseGeocoderResult.ad_info.adcode || null,
-        city: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.city || null,
-        district: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.district || null,
-        nation: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.nation || null,
-        province: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.province || null,
-        street: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.street || null,
-        street_number: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.street_number || null,
-        recommend: reverseGeocoderResult.formatted_addresses && reverseGeocoderResult.formatted_addresses.recommend || null,
-        rough: reverseGeocoderResult.formatted_addresses && reverseGeocoderResult.formatted_addresses.rough || null
-      };
-      if (reverseGeocoderResult.pois) {
-        var pois = reverseGeocoderResult.pois;
-        var poisSimplify = [];
-        for (var i = 0; i < pois.length; i++) {
-          poisSimplify.push({
-            id: pois[i].id || null,
-            title: pois[i].title || null,
-            latitude: pois[i].location && pois[i].location.lat || null,
-            longitude: pois[i].location && pois[i].location.lng || null,
-            address: pois[i].address || null,
-            category: pois[i].category || null,
-            adcode: pois[i].ad_info && pois[i].ad_info.adcode || null,
-            city: pois[i].ad_info && pois[i].ad_info.city || null,
-            district: pois[i].ad_info && pois[i].ad_info.district || null,
-            province: pois[i].ad_info && pois[i].ad_info.province || null
-          });
-        }
-        param.success(data, {
-          reverseGeocoderResult: reverseGeocoderResult,
-          reverseGeocoderSimplify: reverseGeocoderSimplify,
-          pois: pois,
-          poisSimplify: poisSimplify
-        });
-      } else {
-        param.success(data, {
-          reverseGeocoderResult: reverseGeocoderResult,
-          reverseGeocoderSimplify: reverseGeocoderSimplify
-        });
-      }
-    } else if (feature == 'geocoder') {
-      var geocoderResult = data.result;
-      var geocoderSimplify = {
-        title: geocoderResult.title || null,
-        latitude: geocoderResult.location && geocoderResult.location.lat || null,
-        longitude: geocoderResult.location && geocoderResult.location.lng || null,
-        adcode: geocoderResult.ad_info && geocoderResult.ad_info.adcode || null,
-        province: geocoderResult.address_components && geocoderResult.address_components.province || null,
-        city: geocoderResult.address_components && geocoderResult.address_components.city || null,
-        district: geocoderResult.address_components && geocoderResult.address_components.district || null,
-        street: geocoderResult.address_components && geocoderResult.address_components.street || null,
-        street_number: geocoderResult.address_components && geocoderResult.address_components.street_number || null,
-        level: geocoderResult.level || null
-      };
-      param.success(data, {
-        geocoderResult: geocoderResult,
-        geocoderSimplify: geocoderSimplify
-      });
-    } else if (feature == 'getCityList') {
-      var provinceResult = data.result[0];
-      var cityResult = data.result[1];
-      var districtResult = data.result[2];
-      param.success(data, {
-        provinceResult: provinceResult,
-        cityResult: cityResult,
-        districtResult: districtResult
-      });
-    } else if (feature == 'getDistrictByCityId') {
-      var districtByCity = data.result[0];
-      param.success(data, districtByCity);
-    } else if (feature == 'calculateDistance') {
-      var calculateDistanceResult = data.result.elements;
-      var distance = [];
-      for (var i = 0; i < calculateDistanceResult.length; i++) {
-        distance.push(calculateDistanceResult[i].distance);
-      }
-      param.success(data, {
-        calculateDistanceResult: calculateDistanceResult,
-        distance: distance
-      });
-    } else if (feature == 'direction') {
-      var direction = data.result.routes;
-      param.success(data, direction);
-    } else {
-      param.success(data);
-    }
-  },
-  buildWxRequestConfig: function buildWxRequestConfig(param, options, feature) {
-    var that = this;
-    options.header = {
-      "content-type": "application/json"
-    };
-    options.method = 'GET';
-    options.success = function (res) {
-      var data = res.data;
-      if (data.status === 0) {
-        that.handleData(param, data, feature);
-      } else {
-        param.fail(data);
-      }
-    };
-    options.fail = function (res) {
-      res.statusCode = ERROR_CONF.WX_ERR_CODE;
-      param.fail(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
-    };
-    options.complete = function (res) {
-      var statusCode = +res.statusCode;
-      switch (statusCode) {
-        case ERROR_CONF.WX_ERR_CODE:
-          {
-            param.complete(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
-            break;
-          }
-        case ERROR_CONF.WX_OK_CODE:
-          {
-            var data = res.data;
-            if (data.status === 0) {
-              param.complete(data);
-            } else {
-              param.complete(that.buildErrorConfig(data.status, data.message));
-            }
-            break;
-          }
-        default:
-          {
-            param.complete(that.buildErrorConfig(ERROR_CONF.SYSTEM_ERR, ERROR_CONF.SYSTEM_ERR_MSG));
-          }
-      }
-    };
-    return options;
-  },
-  locationProcess: function locationProcess(param, locationsuccess, locationfail, locationcomplete) {
-    var that = this;
-    locationfail = locationfail || function (res) {
-      res.statusCode = ERROR_CONF.WX_ERR_CODE;
-      param.fail(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
-    };
-    locationcomplete = locationcomplete || function (res) {
-      if (res.statusCode == ERROR_CONF.WX_ERR_CODE) {
-        param.complete(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
-      }
-    };
-    if (!param.location) {
-      that.getWXLocation(locationsuccess, locationfail, locationcomplete);
-    } else if (that.checkLocation(param)) {
-      var location = Utils.getLocationParam(param.location);
-      locationsuccess(location);
-    }
-  }
-};
-var QQMapWX = /*#__PURE__*/function () {
-  "use strict";
-
-  function QQMapWX(options) {
-    _classCallCheck(this, QQMapWX);
-    if (!options.key) {
-      throw Error('key值不能为空');
-    }
-    this.key = options.key;
-  }
-  _createClass(QQMapWX, [{
-    key: "search",
-    value: function search(options) {
-      var that = this;
-      options = options || {};
-      Utils.polyfillParam(options);
-      if (!Utils.checkKeyword(options)) {
-        return;
-      }
-      var requestParam = {
-        keyword: options.keyword,
-        orderby: options.orderby || '_distance',
-        page_size: options.page_size || 10,
-        page_index: options.page_index || 1,
-        output: 'json',
-        key: that.key
-      };
-      if (options.address_format) {
-        requestParam.address_format = options.address_format;
-      }
-      if (options.filter) {
-        requestParam.filter = options.filter;
-      }
-      var distance = options.distance || "1000";
-      var auto_extend = options.auto_extend || 1;
-      var region = null;
-      var rectangle = null;
-      if (options.region) {
-        region = options.region;
-      }
-      if (options.rectangle) {
-        rectangle = options.rectangle;
-      }
-      var locationsuccess = function locationsuccess(result) {
-        if (region && !rectangle) {
-          requestParam.boundary = "region(" + region + "," + auto_extend + "," + result.latitude + "," + result.longitude + ")";
-          if (options.sig) {
-            requestParam.sig = Utils.getSig(requestParam, options.sig, 'search');
-          }
-        } else if (rectangle && !region) {
-          requestParam.boundary = "rectangle(" + rectangle + ")";
-          if (options.sig) {
-            requestParam.sig = Utils.getSig(requestParam, options.sig, 'search');
-          }
-        } else {
-          requestParam.boundary = "nearby(" + result.latitude + "," + result.longitude + "," + distance + "," + auto_extend + ")";
-          if (options.sig) {
-            requestParam.sig = Utils.getSig(requestParam, options.sig, 'search');
-          }
-        }
-        wx.request(Utils.buildWxRequestConfig(options, {
-          url: URL_SEARCH,
-          data: requestParam
-        }, 'search'));
-      };
-      Utils.locationProcess(options, locationsuccess);
-    }
-  }, {
-    key: "getSuggestion",
-    value: function getSuggestion(options) {
-      var that = this;
-      options = options || {};
-      Utils.polyfillParam(options);
-      if (!Utils.checkKeyword(options)) {
-        return;
-      }
-      var requestParam = {
-        keyword: options.keyword,
-        region: options.region || '全国',
-        region_fix: options.region_fix || 0,
-        policy: options.policy || 0,
-        page_size: options.page_size || 10,
-        page_index: options.page_index || 1,
-        get_subpois: options.get_subpois || 0,
-        output: 'json',
-        key: that.key
-      };
-      if (options.address_format) {
-        requestParam.address_format = options.address_format;
-      }
-      if (options.filter) {
-        requestParam.filter = options.filter;
-      }
-      if (options.location) {
-        var locationsuccess = function locationsuccess(result) {
-          requestParam.location = result.latitude + ',' + result.longitude;
-          if (options.sig) {
-            requestParam.sig = Utils.getSig(requestParam, options.sig, 'suggest');
-          }
-          wx.request(Utils.buildWxRequestConfig(options, {
-            url: URL_SUGGESTION,
-            data: requestParam
-          }, "suggest"));
-        };
-        Utils.locationProcess(options, locationsuccess);
-      } else {
-        if (options.sig) {
-          requestParam.sig = Utils.getSig(requestParam, options.sig, 'suggest');
-        }
-        wx.request(Utils.buildWxRequestConfig(options, {
-          url: URL_SUGGESTION,
-          data: requestParam
-        }, "suggest"));
-      }
-    }
-  }, {
-    key: "reverseGeocoder",
-    value: function reverseGeocoder(options) {
-      var that = this;
-      options = options || {};
-      Utils.polyfillParam(options);
-      var requestParam = {
-        coord_type: options.coord_type || 5,
-        get_poi: options.get_poi || 0,
-        output: 'json',
-        key: that.key
-      };
-      if (options.poi_options) {
-        requestParam.poi_options = options.poi_options;
-      }
-      var locationsuccess = function locationsuccess(result) {
-        requestParam.location = result.latitude + ',' + result.longitude;
-        if (options.sig) {
-          requestParam.sig = Utils.getSig(requestParam, options.sig, 'reverseGeocoder');
-        }
-        wx.request(Utils.buildWxRequestConfig(options, {
-          url: URL_GET_GEOCODER,
-          data: requestParam
-        }, 'reverseGeocoder'));
-      };
-      Utils.locationProcess(options, locationsuccess);
-    }
-  }, {
-    key: "geocoder",
-    value: function geocoder(options) {
-      var that = this;
-      options = options || {};
-      Utils.polyfillParam(options);
-      if (Utils.checkParamKeyEmpty(options, 'address')) {
-        return;
-      }
-      var requestParam = {
-        address: options.address,
-        output: 'json',
-        key: that.key
-      };
-      if (options.region) {
-        requestParam.region = options.region;
-      }
-      if (options.sig) {
-        requestParam.sig = Utils.getSig(requestParam, options.sig, 'geocoder');
-      }
-      wx.request(Utils.buildWxRequestConfig(options, {
-        url: URL_GET_GEOCODER,
-        data: requestParam
-      }, 'geocoder'));
-    }
-  }, {
-    key: "getCityList",
-    value: function getCityList(options) {
-      var that = this;
-      options = options || {};
-      Utils.polyfillParam(options);
-      var requestParam = {
-        output: 'json',
-        key: that.key
-      };
-      if (options.sig) {
-        requestParam.sig = Utils.getSig(requestParam, options.sig, 'getCityList');
-      }
-      wx.request(Utils.buildWxRequestConfig(options, {
-        url: URL_CITY_LIST,
-        data: requestParam
-      }, 'getCityList'));
-    }
-  }, {
-    key: "getDistrictByCityId",
-    value: function getDistrictByCityId(options) {
-      var that = this;
-      options = options || {};
-      Utils.polyfillParam(options);
-      if (Utils.checkParamKeyEmpty(options, 'id')) {
-        return;
-      }
-      var requestParam = {
-        id: options.id || '',
-        output: 'json',
-        key: that.key
-      };
-      if (options.sig) {
-        requestParam.sig = Utils.getSig(requestParam, options.sig, 'getDistrictByCityId');
-      }
-      wx.request(Utils.buildWxRequestConfig(options, {
-        url: URL_AREA_LIST,
-        data: requestParam
-      }, 'getDistrictByCityId'));
-    }
-  }, {
-    key: "calculateDistance",
-    value: function calculateDistance(options) {
-      var that = this;
-      options = options || {};
-      Utils.polyfillParam(options);
-      if (Utils.checkParamKeyEmpty(options, 'to')) {
-        return;
-      }
-      var requestParam = {
-        mode: options.mode || 'walking',
-        to: Utils.location2query(options.to),
-        output: 'json',
-        key: that.key
-      };
-      if (options.from) {
-        options.location = options.from;
-      }
-      if (requestParam.mode == 'straight') {
-        var locationsuccess = function locationsuccess(result) {
-          var locationTo = Utils.getEndLocation(requestParam.to);
-          var data = {
-            message: "query ok",
-            result: {
-              elements: []
-            },
-            status: 0
-          };
-          for (var i = 0; i < locationTo.length; i++) {
-            data.result.elements.push({
-              distance: Utils.getDistance(result.latitude, result.longitude, locationTo[i].lat, locationTo[i].lng),
-              duration: 0,
-              from: {
-                lat: result.latitude,
-                lng: result.longitude
-              },
-              to: {
-                lat: locationTo[i].lat,
-                lng: locationTo[i].lng
-              }
-            });
-          }
-          var calculateResult = data.result.elements;
-          var distanceResult = [];
-          for (var i = 0; i < calculateResult.length; i++) {
-            distanceResult.push(calculateResult[i].distance);
-          }
-          return options.success(data, {
-            calculateResult: calculateResult,
-            distanceResult: distanceResult
-          });
-        };
-        Utils.locationProcess(options, locationsuccess);
-      } else {
-        var locationsuccess = function locationsuccess(result) {
-          requestParam.from = result.latitude + ',' + result.longitude;
-          if (options.sig) {
-            requestParam.sig = Utils.getSig(requestParam, options.sig, 'calculateDistance');
-          }
-          wx.request(Utils.buildWxRequestConfig(options, {
-            url: URL_DISTANCE,
-            data: requestParam
-          }, 'calculateDistance'));
-        };
-        Utils.locationProcess(options, locationsuccess);
-      }
-    }
-  }, {
-    key: "direction",
-    value: function direction(options) {
-      var that = this;
-      options = options || {};
-      Utils.polyfillParam(options);
-      if (Utils.checkParamKeyEmpty(options, 'to')) {
-        return;
-      }
-      var requestParam = {
-        output: 'json',
-        key: that.key
-      };
-      if (typeof options.to == 'string') {
-        requestParam.to = options.to;
-      } else {
-        requestParam.to = options.to.latitude + ',' + options.to.longitude;
-      }
-      var SET_URL_DIRECTION = null;
-      options.mode = options.mode || MODE.driving;
-      SET_URL_DIRECTION = URL_DIRECTION + options.mode;
-      if (options.from) {
-        options.location = options.from;
-      }
-      if (options.mode == MODE.driving) {
-        if (options.from_poi) {
-          requestParam.from_poi = options.from_poi;
-        }
-        if (options.heading) {
-          requestParam.heading = options.heading;
-        }
-        if (options.speed) {
-          requestParam.speed = options.speed;
-        }
-        if (options.accuracy) {
-          requestParam.accuracy = options.accuracy;
-        }
-        if (options.road_type) {
-          requestParam.road_type = options.road_type;
-        }
-        if (options.to_poi) {
-          requestParam.to_poi = options.to_poi;
-        }
-        if (options.from_track) {
-          requestParam.from_track = options.from_track;
-        }
-        if (options.waypoints) {
-          requestParam.waypoints = options.waypoints;
-        }
-        if (options.policy) {
-          requestParam.policy = options.policy;
-        }
-        if (options.plate_number) {
-          requestParam.plate_number = options.plate_number;
-        }
-      }
-      if (options.mode == MODE.transit) {
-        if (options.departure_time) {
-          requestParam.departure_time = options.departure_time;
-        }
-        if (options.policy) {
-          requestParam.policy = options.policy;
-        }
-      }
-      var locationsuccess = function locationsuccess(result) {
-        requestParam.from = result.latitude + ',' + result.longitude;
-        if (options.sig) {
-          requestParam.sig = Utils.getSig(requestParam, options.sig, 'direction', options.mode);
-        }
-        wx.request(Utils.buildWxRequestConfig(options, {
-          url: SET_URL_DIRECTION,
-          data: requestParam
-        }, 'direction'));
-      };
-      Utils.locationProcess(options, locationsuccess);
-    }
-  }]);
-  return QQMapWX;
-}();
-;
-module.exports = QQMapWX;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/wx.js */ 1)["default"]))
-
-/***/ }),
-/* 179 */,
-/* 180 */,
-/* 181 */,
-/* 182 */,
-/* 183 */,
-/* 184 */,
-/* 185 */,
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */,
-/* 193 */,
-/* 194 */,
-/* 195 */,
-/* 196 */,
-/* 197 */,
-/* 198 */,
-/* 199 */,
-/* 200 */,
-/* 201 */,
-/* 202 */,
-/* 203 */
-/*!************************************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js ***!
-  \************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-// mescroll-body 和 mescroll-uni 通用
-var MescrollMixin = {
-  data: function data() {
-    return {
-      mescroll: null //mescroll实例对象
-    };
-  },
-  // 注册系统自带的下拉刷新 (配置down.native为true时生效, 还需在pages配置enablePullDownRefresh:true;详请参考mescroll-native的案例)
-  onPullDownRefresh: function onPullDownRefresh() {
-    this.mescroll && this.mescroll.onPullDownRefresh();
-  },
-  // 注册列表滚动事件,用于判定在顶部可下拉刷新,在指定位置可显示隐藏回到顶部按钮 (此方法为页面生命周期,无法在子组件中触发, 仅在mescroll-body生效)
-  onPageScroll: function onPageScroll(e) {
-    this.mescroll && this.mescroll.onPageScroll(e);
-  },
-  // 注册滚动到底部的事件,用于上拉加载 (此方法为页面生命周期,无法在子组件中触发, 仅在mescroll-body生效)
-  onReachBottom: function onReachBottom() {
-    this.mescroll && this.mescroll.onReachBottom();
-  },
-  methods: {
-    // mescroll组件初始化的回调,可获取到mescroll对象
-    mescrollInit: function mescrollInit(mescroll) {
-      this.mescroll = mescroll;
-    },
-    // 下拉刷新的回调 (mixin默认resetUpScroll)
-    downCallback: function downCallback() {
-      var _this = this;
-      if (this.mescroll.optUp.use) {
-        this.mescroll.resetUpScroll();
-      } else {
-        setTimeout(function () {
-          _this.mescroll.endSuccess();
-        }, 500);
-      }
-    },
-    // 上拉加载的回调
-    upCallback: function upCallback() {
-      var _this2 = this;
-      // mixin默认延时500自动结束加载
-      setTimeout(function () {
-        _this2.mescroll.endErr();
-      }, 500);
-    }
-  }
-};
-var _default = MescrollMixin;
-exports.default = _default;
-
-/***/ }),
-/* 204 */
-/*!****************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/mock.js ***!
-  \****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.apiGetTabs = apiGetTabs;
-exports.apiGoods = apiGoods;
-exports.apiMsgList = apiMsgList;
-exports.apiNewList = apiNewList;
-exports.apiWeiboList = apiWeiboList;
-var _goods = _interopRequireDefault(__webpack_require__(/*! ./goods.js */ 205));
-/*
-本地模拟接口请求, 仅demo演示用.
-实际项目以您服务器接口返回的数据为准,无需本地处理分页.
-请参考官方写法: https://www.mescroll.com/uni.html?v=20200210#tagUpCallback
-* */
-
-// 模拟数据
-
-// 获取新闻列表
-function apiNewList(pageNum, pageSize) {
-  return new Promise(function (resolute, reject) {
-    //延时一秒,模拟联网
-    setTimeout(function () {
-      try {
-        var list = [];
-        if (!pageNum) {
-          //模拟下拉刷新返回的数据
-          var id = new Date().getTime();
-          var newObj = {
-            id: id,
-            title: "【新增新闻" + id + "】 标题",
-            content: "新增新闻的内容"
-          };
-          list.push(newObj);
-        } else {
-          //模拟上拉加载返回的数据
-          for (var i = 0; i < pageSize; i++) {
-            var upIndex = (pageNum - 1) * pageSize + i + 1;
-            var _newObj = {
-              id: upIndex,
-              title: "【新闻" + upIndex + "】 标题标题标题标题标题",
-              content: "内容内容内容内容内容内容内容内容内容"
-            };
-            list.push(_newObj);
-          }
-          console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
-        }
-        //模拟接口请求成功
-        resolute(list);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 1000);
-  });
-}
-
-// 搜索商品
-function apiGoods(pageNum, pageSize, keyword) {
-  return new Promise(function (resolute, reject) {
-    //延时一秒,模拟联网
-    setTimeout(function () {
-      try {
-        var data = {
-          list: [],
-          // 数据列表
-          totalCount: 0,
-          // 总数量
-          totalPage: 0,
-          // 总页数
-          hasNext: false // 是否有下一页
-        };
-
-        // 符合关键词的记录
-        var keywordList = [];
-        if (!keyword || keyword == "全部") {
-          // 搜索全部商品
-          keywordList = _goods.default;
-        } else {
-          // 关键词搜索
-          if (keyword == "母婴") keyword = "婴"; // 为这个关键词展示多几条数据
-          for (var i = 0; i < _goods.default.length; i++) {
-            var good = _goods.default[i];
-            if (good.goodName.indexOf(keyword) !== -1) {
-              keywordList.push(good);
-            }
-          }
-        }
-
-        // 分页
-        for (var _i = (pageNum - 1) * pageSize; _i < pageNum * pageSize; _i++) {
-          if (_i >= keywordList.length) break;
-          data.list.push(keywordList[_i]);
-        }
-
-        // 汇总数据
-        data.totalCount = keywordList.length;
-        data.totalPage = Math.ceil(data.totalCount / pageSize);
-        data.hasNext = pageNum < data.totalPage;
-
-        //模拟接口请求成功
-        console.log("pageNum=" + pageNum + ", pageSize=" + pageSize + ", data.list.length=" + data.list.length + ", totalCount=" + data.totalCount + ", totalPage=" + data.totalPage + ", hasNext=" + data.hasNext + (keyword ? ", keyword=" + keyword : ""));
-        resolute(data);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 1000);
-  });
-}
-
-// 获取微博列表
-function apiWeiboList(pageNum, pageSize) {
-  return new Promise(function (resolute, reject) {
-    //延时2秒,模拟联网
-    setTimeout(function () {
-      try {
-        var list = [];
-        if (!pageNum) {
-          //此处模拟下拉刷新返回的数据
-          var id = new Date().getTime();
-          var newObj = {
-            id: id,
-            title: "【新增微博" + id + "】 新增微博",
-            content: "新增微博的内容,新增微博的内容"
-          };
-          list.push(newObj);
-        } else {
-          //此处模拟上拉加载返回的数据
-          for (var i = 0; i < pageSize; i++) {
-            var upIndex = (pageNum - 1) * pageSize + i + 1;
-            var _newObj2 = {
-              id: upIndex,
-              title: "【微博" + upIndex + "】 标题标题标题标题标题标题",
-              content: "内容内容内容内容内容内容内容内容内容内容"
-            };
-            list.push(_newObj2);
-          }
-          console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
-        }
-        //模拟接口请求成功
-        resolute(list);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 2000);
-  });
-}
-
-// 获取消息列表(共5页消息)
-function apiMsgList(pageNum, pageSize) {
-  return new Promise(function (resolute, reject) {
-    //延时一秒,模拟联网
-    setTimeout(function () {
-      try {
-        var list = [];
-        //模拟下拉加载更多记录
-        for (var i = 0; i < pageSize; i++) {
-          var msgId = (pageNum - 1) * pageSize + i + 1;
-          var newObj = {
-            id: msgId,
-            title: "【消息" + msgId + "】",
-            content: "内容: 下拉获取聊天记录"
-          };
-          // 此处模拟只有5页的消息 (第5页只有3条)
-          if (pageNum >= 5 && i >= 3) {} else {
-            list.unshift(newObj);
-          }
-        }
-        console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
-        //模拟接口请求成功
-        resolute(list);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 1000);
-  });
-}
-
-// 获取tabs类目
-function apiGetTabs() {
-  return new Promise(function (resolute, reject) {
-    //延时,模拟联网
-    setTimeout(function () {
-      try {
-        var tabs = ['全部', '奶粉', '面膜', '图书', '果汁', '奶瓶', '美素', '花王', '韩蜜', '口红', '毛巾', '玩具', '衣服'];
-        //模拟接口请求成功
-        resolute(tabs);
-      } catch (e) {
-        //模拟接口请求失败
-        reject(e);
-      }
-    }, 10);
-  });
-}
-
-/***/ }),
-/* 205 */
-/*!*****************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/goods.js ***!
-  \*****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var goods = [{
-  "id": "1",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd1.jpg",
-  "goodName": "【1】  六罐装荷兰美素佳儿金装2段900g",
-  "goodPrice": 1149.00,
-  "goodSold": 648
-}, {
-  "id": "2",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd2.jpg",
-  "goodName": "【2】  韩国Amore爱茉莉红吕洗发水套装修复受损发质",
-  "goodPrice": 89.00,
-  "goodSold": 128
-}, {
-  "id": "3",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd3.jpg",
-  "goodName": "【3】  Friso美素佳儿 金装婴儿配方奶粉3段900g",
-  "goodPrice": 195.00,
-  "goodSold": 968
-}, {
-  "id": "4",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd4.jpg",
-  "goodName": "【4】  Fisher goodPrice费雪 费雪三轮儿童滑行车",
-  "goodPrice": 299.00,
-  "goodSold": 85
-}, {
-  "id": "5",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd5.jpg",
-  "goodName": "【5】  Babylee巴布力 实木婴儿床 雷卡拉130*70cm",
-  "goodPrice": 1889.00,
-  "goodSold": 18
-}, {
-  "id": "6",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd6.jpg",
-  "goodName": "【6】  Pigeon贝亲 独立三层奶粉盒 送小罐奶粉1段200g",
-  "goodPrice": 70.00,
-  "goodSold": 658
-}, {
-  "id": "7",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd7.jpg",
-  "goodName": "【7】 TTBOO兔兔小布 肩纽扣套装",
-  "goodPrice": 268.00,
-  "goodSold": 128
-}, {
-  "id": "8",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd8.jpg",
-  "goodName": "【8】  Nuna璐拉 婴儿布里奇果精纯嫩肤沐浴露婴儿精纯芦荟胶",
-  "goodPrice": 140.00,
-  "goodSold": 366
-}, {
-  "id": "9",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd9.jpg",
-  "goodName": "【9】  illuma启赋 奶粉3段900g",
-  "goodPrice": 252.00,
-  "goodSold": 98
-}, {
-  "id": "10",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd10.jpg",
-  "goodName": "【10】  Abbott雅培乳蛋白部分水解婴儿配方奶粉3段820g",
-  "goodPrice": 89.00,
-  "goodSold": 128
-}, {
-  "id": "11",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd11.jpg",
-  "goodName": "【11】  韩蜜 酷炫唇蜜（礼盒套装）2.8g*4",
-  "goodPrice": 179.00,
-  "goodSold": 35
-}, {
-  "id": "12",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd12.jpg",
-  "goodName": "【12】  保税区直发【3包装】日本Merries花王纸尿裤NB90",
-  "goodPrice": 289.00,
-  "goodSold": 1928
-}, {
-  "id": "13",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd13.jpg",
-  "goodName": "【13】  Comotomo可么多么 硅胶奶瓶（0-3月奶嘴）150ml绿色",
-  "goodPrice": 203.00,
-  "goodSold": 87
-}, {
-  "id": "14",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd14.jpg",
-  "goodName": "【14】  香港直邮德国瑞德露Rival de Loop芦荟精华安瓶",
-  "goodPrice": 152.00,
-  "goodSold": 61
-}, {
-  "id": "15",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd15.jpg",
-  "goodName": "【15】  保税区直发药师堂尊马油香草味温和保湿无刺激面霜",
-  "goodPrice": 269.00,
-  "goodSold": 73
-}, {
-  "id": "16",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd16.jpg",
-  "goodName": "【16】  香港直邮日本Spatreatment眼膜保湿去细纹法令纹",
-  "goodPrice": 219.00,
-  "goodSold": 13
-}, {
-  "id": "17",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd17.jpg",
-  "goodName": "【17】  韩国MEDIHEALNMF可莱丝针剂睡眠面膜",
-  "goodPrice": 81.00,
-  "goodSold": 128
-}, {
-  "id": "18",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd18.jpg",
-  "goodName": "【18】  DHC蝶翠诗橄榄蜂蜜滋养洗脸手工皂90g",
-  "goodPrice": 123.00,
-  "goodSold": 77
-}, {
-  "id": "19",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd19.jpg",
-  "goodName": "【19】  日本资生堂CPB肌肤之钥新版隔离霜 清爽型 30ml",
-  "goodPrice": 429.00,
-  "goodSold": 36
-}, {
-  "id": "20",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd20.jpg",
-  "goodName": "【20】 Heinz亨氏 婴儿面条优加面条全素套餐组合3口味3盒",
-  "goodPrice": 39.00,
-  "goodSold": 61
-}, {
-  "id": "21",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd21.jpg",
-  "goodName": "【21】  Heinz亨氏 乐维滋果汁泥组合5口味15袋",
-  "goodPrice": 69.00,
-  "goodSold": 55
-}, {
-  "id": "22",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd22.jpg",
-  "goodName": "【22】  保税区直发澳大利亚Swisse高浓度蔓越莓胶囊30粒",
-  "goodPrice": 271.00,
-  "goodSold": 19
-}, {
-  "id": "23",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd23.jpg",
-  "goodName": "【23】  挪威Nordic Naturals小鱼婴幼儿鱼油DHA滴剂",
-  "goodPrice": 102.00,
-  "goodSold": 125
-}, {
-  "id": "24",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd24.jpg",
-  "goodName": "【24】  澳大利亚Bio island DHA for Pregnancy海藻油DHA",
-  "goodPrice": 289.00,
-  "goodSold": 28
-}, {
-  "id": "25",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd25.jpg",
-  "goodName": "【25】  澳大利亚Fatblaster Coconut Detox椰子水",
-  "goodPrice": 152.00,
-  "goodSold": 17
-}, {
-  "id": "26",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd26.jpg",
-  "goodName": "【26】  Suitsky舒比奇 高护极薄舒爽纸尿片尿不湿XL60",
-  "goodPrice": 99.00,
-  "goodSold": 181
-}, {
-  "id": "27",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd27.jpg",
-  "goodName": "【27】  英国JUST SOAP手工皂 玫瑰天竺葵蛋糕皂",
-  "goodPrice": 72.00,
-  "goodSold": 66
-}, {
-  "id": "28",
-  "goodImg": "https://www.mescroll.com/demo/res/img/pd28.jpg",
-  "goodName": "【28】  德国NUK 多色婴幼儿带盖学饮杯",
-  "goodPrice": 92.00,
-  "goodSold": 138
-}];
-var _default = goods;
-exports.default = _default;
-
-/***/ }),
-/* 206 */,
-/* 207 */,
-/* 208 */,
-/* 209 */,
-/* 210 */,
-/* 211 */,
-/* 212 */,
-/* 213 */,
-/* 214 */,
-/* 215 */,
-/* 216 */,
-/* 217 */,
-/* 218 */,
-/* 219 */,
-/* 220 */,
-/* 221 */,
-/* 222 */,
-/* 223 */,
-/* 224 */,
-/* 225 */,
-/* 226 */,
-/* 227 */,
-/* 228 */,
-/* 229 */,
-/* 230 */,
-/* 231 */,
-/* 232 */,
-/* 233 */,
-/* 234 */,
-/* 235 */,
-/* 236 */,
-/* 237 */,
-/* 238 */,
-/* 239 */,
-/* 240 */,
-/* 241 */,
-/* 242 */,
-/* 243 */,
-/* 244 */,
-/* 245 */,
-/* 246 */,
-/* 247 */,
-/* 248 */,
-/* 249 */,
-/* 250 */,
-/* 251 */,
-/* 252 */,
-/* 253 */,
-/* 254 */,
-/* 255 */,
-/* 256 */,
-/* 257 */
-/*!****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/icons.js ***!
-  \****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  'uicon-level': "\uE693",
-  'uicon-column-line': "\uE68E",
-  'uicon-checkbox-mark': "\uE807",
-  'uicon-folder': "\uE7F5",
-  'uicon-movie': "\uE7F6",
-  'uicon-star-fill': "\uE669",
-  'uicon-star': "\uE65F",
-  'uicon-phone-fill': "\uE64F",
-  'uicon-phone': "\uE622",
-  'uicon-apple-fill': "\uE881",
-  'uicon-chrome-circle-fill': "\uE885",
-  'uicon-backspace': "\uE67B",
-  'uicon-attach': "\uE632",
-  'uicon-cut': "\uE948",
-  'uicon-empty-car': "\uE602",
-  'uicon-empty-coupon': "\uE682",
-  'uicon-empty-address': "\uE646",
-  'uicon-empty-favor': "\uE67C",
-  'uicon-empty-permission': "\uE686",
-  'uicon-empty-news': "\uE687",
-  'uicon-empty-search': "\uE664",
-  'uicon-github-circle-fill': "\uE887",
-  'uicon-rmb': "\uE608",
-  'uicon-person-delete-fill': "\uE66A",
-  'uicon-reload': "\uE788",
-  'uicon-order': "\uE68F",
-  'uicon-server-man': "\uE6BC",
-  'uicon-search': "\uE62A",
-  'uicon-fingerprint': "\uE955",
-  'uicon-more-dot-fill': "\uE630",
-  'uicon-scan': "\uE662",
-  'uicon-share-square': "\uE60B",
-  'uicon-map': "\uE61D",
-  'uicon-map-fill': "\uE64E",
-  'uicon-tags': "\uE629",
-  'uicon-tags-fill': "\uE651",
-  'uicon-bookmark-fill': "\uE63B",
-  'uicon-bookmark': "\uE60A",
-  'uicon-eye': "\uE613",
-  'uicon-eye-fill': "\uE641",
-  'uicon-mic': "\uE64A",
-  'uicon-mic-off': "\uE649",
-  'uicon-calendar': "\uE66E",
-  'uicon-calendar-fill': "\uE634",
-  'uicon-trash': "\uE623",
-  'uicon-trash-fill': "\uE658",
-  'uicon-play-left': "\uE66D",
-  'uicon-play-right': "\uE610",
-  'uicon-minus': "\uE618",
-  'uicon-plus': "\uE62D",
-  'uicon-info': "\uE653",
-  'uicon-info-circle': "\uE7D2",
-  'uicon-info-circle-fill': "\uE64B",
-  'uicon-question': "\uE715",
-  'uicon-error': "\uE6D3",
-  'uicon-close': "\uE685",
-  'uicon-checkmark': "\uE6A8",
-  'uicon-android-circle-fill': "\uE67E",
-  'uicon-android-fill': "\uE67D",
-  'uicon-ie': "\uE87B",
-  'uicon-IE-circle-fill': "\uE889",
-  'uicon-google': "\uE87A",
-  'uicon-google-circle-fill': "\uE88A",
-  'uicon-setting-fill': "\uE872",
-  'uicon-setting': "\uE61F",
-  'uicon-minus-square-fill': "\uE855",
-  'uicon-plus-square-fill': "\uE856",
-  'uicon-heart': "\uE7DF",
-  'uicon-heart-fill': "\uE851",
-  'uicon-camera': "\uE7D7",
-  'uicon-camera-fill': "\uE870",
-  'uicon-more-circle': "\uE63E",
-  'uicon-more-circle-fill': "\uE645",
-  'uicon-chat': "\uE620",
-  'uicon-chat-fill': "\uE61E",
-  'uicon-bag-fill': "\uE617",
-  'uicon-bag': "\uE619",
-  'uicon-error-circle-fill': "\uE62C",
-  'uicon-error-circle': "\uE624",
-  'uicon-close-circle': "\uE63F",
-  'uicon-close-circle-fill': "\uE637",
-  'uicon-checkmark-circle': "\uE63D",
-  'uicon-checkmark-circle-fill': "\uE635",
-  'uicon-question-circle-fill': "\uE666",
-  'uicon-question-circle': "\uE625",
-  'uicon-share': "\uE631",
-  'uicon-share-fill': "\uE65E",
-  'uicon-shopping-cart': "\uE621",
-  'uicon-shopping-cart-fill': "\uE65D",
-  'uicon-bell': "\uE609",
-  'uicon-bell-fill': "\uE640",
-  'uicon-list': "\uE650",
-  'uicon-list-dot': "\uE616",
-  'uicon-zhihu': "\uE6BA",
-  'uicon-zhihu-circle-fill': "\uE709",
-  'uicon-zhifubao': "\uE6B9",
-  'uicon-zhifubao-circle-fill': "\uE6B8",
-  'uicon-weixin-circle-fill': "\uE6B1",
-  'uicon-weixin-fill': "\uE6B2",
-  'uicon-twitter-circle-fill': "\uE6AB",
-  'uicon-twitter': "\uE6AA",
-  'uicon-taobao-circle-fill': "\uE6A7",
-  'uicon-taobao': "\uE6A6",
-  'uicon-weibo-circle-fill': "\uE6A5",
-  'uicon-weibo': "\uE6A4",
-  'uicon-qq-fill': "\uE6A1",
-  'uicon-qq-circle-fill': "\uE6A0",
-  'uicon-moments-circel-fill': "\uE69A",
-  'uicon-moments': "\uE69B",
-  'uicon-qzone': "\uE695",
-  'uicon-qzone-circle-fill': "\uE696",
-  'uicon-baidu-circle-fill': "\uE680",
-  'uicon-baidu': "\uE681",
-  'uicon-facebook-circle-fill': "\uE68A",
-  'uicon-facebook': "\uE689",
-  'uicon-car': "\uE60C",
-  'uicon-car-fill': "\uE636",
-  'uicon-warning-fill': "\uE64D",
-  'uicon-warning': "\uE694",
-  'uicon-clock-fill': "\uE638",
-  'uicon-clock': "\uE60F",
-  'uicon-edit-pen': "\uE612",
-  'uicon-edit-pen-fill': "\uE66B",
-  'uicon-email': "\uE611",
-  'uicon-email-fill': "\uE642",
-  'uicon-minus-circle': "\uE61B",
-  'uicon-minus-circle-fill': "\uE652",
-  'uicon-plus-circle': "\uE62E",
-  'uicon-plus-circle-fill': "\uE661",
-  'uicon-file-text': "\uE663",
-  'uicon-file-text-fill': "\uE665",
-  'uicon-pushpin': "\uE7E3",
-  'uicon-pushpin-fill': "\uE86E",
-  'uicon-grid': "\uE673",
-  'uicon-grid-fill': "\uE678",
-  'uicon-play-circle': "\uE647",
-  'uicon-play-circle-fill': "\uE655",
-  'uicon-pause-circle-fill': "\uE654",
-  'uicon-pause': "\uE8FA",
-  'uicon-pause-circle': "\uE643",
-  'uicon-eye-off': "\uE648",
-  'uicon-eye-off-outline': "\uE62B",
-  'uicon-gift-fill': "\uE65C",
-  'uicon-gift': "\uE65B",
-  'uicon-rmb-circle-fill': "\uE657",
-  'uicon-rmb-circle': "\uE677",
-  'uicon-kefu-ermai': "\uE656",
-  'uicon-server-fill': "\uE751",
-  'uicon-coupon-fill': "\uE8C4",
-  'uicon-coupon': "\uE8AE",
-  'uicon-integral': "\uE704",
-  'uicon-integral-fill': "\uE703",
-  'uicon-home-fill': "\uE964",
-  'uicon-home': "\uE965",
-  'uicon-hourglass-half-fill': "\uE966",
-  'uicon-hourglass': "\uE967",
-  'uicon-account': "\uE628",
-  'uicon-plus-people-fill': "\uE626",
-  'uicon-minus-people-fill': "\uE615",
-  'uicon-account-fill': "\uE614",
-  'uicon-thumb-down-fill': "\uE726",
-  'uicon-thumb-down': "\uE727",
-  'uicon-thumb-up': "\uE733",
-  'uicon-thumb-up-fill': "\uE72F",
-  'uicon-lock-fill': "\uE979",
-  'uicon-lock-open': "\uE973",
-  'uicon-lock-opened-fill': "\uE974",
-  'uicon-lock': "\uE97A",
-  'uicon-red-packet-fill': "\uE690",
-  'uicon-photo-fill': "\uE98B",
-  'uicon-photo': "\uE98D",
-  'uicon-volume-off-fill': "\uE659",
-  'uicon-volume-off': "\uE644",
-  'uicon-volume-fill': "\uE670",
-  'uicon-volume': "\uE633",
-  'uicon-red-packet': "\uE691",
-  'uicon-download': "\uE63C",
-  'uicon-arrow-up-fill': "\uE6B0",
-  'uicon-arrow-down-fill': "\uE600",
-  'uicon-play-left-fill': "\uE675",
-  'uicon-play-right-fill': "\uE676",
-  'uicon-rewind-left-fill': "\uE679",
-  'uicon-rewind-right-fill': "\uE67A",
-  'uicon-arrow-downward': "\uE604",
-  'uicon-arrow-leftward': "\uE601",
-  'uicon-arrow-rightward': "\uE603",
-  'uicon-arrow-upward': "\uE607",
-  'uicon-arrow-down': "\uE60D",
-  'uicon-arrow-right': "\uE605",
-  'uicon-arrow-left': "\uE60E",
-  'uicon-arrow-up': "\uE606",
-  'uicon-skip-back-left': "\uE674",
-  'uicon-skip-forward-right': "\uE672",
-  'uicon-rewind-right': "\uE66F",
-  'uicon-rewind-left': "\uE671",
-  'uicon-arrow-right-double': "\uE68D",
-  'uicon-arrow-left-double': "\uE68C",
-  'uicon-wifi-off': "\uE668",
-  'uicon-wifi': "\uE667",
-  'uicon-empty-data': "\uE62F",
-  'uicon-empty-history': "\uE684",
-  'uicon-empty-list': "\uE68B",
-  'uicon-empty-page': "\uE627",
-  'uicon-empty-order': "\uE639",
-  'uicon-man': "\uE697",
-  'uicon-woman': "\uE69C",
-  'uicon-man-add': "\uE61C",
-  'uicon-man-add-fill': "\uE64C",
-  'uicon-man-delete': "\uE61A",
-  'uicon-man-delete-fill': "\uE66A",
-  'uicon-zh': "\uE70A",
-  'uicon-en': "\uE692"
-};
-exports.default = _default;
-
-/***/ }),
-/* 258 */
-/*!****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/props.js ***!
-  \****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 图标类名
-    name: {
-      type: String,
-      default: uni.$u.props.icon.name
-    },
-    // 图标颜色，可接受主题色
-    color: {
-      type: String,
-      default: uni.$u.props.icon.color
-    },
-    // 字体大小，单位px
-    size: {
-      type: [String, Number],
-      default: uni.$u.props.icon.size
-    },
-    // 是否显示粗体
-    bold: {
-      type: Boolean,
-      default: uni.$u.props.icon.bold
-    },
-    // 点击图标的时候传递事件出去的index（用于区分点击了哪一个）
-    index: {
-      type: [String, Number],
-      default: uni.$u.props.icon.index
-    },
-    // 触摸图标时的类名
-    hoverClass: {
-      type: String,
-      default: uni.$u.props.icon.hoverClass
-    },
-    // 自定义扩展前缀，方便用户扩展自己的图标库
-    customPrefix: {
-      type: String,
-      default: uni.$u.props.icon.customPrefix
-    },
-    // 图标右边或者下面的文字
-    label: {
-      type: [String, Number],
-      default: uni.$u.props.icon.label
-    },
-    // label的位置，只能右边或者下边
-    labelPos: {
-      type: String,
-      default: uni.$u.props.icon.labelPos
-    },
-    // label的大小
-    labelSize: {
-      type: [String, Number],
-      default: uni.$u.props.icon.labelSize
-    },
-    // label的颜色
-    labelColor: {
-      type: String,
-      default: uni.$u.props.icon.labelColor
-    },
-    // label与图标的距离
-    space: {
-      type: [String, Number],
-      default: uni.$u.props.icon.space
-    },
-    // 图片的mode
-    imgMode: {
-      type: String,
-      default: uni.$u.props.icon.imgMode
-    },
-    // 用于显示图片小图标时，图片的宽度
-    width: {
-      type: [String, Number],
-      default: uni.$u.props.icon.width
-    },
-    // 用于显示图片小图标时，图片的高度
-    height: {
-      type: [String, Number],
-      default: uni.$u.props.icon.height
-    },
-    // 用于解决某些情况下，让图标垂直居中的用途
-    top: {
-      type: [String, Number],
-      default: uni.$u.props.icon.top
-    },
-    // 是否阻止事件传播
-    stop: {
-      type: Boolean,
-      default: uni.$u.props.icon.stop
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 259 */,
-/* 260 */,
-/* 261 */,
-/* 262 */,
-/* 263 */,
-/* 264 */,
-/* 265 */,
-/* 266 */
-/*!********************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/components/ljs-top/index.js ***!
-  \********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default2 = {
-  data: function data() {
-    return {
-      statusBarHeight: 0,
-      // 状态按钮高度
-      myback: {
-        // 是否显示返回按钮
-        show: true,
-        // 是否显示返回按钮
-        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 267)
-      },
-      // top样式
-      topStyle: {}
-    };
-  },
-  props: {
-    // 标题内容
-    title: String,
-    // 标题颜色
-    titleColor: {
-      type: String,
-      default: '#FFFFFF'
-    },
-    // 返回按钮相关配置
-    back: {
-      type: Object,
-      default: function _default() {
-        return {
-          // 是否显示返回按钮，默认显示
-          show: true,
-          // 返回按钮的图片地址
-          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 267)
-        };
-      }
-    },
-    // 开启背景图片，未开启，使用背景颜色，开启backgroundImage为必填项
-    backgroundImageShow: {
-      type: Boolean,
-      default: false
-    },
-    // 背景颜色，支持渐变色，如：linear-gradient(to top right, #CDDC39, #8BC34A, #FFEB3B);
-    backgroundColor: {
-      type: String,
-      default: '#004799'
-    },
-    // 背景图片地址，使用前需配置backgroundImageShow为true。
-    backgroundImage: String,
-    // 高度（除状态栏）
-    topHeight: {
-      type: Number,
-      default: 108
-    }
-  },
-  mounted: function mounted() {
-    this.init();
-  },
-  methods: {
-    goBack: function goBack() {
-      uni.navigateBack();
-    },
-    init: function init() {
-      this.statusBarHeight = this.getSysInfo().statusBarHeight;
-      for (var key in this.back) {
-        this.myback[key] = this.back[key];
-      }
-    },
-    getSysInfo: function getSysInfo() {
-      return uni.getSystemInfoSync();
-    }
-  }
-};
-exports.default = _default2;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 267 */
-/*!*******************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/static/images/ico_back.png ***!
-  \*******************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3NpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmZmZjZDFmMS04MzM2LWE5NDMtODY4MC01NTM5NmZhODQzMmUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjNDRUQ2RjJCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjNDRUQ2RjFCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZmZmY2QxZjEtODMzNi1hOTQzLTg2ODAtNTUzOTZmYTg0MzJlIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmZmZmNkMWYxLTgzMzYtYTk0My04NjgwLTU1Mzk2ZmE4NDMyZSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pq6FkCUAAAErSURBVHja7NpBDsIgEAXQjvEc3sC1W28GHsUruPEIXsLEjZ4DIWmiaWxty0iZ75+EkLCgvJSGASohhAY5Vg14EEgggQQSSOA/A9daHYlIdh8xq9rFahPLJZa7ysBSqqZRFMbhwytOauOqAdjBpbhpjWvxbzDhYuU6zUfNByz2Bj+8udCCG/NTdAhnHvgNZxo4BmcWOBZnEjgFZw44FWcK2INzxZavXwLn4kwAc3DVA3NxVQM1cNUCtXBVAucsBSWA8EcWJaaoh5iiOVkLyjLhYYAaSMupmocB5iARtksOBjgHiXRk4WCAU5CIx4YOBjgGCXH5MoSEuV3qWyfRr88eUPtBEUmZzeGt6azWt9bPeEpX2PtYbVvgtSog/7IgkEACCSSQQAKLx1OAAQC3zNidKkNOVAAAAABJRU5ErkJggg=="
-
-/***/ }),
-/* 268 */,
-/* 269 */,
-/* 270 */,
-/* 271 */,
-/* 272 */,
-/* 273 */,
-/* 274 */,
-/* 275 */
 /*!*********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.js ***!
   \*********************************************************************************************************************************************/
@@ -25543,7 +23645,546 @@ MeScroll.prototype.preventDefault = function (e) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 276 */
+/* 179 */
+/*!****************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/mock.js ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.apiGetTabs = apiGetTabs;
+exports.apiGoods = apiGoods;
+exports.apiMsgList = apiMsgList;
+exports.apiNewList = apiNewList;
+exports.apiWeiboList = apiWeiboList;
+var _goods = _interopRequireDefault(__webpack_require__(/*! ./goods.js */ 180));
+/*
+本地模拟接口请求, 仅demo演示用.
+实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+请参考官方写法: https://www.mescroll.com/uni.html?v=20200210#tagUpCallback
+* */
+
+// 模拟数据
+
+// 获取新闻列表
+function apiNewList(pageNum, pageSize) {
+  return new Promise(function (resolute, reject) {
+    //延时一秒,模拟联网
+    setTimeout(function () {
+      try {
+        var list = [];
+        if (!pageNum) {
+          //模拟下拉刷新返回的数据
+          var id = new Date().getTime();
+          var newObj = {
+            id: id,
+            title: "【新增新闻" + id + "】 标题",
+            content: "新增新闻的内容"
+          };
+          list.push(newObj);
+        } else {
+          //模拟上拉加载返回的数据
+          for (var i = 0; i < pageSize; i++) {
+            var upIndex = (pageNum - 1) * pageSize + i + 1;
+            var _newObj = {
+              id: upIndex,
+              title: "【新闻" + upIndex + "】 标题标题标题标题标题",
+              content: "内容内容内容内容内容内容内容内容内容"
+            };
+            list.push(_newObj);
+          }
+          console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
+        }
+        //模拟接口请求成功
+        resolute(list);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 1000);
+  });
+}
+
+// 搜索商品
+function apiGoods(pageNum, pageSize, keyword) {
+  return new Promise(function (resolute, reject) {
+    //延时一秒,模拟联网
+    setTimeout(function () {
+      try {
+        var data = {
+          list: [],
+          // 数据列表
+          totalCount: 0,
+          // 总数量
+          totalPage: 0,
+          // 总页数
+          hasNext: false // 是否有下一页
+        };
+
+        // 符合关键词的记录
+        var keywordList = [];
+        if (!keyword || keyword == "全部") {
+          // 搜索全部商品
+          keywordList = _goods.default;
+        } else {
+          // 关键词搜索
+          if (keyword == "母婴") keyword = "婴"; // 为这个关键词展示多几条数据
+          for (var i = 0; i < _goods.default.length; i++) {
+            var good = _goods.default[i];
+            if (good.goodName.indexOf(keyword) !== -1) {
+              keywordList.push(good);
+            }
+          }
+        }
+
+        // 分页
+        for (var _i = (pageNum - 1) * pageSize; _i < pageNum * pageSize; _i++) {
+          if (_i >= keywordList.length) break;
+          data.list.push(keywordList[_i]);
+        }
+
+        // 汇总数据
+        data.totalCount = keywordList.length;
+        data.totalPage = Math.ceil(data.totalCount / pageSize);
+        data.hasNext = pageNum < data.totalPage;
+
+        //模拟接口请求成功
+        console.log("pageNum=" + pageNum + ", pageSize=" + pageSize + ", data.list.length=" + data.list.length + ", totalCount=" + data.totalCount + ", totalPage=" + data.totalPage + ", hasNext=" + data.hasNext + (keyword ? ", keyword=" + keyword : ""));
+        resolute(data);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 1000);
+  });
+}
+
+// 获取微博列表
+function apiWeiboList(pageNum, pageSize) {
+  return new Promise(function (resolute, reject) {
+    //延时2秒,模拟联网
+    setTimeout(function () {
+      try {
+        var list = [];
+        if (!pageNum) {
+          //此处模拟下拉刷新返回的数据
+          var id = new Date().getTime();
+          var newObj = {
+            id: id,
+            title: "【新增微博" + id + "】 新增微博",
+            content: "新增微博的内容,新增微博的内容"
+          };
+          list.push(newObj);
+        } else {
+          //此处模拟上拉加载返回的数据
+          for (var i = 0; i < pageSize; i++) {
+            var upIndex = (pageNum - 1) * pageSize + i + 1;
+            var _newObj2 = {
+              id: upIndex,
+              title: "【微博" + upIndex + "】 标题标题标题标题标题标题",
+              content: "内容内容内容内容内容内容内容内容内容内容"
+            };
+            list.push(_newObj2);
+          }
+          console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
+        }
+        //模拟接口请求成功
+        resolute(list);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 2000);
+  });
+}
+
+// 获取消息列表(共5页消息)
+function apiMsgList(pageNum, pageSize) {
+  return new Promise(function (resolute, reject) {
+    //延时一秒,模拟联网
+    setTimeout(function () {
+      try {
+        var list = [];
+        //模拟下拉加载更多记录
+        for (var i = 0; i < pageSize; i++) {
+          var msgId = (pageNum - 1) * pageSize + i + 1;
+          var newObj = {
+            id: msgId,
+            title: "【消息" + msgId + "】",
+            content: "内容: 下拉获取聊天记录"
+          };
+          // 此处模拟只有5页的消息 (第5页只有3条)
+          if (pageNum >= 5 && i >= 3) {} else {
+            list.unshift(newObj);
+          }
+        }
+        console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
+        //模拟接口请求成功
+        resolute(list);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 1000);
+  });
+}
+
+// 获取tabs类目
+function apiGetTabs() {
+  return new Promise(function (resolute, reject) {
+    //延时,模拟联网
+    setTimeout(function () {
+      try {
+        var tabs = ['全部', '奶粉', '面膜', '图书', '果汁', '奶瓶', '美素', '花王', '韩蜜', '口红', '毛巾', '玩具', '衣服'];
+        //模拟接口请求成功
+        resolute(tabs);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 10);
+  });
+}
+
+/***/ }),
+/* 180 */
+/*!*****************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/goods.js ***!
+  \*****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var goods = [{
+  "id": "1",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd1.jpg",
+  "goodName": "【1】  六罐装荷兰美素佳儿金装2段900g",
+  "goodPrice": 1149.00,
+  "goodSold": 648
+}, {
+  "id": "2",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd2.jpg",
+  "goodName": "【2】  韩国Amore爱茉莉红吕洗发水套装修复受损发质",
+  "goodPrice": 89.00,
+  "goodSold": 128
+}, {
+  "id": "3",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd3.jpg",
+  "goodName": "【3】  Friso美素佳儿 金装婴儿配方奶粉3段900g",
+  "goodPrice": 195.00,
+  "goodSold": 968
+}, {
+  "id": "4",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd4.jpg",
+  "goodName": "【4】  Fisher goodPrice费雪 费雪三轮儿童滑行车",
+  "goodPrice": 299.00,
+  "goodSold": 85
+}, {
+  "id": "5",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd5.jpg",
+  "goodName": "【5】  Babylee巴布力 实木婴儿床 雷卡拉130*70cm",
+  "goodPrice": 1889.00,
+  "goodSold": 18
+}, {
+  "id": "6",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd6.jpg",
+  "goodName": "【6】  Pigeon贝亲 独立三层奶粉盒 送小罐奶粉1段200g",
+  "goodPrice": 70.00,
+  "goodSold": 658
+}, {
+  "id": "7",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd7.jpg",
+  "goodName": "【7】 TTBOO兔兔小布 肩纽扣套装",
+  "goodPrice": 268.00,
+  "goodSold": 128
+}, {
+  "id": "8",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd8.jpg",
+  "goodName": "【8】  Nuna璐拉 婴儿布里奇果精纯嫩肤沐浴露婴儿精纯芦荟胶",
+  "goodPrice": 140.00,
+  "goodSold": 366
+}, {
+  "id": "9",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd9.jpg",
+  "goodName": "【9】  illuma启赋 奶粉3段900g",
+  "goodPrice": 252.00,
+  "goodSold": 98
+}, {
+  "id": "10",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd10.jpg",
+  "goodName": "【10】  Abbott雅培乳蛋白部分水解婴儿配方奶粉3段820g",
+  "goodPrice": 89.00,
+  "goodSold": 128
+}, {
+  "id": "11",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd11.jpg",
+  "goodName": "【11】  韩蜜 酷炫唇蜜（礼盒套装）2.8g*4",
+  "goodPrice": 179.00,
+  "goodSold": 35
+}, {
+  "id": "12",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd12.jpg",
+  "goodName": "【12】  保税区直发【3包装】日本Merries花王纸尿裤NB90",
+  "goodPrice": 289.00,
+  "goodSold": 1928
+}, {
+  "id": "13",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd13.jpg",
+  "goodName": "【13】  Comotomo可么多么 硅胶奶瓶（0-3月奶嘴）150ml绿色",
+  "goodPrice": 203.00,
+  "goodSold": 87
+}, {
+  "id": "14",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd14.jpg",
+  "goodName": "【14】  香港直邮德国瑞德露Rival de Loop芦荟精华安瓶",
+  "goodPrice": 152.00,
+  "goodSold": 61
+}, {
+  "id": "15",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd15.jpg",
+  "goodName": "【15】  保税区直发药师堂尊马油香草味温和保湿无刺激面霜",
+  "goodPrice": 269.00,
+  "goodSold": 73
+}, {
+  "id": "16",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd16.jpg",
+  "goodName": "【16】  香港直邮日本Spatreatment眼膜保湿去细纹法令纹",
+  "goodPrice": 219.00,
+  "goodSold": 13
+}, {
+  "id": "17",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd17.jpg",
+  "goodName": "【17】  韩国MEDIHEALNMF可莱丝针剂睡眠面膜",
+  "goodPrice": 81.00,
+  "goodSold": 128
+}, {
+  "id": "18",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd18.jpg",
+  "goodName": "【18】  DHC蝶翠诗橄榄蜂蜜滋养洗脸手工皂90g",
+  "goodPrice": 123.00,
+  "goodSold": 77
+}, {
+  "id": "19",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd19.jpg",
+  "goodName": "【19】  日本资生堂CPB肌肤之钥新版隔离霜 清爽型 30ml",
+  "goodPrice": 429.00,
+  "goodSold": 36
+}, {
+  "id": "20",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd20.jpg",
+  "goodName": "【20】 Heinz亨氏 婴儿面条优加面条全素套餐组合3口味3盒",
+  "goodPrice": 39.00,
+  "goodSold": 61
+}, {
+  "id": "21",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd21.jpg",
+  "goodName": "【21】  Heinz亨氏 乐维滋果汁泥组合5口味15袋",
+  "goodPrice": 69.00,
+  "goodSold": 55
+}, {
+  "id": "22",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd22.jpg",
+  "goodName": "【22】  保税区直发澳大利亚Swisse高浓度蔓越莓胶囊30粒",
+  "goodPrice": 271.00,
+  "goodSold": 19
+}, {
+  "id": "23",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd23.jpg",
+  "goodName": "【23】  挪威Nordic Naturals小鱼婴幼儿鱼油DHA滴剂",
+  "goodPrice": 102.00,
+  "goodSold": 125
+}, {
+  "id": "24",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd24.jpg",
+  "goodName": "【24】  澳大利亚Bio island DHA for Pregnancy海藻油DHA",
+  "goodPrice": 289.00,
+  "goodSold": 28
+}, {
+  "id": "25",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd25.jpg",
+  "goodName": "【25】  澳大利亚Fatblaster Coconut Detox椰子水",
+  "goodPrice": 152.00,
+  "goodSold": 17
+}, {
+  "id": "26",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd26.jpg",
+  "goodName": "【26】  Suitsky舒比奇 高护极薄舒爽纸尿片尿不湿XL60",
+  "goodPrice": 99.00,
+  "goodSold": 181
+}, {
+  "id": "27",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd27.jpg",
+  "goodName": "【27】  英国JUST SOAP手工皂 玫瑰天竺葵蛋糕皂",
+  "goodPrice": 72.00,
+  "goodSold": 66
+}, {
+  "id": "28",
+  "goodImg": "https://www.mescroll.com/demo/res/img/pd28.jpg",
+  "goodName": "【28】  德国NUK 多色婴幼儿带盖学饮杯",
+  "goodPrice": 92.00,
+  "goodSold": 138
+}];
+var _default = goods;
+exports.default = _default;
+
+/***/ }),
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
+/* 203 */
+/*!************************************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js ***!
+  \************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+// mescroll-body 和 mescroll-uni 通用
+var MescrollMixin = {
+  data: function data() {
+    return {
+      mescroll: null //mescroll实例对象
+    };
+  },
+  // 注册系统自带的下拉刷新 (配置down.native为true时生效, 还需在pages配置enablePullDownRefresh:true;详请参考mescroll-native的案例)
+  onPullDownRefresh: function onPullDownRefresh() {
+    this.mescroll && this.mescroll.onPullDownRefresh();
+  },
+  // 注册列表滚动事件,用于判定在顶部可下拉刷新,在指定位置可显示隐藏回到顶部按钮 (此方法为页面生命周期,无法在子组件中触发, 仅在mescroll-body生效)
+  onPageScroll: function onPageScroll(e) {
+    this.mescroll && this.mescroll.onPageScroll(e);
+  },
+  // 注册滚动到底部的事件,用于上拉加载 (此方法为页面生命周期,无法在子组件中触发, 仅在mescroll-body生效)
+  onReachBottom: function onReachBottom() {
+    this.mescroll && this.mescroll.onReachBottom();
+  },
+  methods: {
+    // mescroll组件初始化的回调,可获取到mescroll对象
+    mescrollInit: function mescrollInit(mescroll) {
+      this.mescroll = mescroll;
+    },
+    // 下拉刷新的回调 (mixin默认resetUpScroll)
+    downCallback: function downCallback() {
+      var _this = this;
+      if (this.mescroll.optUp.use) {
+        this.mescroll.resetUpScroll();
+      } else {
+        setTimeout(function () {
+          _this.mescroll.endSuccess();
+        }, 500);
+      }
+    },
+    // 上拉加载的回调
+    upCallback: function upCallback() {
+      var _this2 = this;
+      // mixin默认延时500自动结束加载
+      setTimeout(function () {
+        _this2.mescroll.endErr();
+      }, 500);
+    }
+  }
+};
+var _default = MescrollMixin;
+exports.default = _default;
+
+/***/ }),
+/* 204 */,
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */,
+/* 225 */,
+/* 226 */,
+/* 227 */,
+/* 228 */,
+/* 229 */,
+/* 230 */,
+/* 231 */,
+/* 232 */,
+/* 233 */,
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */
 /*!****************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni-option.js ***!
   \****************************************************************************************************************************************************/
@@ -25641,7 +24282,7 @@ var _default = GlobalOption;
 exports.default = _default;
 
 /***/ }),
-/* 277 */
+/* 263 */
 /*!**********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-i18n.js ***!
   \**********************************************************************************************************************************************/
@@ -25673,7 +24314,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 278 */
+/* 264 */
 /*!*******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/wxs/mixins.js ***!
   \*******************************************************************************************************************************************/
@@ -25797,12 +24438,459 @@ var _default = WxsMixin;
 exports.default = _default;
 
 /***/ }),
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */,
+/* 272 */,
+/* 273 */,
+/* 274 */
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/icons.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  'uicon-level': "\uE693",
+  'uicon-column-line': "\uE68E",
+  'uicon-checkbox-mark': "\uE807",
+  'uicon-folder': "\uE7F5",
+  'uicon-movie': "\uE7F6",
+  'uicon-star-fill': "\uE669",
+  'uicon-star': "\uE65F",
+  'uicon-phone-fill': "\uE64F",
+  'uicon-phone': "\uE622",
+  'uicon-apple-fill': "\uE881",
+  'uicon-chrome-circle-fill': "\uE885",
+  'uicon-backspace': "\uE67B",
+  'uicon-attach': "\uE632",
+  'uicon-cut': "\uE948",
+  'uicon-empty-car': "\uE602",
+  'uicon-empty-coupon': "\uE682",
+  'uicon-empty-address': "\uE646",
+  'uicon-empty-favor': "\uE67C",
+  'uicon-empty-permission': "\uE686",
+  'uicon-empty-news': "\uE687",
+  'uicon-empty-search': "\uE664",
+  'uicon-github-circle-fill': "\uE887",
+  'uicon-rmb': "\uE608",
+  'uicon-person-delete-fill': "\uE66A",
+  'uicon-reload': "\uE788",
+  'uicon-order': "\uE68F",
+  'uicon-server-man': "\uE6BC",
+  'uicon-search': "\uE62A",
+  'uicon-fingerprint': "\uE955",
+  'uicon-more-dot-fill': "\uE630",
+  'uicon-scan': "\uE662",
+  'uicon-share-square': "\uE60B",
+  'uicon-map': "\uE61D",
+  'uicon-map-fill': "\uE64E",
+  'uicon-tags': "\uE629",
+  'uicon-tags-fill': "\uE651",
+  'uicon-bookmark-fill': "\uE63B",
+  'uicon-bookmark': "\uE60A",
+  'uicon-eye': "\uE613",
+  'uicon-eye-fill': "\uE641",
+  'uicon-mic': "\uE64A",
+  'uicon-mic-off': "\uE649",
+  'uicon-calendar': "\uE66E",
+  'uicon-calendar-fill': "\uE634",
+  'uicon-trash': "\uE623",
+  'uicon-trash-fill': "\uE658",
+  'uicon-play-left': "\uE66D",
+  'uicon-play-right': "\uE610",
+  'uicon-minus': "\uE618",
+  'uicon-plus': "\uE62D",
+  'uicon-info': "\uE653",
+  'uicon-info-circle': "\uE7D2",
+  'uicon-info-circle-fill': "\uE64B",
+  'uicon-question': "\uE715",
+  'uicon-error': "\uE6D3",
+  'uicon-close': "\uE685",
+  'uicon-checkmark': "\uE6A8",
+  'uicon-android-circle-fill': "\uE67E",
+  'uicon-android-fill': "\uE67D",
+  'uicon-ie': "\uE87B",
+  'uicon-IE-circle-fill': "\uE889",
+  'uicon-google': "\uE87A",
+  'uicon-google-circle-fill': "\uE88A",
+  'uicon-setting-fill': "\uE872",
+  'uicon-setting': "\uE61F",
+  'uicon-minus-square-fill': "\uE855",
+  'uicon-plus-square-fill': "\uE856",
+  'uicon-heart': "\uE7DF",
+  'uicon-heart-fill': "\uE851",
+  'uicon-camera': "\uE7D7",
+  'uicon-camera-fill': "\uE870",
+  'uicon-more-circle': "\uE63E",
+  'uicon-more-circle-fill': "\uE645",
+  'uicon-chat': "\uE620",
+  'uicon-chat-fill': "\uE61E",
+  'uicon-bag-fill': "\uE617",
+  'uicon-bag': "\uE619",
+  'uicon-error-circle-fill': "\uE62C",
+  'uicon-error-circle': "\uE624",
+  'uicon-close-circle': "\uE63F",
+  'uicon-close-circle-fill': "\uE637",
+  'uicon-checkmark-circle': "\uE63D",
+  'uicon-checkmark-circle-fill': "\uE635",
+  'uicon-question-circle-fill': "\uE666",
+  'uicon-question-circle': "\uE625",
+  'uicon-share': "\uE631",
+  'uicon-share-fill': "\uE65E",
+  'uicon-shopping-cart': "\uE621",
+  'uicon-shopping-cart-fill': "\uE65D",
+  'uicon-bell': "\uE609",
+  'uicon-bell-fill': "\uE640",
+  'uicon-list': "\uE650",
+  'uicon-list-dot': "\uE616",
+  'uicon-zhihu': "\uE6BA",
+  'uicon-zhihu-circle-fill': "\uE709",
+  'uicon-zhifubao': "\uE6B9",
+  'uicon-zhifubao-circle-fill': "\uE6B8",
+  'uicon-weixin-circle-fill': "\uE6B1",
+  'uicon-weixin-fill': "\uE6B2",
+  'uicon-twitter-circle-fill': "\uE6AB",
+  'uicon-twitter': "\uE6AA",
+  'uicon-taobao-circle-fill': "\uE6A7",
+  'uicon-taobao': "\uE6A6",
+  'uicon-weibo-circle-fill': "\uE6A5",
+  'uicon-weibo': "\uE6A4",
+  'uicon-qq-fill': "\uE6A1",
+  'uicon-qq-circle-fill': "\uE6A0",
+  'uicon-moments-circel-fill': "\uE69A",
+  'uicon-moments': "\uE69B",
+  'uicon-qzone': "\uE695",
+  'uicon-qzone-circle-fill': "\uE696",
+  'uicon-baidu-circle-fill': "\uE680",
+  'uicon-baidu': "\uE681",
+  'uicon-facebook-circle-fill': "\uE68A",
+  'uicon-facebook': "\uE689",
+  'uicon-car': "\uE60C",
+  'uicon-car-fill': "\uE636",
+  'uicon-warning-fill': "\uE64D",
+  'uicon-warning': "\uE694",
+  'uicon-clock-fill': "\uE638",
+  'uicon-clock': "\uE60F",
+  'uicon-edit-pen': "\uE612",
+  'uicon-edit-pen-fill': "\uE66B",
+  'uicon-email': "\uE611",
+  'uicon-email-fill': "\uE642",
+  'uicon-minus-circle': "\uE61B",
+  'uicon-minus-circle-fill': "\uE652",
+  'uicon-plus-circle': "\uE62E",
+  'uicon-plus-circle-fill': "\uE661",
+  'uicon-file-text': "\uE663",
+  'uicon-file-text-fill': "\uE665",
+  'uicon-pushpin': "\uE7E3",
+  'uicon-pushpin-fill': "\uE86E",
+  'uicon-grid': "\uE673",
+  'uicon-grid-fill': "\uE678",
+  'uicon-play-circle': "\uE647",
+  'uicon-play-circle-fill': "\uE655",
+  'uicon-pause-circle-fill': "\uE654",
+  'uicon-pause': "\uE8FA",
+  'uicon-pause-circle': "\uE643",
+  'uicon-eye-off': "\uE648",
+  'uicon-eye-off-outline': "\uE62B",
+  'uicon-gift-fill': "\uE65C",
+  'uicon-gift': "\uE65B",
+  'uicon-rmb-circle-fill': "\uE657",
+  'uicon-rmb-circle': "\uE677",
+  'uicon-kefu-ermai': "\uE656",
+  'uicon-server-fill': "\uE751",
+  'uicon-coupon-fill': "\uE8C4",
+  'uicon-coupon': "\uE8AE",
+  'uicon-integral': "\uE704",
+  'uicon-integral-fill': "\uE703",
+  'uicon-home-fill': "\uE964",
+  'uicon-home': "\uE965",
+  'uicon-hourglass-half-fill': "\uE966",
+  'uicon-hourglass': "\uE967",
+  'uicon-account': "\uE628",
+  'uicon-plus-people-fill': "\uE626",
+  'uicon-minus-people-fill': "\uE615",
+  'uicon-account-fill': "\uE614",
+  'uicon-thumb-down-fill': "\uE726",
+  'uicon-thumb-down': "\uE727",
+  'uicon-thumb-up': "\uE733",
+  'uicon-thumb-up-fill': "\uE72F",
+  'uicon-lock-fill': "\uE979",
+  'uicon-lock-open': "\uE973",
+  'uicon-lock-opened-fill': "\uE974",
+  'uicon-lock': "\uE97A",
+  'uicon-red-packet-fill': "\uE690",
+  'uicon-photo-fill': "\uE98B",
+  'uicon-photo': "\uE98D",
+  'uicon-volume-off-fill': "\uE659",
+  'uicon-volume-off': "\uE644",
+  'uicon-volume-fill': "\uE670",
+  'uicon-volume': "\uE633",
+  'uicon-red-packet': "\uE691",
+  'uicon-download': "\uE63C",
+  'uicon-arrow-up-fill': "\uE6B0",
+  'uicon-arrow-down-fill': "\uE600",
+  'uicon-play-left-fill': "\uE675",
+  'uicon-play-right-fill': "\uE676",
+  'uicon-rewind-left-fill': "\uE679",
+  'uicon-rewind-right-fill': "\uE67A",
+  'uicon-arrow-downward': "\uE604",
+  'uicon-arrow-leftward': "\uE601",
+  'uicon-arrow-rightward': "\uE603",
+  'uicon-arrow-upward': "\uE607",
+  'uicon-arrow-down': "\uE60D",
+  'uicon-arrow-right': "\uE605",
+  'uicon-arrow-left': "\uE60E",
+  'uicon-arrow-up': "\uE606",
+  'uicon-skip-back-left': "\uE674",
+  'uicon-skip-forward-right': "\uE672",
+  'uicon-rewind-right': "\uE66F",
+  'uicon-rewind-left': "\uE671",
+  'uicon-arrow-right-double': "\uE68D",
+  'uicon-arrow-left-double': "\uE68C",
+  'uicon-wifi-off': "\uE668",
+  'uicon-wifi': "\uE667",
+  'uicon-empty-data': "\uE62F",
+  'uicon-empty-history': "\uE684",
+  'uicon-empty-list': "\uE68B",
+  'uicon-empty-page': "\uE627",
+  'uicon-empty-order': "\uE639",
+  'uicon-man': "\uE697",
+  'uicon-woman': "\uE69C",
+  'uicon-man-add': "\uE61C",
+  'uicon-man-add-fill': "\uE64C",
+  'uicon-man-delete': "\uE61A",
+  'uicon-man-delete-fill': "\uE66A",
+  'uicon-zh': "\uE70A",
+  'uicon-en': "\uE692"
+};
+exports.default = _default;
+
+/***/ }),
+/* 275 */
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/props.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 图标类名
+    name: {
+      type: String,
+      default: uni.$u.props.icon.name
+    },
+    // 图标颜色，可接受主题色
+    color: {
+      type: String,
+      default: uni.$u.props.icon.color
+    },
+    // 字体大小，单位px
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.icon.size
+    },
+    // 是否显示粗体
+    bold: {
+      type: Boolean,
+      default: uni.$u.props.icon.bold
+    },
+    // 点击图标的时候传递事件出去的index（用于区分点击了哪一个）
+    index: {
+      type: [String, Number],
+      default: uni.$u.props.icon.index
+    },
+    // 触摸图标时的类名
+    hoverClass: {
+      type: String,
+      default: uni.$u.props.icon.hoverClass
+    },
+    // 自定义扩展前缀，方便用户扩展自己的图标库
+    customPrefix: {
+      type: String,
+      default: uni.$u.props.icon.customPrefix
+    },
+    // 图标右边或者下面的文字
+    label: {
+      type: [String, Number],
+      default: uni.$u.props.icon.label
+    },
+    // label的位置，只能右边或者下边
+    labelPos: {
+      type: String,
+      default: uni.$u.props.icon.labelPos
+    },
+    // label的大小
+    labelSize: {
+      type: [String, Number],
+      default: uni.$u.props.icon.labelSize
+    },
+    // label的颜色
+    labelColor: {
+      type: String,
+      default: uni.$u.props.icon.labelColor
+    },
+    // label与图标的距离
+    space: {
+      type: [String, Number],
+      default: uni.$u.props.icon.space
+    },
+    // 图片的mode
+    imgMode: {
+      type: String,
+      default: uni.$u.props.icon.imgMode
+    },
+    // 用于显示图片小图标时，图片的宽度
+    width: {
+      type: [String, Number],
+      default: uni.$u.props.icon.width
+    },
+    // 用于显示图片小图标时，图片的高度
+    height: {
+      type: [String, Number],
+      default: uni.$u.props.icon.height
+    },
+    // 用于解决某些情况下，让图标垂直居中的用途
+    top: {
+      type: [String, Number],
+      default: uni.$u.props.icon.top
+    },
+    // 是否阻止事件传播
+    stop: {
+      type: Boolean,
+      default: uni.$u.props.icon.stop
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 276 */,
+/* 277 */,
+/* 278 */,
 /* 279 */,
 /* 280 */,
 /* 281 */,
 /* 282 */,
-/* 283 */,
-/* 284 */,
+/* 283 */
+/*!********************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/components/ljs-top/index.js ***!
+  \********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default2 = {
+  data: function data() {
+    return {
+      statusBarHeight: 0,
+      // 状态按钮高度
+      myback: {
+        // 是否显示返回按钮
+        show: true,
+        // 是否显示返回按钮
+        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 284)
+      },
+      // top样式
+      topStyle: {}
+    };
+  },
+  props: {
+    // 标题内容
+    title: String,
+    // 标题颜色
+    titleColor: {
+      type: String,
+      default: '#FFFFFF'
+    },
+    // 返回按钮相关配置
+    back: {
+      type: Object,
+      default: function _default() {
+        return {
+          // 是否显示返回按钮，默认显示
+          show: true,
+          // 返回按钮的图片地址
+          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 284)
+        };
+      }
+    },
+    // 开启背景图片，未开启，使用背景颜色，开启backgroundImage为必填项
+    backgroundImageShow: {
+      type: Boolean,
+      default: false
+    },
+    // 背景颜色，支持渐变色，如：linear-gradient(to top right, #CDDC39, #8BC34A, #FFEB3B);
+    backgroundColor: {
+      type: String,
+      default: '#004799'
+    },
+    // 背景图片地址，使用前需配置backgroundImageShow为true。
+    backgroundImage: String,
+    // 高度（除状态栏）
+    topHeight: {
+      type: Number,
+      default: 108
+    }
+  },
+  mounted: function mounted() {
+    this.init();
+  },
+  methods: {
+    goBack: function goBack() {
+      uni.navigateBack();
+    },
+    init: function init() {
+      this.statusBarHeight = this.getSysInfo().statusBarHeight;
+      for (var key in this.back) {
+        this.myback[key] = this.back[key];
+      }
+    },
+    getSysInfo: function getSysInfo() {
+      return uni.getSystemInfoSync();
+    }
+  }
+};
+exports.default = _default2;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 284 */
+/*!*******************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/static/images/ico_back.png ***!
+  \*******************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3NpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmZmZjZDFmMS04MzM2LWE5NDMtODY4MC01NTM5NmZhODQzMmUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjNDRUQ2RjJCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjNDRUQ2RjFCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZmZmY2QxZjEtODMzNi1hOTQzLTg2ODAtNTUzOTZmYTg0MzJlIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmZmZmNkMWYxLTgzMzYtYTk0My04NjgwLTU1Mzk2ZmE4NDMyZSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pq6FkCUAAAErSURBVHja7NpBDsIgEAXQjvEc3sC1W28GHsUruPEIXsLEjZ4DIWmiaWxty0iZ75+EkLCgvJSGASohhAY5Vg14EEgggQQSSOA/A9daHYlIdh8xq9rFahPLJZa7ysBSqqZRFMbhwytOauOqAdjBpbhpjWvxbzDhYuU6zUfNByz2Bj+8udCCG/NTdAhnHvgNZxo4BmcWOBZnEjgFZw44FWcK2INzxZavXwLn4kwAc3DVA3NxVQM1cNUCtXBVAucsBSWA8EcWJaaoh5iiOVkLyjLhYYAaSMupmocB5iARtksOBjgHiXRk4WCAU5CIx4YOBjgGCXH5MoSEuV3qWyfRr88eUPtBEUmZzeGt6azWt9bPeEpX2PtYbVvgtSog/7IgkEACCSSQQAKLx1OAAQC3zNidKkNOVAAAAABJRU5ErkJggg=="
+
+/***/ }),
 /* 285 */,
 /* 286 */,
 /* 287 */,
@@ -25820,7 +24908,11 @@ exports.default = _default;
 /* 299 */,
 /* 300 */,
 /* 301 */,
-/* 302 */
+/* 302 */,
+/* 303 */,
+/* 304 */,
+/* 305 */,
+/* 306 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-input/props.js ***!
   \*****************************************************************************************************************************/
@@ -26025,14 +25117,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 303 */,
-/* 304 */,
-/* 305 */,
-/* 306 */,
 /* 307 */,
 /* 308 */,
 /* 309 */,
-/* 310 */
+/* 310 */,
+/* 311 */,
+/* 312 */,
+/* 313 */,
+/* 314 */
 /*!**************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox-group/props.js ***!
   \**************************************************************************************************************************************/
@@ -26129,14 +25221,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 311 */,
-/* 312 */,
-/* 313 */,
-/* 314 */,
 /* 315 */,
 /* 316 */,
 /* 317 */,
-/* 318 */
+/* 318 */,
+/* 319 */,
+/* 320 */,
+/* 321 */,
+/* 322 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox/props.js ***!
   \********************************************************************************************************************************/
@@ -26223,14 +25315,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 319 */,
-/* 320 */,
-/* 321 */,
-/* 322 */,
 /* 323 */,
 /* 324 */,
 /* 325 */,
-/* 326 */
+/* 326 */,
+/* 327 */,
+/* 328 */,
+/* 329 */,
+/* 330 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-textarea/props.js ***!
   \********************************************************************************************************************************/

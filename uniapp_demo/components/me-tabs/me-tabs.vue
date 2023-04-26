@@ -134,7 +134,7 @@
 <style lang="scss">
 	.me-tabs{
 		position: relative;
-		font-size: 24rpx;
+		font-size: 26rpx;
 		background-color: #fff;
 		border-bottom: 1rpx solid #eee;
 		box-sizing: border-box;
@@ -158,7 +158,7 @@
 				box-sizing: border-box;
 				&.active{
 					font-weight: bold;
-					color: red;
+					color: #39C9BC;
 				}
 			}
 		}
@@ -187,7 +187,7 @@
 			transform: translateX(-50%);
 			border-radius: 4rpx;
 			transition: left .3s;
-			background: red;
+			background: #39C9BC;
 		}
 	}
 </style>

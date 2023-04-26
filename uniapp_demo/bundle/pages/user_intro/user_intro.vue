@@ -28,8 +28,7 @@
 		data(){
 			return {
 				introValue:'个人介绍',
-				inputEnble: false,
-				inputEnbleValue: 'false'
+				inputEnble: false
 			}
 		},
 		onLoad() {
@@ -42,11 +41,7 @@
 				// console.log('修改 个人介绍')
 				this.inputEnble = !this.inputEnble
 				console.log('修改 个人介绍',this.inputEnble)
-				if(this.inputEnble){
-					this.inputEnbleValue = 'true'
-				}else{
-					this.inputEnbleValue = 'false'
-				}
+				
 			},
 			backFun() {
 				console.log('取消')
