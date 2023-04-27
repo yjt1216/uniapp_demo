@@ -1,6 +1,7 @@
 <template>
 	<view>
-		<nav-bar title="swiper" :back="false" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
+		<!-- 导航栏 -->
+		<nav-bar title="swiper"  backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		<!--轮播-->
 		<swiper style="min-height: 300rpx" autoplay="true" interval="3000" duration="300" circular="true">
 		    <swiper-item>
