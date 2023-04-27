@@ -91,7 +91,7 @@
 
 <style lang="scss" scoped>
 	@import '../../libs/css/components.scss';
-	$u-divider-margin:15px 0 !default;
+	$u-divider-margin:15rpx 0 !default;
 	$u-divider-text-margin:0 15px !default;
 	$u-divider-dot-font-size:12px !default;
 	$u-divider-dot-margin:0 12px !default;
