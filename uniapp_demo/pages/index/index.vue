@@ -17,6 +17,13 @@
 			<view class="demo-li">服务订单<text class="demo-tip"> 切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>
 		
+		<navigator url="/bundle/pages/form_page/form_page">
+			<view class="demo-li">表单<text class="demo-tip"> 表单界面</text></view>
+		</navigator>
+		
+		<navigator url="/bundle/pages/upload_img/upload_img">
+			<view class="demo-li">上传照片<text class="demo-tip"> 证件照</text></view>
+		</navigator>
 		
 	</view>
 </template>

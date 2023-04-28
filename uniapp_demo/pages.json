@@ -71,6 +71,19 @@
 					"style": {
 						"navigationStyle": "custom" 
 					}
+				},
+				{
+					"path": "pages/form_page/form_page",
+					"style": {
+						"navigationStyle": "custom" 
+						// "navigationBarTitleText": "表单"
+					}
+				},
+				{
+					"path": "pages/upload_img/upload_img",
+					"style": {
+						"navigationBarTitleText": "上传证件"
+					}
 				}
 			]
 		}
