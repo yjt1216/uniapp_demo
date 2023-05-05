@@ -29,6 +29,10 @@
 			<view class="demo-li">input<text class="demo-tip"> 循环创建input</text></view>
 		</navigator>
 		
+		<navigator url="/bundle/pages/appraise_form/appraise_form">
+			<view class="demo-li">评估表单<text class="demo-tip"> 填空 单选 多选</text></view>
+		</navigator>
+		
 	</view>
 </template>
 

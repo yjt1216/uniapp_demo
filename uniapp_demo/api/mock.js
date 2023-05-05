@@ -7,6 +7,7 @@
 // 模拟数据
 import goods from "./goods.js";
 import orders from "./orders.js"
+import assessFormData from './assess_form.js'
 
 // 获取新闻列表
 export function apiNewList(pageNum, pageSize) {
@@ -178,7 +179,7 @@ export function apiGetTabs() {
 	})
 }
 
-
+/* 订单list */
 export function apiOrders(pageNum, pageSize, keyword) {
 	return new Promise((resolute, reject)=>{
 		//延时一秒,模拟联网
@@ -222,3 +223,19 @@ export function apiOrders(pageNum, pageSize, keyword) {
 	})
 }
 
+/* 评估表单数据 */
+export function apiAssessFromData() {
+	return new Promise((resolute, reject)=>{
+		//延时一秒,模拟联网
+		setTimeout(()=> {
+			try{
+				let data = assessFormData
+				
+				resolute(data);
+			} catch (e) {
+				//模拟接口请求失败
+				reject(e);
+			}
+		},1000)
+	})
+}

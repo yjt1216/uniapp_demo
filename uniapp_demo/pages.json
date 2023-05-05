@@ -90,6 +90,12 @@
 					"style": {
 						"navigationBarTitleText": "多个input"
 					}
+				},
+				{
+					"path": "pages/appraise_form/appraise_form",
+					"style": {
+						"navigationBarTitleText": "评估表单"
+					}
 				}
 			]
 		}

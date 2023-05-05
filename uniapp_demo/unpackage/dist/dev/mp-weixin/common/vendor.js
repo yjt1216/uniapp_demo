@@ -20897,7 +20897,7 @@ var router = (0, _uniSimpleRouter.createRouter)({
     router.$lockStatus = false;
   },
   debugger: false,
-  routes: [].concat((0, _toConsumableArray2.default)([{"path":"/pages/index/index","aliasPath":"/"},{"path":"/pages/user/user"},{"path":"/pages/text_auto/text_auto"},{"path":"/pages/message/message"},{"path":"/pages/server_explan/server_explan"},{"path":"/pages/login/login"},{"path":"/pages/register/register"},{"path":"/bundle/pages/user_intro/user_intro"},{"path":"/bundle/pages/mescroll_swiper/mescroll_swiper"},{"path":"/bundle/pages/nurse_order/nurse_order"},{"path":"/bundle/pages/service_order/service_order"},{"path":"/bundle/pages/form_page/form_page"},{"path":"/bundle/pages/upload_img/upload_img"},{"path":"/bundle/pages/list_input/list_input"}]), [{
+  routes: [].concat((0, _toConsumableArray2.default)([{"path":"/pages/index/index","aliasPath":"/"},{"path":"/pages/user/user"},{"path":"/pages/text_auto/text_auto"},{"path":"/pages/message/message"},{"path":"/pages/server_explan/server_explan"},{"path":"/pages/login/login"},{"path":"/pages/register/register"},{"path":"/bundle/pages/user_intro/user_intro"},{"path":"/bundle/pages/mescroll_swiper/mescroll_swiper"},{"path":"/bundle/pages/nurse_order/nurse_order"},{"path":"/bundle/pages/service_order/service_order"},{"path":"/bundle/pages/form_page/form_page"},{"path":"/bundle/pages/upload_img/upload_img"},{"path":"/bundle/pages/list_input/list_input"},{"path":"/bundle/pages/appraise_form/appraise_form"}]), [{
     path: '*',
     redirect: function redirect(to) {
       return {
@@ -22845,6 +22845,7 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.apiAssessFromData = apiAssessFromData;
 exports.apiGetTabs = apiGetTabs;
 exports.apiGoods = apiGoods;
 exports.apiMsgList = apiMsgList;
@@ -22853,6 +22854,7 @@ exports.apiOrders = apiOrders;
 exports.apiWeiboList = apiWeiboList;
 var _goods = _interopRequireDefault(__webpack_require__(/*! ./goods.js */ 204));
 var _orders = _interopRequireDefault(__webpack_require__(/*! ./orders.js */ 205));
+var _assess_form = _interopRequireDefault(__webpack_require__(/*! ./assess_form.js */ 206));
 /*
 本地模拟接口请求, 仅demo演示用.
 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
@@ -23040,6 +23042,8 @@ function apiGetTabs() {
     }, 10);
   });
 }
+
+/* 订单list */
 function apiOrders(pageNum, pageSize, keyword) {
   return new Promise(function (resolute, reject) {
     //延时一秒,模拟联网
@@ -23077,6 +23081,22 @@ function apiOrders(pageNum, pageSize, keyword) {
 
         //模拟接口请求成功
         console.log("pageNum=" + pageNum + ", pageSize=" + pageSize + ", data.list.length=" + data.list.length + ", totalCount=" + data.totalCount + ", totalPage=" + data.totalPage + ", hasNext=" + data.hasNext + (keyword ? ", keyword=" + keyword : ""));
+        resolute(data);
+      } catch (e) {
+        //模拟接口请求失败
+        reject(e);
+      }
+    }, 1000);
+  });
+}
+
+/* 评估表单数据 */
+function apiAssessFromData() {
+  return new Promise(function (resolute, reject) {
+    //延时一秒,模拟联网
+    setTimeout(function () {
+      try {
+        var data = _assess_form.default;
         resolute(data);
       } catch (e) {
         //模拟接口请求失败
@@ -23872,7 +23892,1263 @@ var _default = orders;
 exports.default = _default;
 
 /***/ }),
-/* 206 */,
+/* 206 */
+/*!***********************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/assess_form.js ***!
+  \***********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+/* 评估表单内容 */
+var assessFormData = {
+  "success": 1,
+  "msg": "成功",
+  "code": 0,
+  "data": {
+    "title": "通用护理评估表单",
+    "version": 17,
+    "questions": [{
+      "qid": "1611797524333",
+      "title": "体温(℃)3",
+      "qTypeId": "q_text",
+      "timestamp": "1611797524333",
+      "options": [{
+        "title": "体温(℃)3",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }],
+      "no": "1",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797577265",
+      "title": "脉搏(次/分)",
+      "qTypeId": "q_text",
+      "timestamp": "1611797577265",
+      "options": [{
+        "title": "脉搏(次/分)",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }],
+      "no": "2",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797616728",
+      "title": "呼吸(次/分)",
+      "qTypeId": "q_text",
+      "timestamp": "1611797616728",
+      "options": [{
+        "title": "呼吸(次/分)",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }],
+      "no": "3",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797702625",
+      "title": "血压(mmHg)",
+      "qTypeId": "q_text",
+      "timestamp": "1611797702625",
+      "options": [{
+        "title": "血压(mmHg)",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }],
+      "no": "4",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797707290",
+      "title": "体重(KG)",
+      "qTypeId": "q_text",
+      "timestamp": "1611797707290",
+      "options": [{
+        "title": "体重(KG)",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }],
+      "no": "5",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797712307",
+      "title": "身高(cm)",
+      "qTypeId": "q_text",
+      "timestamp": "1611797712307",
+      "options": [{
+        "title": "身高(cm)",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }],
+      "no": "6",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797723340",
+      "title": "病史",
+      "qTypeId": "q_text",
+      "timestamp": "1611797723340",
+      "options": [{
+        "title": "病史",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }],
+      "no": "7",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797747672",
+      "title": "意识",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797747672",
+      "options": [{
+        "title": "清楚",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "欠清",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "模糊",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "嗜睡",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "烦躁",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "昏迷",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }],
+      "no": "8",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797818218",
+      "title": "记忆力",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797818218",
+      "options": [{
+        "title": "良好",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "减退",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }],
+      "no": "9",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797816736",
+      "title": "理解能力",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797816736",
+      "options": [{
+        "title": "完全理解",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "欠缺",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "部分理解",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "无法理解",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "5",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "10",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797814985",
+      "title": "表达能力",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797814985",
+      "options": [{
+        "title": "清晰表达",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "欠清",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "含糊表达",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "不能表达",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }],
+      "no": "11",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797754605",
+      "title": "视力",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797754605",
+      "options": [{
+        "title": "正常",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "近视",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "远视",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "老花",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "失明",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "6",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "12",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797813719",
+      "title": "睡眠",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797813719",
+      "options": [{
+        "title": "正常",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "入睡困难",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "易醒",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "多梦",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "失眠",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "药物副猪睡眠",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "7",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "13",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797812518",
+      "title": "喝酒",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797812518",
+      "options": [{
+        "title": "无",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "有",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }],
+      "no": "14",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797811169",
+      "title": "吸烟",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797811169",
+      "options": [{
+        "title": "无",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "有",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }],
+      "no": "15",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797772304",
+      "title": "饮食习惯",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797772304",
+      "options": [{
+        "title": "合理",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "高蛋白",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "高脂肪",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "高碳水化合物",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "素食",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "偏食",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "忌食",
+        "no": "7",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "8",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "16",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797809186",
+      "title": "咀嚼困难",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797809186",
+      "options": [{
+        "title": "无",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "有",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }],
+      "no": "17",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797832668",
+      "title": "吞咽困难",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797832668",
+      "options": [{
+        "title": "无",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "有",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }],
+      "no": "18",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797828602",
+      "title": "大便",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797828602",
+      "options": [{
+        "title": "正常",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "便秘",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "腹泻",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "失禁",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "5",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "19",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797777770",
+      "title": "小便",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797777770",
+      "options": [{
+        "title": "正常",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "色",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "尿路中断",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "尿频",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "尿急",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "尿痛",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "留置导尿",
+        "no": "7",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "8",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "20",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797806603",
+      "title": "食欲",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797806603",
+      "options": [{
+        "title": "正常",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "亢进",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "下降",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }],
+      "no": "21",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797826718",
+      "title": "自主能力",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797826718",
+      "options": [{
+        "title": "完全自理",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "大部分自理",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "小部分自理",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "完全不能自理",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "5",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "22",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797827701",
+      "title": "活动能力",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797827701",
+      "options": [{
+        "title": "自主活动",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "轮椅",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "卧床自行翻身",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "辅助翻身",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "床椅辅助转移",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "床椅自行转移",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "室内活动",
+        "no": "7",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "室外活动",
+        "no": "8",
+        "action": "",
+        "data": ""
+      }],
+      "no": "23",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797829518",
+      "title": "肌力左上",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797829518",
+      "options": [{
+        "title": "V级",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "IV级",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "III级",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "II级",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "I级",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "0级",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }],
+      "no": "24",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797830285",
+      "title": "肌力左下",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797830285",
+      "options": [{
+        "title": "V级",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "IV级",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "III级",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "II级",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "I级",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "0级",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }],
+      "no": "25",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797831086",
+      "title": "肌力右上",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797831086",
+      "options": [{
+        "title": "V级",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "IV级",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "III级",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "II级",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "I级",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "0级",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }],
+      "no": "26",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797831851",
+      "title": "肌力右下",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797831851",
+      "options": [{
+        "title": "V级",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "IV级",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "III级",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "II级",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "I级",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "0级",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }],
+      "no": "27",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797833434",
+      "title": "全身营养状况",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797833434",
+      "options": [{
+        "title": "良好",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "中等",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "不良",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "肥胖",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "消瘦",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "6",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "28",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797834351",
+      "title": "皮肤黏膜",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797834351",
+      "options": [{
+        "title": "正常",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "黄染",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "发绀",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "水肿",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "潮红",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "苍白",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "7",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "29",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797835134",
+      "title": "口腔",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797835134",
+      "options": [{
+        "title": "正常",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "溃疡",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "假膜",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "4",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "30",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797835901",
+      "title": "牙龈",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797835901",
+      "options": [{
+        "title": "正常",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "红肿",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "出血",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "溃疡",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "5",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "31",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797836667",
+      "title": "牙齿",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797836667",
+      "options": [{
+        "title": "正常",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "义齿",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "缺齿",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "4",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "32",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797849568",
+      "title": "压疮",
+      "qTypeId": "q_text",
+      "timestamp": "1611797849568",
+      "options": [{
+        "title": "压疮",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }],
+      "no": "33",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797851201",
+      "title": "导管情况",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797851201",
+      "options": [{
+        "title": "无",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "鼻导管",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "胃管",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "导尿管",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "5",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "34",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797852084",
+      "title": "造口情况",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797852084",
+      "options": [{
+        "title": "无",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "红肿",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "出血",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "溃烂",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "膨出",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "6",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "35",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1615958275652",
+      "title": "近期（7天内）是否在服用抗凝药物？",
+      "qTypeId": "q_radio",
+      "timestamp": "1615958275652",
+      "options": [{
+        "title": "是",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "否",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }],
+      "no": "36",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "",
+      "title": "心理状态",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797852817",
+      "options": [{
+        "title": "镇静",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "易激动",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "焦虑",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "恐惧",
+        "no": "4",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "沮丧",
+        "no": "5",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "无反应",
+        "no": "6",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "7",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "37",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797854501",
+      "title": "社交能力",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797854501",
+      "options": [{
+        "title": "愿意与人交往",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "不愿与人交往",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "3",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "38",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "1611797859133",
+      "title": "家属关心",
+      "qTypeId": "q_radio",
+      "timestamp": "1611797859133",
+      "options": [{
+        "title": "关心",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "一般",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "冷漠",
+        "no": "3",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "其他",
+        "no": "4",
+        "action": "",
+        "data": "",
+        "textbox": 1
+      }],
+      "no": "39",
+      "required": true,
+      "data": "",
+      "action": ""
+    }, {
+      "qid": "0",
+      "title": "本次服务项目所需的耗材是否齐全（缺少耗材需要在下面勾选出来，单独购买或由平台提供，费用自理）",
+      "qTypeId": "q_check",
+      "timestamp": "0",
+      "options": [{
+        "title": "创可贴",
+        "no": "1",
+        "action": "",
+        "data": ""
+      }, {
+        "title": "导尿管",
+        "no": "2",
+        "action": "",
+        "data": ""
+      }],
+      "no": "40",
+      "required": false,
+      "data": "",
+      "action": ""
+    }],
+    "id": 19
+  }
+};
+var _default = assessFormData;
+exports.default = _default;
+
+/***/ }),
 /* 207 */,
 /* 208 */,
 /* 209 */,
@@ -23975,7 +25251,10 @@ exports.default = _default;
 /* 306 */,
 /* 307 */,
 /* 308 */,
-/* 309 */
+/* 309 */,
+/* 310 */,
+/* 311 */,
+/* 312 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/icons.js ***!
   \****************************************************************************************************************************/
@@ -24206,7 +25485,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 310 */
+/* 313 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/props.js ***!
   \****************************************************************************************************************************/
@@ -24313,14 +25592,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 311 */,
-/* 312 */,
-/* 313 */,
 /* 314 */,
 /* 315 */,
 /* 316 */,
 /* 317 */,
-/* 318 */
+/* 318 */,
+/* 319 */,
+/* 320 */,
+/* 321 */
 /*!********************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/components/ljs-top/index.js ***!
   \********************************************************************************************************/
@@ -24343,7 +25622,7 @@ var _default2 = {
         // 是否显示返回按钮
         show: true,
         // 是否显示返回按钮
-        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 319)
+        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 322)
       },
       // top样式
       topStyle: {}
@@ -24365,7 +25644,7 @@ var _default2 = {
           // 是否显示返回按钮，默认显示
           show: true,
           // 返回按钮的图片地址
-          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 319)
+          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 322)
         };
       }
     },
@@ -24409,7 +25688,7 @@ exports.default = _default2;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 319 */
+/* 322 */
 /*!*******************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/static/images/ico_back.png ***!
   \*******************************************************************************************************/
@@ -24419,14 +25698,14 @@ exports.default = _default2;
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3NpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmZmZjZDFmMS04MzM2LWE5NDMtODY4MC01NTM5NmZhODQzMmUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjNDRUQ2RjJCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjNDRUQ2RjFCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZmZmY2QxZjEtODMzNi1hOTQzLTg2ODAtNTUzOTZmYTg0MzJlIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmZmZmNkMWYxLTgzMzYtYTk0My04NjgwLTU1Mzk2ZmE4NDMyZSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pq6FkCUAAAErSURBVHja7NpBDsIgEAXQjvEc3sC1W28GHsUruPEIXsLEjZ4DIWmiaWxty0iZ75+EkLCgvJSGASohhAY5Vg14EEgggQQSSOA/A9daHYlIdh8xq9rFahPLJZa7ysBSqqZRFMbhwytOauOqAdjBpbhpjWvxbzDhYuU6zUfNByz2Bj+8udCCG/NTdAhnHvgNZxo4BmcWOBZnEjgFZw44FWcK2INzxZavXwLn4kwAc3DVA3NxVQM1cNUCtXBVAucsBSWA8EcWJaaoh5iiOVkLyjLhYYAaSMupmocB5iARtksOBjgHiXRk4WCAU5CIx4YOBjgGCXH5MoSEuV3qWyfRr88eUPtBEUmZzeGt6azWt9bPeEpX2PtYbVvgtSog/7IgkEACCSSQQAKLx1OAAQC3zNidKkNOVAAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 320 */,
-/* 321 */,
-/* 322 */,
 /* 323 */,
 /* 324 */,
 /* 325 */,
 /* 326 */,
-/* 327 */
+/* 327 */,
+/* 328 */,
+/* 329 */,
+/* 330 */
 /*!*********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.js ***!
   \*********************************************************************************************************************************************/
@@ -25327,7 +26606,7 @@ MeScroll.prototype.preventDefault = function (e) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 328 */
+/* 331 */
 /*!****************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni-option.js ***!
   \****************************************************************************************************************************************************/
@@ -25425,7 +26704,7 @@ var _default = GlobalOption;
 exports.default = _default;
 
 /***/ }),
-/* 329 */
+/* 332 */
 /*!**********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-i18n.js ***!
   \**********************************************************************************************************************************************/
@@ -25457,7 +26736,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 330 */
+/* 333 */
 /*!*******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/wxs/mixins.js ***!
   \*******************************************************************************************************************************************/
@@ -25581,9 +26860,6 @@ var _default = WxsMixin;
 exports.default = _default;
 
 /***/ }),
-/* 331 */,
-/* 332 */,
-/* 333 */,
 /* 334 */,
 /* 335 */,
 /* 336 */,
@@ -25597,7 +26873,10 @@ exports.default = _default;
 /* 344 */,
 /* 345 */,
 /* 346 */,
-/* 347 */
+/* 347 */,
+/* 348 */,
+/* 349 */,
+/* 350 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-input/props.js ***!
   \*****************************************************************************************************************************/
@@ -25802,14 +27081,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 348 */,
-/* 349 */,
-/* 350 */,
 /* 351 */,
 /* 352 */,
 /* 353 */,
 /* 354 */,
-/* 355 */
+/* 355 */,
+/* 356 */,
+/* 357 */,
+/* 358 */
 /*!**************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox-group/props.js ***!
   \**************************************************************************************************************************************/
@@ -25906,14 +27185,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 356 */,
-/* 357 */,
-/* 358 */,
 /* 359 */,
 /* 360 */,
 /* 361 */,
 /* 362 */,
-/* 363 */
+/* 363 */,
+/* 364 */,
+/* 365 */,
+/* 366 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox/props.js ***!
   \********************************************************************************************************************************/
@@ -26000,14 +27279,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 364 */,
-/* 365 */,
-/* 366 */,
 /* 367 */,
 /* 368 */,
 /* 369 */,
 /* 370 */,
-/* 371 */
+/* 371 */,
+/* 372 */,
+/* 373 */,
+/* 374 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-textarea/props.js ***!
   \********************************************************************************************************************************/
@@ -26144,9 +27423,6 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 372 */,
-/* 373 */,
-/* 374 */,
 /* 375 */,
 /* 376 */,
 /* 377 */,
@@ -26176,7 +27452,10 @@ exports.default = _default;
 /* 401 */,
 /* 402 */,
 /* 403 */,
-/* 404 */
+/* 404 */,
+/* 405 */,
+/* 406 */,
+/* 407 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-navbar/props.js ***!
   \******************************************************************************************************************************/
@@ -26278,14 +27557,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 405 */,
-/* 406 */,
-/* 407 */,
 /* 408 */,
 /* 409 */,
 /* 410 */,
 /* 411 */,
-/* 412 */
+/* 412 */,
+/* 413 */,
+/* 414 */,
+/* 415 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-form/props.js ***!
   \****************************************************************************************************************************/
@@ -26348,12 +27627,12 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 413 */,
-/* 414 */,
-/* 415 */,
 /* 416 */,
 /* 417 */,
-/* 418 */
+/* 418 */,
+/* 419 */,
+/* 420 */,
+/* 421 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-form-item/props.js ***!
   \*********************************************************************************************************************************/
@@ -26419,9 +27698,6 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 419 */,
-/* 420 */,
-/* 421 */,
 /* 422 */,
 /* 423 */,
 /* 424 */,
@@ -26431,7 +27707,10 @@ exports.default = _default;
 /* 428 */,
 /* 429 */,
 /* 430 */,
-/* 431 */
+/* 431 */,
+/* 432 */,
+/* 433 */,
+/* 434 */
 /*!**********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/mixin/button.js ***!
   \**********************************************************************************************************************/
@@ -26461,7 +27740,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 432 */
+/* 435 */
 /*!************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/mixin/openType.js ***!
   \************************************************************************************************************************/
@@ -26503,7 +27782,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 433 */
+/* 436 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-button/props.js ***!
   \******************************************************************************************************************************/
@@ -26682,14 +27961,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 434 */,
-/* 435 */,
-/* 436 */,
 /* 437 */,
 /* 438 */,
 /* 439 */,
 /* 440 */,
-/* 441 */
+/* 441 */,
+/* 442 */,
+/* 443 */,
+/* 444 */
 /*!************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-action-sheet/props.js ***!
   \************************************************************************************************************************************/
@@ -26761,14 +28040,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 442 */,
-/* 443 */,
-/* 444 */,
 /* 445 */,
 /* 446 */,
 /* 447 */,
 /* 448 */,
-/* 449 */
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-calendar/props.js ***!
   \********************************************************************************************************************************/
@@ -26930,7 +28209,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 450 */
+/* 453 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-calendar/util.js ***!
   \*******************************************************************************************************************************/
@@ -27027,7 +28306,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 451 */
+/* 454 */
 /*!********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/dayjs.js ***!
   \********************************************************************************************************************/
@@ -27339,7 +28618,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = 
 });
 
 /***/ }),
-/* 452 */
+/* 455 */
 /*!***********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/calendar.js ***!
   \***********************************************************************************************************************/
@@ -27856,14 +29135,14 @@ var _default = calendar;
 exports.default = _default;
 
 /***/ }),
-/* 453 */,
-/* 454 */,
-/* 455 */,
 /* 456 */,
 /* 457 */,
 /* 458 */,
 /* 459 */,
-/* 460 */
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-code/props.js ***!
   \****************************************************************************************************************************/
@@ -27915,14 +29194,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 461 */,
-/* 462 */,
-/* 463 */,
 /* 464 */,
 /* 465 */,
 /* 466 */,
 /* 467 */,
-/* 468 */
+/* 468 */,
+/* 469 */,
+/* 470 */,
+/* 471 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-datetime-picker/props.js ***!
   \***************************************************************************************************************************************/
@@ -28056,9 +29335,6 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 469 */,
-/* 470 */,
-/* 471 */,
 /* 472 */,
 /* 473 */,
 /* 474 */,
@@ -28066,7 +29342,108 @@ exports.default = _default;
 /* 476 */,
 /* 477 */,
 /* 478 */,
-/* 479 */,
+/* 479 */
+/*!***********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio-group/props.js ***!
+  \***********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 绑定的值
+    value: {
+      type: [String, Number, Boolean],
+      default: uni.$u.props.radioGroup.value
+    },
+    // 是否禁用全部radio
+    disabled: {
+      type: Boolean,
+      default: uni.$u.props.radioGroup.disabled
+    },
+    // 形状，circle-圆形，square-方形
+    shape: {
+      type: String,
+      default: uni.$u.props.radioGroup.shape
+    },
+    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
+    activeColor: {
+      type: String,
+      default: uni.$u.props.radioGroup.activeColor
+    },
+    // 未选中的颜色
+    inactiveColor: {
+      type: String,
+      default: uni.$u.props.radioGroup.inactiveColor
+    },
+    // 标识符
+    name: {
+      type: String,
+      default: uni.$u.props.radioGroup.name
+    },
+    // 整个组件的尺寸，默认px
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.radioGroup.size
+    },
+    // 布局方式，row-横向，column-纵向
+    placement: {
+      type: String,
+      default: uni.$u.props.radioGroup.placement
+    },
+    // label的文本
+    label: {
+      type: [String],
+      default: uni.$u.props.radioGroup.label
+    },
+    // label的颜色 （默认 '#303133' ）
+    labelColor: {
+      type: [String],
+      default: uni.$u.props.radioGroup.labelColor
+    },
+    // label的字体大小，px单位
+    labelSize: {
+      type: [String, Number],
+      default: uni.$u.props.radioGroup.labelSize
+    },
+    // 是否禁止点击文本操作checkbox(默认 false )
+    labelDisabled: {
+      type: Boolean,
+      default: uni.$u.props.radioGroup.labelDisabled
+    },
+    // 图标颜色
+    iconColor: {
+      type: String,
+      default: uni.$u.props.radioGroup.iconColor
+    },
+    // 图标的大小，单位px
+    iconSize: {
+      type: [String, Number],
+      default: uni.$u.props.radioGroup.iconSize
+    },
+    // 竖向配列时，是否显示下划线
+    borderBottom: {
+      type: Boolean,
+      default: uni.$u.props.radioGroup.borderBottom
+    },
+    // 图标与文字的对齐方式
+    iconPlacement: {
+      type: String,
+      default: uni.$u.props.radio.iconPlacement
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
 /* 480 */,
 /* 481 */,
 /* 482 */,
@@ -28074,7 +29451,88 @@ exports.default = _default;
 /* 484 */,
 /* 485 */,
 /* 486 */,
-/* 487 */,
+/* 487 */
+/*!*****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio/props.js ***!
+  \*****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // radio的名称
+    name: {
+      type: [String, Number, Boolean],
+      default: uni.$u.props.radio.name
+    },
+    // 形状，square为方形，circle为圆型
+    shape: {
+      type: String,
+      default: uni.$u.props.radio.shape
+    },
+    // 是否禁用
+    disabled: {
+      type: [String, Boolean],
+      default: uni.$u.props.radio.disabled
+    },
+    // 是否禁止点击提示语选中单选框
+    labelDisabled: {
+      type: [String, Boolean],
+      default: uni.$u.props.radio.labelDisabled
+    },
+    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
+    activeColor: {
+      type: String,
+      default: uni.$u.props.radio.activeColor
+    },
+    // 未选中的颜色
+    inactiveColor: {
+      type: String,
+      default: uni.$u.props.radio.inactiveColor
+    },
+    // 图标的大小，单位px
+    iconSize: {
+      type: [String, Number],
+      default: uni.$u.props.radio.iconSize
+    },
+    // label的字体大小，px单位
+    labelSize: {
+      type: [String, Number],
+      default: uni.$u.props.radio.labelSize
+    },
+    // label提示文字，因为nvue下，直接slot进来的文字，由于特殊的结构，无法修改样式
+    label: {
+      type: [String, Number],
+      default: uni.$u.props.radio.label
+    },
+    // 整体的大小
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.radio.size
+    },
+    // 图标颜色
+    color: {
+      type: String,
+      default: uni.$u.props.radio.color
+    },
+    // label的颜色
+    labelColor: {
+      type: String,
+      default: uni.$u.props.radio.labelColor
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
 /* 488 */,
 /* 489 */,
 /* 490 */,
@@ -28086,7 +29544,26 @@ exports.default = _default;
 /* 496 */,
 /* 497 */,
 /* 498 */,
-/* 499 */
+/* 499 */,
+/* 500 */,
+/* 501 */,
+/* 502 */,
+/* 503 */,
+/* 504 */,
+/* 505 */,
+/* 506 */,
+/* 507 */,
+/* 508 */,
+/* 509 */,
+/* 510 */,
+/* 511 */,
+/* 512 */,
+/* 513 */,
+/* 514 */,
+/* 515 */,
+/* 516 */,
+/* 517 */,
+/* 518 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-divider/props.js ***!
   \*******************************************************************************************************************************/
@@ -28148,14 +29625,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 500 */,
-/* 501 */,
-/* 502 */,
-/* 503 */,
-/* 504 */,
-/* 505 */,
-/* 506 */,
-/* 507 */
+/* 519 */,
+/* 520 */,
+/* 521 */,
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-rate/props.js ***!
   \****************************************************************************************************************************/
@@ -28242,14 +29719,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 508 */,
-/* 509 */,
-/* 510 */,
-/* 511 */,
-/* 512 */,
-/* 513 */,
-/* 514 */,
-/* 515 */
+/* 527 */,
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */,
+/* 532 */,
+/* 533 */,
+/* 534 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-status-bar/props.js ***!
   \**********************************************************************************************************************************/
@@ -28275,14 +29752,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 516 */,
-/* 517 */,
-/* 518 */,
-/* 519 */,
-/* 520 */,
-/* 521 */,
-/* 522 */,
-/* 523 */
+/* 535 */,
+/* 536 */,
+/* 537 */,
+/* 538 */,
+/* 539 */,
+/* 540 */,
+/* 541 */,
+/* 542 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/async-validator.js ***!
   \******************************************************************************************************************************/
@@ -29463,10 +30940,10 @@ Schema.warning = warning;
 Schema.messages = messages;
 var _default = Schema; // # sourceMappingURL=index.js.map
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 524)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 543)))
 
 /***/ }),
-/* 524 */
+/* 543 */
 /*!********************************************************!*\
   !*** ./node_modules/node-libs-browser/mock/process.js ***!
   \********************************************************/
@@ -29497,7 +30974,7 @@ exports.binding = function (name) {
     var path;
     exports.cwd = function () { return cwd };
     exports.chdir = function (dir) {
-        if (!path) path = __webpack_require__(/*! path */ 525);
+        if (!path) path = __webpack_require__(/*! path */ 544);
         cwd = path.resolve(dir, cwd);
     };
 })();
@@ -29510,7 +30987,7 @@ exports.features = {};
 
 
 /***/ }),
-/* 525 */
+/* 544 */
 /*!***********************************************!*\
   !*** ./node_modules/path-browserify/index.js ***!
   \***********************************************/
@@ -29820,15 +31297,15 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 524)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 543)))
 
 /***/ }),
-/* 526 */,
-/* 527 */,
-/* 528 */,
-/* 529 */,
-/* 530 */,
-/* 531 */
+/* 545 */,
+/* 546 */,
+/* 547 */,
+/* 548 */,
+/* 549 */,
+/* 550 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-line/props.js ***!
   \****************************************************************************************************************************/
@@ -29879,14 +31356,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 532 */,
-/* 533 */,
-/* 534 */,
-/* 535 */,
-/* 536 */,
-/* 537 */,
-/* 538 */,
-/* 539 */
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */,
+/* 556 */,
+/* 557 */,
+/* 558 */
 /*!************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-loading-icon/props.js ***!
   \************************************************************************************************************************************/
@@ -29963,14 +31440,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 540 */,
-/* 541 */,
-/* 542 */,
-/* 543 */,
-/* 544 */,
-/* 545 */,
-/* 546 */,
-/* 547 */
+/* 559 */,
+/* 560 */,
+/* 561 */,
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-popup/props.js ***!
   \*****************************************************************************************************************************/
@@ -30067,14 +31544,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 548 */,
-/* 549 */,
-/* 550 */,
-/* 551 */,
-/* 552 */,
-/* 553 */,
-/* 554 */,
-/* 555 */
+/* 567 */,
+/* 568 */,
+/* 569 */,
+/* 570 */,
+/* 571 */,
+/* 572 */,
+/* 573 */,
+/* 574 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-gap/props.js ***!
   \***************************************************************************************************************************/
@@ -30116,28 +31593,28 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 556 */,
-/* 557 */,
-/* 558 */,
-/* 559 */,
-/* 560 */,
-/* 561 */,
-/* 562 */,
-/* 563 */,
-/* 564 */,
-/* 565 */,
-/* 566 */,
-/* 567 */,
-/* 568 */,
-/* 569 */,
-/* 570 */,
-/* 571 */,
-/* 572 */,
-/* 573 */,
-/* 574 */,
 /* 575 */,
 /* 576 */,
-/* 577 */
+/* 577 */,
+/* 578 */,
+/* 579 */,
+/* 580 */,
+/* 581 */,
+/* 582 */,
+/* 583 */,
+/* 584 */,
+/* 585 */,
+/* 586 */,
+/* 587 */,
+/* 588 */,
+/* 589 */,
+/* 590 */,
+/* 591 */,
+/* 592 */,
+/* 593 */,
+/* 594 */,
+/* 595 */,
+/* 596 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-picker/props.js ***!
   \******************************************************************************************************************************/
@@ -30234,14 +31711,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 578 */,
-/* 579 */,
-/* 580 */,
-/* 581 */,
-/* 582 */,
-/* 583 */,
-/* 584 */,
-/* 585 */
+/* 597 */,
+/* 598 */,
+/* 599 */,
+/* 600 */,
+/* 601 */,
+/* 602 */,
+/* 603 */,
+/* 604 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-overlay/props.js ***!
   \*******************************************************************************************************************************/
@@ -30283,14 +31760,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 586 */,
-/* 587 */,
-/* 588 */,
-/* 589 */,
-/* 590 */,
-/* 591 */,
-/* 592 */,
-/* 593 */
+/* 605 */,
+/* 606 */,
+/* 607 */,
+/* 608 */,
+/* 609 */,
+/* 610 */,
+/* 611 */,
+/* 612 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-transition/props.js ***!
   \**********************************************************************************************************************************/
@@ -30332,7 +31809,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 594 */
+/* 613 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-transition/transition.js ***!
   \***************************************************************************************************************************************/
@@ -30349,7 +31826,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
-var _nvueAniMap = _interopRequireDefault(__webpack_require__(/*! ./nvue.ani-map.js */ 595));
+var _nvueAniMap = _interopRequireDefault(__webpack_require__(/*! ./nvue.ani-map.js */ 614));
 // 定义一个一定时间后自动成功的promise，让调用nextTick方法处，进入下一个then方法
 var nextTick = function nextTick() {
   return new Promise(function (resolve) {
@@ -30441,7 +31918,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 595 */
+/* 614 */
 /*!*****************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-transition/nvue.ani-map.js ***!
   \*****************************************************************************************************************************************/
@@ -30634,14 +32111,14 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 596 */,
-/* 597 */,
-/* 598 */,
-/* 599 */,
-/* 600 */,
-/* 601 */,
-/* 602 */,
-/* 603 */
+/* 615 */,
+/* 616 */,
+/* 617 */,
+/* 618 */,
+/* 619 */,
+/* 620 */,
+/* 621 */,
+/* 622 */
 /*!***********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-safe-bottom/props.js ***!
   \***********************************************************************************************************************************/
@@ -30661,14 +32138,14 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 604 */,
-/* 605 */,
-/* 606 */,
-/* 607 */,
-/* 608 */,
-/* 609 */,
-/* 610 */,
-/* 611 */
+/* 623 */,
+/* 624 */,
+/* 625 */,
+/* 626 */,
+/* 627 */,
+/* 628 */,
+/* 629 */,
+/* 630 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-toolbar/props.js ***!
   \*******************************************************************************************************************************/
@@ -30713,257 +32190,6 @@ var _default = {
     title: {
       type: String,
       default: uni.$u.props.toolbar.title
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 612 */,
-/* 613 */,
-/* 614 */,
-/* 615 */,
-/* 616 */,
-/* 617 */,
-/* 618 */,
-/* 619 */,
-/* 620 */,
-/* 621 */,
-/* 622 */,
-/* 623 */,
-/* 624 */,
-/* 625 */,
-/* 626 */,
-/* 627 */,
-/* 628 */,
-/* 629 */,
-/* 630 */,
-/* 631 */,
-/* 632 */,
-/* 633 */,
-/* 634 */,
-/* 635 */,
-/* 636 */,
-/* 637 */,
-/* 638 */,
-/* 639 */,
-/* 640 */,
-/* 641 */,
-/* 642 */,
-/* 643 */,
-/* 644 */,
-/* 645 */,
-/* 646 */,
-/* 647 */,
-/* 648 */,
-/* 649 */,
-/* 650 */,
-/* 651 */,
-/* 652 */,
-/* 653 */,
-/* 654 */,
-/* 655 */,
-/* 656 */,
-/* 657 */,
-/* 658 */,
-/* 659 */,
-/* 660 */,
-/* 661 */,
-/* 662 */,
-/* 663 */,
-/* 664 */,
-/* 665 */,
-/* 666 */,
-/* 667 */,
-/* 668 */,
-/* 669 */,
-/* 670 */,
-/* 671 */
-/*!***********************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio-group/props.js ***!
-  \***********************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 绑定的值
-    value: {
-      type: [String, Number, Boolean],
-      default: uni.$u.props.radioGroup.value
-    },
-    // 是否禁用全部radio
-    disabled: {
-      type: Boolean,
-      default: uni.$u.props.radioGroup.disabled
-    },
-    // 形状，circle-圆形，square-方形
-    shape: {
-      type: String,
-      default: uni.$u.props.radioGroup.shape
-    },
-    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
-    activeColor: {
-      type: String,
-      default: uni.$u.props.radioGroup.activeColor
-    },
-    // 未选中的颜色
-    inactiveColor: {
-      type: String,
-      default: uni.$u.props.radioGroup.inactiveColor
-    },
-    // 标识符
-    name: {
-      type: String,
-      default: uni.$u.props.radioGroup.name
-    },
-    // 整个组件的尺寸，默认px
-    size: {
-      type: [String, Number],
-      default: uni.$u.props.radioGroup.size
-    },
-    // 布局方式，row-横向，column-纵向
-    placement: {
-      type: String,
-      default: uni.$u.props.radioGroup.placement
-    },
-    // label的文本
-    label: {
-      type: [String],
-      default: uni.$u.props.radioGroup.label
-    },
-    // label的颜色 （默认 '#303133' ）
-    labelColor: {
-      type: [String],
-      default: uni.$u.props.radioGroup.labelColor
-    },
-    // label的字体大小，px单位
-    labelSize: {
-      type: [String, Number],
-      default: uni.$u.props.radioGroup.labelSize
-    },
-    // 是否禁止点击文本操作checkbox(默认 false )
-    labelDisabled: {
-      type: Boolean,
-      default: uni.$u.props.radioGroup.labelDisabled
-    },
-    // 图标颜色
-    iconColor: {
-      type: String,
-      default: uni.$u.props.radioGroup.iconColor
-    },
-    // 图标的大小，单位px
-    iconSize: {
-      type: [String, Number],
-      default: uni.$u.props.radioGroup.iconSize
-    },
-    // 竖向配列时，是否显示下划线
-    borderBottom: {
-      type: Boolean,
-      default: uni.$u.props.radioGroup.borderBottom
-    },
-    // 图标与文字的对齐方式
-    iconPlacement: {
-      type: String,
-      default: uni.$u.props.radio.iconPlacement
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 672 */,
-/* 673 */,
-/* 674 */,
-/* 675 */,
-/* 676 */,
-/* 677 */,
-/* 678 */,
-/* 679 */,
-/* 680 */
-/*!*****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio/props.js ***!
-  \*****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // radio的名称
-    name: {
-      type: [String, Number, Boolean],
-      default: uni.$u.props.radio.name
-    },
-    // 形状，square为方形，circle为圆型
-    shape: {
-      type: String,
-      default: uni.$u.props.radio.shape
-    },
-    // 是否禁用
-    disabled: {
-      type: [String, Boolean],
-      default: uni.$u.props.radio.disabled
-    },
-    // 是否禁止点击提示语选中单选框
-    labelDisabled: {
-      type: [String, Boolean],
-      default: uni.$u.props.radio.labelDisabled
-    },
-    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
-    activeColor: {
-      type: String,
-      default: uni.$u.props.radio.activeColor
-    },
-    // 未选中的颜色
-    inactiveColor: {
-      type: String,
-      default: uni.$u.props.radio.inactiveColor
-    },
-    // 图标的大小，单位px
-    iconSize: {
-      type: [String, Number],
-      default: uni.$u.props.radio.iconSize
-    },
-    // label的字体大小，px单位
-    labelSize: {
-      type: [String, Number],
-      default: uni.$u.props.radio.labelSize
-    },
-    // label提示文字，因为nvue下，直接slot进来的文字，由于特殊的结构，无法修改样式
-    label: {
-      type: [String, Number],
-      default: uni.$u.props.radio.label
-    },
-    // 整体的大小
-    size: {
-      type: [String, Number],
-      default: uni.$u.props.radio.size
-    },
-    // 图标颜色
-    color: {
-      type: String,
-      default: uni.$u.props.radio.color
-    },
-    // label的颜色
-    labelColor: {
-      type: String,
-      default: uni.$u.props.radio.labelColor
     }
   }
 };
