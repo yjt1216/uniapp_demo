@@ -5,8 +5,7 @@
 			@leftClick="navigateBack"
 			safeAreaInsetTop
 			fixed
-			placeholder
-		></u-navbar>
+			placeholder></u-navbar>
 		<view class="u-demo-block">
 			<text class="u-demo-block__title">基础使用</text>
 			<view class="u-demo-block__content">
@@ -55,12 +54,8 @@
 							disabledColor="#ffffff"
 							placeholder="请选择性别"
 							border="bottom">
-							<!-- <u-text text="性别:" slot="prefix" margin="0 3px 0 0" type="tips"></u-text> -->
 						</u-input>
-						<u-icon
-							slot="right"
-							name="arrow-right"
-						></u-icon>
+						<u-icon slot="right" name="arrow-right" ></u-icon>
 					</u-form-item>
 					
 					
@@ -198,7 +193,8 @@
 				},
 				showSex: false,
 				birthday: Number(new Date()),
-				actions: [{
+				actions: [
+					{
 						name: '男',
 						value: 1
 					},
@@ -210,6 +206,10 @@
 						name: '保密',
 						value: 2
 					},
+				],
+				studentes:[
+					{name: '张三'},{name: '李四'},{name: '王二'},{name: '马五'},{name: '王雪'},{name: '赵丹'},
+					{name: '月度'},{name: '蓝颜'},{name: '水波'},{name: '曹丽'},{name: '张顺'},{name: '例戚风'},
 				],
 				rules: {
 					'userInfo.name': [{
@@ -408,6 +408,6 @@
 
 <style lang="scss">
 	.form-page {
-		
+		padding: 10rpx;
 	}
 </style>

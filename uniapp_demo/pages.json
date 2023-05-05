@@ -84,6 +84,12 @@
 					"style": {
 						"navigationBarTitleText": "上传证件"
 					}
+				},
+				{
+					"path": "pages/list_input/list_input",
+					"style": {
+						"navigationBarTitleText": "多个input"
+					}
 				}
 			]
 		}

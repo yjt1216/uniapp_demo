@@ -25,6 +25,10 @@
 			<view class="demo-li">上传照片<text class="demo-tip"> 证件照</text></view>
 		</navigator>
 		
+		<navigator url="/bundle/pages/list_input/list_input">
+			<view class="demo-li">input<text class="demo-tip"> 循环创建input</text></view>
+		</navigator>
+		
 	</view>
 </template>
 

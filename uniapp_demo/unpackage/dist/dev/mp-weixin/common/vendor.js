@@ -20897,7 +20897,7 @@ var router = (0, _uniSimpleRouter.createRouter)({
     router.$lockStatus = false;
   },
   debugger: false,
-  routes: [].concat((0, _toConsumableArray2.default)([{"path":"/pages/index/index","aliasPath":"/"},{"path":"/pages/user/user"},{"path":"/pages/text_auto/text_auto"},{"path":"/pages/message/message"},{"path":"/pages/server_explan/server_explan"},{"path":"/pages/login/login"},{"path":"/pages/register/register"},{"path":"/bundle/pages/user_intro/user_intro"},{"path":"/bundle/pages/mescroll_swiper/mescroll_swiper"},{"path":"/bundle/pages/nurse_order/nurse_order"},{"path":"/bundle/pages/service_order/service_order"},{"path":"/bundle/pages/form_page/form_page"},{"path":"/bundle/pages/upload_img/upload_img"}]), [{
+  routes: [].concat((0, _toConsumableArray2.default)([{"path":"/pages/index/index","aliasPath":"/"},{"path":"/pages/user/user"},{"path":"/pages/text_auto/text_auto"},{"path":"/pages/message/message"},{"path":"/pages/server_explan/server_explan"},{"path":"/pages/login/login"},{"path":"/pages/register/register"},{"path":"/bundle/pages/user_intro/user_intro"},{"path":"/bundle/pages/mescroll_swiper/mescroll_swiper"},{"path":"/bundle/pages/nurse_order/nurse_order"},{"path":"/bundle/pages/service_order/service_order"},{"path":"/bundle/pages/form_page/form_page"},{"path":"/bundle/pages/upload_img/upload_img"},{"path":"/bundle/pages/list_input/list_input"}]), [{
     path: '*',
     redirect: function redirect(to) {
       return {
@@ -23969,7 +23969,13 @@ exports.default = _default;
 /* 300 */,
 /* 301 */,
 /* 302 */,
-/* 303 */
+/* 303 */,
+/* 304 */,
+/* 305 */,
+/* 306 */,
+/* 307 */,
+/* 308 */,
+/* 309 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/icons.js ***!
   \****************************************************************************************************************************/
@@ -24200,7 +24206,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 304 */
+/* 310 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/props.js ***!
   \****************************************************************************************************************************/
@@ -24307,14 +24313,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 305 */,
-/* 306 */,
-/* 307 */,
-/* 308 */,
-/* 309 */,
-/* 310 */,
 /* 311 */,
-/* 312 */
+/* 312 */,
+/* 313 */,
+/* 314 */,
+/* 315 */,
+/* 316 */,
+/* 317 */,
+/* 318 */
 /*!********************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/components/ljs-top/index.js ***!
   \********************************************************************************************************/
@@ -24337,7 +24343,7 @@ var _default2 = {
         // 是否显示返回按钮
         show: true,
         // 是否显示返回按钮
-        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 313)
+        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 319)
       },
       // top样式
       topStyle: {}
@@ -24359,7 +24365,7 @@ var _default2 = {
           // 是否显示返回按钮，默认显示
           show: true,
           // 返回按钮的图片地址
-          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 313)
+          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 319)
         };
       }
     },
@@ -24403,7 +24409,7 @@ exports.default = _default2;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 313 */
+/* 319 */
 /*!*******************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/static/images/ico_back.png ***!
   \*******************************************************************************************************/
@@ -24413,14 +24419,14 @@ exports.default = _default2;
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3NpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmZmZjZDFmMS04MzM2LWE5NDMtODY4MC01NTM5NmZhODQzMmUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjNDRUQ2RjJCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjNDRUQ2RjFCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZmZmY2QxZjEtODMzNi1hOTQzLTg2ODAtNTUzOTZmYTg0MzJlIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmZmZmNkMWYxLTgzMzYtYTk0My04NjgwLTU1Mzk2ZmE4NDMyZSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pq6FkCUAAAErSURBVHja7NpBDsIgEAXQjvEc3sC1W28GHsUruPEIXsLEjZ4DIWmiaWxty0iZ75+EkLCgvJSGASohhAY5Vg14EEgggQQSSOA/A9daHYlIdh8xq9rFahPLJZa7ysBSqqZRFMbhwytOauOqAdjBpbhpjWvxbzDhYuU6zUfNByz2Bj+8udCCG/NTdAhnHvgNZxo4BmcWOBZnEjgFZw44FWcK2INzxZavXwLn4kwAc3DVA3NxVQM1cNUCtXBVAucsBSWA8EcWJaaoh5iiOVkLyjLhYYAaSMupmocB5iARtksOBjgHiXRk4WCAU5CIx4YOBjgGCXH5MoSEuV3qWyfRr88eUPtBEUmZzeGt6azWt9bPeEpX2PtYbVvgtSog/7IgkEACCSSQQAKLx1OAAQC3zNidKkNOVAAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 314 */,
-/* 315 */,
-/* 316 */,
-/* 317 */,
-/* 318 */,
-/* 319 */,
 /* 320 */,
-/* 321 */
+/* 321 */,
+/* 322 */,
+/* 323 */,
+/* 324 */,
+/* 325 */,
+/* 326 */,
+/* 327 */
 /*!*********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.js ***!
   \*********************************************************************************************************************************************/
@@ -25321,7 +25327,7 @@ MeScroll.prototype.preventDefault = function (e) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 322 */
+/* 328 */
 /*!****************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni-option.js ***!
   \****************************************************************************************************************************************************/
@@ -25419,7 +25425,7 @@ var _default = GlobalOption;
 exports.default = _default;
 
 /***/ }),
-/* 323 */
+/* 329 */
 /*!**********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-i18n.js ***!
   \**********************************************************************************************************************************************/
@@ -25451,7 +25457,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 324 */
+/* 330 */
 /*!*******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/wxs/mixins.js ***!
   \*******************************************************************************************************************************************/
@@ -25575,12 +25581,6 @@ var _default = WxsMixin;
 exports.default = _default;
 
 /***/ }),
-/* 325 */,
-/* 326 */,
-/* 327 */,
-/* 328 */,
-/* 329 */,
-/* 330 */,
 /* 331 */,
 /* 332 */,
 /* 333 */,
@@ -25591,7 +25591,13 @@ exports.default = _default;
 /* 338 */,
 /* 339 */,
 /* 340 */,
-/* 341 */
+/* 341 */,
+/* 342 */,
+/* 343 */,
+/* 344 */,
+/* 345 */,
+/* 346 */,
+/* 347 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-input/props.js ***!
   \*****************************************************************************************************************************/
@@ -25796,14 +25802,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 342 */,
-/* 343 */,
-/* 344 */,
-/* 345 */,
-/* 346 */,
-/* 347 */,
 /* 348 */,
-/* 349 */
+/* 349 */,
+/* 350 */,
+/* 351 */,
+/* 352 */,
+/* 353 */,
+/* 354 */,
+/* 355 */
 /*!**************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox-group/props.js ***!
   \**************************************************************************************************************************************/
@@ -25900,14 +25906,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 350 */,
-/* 351 */,
-/* 352 */,
-/* 353 */,
-/* 354 */,
-/* 355 */,
 /* 356 */,
-/* 357 */
+/* 357 */,
+/* 358 */,
+/* 359 */,
+/* 360 */,
+/* 361 */,
+/* 362 */,
+/* 363 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox/props.js ***!
   \********************************************************************************************************************************/
@@ -25994,14 +26000,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 358 */,
-/* 359 */,
-/* 360 */,
-/* 361 */,
-/* 362 */,
-/* 363 */,
 /* 364 */,
-/* 365 */
+/* 365 */,
+/* 366 */,
+/* 367 */,
+/* 368 */,
+/* 369 */,
+/* 370 */,
+/* 371 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-textarea/props.js ***!
   \********************************************************************************************************************************/
@@ -26138,12 +26144,6 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 366 */,
-/* 367 */,
-/* 368 */,
-/* 369 */,
-/* 370 */,
-/* 371 */,
 /* 372 */,
 /* 373 */,
 /* 374 */,
@@ -26170,7 +26170,13 @@ exports.default = _default;
 /* 395 */,
 /* 396 */,
 /* 397 */,
-/* 398 */
+/* 398 */,
+/* 399 */,
+/* 400 */,
+/* 401 */,
+/* 402 */,
+/* 403 */,
+/* 404 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-navbar/props.js ***!
   \******************************************************************************************************************************/
@@ -26272,14 +26278,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 399 */,
-/* 400 */,
-/* 401 */,
-/* 402 */,
-/* 403 */,
-/* 404 */,
 /* 405 */,
-/* 406 */
+/* 406 */,
+/* 407 */,
+/* 408 */,
+/* 409 */,
+/* 410 */,
+/* 411 */,
+/* 412 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-form/props.js ***!
   \****************************************************************************************************************************/
@@ -26342,12 +26348,12 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 407 */,
-/* 408 */,
-/* 409 */,
-/* 410 */,
-/* 411 */,
-/* 412 */
+/* 413 */,
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */,
+/* 418 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-form-item/props.js ***!
   \*********************************************************************************************************************************/
@@ -26413,19 +26419,19 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 413 */,
-/* 414 */,
-/* 415 */,
-/* 416 */,
-/* 417 */,
-/* 418 */,
 /* 419 */,
 /* 420 */,
 /* 421 */,
 /* 422 */,
 /* 423 */,
 /* 424 */,
-/* 425 */
+/* 425 */,
+/* 426 */,
+/* 427 */,
+/* 428 */,
+/* 429 */,
+/* 430 */,
+/* 431 */
 /*!**********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/mixin/button.js ***!
   \**********************************************************************************************************************/
@@ -26455,7 +26461,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 426 */
+/* 432 */
 /*!************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/mixin/openType.js ***!
   \************************************************************************************************************************/
@@ -26497,7 +26503,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 427 */
+/* 433 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-button/props.js ***!
   \******************************************************************************************************************************/
@@ -26676,14 +26682,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 428 */,
-/* 429 */,
-/* 430 */,
-/* 431 */,
-/* 432 */,
-/* 433 */,
 /* 434 */,
-/* 435 */
+/* 435 */,
+/* 436 */,
+/* 437 */,
+/* 438 */,
+/* 439 */,
+/* 440 */,
+/* 441 */
 /*!************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-action-sheet/props.js ***!
   \************************************************************************************************************************************/
@@ -26755,14 +26761,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 436 */,
-/* 437 */,
-/* 438 */,
-/* 439 */,
-/* 440 */,
-/* 441 */,
 /* 442 */,
-/* 443 */
+/* 443 */,
+/* 444 */,
+/* 445 */,
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-calendar/props.js ***!
   \********************************************************************************************************************************/
@@ -26924,7 +26930,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 444 */
+/* 450 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-calendar/util.js ***!
   \*******************************************************************************************************************************/
@@ -27021,7 +27027,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 445 */
+/* 451 */
 /*!********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/dayjs.js ***!
   \********************************************************************************************************************/
@@ -27333,7 +27339,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = 
 });
 
 /***/ }),
-/* 446 */
+/* 452 */
 /*!***********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/calendar.js ***!
   \***********************************************************************************************************************/
@@ -27850,14 +27856,14 @@ var _default = calendar;
 exports.default = _default;
 
 /***/ }),
-/* 447 */,
-/* 448 */,
-/* 449 */,
-/* 450 */,
-/* 451 */,
-/* 452 */,
 /* 453 */,
-/* 454 */
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-code/props.js ***!
   \****************************************************************************************************************************/
@@ -27909,14 +27915,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 455 */,
-/* 456 */,
-/* 457 */,
-/* 458 */,
-/* 459 */,
-/* 460 */,
 /* 461 */,
-/* 462 */
+/* 462 */,
+/* 463 */,
+/* 464 */,
+/* 465 */,
+/* 466 */,
+/* 467 */,
+/* 468 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-datetime-picker/props.js ***!
   \***************************************************************************************************************************************/
@@ -28050,12 +28056,6 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 463 */,
-/* 464 */,
-/* 465 */,
-/* 466 */,
-/* 467 */,
-/* 468 */,
 /* 469 */,
 /* 470 */,
 /* 471 */,
@@ -28080,7 +28080,13 @@ exports.default = _default;
 /* 490 */,
 /* 491 */,
 /* 492 */,
-/* 493 */
+/* 493 */,
+/* 494 */,
+/* 495 */,
+/* 496 */,
+/* 497 */,
+/* 498 */,
+/* 499 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-divider/props.js ***!
   \*******************************************************************************************************************************/
@@ -28142,14 +28148,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 494 */,
-/* 495 */,
-/* 496 */,
-/* 497 */,
-/* 498 */,
-/* 499 */,
 /* 500 */,
-/* 501 */
+/* 501 */,
+/* 502 */,
+/* 503 */,
+/* 504 */,
+/* 505 */,
+/* 506 */,
+/* 507 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-rate/props.js ***!
   \****************************************************************************************************************************/
@@ -28236,14 +28242,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 502 */,
-/* 503 */,
-/* 504 */,
-/* 505 */,
-/* 506 */,
-/* 507 */,
 /* 508 */,
-/* 509 */
+/* 509 */,
+/* 510 */,
+/* 511 */,
+/* 512 */,
+/* 513 */,
+/* 514 */,
+/* 515 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-status-bar/props.js ***!
   \**********************************************************************************************************************************/
@@ -28269,14 +28275,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 510 */,
-/* 511 */,
-/* 512 */,
-/* 513 */,
-/* 514 */,
-/* 515 */,
 /* 516 */,
-/* 517 */
+/* 517 */,
+/* 518 */,
+/* 519 */,
+/* 520 */,
+/* 521 */,
+/* 522 */,
+/* 523 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/async-validator.js ***!
   \******************************************************************************************************************************/
@@ -29457,10 +29463,10 @@ Schema.warning = warning;
 Schema.messages = messages;
 var _default = Schema; // # sourceMappingURL=index.js.map
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 518)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 524)))
 
 /***/ }),
-/* 518 */
+/* 524 */
 /*!********************************************************!*\
   !*** ./node_modules/node-libs-browser/mock/process.js ***!
   \********************************************************/
@@ -29491,7 +29497,7 @@ exports.binding = function (name) {
     var path;
     exports.cwd = function () { return cwd };
     exports.chdir = function (dir) {
-        if (!path) path = __webpack_require__(/*! path */ 519);
+        if (!path) path = __webpack_require__(/*! path */ 525);
         cwd = path.resolve(dir, cwd);
     };
 })();
@@ -29504,7 +29510,7 @@ exports.features = {};
 
 
 /***/ }),
-/* 519 */
+/* 525 */
 /*!***********************************************!*\
   !*** ./node_modules/path-browserify/index.js ***!
   \***********************************************/
@@ -29814,15 +29820,15 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 518)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 524)))
 
 /***/ }),
-/* 520 */,
-/* 521 */,
-/* 522 */,
-/* 523 */,
-/* 524 */,
-/* 525 */
+/* 526 */,
+/* 527 */,
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-line/props.js ***!
   \****************************************************************************************************************************/
@@ -29873,14 +29879,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 526 */,
-/* 527 */,
-/* 528 */,
-/* 529 */,
-/* 530 */,
-/* 531 */,
 /* 532 */,
-/* 533 */
+/* 533 */,
+/* 534 */,
+/* 535 */,
+/* 536 */,
+/* 537 */,
+/* 538 */,
+/* 539 */
 /*!************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-loading-icon/props.js ***!
   \************************************************************************************************************************************/
@@ -29957,14 +29963,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 534 */,
-/* 535 */,
-/* 536 */,
-/* 537 */,
-/* 538 */,
-/* 539 */,
 /* 540 */,
-/* 541 */
+/* 541 */,
+/* 542 */,
+/* 543 */,
+/* 544 */,
+/* 545 */,
+/* 546 */,
+/* 547 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-popup/props.js ***!
   \*****************************************************************************************************************************/
@@ -30061,14 +30067,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 542 */,
-/* 543 */,
-/* 544 */,
-/* 545 */,
-/* 546 */,
-/* 547 */,
 /* 548 */,
-/* 549 */
+/* 549 */,
+/* 550 */,
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-gap/props.js ***!
   \***************************************************************************************************************************/
@@ -30110,12 +30116,6 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 550 */,
-/* 551 */,
-/* 552 */,
-/* 553 */,
-/* 554 */,
-/* 555 */,
 /* 556 */,
 /* 557 */,
 /* 558 */,
@@ -30131,7 +30131,13 @@ exports.default = _default;
 /* 568 */,
 /* 569 */,
 /* 570 */,
-/* 571 */
+/* 571 */,
+/* 572 */,
+/* 573 */,
+/* 574 */,
+/* 575 */,
+/* 576 */,
+/* 577 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-picker/props.js ***!
   \******************************************************************************************************************************/
@@ -30228,14 +30234,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 572 */,
-/* 573 */,
-/* 574 */,
-/* 575 */,
-/* 576 */,
-/* 577 */,
 /* 578 */,
-/* 579 */
+/* 579 */,
+/* 580 */,
+/* 581 */,
+/* 582 */,
+/* 583 */,
+/* 584 */,
+/* 585 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-overlay/props.js ***!
   \*******************************************************************************************************************************/
@@ -30277,14 +30283,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 580 */,
-/* 581 */,
-/* 582 */,
-/* 583 */,
-/* 584 */,
-/* 585 */,
 /* 586 */,
-/* 587 */
+/* 587 */,
+/* 588 */,
+/* 589 */,
+/* 590 */,
+/* 591 */,
+/* 592 */,
+/* 593 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-transition/props.js ***!
   \**********************************************************************************************************************************/
@@ -30326,7 +30332,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 588 */
+/* 594 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-transition/transition.js ***!
   \***************************************************************************************************************************************/
@@ -30343,7 +30349,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
-var _nvueAniMap = _interopRequireDefault(__webpack_require__(/*! ./nvue.ani-map.js */ 589));
+var _nvueAniMap = _interopRequireDefault(__webpack_require__(/*! ./nvue.ani-map.js */ 595));
 // 定义一个一定时间后自动成功的promise，让调用nextTick方法处，进入下一个then方法
 var nextTick = function nextTick() {
   return new Promise(function (resolve) {
@@ -30435,7 +30441,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 589 */
+/* 595 */
 /*!*****************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-transition/nvue.ani-map.js ***!
   \*****************************************************************************************************************************************/
@@ -30628,14 +30634,14 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 590 */,
-/* 591 */,
-/* 592 */,
-/* 593 */,
-/* 594 */,
-/* 595 */,
 /* 596 */,
-/* 597 */
+/* 597 */,
+/* 598 */,
+/* 599 */,
+/* 600 */,
+/* 601 */,
+/* 602 */,
+/* 603 */
 /*!***********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-safe-bottom/props.js ***!
   \***********************************************************************************************************************************/
@@ -30655,14 +30661,14 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 598 */,
-/* 599 */,
-/* 600 */,
-/* 601 */,
-/* 602 */,
-/* 603 */,
 /* 604 */,
-/* 605 */
+/* 605 */,
+/* 606 */,
+/* 607 */,
+/* 608 */,
+/* 609 */,
+/* 610 */,
+/* 611 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-toolbar/props.js ***!
   \*******************************************************************************************************************************/
@@ -30707,6 +30713,257 @@ var _default = {
     title: {
       type: String,
       default: uni.$u.props.toolbar.title
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 612 */,
+/* 613 */,
+/* 614 */,
+/* 615 */,
+/* 616 */,
+/* 617 */,
+/* 618 */,
+/* 619 */,
+/* 620 */,
+/* 621 */,
+/* 622 */,
+/* 623 */,
+/* 624 */,
+/* 625 */,
+/* 626 */,
+/* 627 */,
+/* 628 */,
+/* 629 */,
+/* 630 */,
+/* 631 */,
+/* 632 */,
+/* 633 */,
+/* 634 */,
+/* 635 */,
+/* 636 */,
+/* 637 */,
+/* 638 */,
+/* 639 */,
+/* 640 */,
+/* 641 */,
+/* 642 */,
+/* 643 */,
+/* 644 */,
+/* 645 */,
+/* 646 */,
+/* 647 */,
+/* 648 */,
+/* 649 */,
+/* 650 */,
+/* 651 */,
+/* 652 */,
+/* 653 */,
+/* 654 */,
+/* 655 */,
+/* 656 */,
+/* 657 */,
+/* 658 */,
+/* 659 */,
+/* 660 */,
+/* 661 */,
+/* 662 */,
+/* 663 */,
+/* 664 */,
+/* 665 */,
+/* 666 */,
+/* 667 */,
+/* 668 */,
+/* 669 */,
+/* 670 */,
+/* 671 */
+/*!***********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio-group/props.js ***!
+  \***********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 绑定的值
+    value: {
+      type: [String, Number, Boolean],
+      default: uni.$u.props.radioGroup.value
+    },
+    // 是否禁用全部radio
+    disabled: {
+      type: Boolean,
+      default: uni.$u.props.radioGroup.disabled
+    },
+    // 形状，circle-圆形，square-方形
+    shape: {
+      type: String,
+      default: uni.$u.props.radioGroup.shape
+    },
+    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
+    activeColor: {
+      type: String,
+      default: uni.$u.props.radioGroup.activeColor
+    },
+    // 未选中的颜色
+    inactiveColor: {
+      type: String,
+      default: uni.$u.props.radioGroup.inactiveColor
+    },
+    // 标识符
+    name: {
+      type: String,
+      default: uni.$u.props.radioGroup.name
+    },
+    // 整个组件的尺寸，默认px
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.radioGroup.size
+    },
+    // 布局方式，row-横向，column-纵向
+    placement: {
+      type: String,
+      default: uni.$u.props.radioGroup.placement
+    },
+    // label的文本
+    label: {
+      type: [String],
+      default: uni.$u.props.radioGroup.label
+    },
+    // label的颜色 （默认 '#303133' ）
+    labelColor: {
+      type: [String],
+      default: uni.$u.props.radioGroup.labelColor
+    },
+    // label的字体大小，px单位
+    labelSize: {
+      type: [String, Number],
+      default: uni.$u.props.radioGroup.labelSize
+    },
+    // 是否禁止点击文本操作checkbox(默认 false )
+    labelDisabled: {
+      type: Boolean,
+      default: uni.$u.props.radioGroup.labelDisabled
+    },
+    // 图标颜色
+    iconColor: {
+      type: String,
+      default: uni.$u.props.radioGroup.iconColor
+    },
+    // 图标的大小，单位px
+    iconSize: {
+      type: [String, Number],
+      default: uni.$u.props.radioGroup.iconSize
+    },
+    // 竖向配列时，是否显示下划线
+    borderBottom: {
+      type: Boolean,
+      default: uni.$u.props.radioGroup.borderBottom
+    },
+    // 图标与文字的对齐方式
+    iconPlacement: {
+      type: String,
+      default: uni.$u.props.radio.iconPlacement
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 672 */,
+/* 673 */,
+/* 674 */,
+/* 675 */,
+/* 676 */,
+/* 677 */,
+/* 678 */,
+/* 679 */,
+/* 680 */
+/*!*****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio/props.js ***!
+  \*****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // radio的名称
+    name: {
+      type: [String, Number, Boolean],
+      default: uni.$u.props.radio.name
+    },
+    // 形状，square为方形，circle为圆型
+    shape: {
+      type: String,
+      default: uni.$u.props.radio.shape
+    },
+    // 是否禁用
+    disabled: {
+      type: [String, Boolean],
+      default: uni.$u.props.radio.disabled
+    },
+    // 是否禁止点击提示语选中单选框
+    labelDisabled: {
+      type: [String, Boolean],
+      default: uni.$u.props.radio.labelDisabled
+    },
+    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
+    activeColor: {
+      type: String,
+      default: uni.$u.props.radio.activeColor
+    },
+    // 未选中的颜色
+    inactiveColor: {
+      type: String,
+      default: uni.$u.props.radio.inactiveColor
+    },
+    // 图标的大小，单位px
+    iconSize: {
+      type: [String, Number],
+      default: uni.$u.props.radio.iconSize
+    },
+    // label的字体大小，px单位
+    labelSize: {
+      type: [String, Number],
+      default: uni.$u.props.radio.labelSize
+    },
+    // label提示文字，因为nvue下，直接slot进来的文字，由于特殊的结构，无法修改样式
+    label: {
+      type: [String, Number],
+      default: uni.$u.props.radio.label
+    },
+    // 整体的大小
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.radio.size
+    },
+    // 图标颜色
+    color: {
+      type: String,
+      default: uni.$u.props.radio.color
+    },
+    // label的颜色
+    labelColor: {
+      type: String,
+      default: uni.$u.props.radio.labelColor
     }
   }
 };
