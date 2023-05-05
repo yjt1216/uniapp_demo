@@ -2,7 +2,7 @@ page {
   width: 100%;
   height: 100%;
 }
-.appraise-form {
+.scrool-page {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -32,33 +32,10 @@ page {
   text-align: center;
   background: #e0e0e0;
 }
-.u-block__title {
-  font-weight: bold;
-}
-.option-required {
-  color: #FF3B00;
-}
-.space-fill {
-  height: 10rpx;
-  width: 100%;
-}
-.question-text {
-  padding: 20rpx;
-}
-.question-radio {
-  padding: 20rpx;
-}
-.question-check {
-  padding: 20rpx;
-}
 .footer {
   color: #fff;
   line-height: 100rpx;
   flex: 0 0 100rpx;
   /* 不放大不缩小固定100rpx */
-}
-.footer .submit-btn {
-  background-image: linear-gradient(to right, #39C9BC, #6DE8CC);
-  color: white;
 }
 

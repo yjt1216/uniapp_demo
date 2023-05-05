@@ -94,7 +94,15 @@
 				{
 					"path": "pages/appraise_form/appraise_form",
 					"style": {
+						"navigationStyle": "custom" ,
 						"navigationBarTitleText": "评估表单"
+					}
+				},
+				{
+					"path": "pages/header_footer/header_footer",
+					"style": {
+						
+						"navigationBarTitleText": "header footer"
 					}
 				}
 			]

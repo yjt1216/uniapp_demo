@@ -33,6 +33,10 @@
 			<view class="demo-li">评估表单<text class="demo-tip"> 填空 单选 多选</text></view>
 		</navigator>
 		
+		<navigator url="/bundle/pages/header_footer/header_footer">
+			<view class="demo-li">头部底部<text class="demo-tip"> 头部 数据列表list 底部 </text></view>
+		</navigator>
+		
 	</view>
 </template>
 
