@@ -51,6 +51,27 @@ page {
 .question-check {
   padding: 20rpx;
 }
+.question-sign {
+  padding: 20rpx;
+}
+.sign-btn {
+  background-color: #d6d6d6;
+}
+.imgs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #d6d6d6;
+  margin-top: 20rpx;
+  width: 90%;
+  height: 400rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+}
+.imgs text {
+  width: 100%;
+  text-align: center;
+}
 .footer {
   color: #fff;
   line-height: 100rpx;

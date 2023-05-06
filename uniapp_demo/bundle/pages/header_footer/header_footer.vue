@@ -88,7 +88,6 @@
 		height: 100%;
 	}
 
-
 	.scrool-page {
 		display: flex;
 		flex-direction: column;

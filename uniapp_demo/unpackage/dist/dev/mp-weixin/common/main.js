@@ -30,17 +30,11 @@ var routerLink = function routerLink() {
     return resolve(__webpack_require__(/*! ./js_sdk/uni-simple-router/link.vue */ 304));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
-var hxNavbar = function hxNavbar() {
-  __webpack_require__.e(/*! require.ensure | components/hx-navbar/hx-navbar */ "components/hx-navbar/hx-navbar").then((function () {
-    return resolve(__webpack_require__(/*! @/components/hx-navbar/hx-navbar.nvue */ 309));
-  }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
 // Vue.component('mescroll-body', MescrollBody)
 _vue.default.prototype.$toast = _tools.toast;
 _vue.default.prototype.$Cache = _cache.default;
 _vue.default.config.productionTip = false;
 _vue.default.component('RouterLink', routerLink);
-_vue.default.component('hx-navbar', hxNavbar);
 _vue.default.use(_router.router);
 _vue.default.mixin(_app.default);
 _vue.default.use(_uviewUi.default);

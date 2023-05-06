@@ -69,26 +69,53 @@
 							</view>
 						</template>
 					</view>
+					
 				</view>
+				<!-- 签名 -->
+				<view class="logo_text">
+					<text class="option-required"> * </text> 
+					<text class="u-block__title"> 护理人员签名确认 </text>
+				</view>
+				<view class="question-sign" @tap="doss">
+					<!-- <button class="sign-btn" @tap="doss" style="margin: 10px;"></button> -->
+					<!-- <view class="imgs">
+						<text v-if="img1 ==''">点击此处签名确认</text>
+						<image v-if="img1 !=''" class="img" :src="img1" mode="widthFix" style="margin: 0px 24px;"></image>
+					</view> -->
+					<view style="border: 1rpx dashed #555555;">
+						<Signature ref="sig" v-model="v"></Signature>
+					</view>
+					
+				</view>
+				
+				
 			</scroll-view>
-	</view>
+		</view>
 
-	<view class="footer">
-		<button class="submit-btn"  @click="submitAppraiseFun">提交评估</button>
-	</view>
+		<view class="footer">
+			<button class="submit-btn"  @click="submitAppraiseFun">提交评估</button>
+		</view>
 
-   </view>
+	</view>
 </template>
 <script>
 	import {
 		apiAssessFromData
 	} from '@/api/mock.js'
+	import Signature from '@/bundle/pages/sin-signature/sin-signature.vue'
+	
 	export default {
+		components:{
+			Signature
+		},
 		data() {
 			return {
 				formData: {},
 				// 评估表单list
 				questionList: [],
+				/* 签名 弹框 */
+				isShow: false,
+				img1: '',
 				
 			};
 		},
@@ -130,9 +157,24 @@
 				console.log('多选题 ',event,dataValue)
 				this.formData[dataValue] = event;
 			},
+			doss() {
+				this.isShow = true
+			},
+			closeSign(){
+				this.isShow = false	
+			},
+			saveSign(){
+				this.isShow = false
+				this.img1 = this.$refs.hello.signImage
+			},
 			/* 提交评估 */
 			submitAppraiseFun() {
 				
+			},
+			async startSign() {
+				let s = await this.$refs.sig.getSyncSignature();
+				console.log('组件版本', this.$refs.sig.VERSION);
+				console.log('签名数据', s);
 			}
 		},
 	};
@@ -199,7 +241,29 @@
 	.question-check{
 		padding: 20rpx;
 	}
-
+	.question-sign{
+		padding: 20rpx;
+	}
+	.sign-btn{
+		background-color: #d6d6d6;
+		
+	}
+	.imgs{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background-color: #d6d6d6;
+		margin-top: 20rpx;
+		width: 90%;
+		height: 400rpx;
+		border: 1rpx solid #ddd;
+		border-radius: 10rpx;
+		
+		text{
+			width: 100%;
+			text-align: center;
+		}
+	}
 
 	.footer {
 		color: #fff;

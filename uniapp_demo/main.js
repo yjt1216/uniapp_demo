@@ -8,7 +8,6 @@ import minxinsApp from '@/mixins/app'
 // import MescrollBody from "@/components/mescroll-uni/mescroll-body.vue"
 import {router,RouterMount} from './router.js'
 import routerLink from './js_sdk/uni-simple-router/link.vue'
-import hxNavbar from "@/components/hx-navbar/hx-navbar.nvue"
 
 
 // Vue.component('mescroll-body', MescrollBody)
@@ -16,7 +15,7 @@ Vue.prototype.$toast = toast
 Vue.prototype.$Cache = Cache
 Vue.config.productionTip = false
 Vue.component('RouterLink', routerLink)
-Vue.component('hx-navbar',hxNavbar)
+
 Vue.use(router)
 Vue.mixin(minxinsApp);
 Vue.use(uView);

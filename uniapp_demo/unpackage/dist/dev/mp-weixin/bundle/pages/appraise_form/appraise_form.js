@@ -175,10 +175,13 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
 var _mock = __webpack_require__(/*! @/api/mock.js */ 203);
 //
 //
@@ -261,12 +264,42 @@ var _mock = __webpack_require__(/*! @/api/mock.js */ 203);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var Signature = function Signature() {
+  __webpack_require__.e(/*! require.ensure | bundle/pages/sin-signature/sin-signature */ "bundle/pages/sin-signature/sin-signature").then((function () {
+    return resolve(__webpack_require__(/*! @/bundle/pages/sin-signature/sin-signature.vue */ 506));
+  }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
 var _default = {
+  components: {
+    Signature: Signature
+  },
   data: function data() {
     return {
       formData: {},
       // 评估表单list
-      questionList: []
+      questionList: [],
+      /* 签名 弹框 */
+      isShow: false,
+      img1: ''
     };
   },
   onLoad: function onLoad() {
@@ -302,7 +335,39 @@ var _default = {
       console.log('多选题 ', event, dataValue);
       this.formData[dataValue] = event;
     },
-    /* 提交评估 */submitAppraiseFun: function submitAppraiseFun() {}
+    doss: function doss() {
+      this.isShow = true;
+    },
+    closeSign: function closeSign() {
+      this.isShow = false;
+    },
+    saveSign: function saveSign() {
+      this.isShow = false;
+      this.img1 = this.$refs.hello.signImage;
+    },
+    /* 提交评估 */submitAppraiseFun: function submitAppraiseFun() {},
+    startSign: function startSign() {
+      var _this2 = this;
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+        var s;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _this2.$refs.sig.getSyncSignature();
+              case 2:
+                s = _context.sent;
+                console.log('组件版本', _this2.$refs.sig.VERSION);
+                console.log('签名数据', s);
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
   }
 };
 exports.default = _default;

@@ -18,7 +18,8 @@
 			<view class="topMain" :style="'height: '+topHeight+'rpx'">
 				<!-- 返回 -->
 				<view @click="goBack" class="back" v-if="back">
-					<u-icon name="arrow-left" color="#fff"></u-icon>
+					<!-- <u-icon name="arrow-left" color="#fff"></u-icon> -->
+					<image class="img" :src="'/static/images/ico_back.png'"></image>
 				</view>
 				<slot></slot>
 				<!-- 标题文字 -->
