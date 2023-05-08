@@ -169,6 +169,7 @@
 							success: function(res) {
 								that.signImage = res.tempFilePath;
 								that.$emit('saveSign', res.tempFilePath);
+								console.log('签名路径filePath',res)
 								uni.hideLoading();
 								that.hasDh = false;
 								that.show = false;

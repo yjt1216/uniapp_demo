@@ -26,7 +26,7 @@
 		</navigator>
 		
 		<navigator url="/bundle/pages/list_input/list_input">
-			<view class="demo-li">input<text class="demo-tip"> 循环创建input</text></view>
+			<view class="demo-li">input<text class="demo-tip"> 循环创建input 底部签名 返回文件路径</text></view>
 		</navigator>
 		
 		<navigator url="/bundle/pages/appraise_form/appraise_form">

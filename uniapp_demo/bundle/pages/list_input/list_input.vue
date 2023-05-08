@@ -37,12 +37,25 @@
 		
 		
 		<!-- 签名 -->
-		<view>
+		<!-- <view class="sign-boand">
 		    <button type="primary" @tap="doss" style="margin: 10px;">点击签名</button>
 			<view class="imgs"><image class="img" :src="signImage" mode="widthFix" style="margin: 0px 24px;"></image></view>
 			<catSignature canvasId="canvas1" @closeSign="closeSign" @saveSign="saveSign" :visible="isShow" ref="catSign"/>
-		</view>
+		</view> -->
 		
+		<!-- 签名 -->
+		<view class="logo_text">
+			<text class="option-required"> * </text> 
+			<text class="u-block__title"> 护理人员签名确认 </text>
+		</view>
+		<view class="sign-boand">
+			<!-- <button class="sign-btn" @tap="doss" style="margin: 10px;"></button> -->
+			<view class="imgs" @tap="doss" >
+				<text v-if="signImage ==''">点击此处签名确认</text>
+				<image v-if="signImage !=''" class="img" :src="signImage" mode="widthFix" style="margin: 0px 24px;"></image>
+			</view>
+			<catSignature canvasId="canvas1" @closeSign="closeSign" @saveSign="saveSign" :visible="isShow" ref="catSign"/>
+		</view>
 		
 	  
     </view>
@@ -247,15 +260,17 @@
 			saveSign(val){
 				this.isShow = false
 				this.signImage = this.$refs.catSign.signImage
+				console.log('signImage',this.signImage)
 			}
 		},
 	};
 </script>
-<style lang='scss' scoped>
+<style lang='scss'>
+	.person{
+		display: flex;
+		flex-direction: column;
+	}
 	
-	/* .downCheck{
-		
-	} */
 	.person_item{
 		padding: 20rpx;
 	}
@@ -264,6 +279,30 @@
 	}
 	.check-temp{
 		padding: 20rpx;
+	}
+	.sign-boand{
+		padding: 10rpx 20rpx;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.imgs{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: #d6d6d6;
+		margin-top: 20rpx;
+		width: 90%;
+		height: 400rpx;
+		border: 1rpx solid #ddd;
+		border-radius: 10rpx;
+	}
+	.imgs text{
+		text-align: center;
+	}
+	.logo_text{
+		padding:10rpx 20rpx;
 	}
 </style>
 
