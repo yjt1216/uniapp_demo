@@ -72,18 +72,14 @@
 					
 				</view>
 				<!-- 签名 -->
-				<view class="logo_text">
-					<text class="option-required"> * </text> 
-					<text class="u-block__title"> 护理人员签名确认 </text>
-				</view>
-				<view class="question-sign" @tap="doss">
-					<!-- <button class="sign-btn" @tap="doss" style="margin: 10px;"></button> -->
-					<!-- <view class="imgs">
-						<text v-if="img1 ==''">点击此处签名确认</text>
-						<image v-if="img1 !=''" class="img" :src="img1" mode="widthFix" style="margin: 0px 24px;"></image>
-					</view> -->
+				
+				<view class="question-sign" >
+					<view class="logo_text">
+						<text class="option-required"> * </text> 
+						<text class="u-block__title"> 护理人员签名确认 </text>
+					</view>
 					<view style="border: 1rpx dashed #555555;">
-						<Signature ref="sig" v-model="v"></Signature>
+						<Signature ref="sign" v-model="signValue"></Signature>
 					</view>
 					
 				</view>
@@ -113,9 +109,8 @@
 				formData: {},
 				// 评估表单list
 				questionList: [],
-				/* 签名 弹框 */
-				isShow: false,
-				img1: '',
+				/* 签名 base64 数据类型 */
+				signValue: '',
 				
 			};
 		},
@@ -157,23 +152,14 @@
 				console.log('多选题 ',event,dataValue)
 				this.formData[dataValue] = event;
 			},
-			doss() {
-				this.isShow = true
-			},
-			closeSign(){
-				this.isShow = false	
-			},
-			saveSign(){
-				this.isShow = false
-				this.img1 = this.$refs.hello.signImage
-			},
+			
 			/* 提交评估 */
 			submitAppraiseFun() {
-				
+				console.log('提交评估单 --- ',this.signValue)
 			},
 			async startSign() {
-				let s = await this.$refs.sig.getSyncSignature();
-				console.log('组件版本', this.$refs.sig.VERSION);
+				let s = await this.$refs.sign.getSyncSignature();
+				console.log('组件版本', this.$refs.sign.VERSION);
 				console.log('签名数据', s);
 			}
 		},

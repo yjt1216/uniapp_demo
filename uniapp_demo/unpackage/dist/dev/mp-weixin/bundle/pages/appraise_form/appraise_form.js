@@ -101,22 +101,22 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 316))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 309))
     },
     uRadioGroup: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-radio-group/u-radio-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-radio-group/u-radio-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-radio-group/u-radio-group.vue */ 490))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-radio-group/u-radio-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-radio-group/u-radio-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-radio-group/u-radio-group.vue */ 483))
     },
     uRadio: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-radio/u-radio */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-radio/u-radio")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-radio/u-radio.vue */ 498))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-radio/u-radio */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-radio/u-radio")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-radio/u-radio.vue */ 491))
     },
     uCheckboxGroup: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group.vue */ 369))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group.vue */ 353))
     },
     uCheckbox: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-checkbox/u-checkbox */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-checkbox/u-checkbox")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-checkbox/u-checkbox.vue */ 377))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-checkbox/u-checkbox */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-checkbox/u-checkbox")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-checkbox/u-checkbox.vue */ 361))
     },
     uInput: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-input/u-input.vue */ 361))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-input/u-input.vue */ 345))
     },
   }
 } catch (e) {
@@ -279,10 +279,6 @@ var _mock = __webpack_require__(/*! @/api/mock.js */ 203);
 //
 //
 //
-//
-//
-//
-//
 var Signature = function Signature() {
   __webpack_require__.e(/*! require.ensure | bundle/pages/sin-signature/sin-signature */ "bundle/pages/sin-signature/sin-signature").then((function () {
     return resolve(__webpack_require__(/*! @/bundle/pages/sin-signature/sin-signature.vue */ 506));
@@ -297,9 +293,8 @@ var _default = {
       formData: {},
       // 评估表单list
       questionList: [],
-      /* 签名 弹框 */
-      isShow: false,
-      img1: ''
+      /* 签名 base64 数据类型 */
+      signValue: ''
     };
   },
   onLoad: function onLoad() {
@@ -335,17 +330,9 @@ var _default = {
       console.log('多选题 ', event, dataValue);
       this.formData[dataValue] = event;
     },
-    doss: function doss() {
-      this.isShow = true;
+    /* 提交评估 */submitAppraiseFun: function submitAppraiseFun() {
+      console.log('提交评估单 --- ', this.signValue);
     },
-    closeSign: function closeSign() {
-      this.isShow = false;
-    },
-    saveSign: function saveSign() {
-      this.isShow = false;
-      this.img1 = this.$refs.hello.signImage;
-    },
-    /* 提交评估 */submitAppraiseFun: function submitAppraiseFun() {},
     startSign: function startSign() {
       var _this2 = this;
       return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -355,10 +342,10 @@ var _default = {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _this2.$refs.sig.getSyncSignature();
+                return _this2.$refs.sign.getSyncSignature();
               case 2:
                 s = _context.sent;
-                console.log('组件版本', _this2.$refs.sig.VERSION);
+                console.log('组件版本', _this2.$refs.sign.VERSION);
                 console.log('签名数据', s);
               case 5:
               case "end":

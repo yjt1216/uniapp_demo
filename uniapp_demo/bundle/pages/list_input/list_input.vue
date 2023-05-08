@@ -34,6 +34,16 @@
 				</u-checkbox-group>
 			</template>
 		</view>
+		
+		
+		<!-- 签名 -->
+		<view>
+		    <button type="primary" @tap="doss" style="margin: 10px;">点击签名</button>
+			<view class="imgs"><image class="img" :src="signImage" mode="widthFix" style="margin: 0px 24px;"></image></view>
+			<catSignature canvasId="canvas1" @closeSign="closeSign" @saveSign="saveSign" :visible="isShow" ref="catSign"/>
+		</view>
+		
+		
 	  
     </view>
  
@@ -46,10 +56,18 @@
 	import {
 		apiAssessFromData
 	} from '@/api/mock.js'
+	import catSignature from '@/bundle/components/sign-canvas/sign-canvas.vue'
+	
 	export default {
+		components:{
+			catSignature
+		},
 		data() {
 			return {
 				formData: {},
+				// 签名
+				isShow: false,
+				signImage: '',
 				personMsg: [
 					{
 						name: "姓名",
@@ -219,6 +237,17 @@
 			  console.log('event ',event,dataValue)
 			  this.formData[dataValue] = event;
 			},
+			/* 签名 */
+			doss(){
+				this.isShow = true
+			},
+			closeSign(){
+				this.isShow = false
+			},
+			saveSign(val){
+				this.isShow = false
+				this.signImage = this.$refs.catSign.signImage
+			}
 		},
 	};
 </script>

@@ -51,61 +51,62 @@
 		<view class="menu-list">
 			<view class="menu-item" @click="serviceObject">
 				<view class="u-r">
-					<image src="../../static/user/fuwuduixiang.png" class="img"></image>
+					<image src="../../static/user/fuwuduixiang.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">服务对象</view>
 				</view>
-				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+				<!-- <u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon> -->
+				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
 			</view>
 			<view class="divider"></view>
 			<view class="menu-item" @click="serviceObject">
 				<view class="u-r">
-					<image src="../../static/user/peixunkecheng.png" class="img"></image>
+					<image src="../../static/user/peixunkecheng.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">培训课程</view>
 				</view>
-				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
 			</view>
 			<view class="divider"></view>
 			<router-link to="/bundle/pages/user_intro/user_intro">
 				<view class="menu-item" @click="serviceObject">
 					<view class="u-r">
-						<image src="../../static/user/shezhi.png" class="img"></image>
+						<image src="../../static/user/shezhi.png" class="type-img"></image>
 						<view class="menu-text u-m-l-20">个人介绍</view>
 					</view>
-					<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+					<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
 				</view>
 			</router-link>
 			<view class="divider"></view>
 			<view class="menu-item" @click="serviceObject">
 				<view class="u-r">
-					<image src="../../static/user/lianxikefu.png" class="img"></image>
+					<image src="../../static/user/lianxikefu.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">联系客服</view>
 				</view>
-				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
 			</view>
 			<view class="divider"></view>
 			<view class="menu-item" >
 				<view class="u-r">
-					<image src="../../static/user/yonghubangzhu.png" class="img"></image>
+					<image src="../../static/user/yonghubangzhu.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">用户帮助</view>
 				</view>
-				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
 			</view>
 			<view class="divider"></view>
 			<view class="menu-item" >
 				<view class="u-r">
-					<image src="../../static/user/yinsizhengce.png" class="img"></image>
+					<image src="../../static/user/yinsizhengce.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">隐私政策</view>
 				</view>
-				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
 			</view>
 			
 			<view class="divider"></view>
 			<view class="menu-item" >
 				<view class="u-r">
-					<image src="../../static/user/yonghuxieyi.png" class="img"></image>
+					<image src="../../static/user/yonghuxieyi.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">用户协议</view>
 				</view>
-				<u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon>
+				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
 			</view>
 			
 			<view class="divider"></view>
@@ -262,9 +263,13 @@
 					font-size: 32rpx;
 					font-weight: 400;
 				}
-				.img{
+				.type-img{
 					height: 40rpx;
 					width: 40rpx;
+				}
+				.arrow-img{
+					height: 32rpx;
+					width: 26rpx;
 				}
 			}
 			.divider {

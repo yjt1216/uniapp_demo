@@ -1,8 +1,8 @@
-<!-- 手写签名 <catSignature canvasId="canvas1" @close="closeSign" @save="saveSign" :visible="isShow" ref="hello"/>-->
+<!-- 手写签名 <catSignature canvasId="canvas1" @closeSign="closeSign" @saveSign="saveSign" :visible="isShow" ref="hello"/>-->
 <template>
 	<view class="uni-list list-pd">
 		<view v-if="visibleSync" class="cat-signature" :class="{ visible: show }" @touchmove.stop.prevent="moveHandle">
-			<view class="mask" @tap="close" />
+			<view class="mask" @tap="closeSign" />
 			<view class="content">
 				<canvas class="firstCanvas" :canvas-id="canvasId" name="autograph" 
 				@touchmove="move"
@@ -12,7 +12,7 @@
 					disable-scroll="true" @error="error" />
 				<view class="btns">
 					<view class="btn" @tap="clear">清除</view>
-					<view class="btn" @tap="save">保存</view>
+					<view class="btn" @tap="saveSign">保存</view>
 					
 				</view>
 			</view>
@@ -81,7 +81,7 @@
 				content.setLineJoin('round');
 			},
 			//
-			close() {
+			closeSign() {
 				var that = this;
 				that.show = false;
 				that.hasDh = false;
@@ -147,11 +147,10 @@
 				//清除画布
 				content.clearRect(0, 0, canvasw, canvash);
 				content.draw(true);
-				// this.close()
 				this.hasDh = false;
 				this.$emit('clear');
 			},
-			save() {
+			saveSign() {
 				var that = this;
 				if (!this.hasDh) {
 					uni.showToast({
@@ -169,7 +168,7 @@
 							canvasId: this.canvasId,
 							success: function(res) {
 								that.signImage = res.tempFilePath;
-								that.$emit('save', res.tempFilePath);
+								that.$emit('saveSign', res.tempFilePath);
 								uni.hideLoading();
 								that.hasDh = false;
 								that.show = false;
