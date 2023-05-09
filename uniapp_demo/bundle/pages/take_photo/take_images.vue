@@ -1,156 +1,281 @@
 <template>
 	<view>
-		<!-- 上传照片 -->
-		<view class="item-num">
-		    <view class="upload-img">
-		        <!-- 预览缩略图 -->
-		        <view class="q-image-wrap">
-		            <!-- 图片缩略图  -->
-		            <block v-for="(imgItem, idx) in photoFiles" :key="idx">
-		                <view class="item">
-		                    <image class="q-image" :src="imgItem.url" mode="aspectFill" :data-cur="imgItem.url" @tap="refundPicPreView"></image>
-		                    </image>
-		                    <!-- 移除图片的按钮  -->
-		                    <view class="q-image-remover" :data-idx="idx" @tap="removeImage">
-		                        <text>x</text>
-		                        <!-- <image src="../../static/icons/delect.png" mode=""></image> -->
-		                    </view>
-		                </view>
-		            </block>
-		            <!-- 添加图片图标 -->
-		            <view class="item" v-if="photoFiles.length < 6" @tap="getUploadImg">
-		                <view>+</view>
-		            </view>
-		        </view>
-		    </view>
+		
+		<view class="columnDisplay borderGrey">
+			<view class="imageContainer">
+				<view v-for="(im,i) in result" :key="i" @longtap="imageMenu(i)" @tap="viewImage(i)">
+					<image :src="im" class="imageBlock" mode="aspectFill"></image>
+					
+				</view>
+				<view v-if="maxSelect > result.length || maxSelect == -1" class="addImageBlock" @tap="addImage">
+					<!-- <view>+</view> -->
+					<image :src="'/bundle/static/mine_paizhao.png'" class="add-image" mode="aspectFill"></image>
+					<text>照片/拍摄</text>
+				</view>
+			</view>
 		</view>
-		            <!-- end -->
+		
 	</view>
 </template>
 
 <script>
-	export default {
+	export default{
 		data(){
-			return {
-				photoFiles:[]
+			return{
+				result:[""],
+				// 添加照片数量最大 4张
+				maxCount: 4,
 			}
 		},
-		onLoad() {
+		mounted() {
 			
+			if(this.type == "image"){
+				this.$set(this,'result',this.result.splice(1,1));
+				//console.log(this.result);
+			}
+			
+			//初始化返回结果
+			this.$emit('change',this.result);
 		},
 		methods:{
-			/**
-			* 上传图片
-			*/
-			getUploadImg: function(e) {
-			    var idx = e.target.dataset.idx;
-			    console.log(idx);
-			    var ths = this;
-			    wx.chooseImage({
-			        count: 1,
-			        // 默认9
-			        sizeType: ['compressed'],
-			        sourceType: ['album', 'camera'],
-			        success: function(res) {
-			            // 图片的本地临时文件路径列表
-			            var tempFilePaths = res.tempFilePaths;
-						this.photoFiles.push(tempFilePaths[0])
-			            uni.showLoading({
-			                mask: true
-			            });
-			            
-			            
-			        }
-			    });
+			/* 选择图片 */
+			addImage(){
+				
+				var that = this;
+				if(this.result.length >= this.maxCount){
+					uni.showToast({
+						title:'最多上传四张图片',
+						icon:'none',
+						complete:function(res){
+							that.$emit('change',that.result);
+						}
+					})
+				}
+				else{
+					
+					uni.chooseImage({
+						count:4,
+						success:function(res){
+							var newResult = [];
+							for(var i=0;i<that.result.length;i++){
+								newResult.push(that.result[i])
+							}
+							if(that.maxSelect > 0){
+								for(var i=0;i<Math.min(that.maxSelect - that.result.length, res.tempFilePaths.length);i++){
+									newResult.push(res.tempFilePaths[i])
+								}
+							}
+							else{
+								for(var i=0;i<res.tempFilePaths.length;i++){
+									newResult.push(res.tempFilePaths[i])
+								}
+							}
+							that.$set(that,'result',newResult);
+							that.$emit('change',that.result);
+						},
+						fail:function(err){
+							that.$emit('change',that.result);
+						}
+					})
+				}
 			},
-			/**
-			* 图片点击预览
-			*/
-			refundPicPreView(e) {
-			    var current = e.currentTarget.dataset.cur
-			    var urls = []
-			    this.photoFiles.forEach(el => {
-			        urls.push(el.url)
-			    })
-			    uni.previewImage({
-			        current: current,
-			        urls: urls
-			    })
+			/* 长按图片操作 */
+			imageMenu(i){
+				//console.log(i);
+				var that = this;
+				uni.showActionSheet({
+					itemList:["向前移动","向后移动","替换图片","删除图片"],
+					success:function(res){
+						console.log(res.tapIndex);
+						/* 向前移动 */
+						if(res.tapIndex == 0){
+							
+							if(i > 0){
+								var result = that.result;
+								var img = result[i];
+								result[i] = result[i-1];
+								result[i-1] = img;
+								var newResult = [];
+								for(var j=0;j<result.length;j++){
+									newResult.push(result[j]);
+								}
+								that.$set(that,'result',newResult);
+								that.$emit('change',that.result);
+							}
+							else{
+								uni.showToast({
+									title:'无可替换',
+									icon:'none',
+									complete:function(res){
+										that.$emit('change',that.result);
+									}
+								})
+							}
+						}
+						/* 向后移动 */
+						else if(res.tapIndex == 1){
+							//向后
+							if(i < that.result.length - 1){
+								var result = that.result;
+								var img = result[i];
+								result[i] = result[i+1];
+								result[i+1] = img;
+								var newResult = [];
+								for(var j=0;j<result.length;j++){
+									newResult.push(result[j]);
+								}
+								that.$set(that,'result',newResult);
+								that.$emit('change',that.result);
+							}
+							else{
+								uni.showToast({
+									title:'无可替换',
+									icon:'none',
+									complete:function(res){
+										that.$emit('change',that.result);
+									}
+								})
+							}
+						}
+						/* 替换图片 */
+						else if(res.tapIndex == 2){
+							uni.chooseImage({
+								count:4,
+								success:function(res){
+									var result = that.result;
+									//console.log(result);
+									var newResult = [];
+									for(var j=0;j<result.length;j++){
+										if(i!=j){
+											newResult.push(result[j]);
+										}
+										else{
+											newResult.push(res.tempFilePaths[0])
+										}
+									}
+									//console.log(newResult);
+									that.$set(that,'result',newResult);
+									/*that.$nextTick(()=>{
+										console.log("refresh");
+									});*/
+									that.$emit('change',that.result);
+								},
+								fail:function(err){
+									that.$emit('change',that.result);
+								}
+							})
+						}
+						/* 删除图片 */
+						else if(res.tapIndex == 3){
+							uni.showModal({
+								title:'消息',
+								content:'您确认删除该图片吗？',
+								success:(res)=>{
+									if(res.confirm){
+										var result = that.result;
+										//console.log(result);
+										var newResult = [];
+										for(var j=0;j<result.length;j++){
+											if(i!=j){
+												newResult.push(result[j]);
+											}
+										}
+										//console.log(newResult);
+										that.$set(that,'result',newResult);
+										//console.log(that.result);
+										that.$emit('change',that.result);
+									}
+									else{
+										that.$emit('change',that.result);
+									}
+								},
+								fail:err=>{
+									that.$emit('change',that.result);
+								}
+							})
+						}
+					}
+				})
+			},
+			/* 图片预览 */
+			viewImage(i){
+				uni.previewImage({
+					urls:this.result,
+					current:i
+				})
+			},
+			removeImage(){
+				uni.showModal({
+					title:'消息',
+					content:'您确认删除该图片吗？',
+					success:(res)=>{
+						if(res.confirm){
+							var result = that.result;
+							//console.log(result);
+							var newResult = [];
+							for(var j=0;j<result.length;j++){
+								if(i!=j){
+									newResult.push(result[j]);
+								}
+							}
+							//console.log(newResult);
+							that.$set(that,'result',newResult);
+							//console.log(that.result);
+							that.$emit('change',that.result);
+						}
+						else{
+							that.$emit('change',that.result);
+						}
+					},
+					fail:err=>{
+						that.$emit('change',that.result);
+					}
+				})
+			}
+			
+		},
+		props:{
+			type:{
+				type:String,
+				default:"image"
 			},
 			
-			/**
-			* 删除图片
-			*/
-			removeImage: function(e){
-			    var idx = e.currentTarget.dataset.idx;
-			    var photoFiles = this.photoFiles;
-			    photoFiles.splice(idx, 1);
-			    this.setData({
-			        photoFiles: photoFiles
-			    })
+			maxSelect:{
+				type:Number,
+				default:-1
 			}
-		}
+		},
 	}
 </script>
 
-<style lang="scss">
-	.item-num {}
-	
-	.item-num .upload-img {
-	    padding: 40rpx 40rpx 40rpx 30rpx;
+<style scoped lang="scss">
+	.columnDisplay{
+		display: flex;
+		flex-direction: column;
+		margin-left: 2.5%;
+		margin-right: 2.5%;
+		width: 95%;
 	}
 	
-	.item-num .upload-img .q-image-wrap {
-	    display: flex;
-	    /* height: 500rpx; */
-	    flex-wrap: wrap;
+	// view{
+	// 	word-break: break-all;
+	// }
+	
+	.borderGrey{
+		padding-bottom: 10upx;
+		border-bottom: #ececec solid 1px;
+		margin-bottom: 10upx;
 	}
 	
-	.item-num .upload-img .q-image-wrap .item {
-	    position: relative;
-	    height: 200rpx;
-	    width: 200rpx;
-	    margin-right: 20rpx;
-	    margin-bottom: 20rpx;
+	.imageContainer{
+		display: block;
+		width: 95%;
+		padding-left: 2.5%;
+		padding-right: 2.5%;
+		padding-top: 10upx;
+		padding-bottom: 10upx;
 	}
 	
-	.item-num .upload-img .q-image-wrap .item .q-image {
-	    height: 200rpx;
-	    width: 200rpx;
-	}
-	
-	.item-num .upload-img .q-image-wrap .item .q-image-remover {
-	    width: 0;
-	    height: 0;
-	    border-top: 66rpx solid #bfde85;
-	    border-left: 66rpx solid transparent;
-	    position: absolute;
-	    top: 0;
-	    right: 0;
-	}
-	
-	/* .item-num .upload-img .q-image-wrap .item .q-image-remover text{
-	    width: 30rpx;
-	    display: block;
-	    height: 30rpx;
-	    color: #FFFFFF;
-	    text-align: center;
-	    line-height: 30rpx;
-	    font-size: 30rpx;
-	    border-radius: 20rpx;
-	    background-color: #bfde85;
-	    position: absolute;
-	    top: -60rpx;
-	    right: 0;
-	} */
-	
-	.item-num .upload-img .q-image-wrap .item .q-image-remover image {
-	    width: 24rpx;
-	    height: 24rpx;
-	    position: absolute;
-	    top: -60rpx;
-	    right: 4rpx;
-	}
 	.imageBlock{
 		width: 21.6vw;
 		margin-right: 0.4%;
@@ -166,4 +291,30 @@
 		float: left;
 		line-height: 23%;
 	}
+	.addImageBlock{
+		width: 21.6vw;
+		margin-right: 0.4%;
+		margin-left: 0.4%;
+		margin-bottom: 0.4%;
+		margin-top: 0.4%;
+		display: flex;
+		height: 21.6vw;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background-color: #F1F1F1;
+		float: left;
+		line-height: 23%;
+		
+		.add-image{
+			width: 15vw;
+			height: 15vw;
+		}
+		
+	}
+	.addImageBlock text{
+		font-size: 20rpx;
+	}
+	
+	
 </style>

@@ -102,10 +102,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var g0 =
-    _vm.type == "image"
-      ? _vm.maxSelect > _vm.result.length || _vm.maxSelect == -1
-      : null
+  var g0 = _vm.maxSelect > _vm.choosePhotoes.length || _vm.maxSelect == -1
   _vm.$mp.data = Object.assign(
     {},
     {
@@ -176,53 +173,54 @@ exports.default = void 0;
 var _default = {
   data: function data() {
     return {
-      result: [""],
-      init: false,
+      choosePhotoes: [""],
       // 添加照片数量最大 4张
       maxCount: 4
     };
   },
   mounted: function mounted() {
     if (this.type == "image") {
-      this.$set(this, 'result', this.result.splice(1, 1));
-      //console.log(this.result);
+      this.$set(this, 'choosePhotoes', this.choosePhotoes.splice(1, 1));
+      //console.log(this.choosePhotoes);
     }
 
     //初始化返回结果
-    this.$emit('change', this.result);
+    this.$emit('changePhotoes', this.choosePhotoes);
   },
   methods: {
-    addImage: function addImage() {
+    /* 选择图片 */addImage: function addImage() {
       var that = this;
-      if (this.result.length >= this.maxCount) {
+      if (this.choosePhotoes.length >= this.maxCount) {
         uni.showToast({
-          title: '最多只能上传四张图片',
+          title: '最多上传四张图片',
+          icon: 'none',
           complete: function complete(res) {
-            that.$emit('change', that.result);
+            that.$emit('changePhotoes', that.choosePhotoes);
           }
         });
       } else {
         uni.chooseImage({
           count: 4,
           success: function success(res) {
-            var newResult = [];
-            for (var i = 0; i < that.result.length; i++) {
-              newResult.push(that.result[i]);
+            var photoList = [];
+            for (var i = 0; i < that.choosePhotoes.length; i++) {
+              photoList.push(that.choosePhotoes[i]);
             }
             if (that.maxSelect > 0) {
-              for (var i = 0; i < Math.min(that.maxSelect - that.result.length, res.tempFilePaths.length); i++) {
-                newResult.push(res.tempFilePaths[i]);
+              for (var i = 0; i < Math.min(that.maxSelect - that.choosePhotoes.length, res.tempFilePaths.length); i++) {
+                photoList.push(res.tempFilePaths[i]);
               }
             } else {
               for (var i = 0; i < res.tempFilePaths.length; i++) {
-                newResult.push(res.tempFilePaths[i]);
+                photoList.push(res.tempFilePaths[i]);
               }
             }
-            that.$set(that, 'result', newResult);
-            that.$emit('change', that.result);
+            that.$set(that, 'choosePhotoes', photoList);
+            that.$emit('changePhotoes', that.choosePhotoes);
           },
           fail: function fail(err) {
-            that.$emit('change', that.result);
+            console.log('选取图片err', err);
+            that.$emit('changePhotoes', that.choosePhotoes);
           }
         });
       }
@@ -237,45 +235,45 @@ var _default = {
           /* 向前移动 */
           if (res.tapIndex == 0) {
             if (i > 0) {
-              var result = that.result;
-              var img = result[i];
-              result[i] = result[i - 1];
-              result[i - 1] = img;
-              var newResult = [];
-              for (var j = 0; j < result.length; j++) {
-                newResult.push(result[j]);
+              var photoList = that.choosePhotoes;
+              var img = photoList[i];
+              photoList[i] = photoList[i - 1];
+              photoList[i - 1] = img;
+              var newPhotoList = [];
+              for (var j = 0; j < photoList.length; j++) {
+                newPhotoList.push(photoList[j]);
               }
-              that.$set(that, 'result', newResult);
-              that.$emit('change', that.result);
+              that.$set(that, 'choosePhotoes', newPhotoList);
+              that.$emit('changePhotoes', that.choosePhotoes);
             } else {
               uni.showToast({
                 title: '无可替换',
                 icon: 'none',
                 complete: function complete(res) {
-                  that.$emit('change', that.result);
+                  that.$emit('changePhotoes', that.choosePhotoes);
                 }
               });
             }
           }
           /* 向后移动 */else if (res.tapIndex == 1) {
             //向后
-            if (i < that.result.length - 1) {
-              var result = that.result;
-              var img = result[i];
-              result[i] = result[i + 1];
-              result[i + 1] = img;
-              var newResult = [];
-              for (var j = 0; j < result.length; j++) {
-                newResult.push(result[j]);
+            if (i < that.choosePhotoes.length - 1) {
+              var photoList = that.choosePhotoes;
+              var img = photoList[i];
+              photoList[i] = photoList[i + 1];
+              photoList[i + 1] = img;
+              var newPhotoList = [];
+              for (var j = 0; j < photoList.length; j++) {
+                newPhotoList.push(photoList[j]);
               }
-              that.$set(that, 'result', newResult);
-              that.$emit('change', that.result);
+              that.$set(that, 'choosePhotoes', newPhotoList);
+              that.$emit('changePhotoes', that.choosePhotoes);
             } else {
               uni.showToast({
                 title: '无可替换',
                 icon: 'none',
                 complete: function complete(res) {
-                  that.$emit('change', that.result);
+                  that.$emit('changePhotoes', that.choosePhotoes);
                 }
               });
             }
@@ -284,25 +282,25 @@ var _default = {
             uni.chooseImage({
               count: 4,
               success: function success(res) {
-                var result = that.result;
-                //console.log(result);
-                var newResult = [];
-                for (var j = 0; j < result.length; j++) {
+                var photoList = that.choosePhotoes;
+                //console.log(photoList);
+                var newPhotoList = [];
+                for (var j = 0; j < photoList.length; j++) {
                   if (i != j) {
-                    newResult.push(result[j]);
+                    newPhotoList.push(photoList[j]);
                   } else {
-                    newResult.push(res.tempFilePaths[0]);
+                    newPhotoList.push(res.tempFilePaths[0]);
                   }
                 }
-                //console.log(newResult);
-                that.$set(that, 'result', newResult);
+                //console.log(newPhotoList);
+                that.$set(that, 'choosePhotoes', newPhotoList);
                 /*that.$nextTick(()=>{
                 	console.log("refresh");
                 });*/
-                that.$emit('change', that.result);
+                that.$emit('changePhotoes', that.choosePhotoes);
               },
               fail: function fail(err) {
-                that.$emit('change', that.result);
+                that.$emit('changePhotoes', that.choosePhotoes);
               }
             });
           }
@@ -312,24 +310,24 @@ var _default = {
               content: '您确认删除该图片吗？',
               success: function success(res) {
                 if (res.confirm) {
-                  var result = that.result;
-                  //console.log(result);
-                  var newResult = [];
-                  for (var j = 0; j < result.length; j++) {
+                  var photoList = that.choosePhotoes;
+                  //console.log(photoList);
+                  var newPhotoList = [];
+                  for (var j = 0; j < photoList.length; j++) {
                     if (i != j) {
-                      newResult.push(result[j]);
+                      newPhotoList.push(photoList[j]);
                     }
                   }
-                  //console.log(newResult);
-                  that.$set(that, 'result', newResult);
-                  //console.log(that.result);
-                  that.$emit('change', that.result);
+                  //console.log(newPhotoList);
+                  that.$set(that, 'choosePhotoes', newPhotoList);
+                  //console.log(that.choosePhotoes);
+                  that.$emit('changePhotoes', that.choosePhotoes);
                 } else {
-                  that.$emit('change', that.result);
+                  that.$emit('changePhotoes', that.choosePhotoes);
                 }
               },
               fail: function fail(err) {
-                that.$emit('change', that.result);
+                that.$emit('changePhotoes', that.choosePhotoes);
               }
             });
           }
@@ -338,8 +336,35 @@ var _default = {
     },
     /* 图片预览 */viewImage: function viewImage(i) {
       uni.previewImage({
-        urls: this.result,
+        urls: this.choosePhotoes,
         current: i
+      });
+    },
+    removeImage: function removeImage() {
+      uni.showModal({
+        title: '消息',
+        content: '您确认删除该图片吗？',
+        success: function success(res) {
+          if (res.confirm) {
+            var photoList = that.choosePhotoes;
+            //console.log(photoList);
+            var newPhotoList = [];
+            for (var j = 0; j < photoList.length; j++) {
+              if (i != j) {
+                newPhotoList.push(photoList[j]);
+              }
+            }
+            //console.log(newPhotoList);
+            that.$set(that, 'choosePhotoes', newPhotoList);
+            //console.log(that.choosePhotoes);
+            that.$emit('changePhotoes', that.choosePhotoes);
+          } else {
+            that.$emit('changePhotoes', that.choosePhotoes);
+          }
+        },
+        fail: function fail(err) {
+          that.$emit('changePhotoes', that.choosePhotoes);
+        }
       });
     }
   },
