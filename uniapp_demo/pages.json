@@ -122,6 +122,12 @@
 					"style": {
 						"navigationBarTitleText": "拍照"
 					}
+				},
+				{
+					"path": "pages/take_photo/take_images",
+					"style": {
+						"navigationBarTitleText": "image"
+					}
 				}
 			]
 		}

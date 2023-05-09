@@ -7,8 +7,10 @@
 				<view v-for="(im,i) in result" :key="i" @longtap="imageMenu(i)" @tap="viewImage(i)">
 					<image :src="im" class="imageBlock" mode="aspectFill"></image>
 				</view>
-				<view v-if="maxSelect > result.length || maxSelect == -1" class="imageBlock" @tap="addImage">
-					<view>+</view>
+				<view v-if="maxSelect > result.length || maxSelect == -1" class="addImageBlock" @tap="addImage">
+					<!-- <view>+</view> -->
+					<image :src="'/bundle/static/mine_paizhao.png'" class="add-image" mode="aspectFill"></image>
+					<text>照片/拍摄</text>
 				</view>
 			</view>
 		</view>
@@ -363,6 +365,30 @@
 		background-color: #F1F1F1;
 		float: left;
 		line-height: 23%;
+	}
+	.addImageBlock{
+		width: 21.6vw;
+		margin-right: 0.4%;
+		margin-left: 0.4%;
+		margin-bottom: 0.4%;
+		margin-top: 0.4%;
+		display: flex;
+		height: 21.6vw;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background-color: #F1F1F1;
+		float: left;
+		line-height: 23%;
+		
+		.add-image{
+			width: 15vw;
+			height: 15vw;
+		}
+		
+	}
+	.addImageBlock text{
+		font-size: 20rpx;
 	}
 	
 	.phone{

@@ -151,6 +151,28 @@ textarea.data-v-ac57a0b6 {
   float: left;
   line-height: 23%;
 }
+.addImageBlock.data-v-ac57a0b6 {
+  width: 21.6vw;
+  margin-right: 0.4%;
+  margin-left: 0.4%;
+  margin-bottom: 0.4%;
+  margin-top: 0.4%;
+  display: flex;
+  height: 21.6vw;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #F1F1F1;
+  float: left;
+  line-height: 23%;
+}
+.addImageBlock .add-image.data-v-ac57a0b6 {
+  width: 15vw;
+  height: 15vw;
+}
+.addImageBlock text.data-v-ac57a0b6 {
+  font-size: 20rpx;
+}
 .phone.data-v-ac57a0b6 {
   max-width: 40%;
   background-color: #FFFFFF;
