@@ -70,6 +70,10 @@
 		apiAssessFromData
 	} from '@/api/mock.js'
 	import catSignature from '@/bundle/components/sign-canvas/sign-canvas.vue'
+	import { 
+		base64ToPath ,
+		pathToBase64
+	} from '../../../js_sdk/mmmm-image-tools';
 	
 	export default {
 		components:{
@@ -261,6 +265,16 @@
 				this.isShow = false
 				this.signImage = this.$refs.catSign.signImage
 				console.log('signImage',this.signImage)
+				
+				this.loadBase64Url(this.signImage)
+			},
+			loadBase64Url(){
+				const imageStr = this.signImage
+				base64ToPath(imageStr).then(path=>{
+					console.log('signImage path',path)
+				}).catch(err=>{
+					console.log('临时路径 err',err)
+				})
 			}
 		},
 	};

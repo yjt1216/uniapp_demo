@@ -37,6 +37,14 @@
 			<view class="demo-li">头部底部<text class="demo-tip"> 头部 数据列表list 底部 </text></view>
 		</navigator>
 		
+		<navigator url="/bundle/pages/user_sign/user_sign">
+			<view class="demo-li">user sign<text class="demo-tip"> user sign </text></view>
+		</navigator>
+		<navigator url="/pages/location/location">
+			<view class="demo-li">地图定位<text class="demo-tip"> QQ 地图定位功能 </text></view>
+		</navigator>
+		
+		
 	</view>
 </template>
 

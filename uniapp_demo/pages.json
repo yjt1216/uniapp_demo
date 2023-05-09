@@ -42,6 +42,12 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/location/location",
+			"style": {
+				"navigationBarTitleText": "QQ地图定位"
+			}
 		}
 	],
 	"subPackages": [
@@ -103,6 +109,12 @@
 					"style": {
 						
 						"navigationBarTitleText": "header footer"
+					}
+				},
+				{
+					"path": "pages/user_sign/user_sign",
+					"style": {
+						"navigationBarTitleText": "user sign"
 					}
 				}
 			]

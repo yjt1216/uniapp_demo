@@ -164,6 +164,7 @@
 					mask: true
 				});
 				setTimeout(() => {
+					
 					uni.canvasToTempFilePath({
 							canvasId: this.canvasId,
 							success: function(res) {
@@ -173,6 +174,7 @@
 								uni.hideLoading();
 								that.hasDh = false;
 								that.show = false;
+								
 							},
 							fail: function(err) {
 								console.log(err);
@@ -183,6 +185,7 @@
 					);
 				}, 100);
 			}
+			
 		}
 	};
 </script>
