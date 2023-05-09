@@ -116,6 +116,12 @@
 					"style": {
 						"navigationBarTitleText": "user sign"
 					}
+				},
+				{
+					"path": "pages/take_photo/take_photo",
+					"style": {
+						"navigationBarTitleText": "拍照"
+					}
 				}
 			]
 		}

@@ -43,7 +43,9 @@
 		<navigator url="/pages/location/location">
 			<view class="demo-li">地图定位<text class="demo-tip"> QQ 地图定位功能 </text></view>
 		</navigator>
-		
+		<navigator url="/bundle/pages/take_photo/take_photo">
+			<view class="demo-li">take_photo<text class="demo-tip"> take photo </text></view>
+		</navigator>
 		
 	</view>
 </template>
