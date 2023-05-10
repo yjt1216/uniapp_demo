@@ -100,14 +100,17 @@ __webpack_require__.r(__webpack_exports__);
 var components
 try {
   components = {
+    uTag: function () {
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-tag/u-tag */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-tag/u-tag")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-tag/u-tag.vue */ 525))
+    },
     uInput: function () {
       return Promise.all(/*! import() | uni_modules/uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-input/u-input.vue */ 379))
     },
     uRadioGroup: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-radio-group/u-radio-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-radio-group/u-radio-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-radio-group/u-radio-group.vue */ 525))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-radio-group/u-radio-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-radio-group/u-radio-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-radio-group/u-radio-group.vue */ 533))
     },
     uRadio: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-radio/u-radio */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-radio/u-radio")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-radio/u-radio.vue */ 533))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-radio/u-radio */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-radio/u-radio")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-radio/u-radio.vue */ 541))
     },
     uCheckboxGroup: function () {
       return Promise.all(/*! import() | uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group.vue */ 387))
@@ -245,9 +248,19 @@ var _mmmmImageTools = __webpack_require__(/*! ../../../js_sdk/mmmm-image-tools *
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var catSignature = function catSignature() {
   __webpack_require__.e(/*! require.ensure | bundle/components/sign-canvas/sign-canvas */ "bundle/components/sign-canvas/sign-canvas").then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/sign-canvas/sign-canvas.vue */ 541));
+    return resolve(__webpack_require__(/*! @/bundle/components/sign-canvas/sign-canvas.vue */ 549));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {
@@ -324,6 +337,25 @@ var _default = {
           name: '李清照'
         }]
       }],
+      checkboxs: [{
+        checked: true,
+        name: '感染性废物'
+      }, {
+        checked: false,
+        name: '损伤性废物'
+      }, {
+        checked: false,
+        name: '化学性废物'
+      }, {
+        checked: false,
+        name: '药物性废物'
+      }, {
+        checked: false,
+        name: '病理性废物'
+      }, {
+        checked: false,
+        name: '其他'
+      }],
       checkList: [{
         name: "更喜欢哪一种水果？",
         value: 0,
@@ -356,11 +388,50 @@ var _default = {
         }, {
           name: '李清照'
         }]
+      }],
+      testDataList: [{
+        "customerCount": 0,
+        "contactsCount": 0,
+        "businessCount": 0,
+        "businessMoney": 0,
+        "contractCount": 0,
+        "contractMoney": 0,
+        "receivablesMoney": 0,
+        "recordCount": 0,
+        "type": "2021"
+      }, {
+        "customerCount": 0,
+        "contactsCount": 0,
+        "businessCount": 0,
+        "businessMoney": 0,
+        "contractCount": 0,
+        "contractMoney": 0,
+        "receivablesMoney": 0,
+        "recordCount": 0,
+        "type": "2022"
+      }, {
+        "customerCount": 36,
+        "contactsCount": 18,
+        "businessCount": 1,
+        "businessMoney": 10000,
+        "contractCount": 7,
+        "contractMoney": 490008.98,
+        "receivablesMoney": 60000,
+        "recordCount": 71,
+        "type": "2023"
       }]
     };
   },
-  onLoad: function onLoad() {},
+  onLoad: function onLoad() {
+    this.getValueFromObject();
+  },
   methods: {
+    /* 测试object数据取值 */getValueFromObject: function getValueFromObject() {
+      var testObj = this.testDataList.slice(-1);
+      console.log('测试object数据取值testObj', testObj);
+      var soldData = testObj[0];
+      console.log('测试object数据取值soldData', soldData);
+    },
     /* 获取评估表单数据 */getFormData: function getFormData() {
       (0, _mock.apiAssessFromData)().then(function (res) {
         console.log('评估表单res', res);
@@ -397,6 +468,9 @@ var _default = {
       }).catch(function (err) {
         console.log('临时路径 err', err);
       });
+    },
+    checkboxClick: function checkboxClick(name) {
+      this.checkboxs[name].checked = !this.checkboxs[name].checked;
     }
   }
 };

@@ -46,9 +46,13 @@
 		<navigator url="/bundle/pages/take_photo/take_photo">
 			<view class="demo-li">take_photo<text class="demo-tip"> take photo </text></view>
 		</navigator>
-		<navigator url="/bundle/pages/take_photo/take_images">
-			<view class="demo-li">take_images<text class="demo-tip"> take images </text></view>
+		<navigator url="/bundle/pages/tag_page/tag-page">
+			<view class="demo-li">tag_page<text class="demo-tip"> tag </text></view>
 		</navigator>
+		
+		
+		
+		
 	</view>
 </template>
 

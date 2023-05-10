@@ -218,6 +218,10 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
 var _default = {
   onLoad: function onLoad() {
     uni.setNavigationBarTitle({

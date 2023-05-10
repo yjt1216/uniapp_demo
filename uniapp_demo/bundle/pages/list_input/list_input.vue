@@ -3,6 +3,24 @@
 <template>
   <view>
     <view class="person">
+		
+		<view class="u-demo-block">
+			<text class="u-demo-block__title">多选标签</text>
+			<view class="u-demo-block__content">
+				<view class="u-page__tag-item"
+				    v-for="(tagItem, tagIndex) in checkboxs"
+				    :key="tagIndex">
+					<u-tag class="tag-item"
+					    :text="tagItem.name"
+					    :plain="!tagItem.checked"
+					    type="info"
+					    :name="tagIndex"
+					    @click="checkboxClick">
+					</u-tag>
+				</view>
+			</view>
+		</view>
+		
 		<view v-for="(item, index) in personMsg" :key="index">
 		   <!-- 填空 -->
 			<template >
@@ -34,14 +52,6 @@
 				</u-checkbox-group>
 			</template>
 		</view>
-		
-		
-		<!-- 签名 -->
-		<!-- <view class="sign-boand">
-		    <button type="primary" @tap="doss" style="margin: 10px;">点击签名</button>
-			<view class="imgs"><image class="img" :src="signImage" mode="widthFix" style="margin: 0px 24px;"></image></view>
-			<catSignature canvasId="canvas1" @closeSign="closeSign" @saveSign="saveSign" :visible="isShow" ref="catSign"/>
-		</view> -->
 		
 		<!-- 签名 -->
 		<view class="logo_text">
@@ -122,7 +132,7 @@
 					  placeValue: '请输入身份证号码'
 					},
 				  ],
-				  redioList:[
+				redioList:[
 					{
 						name: "更喜欢哪一种水果？",
 						value: 0,
@@ -174,9 +184,33 @@
 							  
 						]
 					}
-				  ],
-				  
-				  checkList:[
+				],
+				checkboxs: [{
+						checked: true,
+						name:'感染性废物'
+					},
+					{
+						checked: false,
+						name:'损伤性废物'
+					},
+					{
+						checked: false,
+						name:'化学性废物'
+					},
+					{
+						checked: false,
+						name:'药物性废物'
+					},
+					{
+						checked: false,
+						name:'病理性废物'
+					},
+					{
+						checked: false,
+						name:'其他'
+					}
+				],
+				checkList:[
 						{
 							name: "更喜欢哪一种水果？",
 							value: 0,
@@ -228,14 +262,56 @@
 								  
 							]
 						}
+				],
+				testDataList:[
+					{
+							"customerCount": 0,
+							"contactsCount": 0,
+							"businessCount": 0,
+							"businessMoney": 0,
+							"contractCount": 0,
+							"contractMoney": 0,
+							"receivablesMoney": 0,
+							"recordCount": 0,
+							"type": "2021"
+					},
+					{
+							"customerCount": 0,
+							"contactsCount": 0,
+							"businessCount": 0,
+							"businessMoney": 0,
+							"contractCount": 0,
+							"contractMoney": 0,
+							"receivablesMoney": 0,
+							"recordCount": 0,
+							"type": "2022"
+					},
+					{
+							"customerCount": 36,
+							"contactsCount": 18,
+							"businessCount": 1,
+							"businessMoney": 10000,
+							"contractCount": 7,
+							"contractMoney": 490008.98,
+							"receivablesMoney": 60000,
+							"recordCount": 71,
+							"type": "2023"
+					}
 				]
 			};
 		},
 
 		onLoad() {
-			
+			this.getValueFromObject()
 		},
 		methods: {
+			/* 测试object数据取值 */
+			getValueFromObject(){
+				const testObj = this.testDataList.slice(-1)
+				console.log('测试object数据取值testObj',testObj)
+				const soldData = testObj[0]
+				console.log('测试object数据取值soldData',soldData)
+			},
 			/* 获取评估表单数据 */
 			getFormData() {
 				apiAssessFromData().then(res=>{
@@ -275,6 +351,9 @@
 				}).catch(err=>{
 					console.log('临时路径 err',err)
 				})
+			},
+			checkboxClick(name) {
+				this.checkboxs[name].checked = !this.checkboxs[name].checked
 			}
 		},
 	};
@@ -317,6 +396,22 @@
 	}
 	.logo_text{
 		padding:10rpx 20rpx;
+	}
+	/* 标签 */
+	.u-demo-block__title{
+		padding: 10rpx 20rpx;
+	}
+	.u-page__tag-item {
+		padding:10rpx 20rpx;
+	}
+	.tag-item{
+		width: 200rpx;
+	}
+	
+	.u-demo-block__content {
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
 	}
 </style>
 
