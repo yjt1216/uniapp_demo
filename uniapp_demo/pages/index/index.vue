@@ -50,7 +50,9 @@
 			<view class="demo-li">tag_page<text class="demo-tip"> tag </text></view>
 		</navigator>
 		
-		
+		<navigator url="/bundle/pages/files_upload/files_upload">
+			<view class="demo-li">files upload<text class="demo-tip"> files upload </text></view>
+		</navigator>
 		
 		
 	</view>

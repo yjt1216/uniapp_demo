@@ -8,13 +8,16 @@ import minxinsApp from '@/mixins/app'
 // import MescrollBody from "@/components/mescroll-uni/mescroll-body.vue"
 import {router,RouterMount} from './router.js'
 import routerLink from './js_sdk/uni-simple-router/link.vue'
-
+import Request from '@/js_sdk/luch-request/luch-request/index.js'
 
 // Vue.component('mescroll-body', MescrollBody)
 Vue.prototype.$toast = toast
 Vue.prototype.$Cache = Cache
 Vue.config.productionTip = false
 Vue.component('RouterLink', routerLink)
+
+const http = new Request();
+Vue.prototype.$http = http;
 
 Vue.use(router)
 Vue.mixin(minxinsApp);

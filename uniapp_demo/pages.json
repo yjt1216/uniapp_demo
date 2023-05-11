@@ -134,6 +134,13 @@
 					"style": {
 						"navigationBarTitleText": "tag"
 					}
+				},
+				{
+					"path": "pages/files_upload/files_upload",
+					"style": {
+						"navigationStyle": "custom",
+						"navigationBarTitleText": "upload files"
+					}
 				}
 			]
 		}

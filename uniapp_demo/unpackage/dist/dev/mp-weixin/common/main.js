@@ -21,13 +21,14 @@ var _cache = _interopRequireDefault(__webpack_require__(/*! ./utils/cache */ 38)
 var _uviewUi = _interopRequireDefault(__webpack_require__(/*! @/uni_modules/uview-ui */ 41));
 var _app = _interopRequireDefault(__webpack_require__(/*! @/mixins/app */ 166));
 var _router = __webpack_require__(/*! ./router.js */ 169);
+var _index = _interopRequireDefault(__webpack_require__(/*! @/js_sdk/luch-request/luch-request/index.js */ 354));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 // @ts-ignore
 wx.__webpack_require_UNI_MP_PLUGIN__ = __webpack_require__;
 var routerLink = function routerLink() {
   __webpack_require__.e(/*! require.ensure | js_sdk/uni-simple-router/link */ "js_sdk/uni-simple-router/link").then((function () {
-    return resolve(__webpack_require__(/*! ./js_sdk/uni-simple-router/link.vue */ 338));
+    return resolve(__webpack_require__(/*! ./js_sdk/uni-simple-router/link.vue */ 370));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 // Vue.component('mescroll-body', MescrollBody)
@@ -35,6 +36,8 @@ _vue.default.prototype.$toast = _tools.toast;
 _vue.default.prototype.$Cache = _cache.default;
 _vue.default.config.productionTip = false;
 _vue.default.component('RouterLink', routerLink);
+var http = new _index.default();
+_vue.default.prototype.$http = http;
 _vue.default.use(_router.router);
 _vue.default.mixin(_app.default);
 _vue.default.use(_uviewUi.default);
