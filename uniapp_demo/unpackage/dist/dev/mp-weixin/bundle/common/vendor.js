@@ -1,6 +1,6 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["bundle/common/vendor"],{
 
-/***/ 286:
+/***/ 300:
 /*!*************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/mmmm-image-tools/index.js ***!
   \*************************************************************************************************************/
@@ -214,7 +214,7 @@ function base64ToPath(base64) {
 
 /***/ }),
 
-/***/ 319:
+/***/ 333:
 /*!************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/common/signature.js ***!
   \************************************************************************************************/
@@ -694,7 +694,7 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 344:
+/***/ 358:
 /*!**********************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/bundle/static/icon_delete.png ***!
   \**********************************************************************************************************/
@@ -705,7 +705,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAA5CAYAAACM
 
 /***/ }),
 
-/***/ 353:
+/***/ 367:
 /*!************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/utils/dp_request.js ***!
   \************************************************************************************************/
@@ -720,7 +720,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _index = _interopRequireDefault(__webpack_require__(/*! @/js_sdk/luch-request/luch-request/index.js */ 354));
+var _index = _interopRequireDefault(__webpack_require__(/*! @/js_sdk/luch-request/luch-request/index.js */ 172));
 var BASE_API = 'https://api.depin.tech/api/';
 var http = new _index.default({
   baseURL: BASE_API,

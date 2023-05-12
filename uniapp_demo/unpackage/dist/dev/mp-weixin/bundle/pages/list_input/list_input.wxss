@@ -77,4 +77,9 @@
   flex-wrap: wrap;
   align-items: center;
 }
+.other-view {
+  background-color: red;
+  width: 90%;
+  height: 45rpx;
+}
 

@@ -72,6 +72,9 @@ page {
   width: 100%;
   text-align: center;
 }
+.radio-bottom-input {
+  margin-top: 20rpx;
+}
 .footer {
   color: #fff;
   line-height: 100rpx;

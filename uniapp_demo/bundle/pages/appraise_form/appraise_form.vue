@@ -22,8 +22,32 @@
 						</view>
 						<view class="space-fill"></view>
 						<u-radio-group placement="column" >
-							<u-radio v-for="(item,qIndex) in question.options" :customStyle="{marginBottom:'8px'}" :key="qIndex" 
-							:label="item.no + '、' + item.title" :name="item.title" @change="radioChange($event, question.title)"></u-radio>
+							
+							<view v-for="(item,qIndex) in question.options">
+								<u-radio :customStyle="{marginBottom:'8px'}" :key="qIndex"
+								:label="item.no + '、' + item.title" 
+								:name="item.title" 
+								@change="radioChange($event, question,index)">
+								
+								</u-radio>
+								<u-input v-if="item.isSelect && item.title == '其他'" class="radio-bottom-input"
+									placeholder="请输入原因"
+									border="bottom"  
+									@input="inputData($event, question.title)"></u-input>
+							</view>
+							
+							<!-- <u-radio v-for="(item,qIndex) in question.options" :customStyle="{marginBottom:'8px'}" :key="qIndex" 
+							:label="item.no + '、' + item.title" 
+							:name="item.title" 
+							@change="radioChange($event, question,index)">
+							
+							<u-input v-if="item.isSelect && item.title == '其他'" class="radio-bottom-input"
+								placeholder="请输入其他 原因"
+								border="bottom"  
+								@input="inputData($event, question.title)"></u-input>
+							
+							</u-radio> -->
+							
 						</u-radio-group>
 					</view>
 					<!-- 多选题q_check -->
@@ -127,7 +151,25 @@
 						questions
 					} = res.data
 					console.log('评估表单questions',questions.length)
-					this.questionList = questions
+					
+					/* q_radio  q_check*/
+					/* 
+						查询表单item中 是否包含 其他-选项 
+						如果包含 则在当前item中添加 input 控件 且item中每个选项 增添 是否选中属性 
+						当其他被选中时则显示输入框 说明 选中 其他的理由
+					*/
+					var formList = []
+					formList = questions
+					formList.forEach(formItem=>{
+						var itemOptions = formItem.options
+						itemOptions.forEach(options=>{
+							options['isSelect'] = false
+						})
+						
+					})
+					
+					console.log('表单添加select属性',formList)
+					this.questionList = formList
 				}).catch((err)=>{
 					console.log('评估表单err',err)
 				})
@@ -143,9 +185,28 @@
 			  this.formData[dataValue] = event;
 			},
 			/* 单选题 */
-			radioChange(event, dataValue){
-				console.log('单选题event ',event,dataValue)
-				this.formData[dataValue] = event;
+			radioChange(event, question,index){
+				console.log('单选题event ',event,question)
+				this.formData[question.title] = event;
+				
+				question.options.forEach(item=>{
+					if(item.title == '其他'){
+						item.isSelect = !item.isSelect
+						console.log('单选题item ',item)
+					}
+				})
+				this.questionList[index] = question
+				/* $forceUpdate 刷新当前组件 */
+				this.$forceUpdate()
+				
+				// if(event == '其他'){
+				// 	uni.showToast({
+				// 		title:dataValue+': '+'选中其他',
+				// 		icon:'none'
+				// 	})
+					
+				// }
+				
 			},
 			/* 多选题 */
 			checkboxChange(event,dataValue){
@@ -249,6 +310,10 @@
 			width: 100%;
 			text-align: center;
 		}
+	}
+	
+	.radio-bottom-input{
+		margin-top: 20rpx;
 	}
 
 	.footer {

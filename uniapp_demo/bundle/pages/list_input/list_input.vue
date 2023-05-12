@@ -38,6 +38,7 @@
 				<u-radio-group placement="column" >
 					<u-radio v-for="(item,index) in listItem.redios" :customStyle="{marginBottom:'8px'}" :key="index" 
 					:label="item.name" :name="item.name" ></u-radio>
+					<view v-if="item.name == '其他'" class="other-view"></view>
 				</u-radio-group>
 			</template>
 		</view>
@@ -161,6 +162,9 @@
 							},
 							{
 								name: '文具盒'
+							},
+							{
+								name:'其他'
 							}
 							  
 						]
@@ -412,6 +416,11 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		align-items: center;
+	}
+	.other-view{
+		background-color: red;
+		width: 90%;
+		height: 45rpx;
 	}
 </style>
 
