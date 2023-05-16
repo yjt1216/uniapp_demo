@@ -101,10 +101,10 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 375))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 389))
     },
     uInput: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-input/u-input.vue */ 411))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-input/u-input.vue */ 433))
     },
   }
 } catch (e) {
@@ -184,12 +184,12 @@ var _dp_request = _interopRequireDefault(__webpack_require__(/*! @/utils/dp_requ
 var _parse = _interopRequireDefault(__webpack_require__(/*! ../../../uni_modules/uview-ui/libs/config/props/parse */ 129));
 var zyTag = function zyTag() {
   __webpack_require__.e(/*! require.ensure | components/zy-tag/zy-tag */ "components/zy-tag/zy-tag").then((function () {
-    return resolve(__webpack_require__(/*! @/components/zy-tag/zy-tag.vue */ 611));
+    return resolve(__webpack_require__(/*! @/components/zy-tag/zy-tag.vue */ 640));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var catSignature = function catSignature() {
   __webpack_require__.e(/*! require.ensure | bundle/components/sign-canvas/sign-canvas */ "bundle/components/sign-canvas/sign-canvas").then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/sign-canvas/sign-canvas.vue */ 581));
+    return resolve(__webpack_require__(/*! @/bundle/components/sign-canvas/sign-canvas.vue */ 610));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var QQMapWX = __webpack_require__(/*! @/common/qqmap-wx-jssdk.min.js */ 253);

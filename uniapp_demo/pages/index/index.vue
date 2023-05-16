@@ -53,7 +53,14 @@
 		<navigator url="/bundle/pages/files_upload/files_upload">
 			<view class="demo-li">files upload<text class="demo-tip"> files upload </text></view>
 		</navigator>
+		<navigator url="/bundle/pages/pop_box/pop_box">
+			<view class="demo-li"> pop_box<text class="demo-tip"> pop view </text></view>
+		</navigator>
+		<navigator url="/bundle/pages/card_list/card_list">
+			<view class="demo-li"> 卡片list<text class="demo-tip"> 卡片 </text></view>
+		</navigator>
 		
+		<y-tabbar ref="tabbar" native></y-tabbar>
 		
 	</view>
 </template>

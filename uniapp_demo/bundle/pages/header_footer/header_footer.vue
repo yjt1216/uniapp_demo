@@ -7,7 +7,7 @@
 					{{item.cont}}
 				</view>
 			</scroll-view>
-	 </view>
+		</view>
 
 	  <view class="footer">
 		<button type="primary">提交</button>

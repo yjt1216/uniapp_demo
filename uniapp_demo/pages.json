@@ -6,12 +6,7 @@
 				"navigationStyle": "custom" 
 			}
 		},
-		{
-			"path": "pages/user/user",
-			"style": {
-				"navigationStyle": "custom" 
-			}
-		},
+		
 		{
 			"path": "pages/text_auto/text_auto",
 			"style": {
@@ -23,6 +18,12 @@
 			"path": "pages/message/message",
 			"style": {
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"style": {
+				"navigationStyle": "custom" 
 			}
 		},
 		{
@@ -141,6 +142,18 @@
 						"navigationStyle": "custom",
 						"navigationBarTitleText": "upload files"
 					}
+				},
+				{
+					"path": "pages/pop_box/pop_box",
+					"style": {
+						"navigationBarTitleText": "pop box"
+					}
+				},
+				{
+					"path": "pages/card_list/card_list",
+					"style": {
+						"navigationBarTitleText": "卡片"
+					}
 				}
 			]
 		}
@@ -158,13 +171,7 @@
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/user/user",
-				"iconPath": "/static/images/tab_user.png",
-				"selectedIconPath": "/static/images/tab_user_s.png",
-				"text": "我的"
-			},
-			{
-				"pagePath": "pages/server_explan/server_explan",
+				"pagePath": "pages/text_auto/text_auto",
 				"iconPath": "/static/images/tab_home.png",
 				"selectedIconPath": "/static/images/tab_home_s.png",
 				"text": "文本"
@@ -174,6 +181,12 @@
 				"iconPath": "/static/images/tab_home.png",
 				"selectedIconPath": "/static/images/tab_home_s.png",
 				"text": "消息"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"iconPath": "/static/images/tab_user.png",
+				"selectedIconPath": "/static/images/tab_user_s.png",
+				"text": "我的"
 			}
 		],
 		"midButton": {

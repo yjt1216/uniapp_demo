@@ -101,13 +101,16 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 375))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 389))
     },
     mescrollBody: function () {
-      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-body/mescroll-body */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-body/mescroll-body")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-body/mescroll-body.vue */ 391))
+      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-body/mescroll-body */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-body/mescroll-body")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-body/mescroll-body.vue */ 413))
     },
     goodList: function () {
-      return __webpack_require__.e(/*! import() | components/good-list/good-list */ "components/good-list/good-list").then(__webpack_require__.bind(null, /*! @/components/good-list/good-list.vue */ 404))
+      return __webpack_require__.e(/*! import() | components/good-list/good-list */ "components/good-list/good-list").then(__webpack_require__.bind(null, /*! @/components/good-list/good-list.vue */ 426))
+    },
+    yTabbar: function () {
+      return Promise.all(/*! import() | components/y-tabbar/y-tabbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/y-tabbar/y-tabbar")]).then(__webpack_require__.bind(null, /*! @/components/y-tabbar/y-tabbar.vue */ 396))
     },
   }
 } catch (e) {
@@ -173,6 +176,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _mescrollMixins = _interopRequireDefault(__webpack_require__(/*! @/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js */ 216));
 var _mock = __webpack_require__(/*! @/api/mock.js */ 217);
+//
+//
 //
 //
 //

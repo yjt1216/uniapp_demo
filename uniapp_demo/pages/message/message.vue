@@ -5,6 +5,8 @@
 			<!-- <view class="notice">mescroll的极简示例,大部分情况就是这么用</view> -->
 			<good-list :list="goods"></good-list>
 		</mescroll-body>
+		
+		<y-tabbar ref="tabbar" native></y-tabbar>
 	</view>
 </template>
 

@@ -11,9 +11,7 @@
 		</view> -->
 		
 		
-		<ljs-top
-			title="textAuto" backgroundColor="linear-gradient(to top right, #CDDC39, #8BC34A, #FFEB3B)">
-		</ljs-top>
+		<nav-bar title="文本" :back="false" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		
 		<view class="Express">
 			<view class="info">
@@ -26,7 +24,7 @@
 			<text @tap="showinfo"  class="hidebtn">{{autoShowText}}</text>
 		</view>
 		
-		
+		<y-tabbar ref="tabbar" native></y-tabbar>
 	</view>
 </template>
 

@@ -112,6 +112,7 @@
 			<view class="divider"></view>
 			
 		</view>
+		<y-tabbar ref="tabbar" native></y-tabbar>
 	</view>
 </template>
 

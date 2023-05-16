@@ -101,7 +101,10 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 375))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 389))
+    },
+    yTabbar: function () {
+      return Promise.all(/*! import() | components/y-tabbar/y-tabbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/y-tabbar/y-tabbar")]).then(__webpack_require__.bind(null, /*! @/components/y-tabbar/y-tabbar.vue */ 396))
     },
   }
 } catch (e) {
@@ -164,6 +167,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
