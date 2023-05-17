@@ -1,0 +1,1 @@
+.index-page{display:flex;flex-direction:column;justify-content:center}.group-title{font-size:30rpx;padding:24rpx;border-bottom:1rpx solid #eee;color:red}.demo-li{font-size:28rpx;padding:24rpx;border-bottom:1rpx solid #eee;color:#18b4fe}.demo-li .demo-tip{float:right;margin-top:4rpx;font-size:24rpx;color:grey}

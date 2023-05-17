@@ -90,4 +90,47 @@
 .y-tabbar__label.data-v-19807b78 {
   font-size: 24rpx;
 }
+/* 拦截 弹框 */
+.intercept-call.data-v-19807b78 {
+  text-align: center;
+  width: 80%;
+  margin-left: 10%;
+  background-color: #fff;
+  border: 4rpx #ccc solid;
+  box-sizing: border-box;
+  border-radius: 6rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.intercept-call .call-title.data-v-19807b78 {
+  margin-top: 20rpx;
+  color: #39C9BC;
+}
+.intercept-call .call-sub-title.data-v-19807b78 {
+  margin: 10rpx 20rpx;
+  font-size: 20rpx;
+}
+.intercept-call .call-actions.data-v-19807b78 {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.intercept-call .call-image.data-v-19807b78 {
+  width: 120rpx;
+  height: 120rpx;
+}
+.intercept-call .space-line.data-v-19807b78 {
+  width: 2rpx;
+  height: 70rpx;
+  background-color: black;
+}
+.intercept-call .call-cancel.data-v-19807b78 {
+  margin: 20rpx;
+  width: 60%;
+  font-size: 28rpx;
+  background-color: #39C9BC;
+  color: white;
+}
 

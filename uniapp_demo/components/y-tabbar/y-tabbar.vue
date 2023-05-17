@@ -23,6 +23,30 @@
 				</view>
 			</view>
 		</view>
+		<uni-popup ref="popup" type="dialog">
+			
+			
+			<view class="intercept-call">
+				<view class="call-title">提示信息</view>
+				<view class="call-sub-title">
+					一键报警为紧急时刻使用，请勿随意拨打，影响正常工作，或拨打电话：0512-65568029
+				</view>
+				<u-divider :hairline="true" lineColor="#666"></u-divider>
+				<view class="call-actions">
+					<view @tap="callPoliceFun">
+						<image class="call-image" :src="'/static/images/home_110.png'"></image>
+					</view>
+					<view class="space-line"></view>
+					<view @tap="contactCustomerFun">
+						<image class="call-image" :src="'/static/images/home_pingtai.png'"></image>
+					</view>
+				</view>
+				<u-divider :hairline="false" :dashed="true"  line-color="#999"></u-divider>
+				<button class="call-cancel" @click="closeCall">取消</button>
+			</view>
+			
+			
+		</uni-popup>
 	</view>
 </template>
 
@@ -295,8 +319,10 @@
 				if (index === currentIndex) {
 					return
 				}
+				
 				if(index === 2){
 					console.log('呼叫客服',index)
+					this.$refs.popup.open()
 					return
 				}
 				
@@ -365,7 +391,28 @@
 					}
 				}
 				this.$emit('change', index)
+			},
+			/* 拦截 弹框 */
+			closeCall(){
+				this.$refs.popup.close()
+			},
+			callPoliceFun(){
+				console.log('报警call')
+				this.$refs.popup.close()
+				uni.makePhoneCall({
+					phoneNumber: '15995454800' //仅为示例
+				});
+
+			},
+			contactCustomerFun(){
+				console.log('联系客服call')
+				this.$refs.popup.close()
+				uni.makePhoneCall({
+					phoneNumber: '0512-66568029' //仅为示例
+				});
+
 			}
+			
 		}
 	};
 </script>
@@ -446,4 +493,49 @@
 	.y-tabbar__label {
 		font-size: 24rpx;
 	}
+	
+	/* 拦截 弹框 */
+	.intercept-call{
+		text-align: center;
+		width: 80%;
+		margin-left: 10%;
+		background-color: #fff;
+		border: 4rpx #ccc solid;
+		box-sizing: border-box; 
+		border-radius: 6rpx; 
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		.call-title{
+			margin-top: 20rpx;
+			color: #39C9BC;
+		}
+		.call-sub-title{
+			margin: 10rpx 20rpx;
+			font-size: 20rpx;
+		}
+		.call-actions{
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+		}
+		.call-image {
+			width: 120rpx;
+			height: 120rpx;
+		}
+		.space-line{
+			width: 2rpx;
+			height: 70rpx;
+			background-color: black;
+		}
+		.call-cancel{
+			margin: 20rpx;
+			width: 60%;
+			font-size: 28rpx;
+			background-color: #39C9BC;
+			color: white;
+		}
+	}
+	
 </style>

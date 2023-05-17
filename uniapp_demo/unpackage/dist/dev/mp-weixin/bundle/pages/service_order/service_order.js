@@ -107,7 +107,7 @@ try {
       return __webpack_require__.e(/*! import() | components/me-tabs/me-tabs */ "components/me-tabs/me-tabs").then(__webpack_require__.bind(null, /*! @/components/me-tabs/me-tabs.vue */ 480))
     },
     mescrollBody: function () {
-      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-body/mescroll-body */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-body/mescroll-body")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-body/mescroll-body.vue */ 413))
+      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-body/mescroll-body */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-body/mescroll-body")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-body/mescroll-body.vue */ 404))
     },
     orderList: function () {
       return __webpack_require__.e(/*! import() | components/order-list/order-list */ "components/order-list/order-list").then(__webpack_require__.bind(null, /*! @/components/order-list/order-list.vue */ 498))
@@ -174,8 +174,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _mescrollMixins = _interopRequireDefault(__webpack_require__(/*! @/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js */ 216));
-var _mock = __webpack_require__(/*! @/api/mock.js */ 217);
+var _mescrollMixins = _interopRequireDefault(__webpack_require__(/*! @/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js */ 208));
+var _mock = __webpack_require__(/*! @/api/mock.js */ 209);
 //
 //
 //

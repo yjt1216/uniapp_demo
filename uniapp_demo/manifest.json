@@ -67,7 +67,7 @@
                 "desc" : "你的位置信息将用于更好的数据展示"
             }
         },
-		"requiredPrivateInfos":["getLocation","chooseLocation"]
+        "requiredPrivateInfos" : [ "getLocation", "chooseLocation" ]
     },
     "mp-alipay" : {
         "usingComponents" : true
@@ -82,12 +82,11 @@
         "enable" : false
     },
     "vueVersion" : "2",
-	"h5": {
-		"router": {
-			"base": "/mobile",
-			"mode": "history"
-		},
-		"title": "加载中"
-		
-	}
+    "h5" : {
+        "router" : {
+            "base" : "/mobile",
+            "mode" : "history"
+        },
+        "title" : "加载中"
+    }
 }

@@ -77,6 +77,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recyclableRender", function() { return recyclableRender; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components
+try {
+  components = {
+    uniPopup: function () {
+      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 663))
+    },
+    uDivider: function () {
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-divider/u-divider */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-divider/u-divider")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-divider/u-divider.vue */ 647))
+    },
+  }
+} catch (e) {
+  if (
+    e.message.indexOf("Cannot find module") !== -1 &&
+    e.message.indexOf(".vue") !== -1
+  ) {
+    console.error(e.message)
+    console.error("1. 排查组件名称拼写是否正确")
+    console.error(
+      "2. 排查组件是否符合 easycom 规范，文档：https://uniapp.dcloud.net.cn/collocation/pages?id=easycom"
+    )
+    console.error(
+      "3. 若组件不符合 easycom 规范，需手动引入，并在 components 中注册该组件"
+    )
+  } else {
+    throw e
+  }
+}
 var render = function () {
   var _vm = this
   var _h = _vm.$createElement
@@ -122,6 +148,30 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _pages = _interopRequireDefault(__webpack_require__(/*! @/pages.json */ 401));
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -387,6 +437,7 @@ var _default2 = {
       }
       if (index === 2) {
         console.log('呼叫客服', index);
+        this.$refs.popup.open();
         return;
       }
       this.beforeData = {
@@ -449,6 +500,23 @@ var _default2 = {
         }
       }
       this.$emit('change', index);
+    },
+    /* 拦截 弹框 */closeCall: function closeCall() {
+      this.$refs.popup.close();
+    },
+    callPoliceFun: function callPoliceFun() {
+      console.log('报警call');
+      this.$refs.popup.close();
+      uni.makePhoneCall({
+        phoneNumber: '15995454800' //仅为示例
+      });
+    },
+    contactCustomerFun: function contactCustomerFun() {
+      console.log('联系客服call');
+      this.$refs.popup.close();
+      uni.makePhoneCall({
+        phoneNumber: '0512-66568029' //仅为示例
+      });
     }
   }
 };
