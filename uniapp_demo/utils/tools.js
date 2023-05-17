@@ -101,3 +101,70 @@ export function getLocationAuth(launchAuth) {
     })
   })
 }
+
+//判断是否为微信环境
+export function isWeixinClient() {
+	// #ifdef H5
+	var ua = navigator.userAgent.toLowerCase();
+	if (ua.match(/MicroMessenger/i) == "micromessenger") {
+		//这是微信环境
+		return true;
+	} else {
+		//这是非微信环境
+		return false;
+	}
+	// #endif
+	// #ifndef H5
+	return false
+	// #endif
+}
+
+//判断是否为安卓环境
+export function isAndroid() {
+	let u = navigator.userAgent;
+	return u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+}
+
+
+//获取url后的参数  以对象返回
+export function strToParams(str) {
+	var newparams = {}
+	for (let item of str.split('&')) {
+		newparams[item.split('=')[0]] = item.split('=')[1]
+	}
+	return newparams
+}
+
+//重写encodeURL函数
+export function urlencode(str) {
+	str = (str + '').toString();
+	return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').
+	replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+}
+
+/* 
+ * 一维数组截取为二维数组
+ * 5个一组
+**/
+export function arraySliceFive(data, array = [], optNum = 5) {
+	data = JSON.parse(JSON.stringify(data))
+	if (data.length <= optNum) {
+		data.length > 0 && array.push(data);
+		return array;
+	}
+	array.push(data.splice(0, optNum));
+	return arraySliceFive(data, array, optNum);
+}
+
+/* 对象参数转为以？&拼接的字符 */
+export function paramsToStr(params) {
+	let p = '';
+	if (typeof params == 'object') {
+		p = '?'
+		for (let props in params) {
+			p += `${props}=${params[props]}&`
+		}
+		p = p.slice(0, -1)
+	}
+	return p
+}

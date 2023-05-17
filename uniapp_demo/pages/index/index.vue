@@ -1,6 +1,12 @@
 <template>
 	<view class="index-page">
 		<nav-bar title="首页" :back="false"  backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
+		
+		<view class="banner">
+			<ad-swipers height="340rpx" :lists="bannerList"></ad-swipers>
+		</view>
+		
+		
 		<view class="group-title">功能示例</view>
 		
 		<navigator url="/pages/text_auto/text_auto">
@@ -68,7 +74,18 @@
 <script>
 	
 	export default {
-		
+		data(){
+			return {
+				bannerList:[
+					{
+						img: "https://didi.depin.tech/storage/file/2019/09/29/5d904d42e3222.jpg"
+					},
+					{
+						img: "https://didi.depin.tech/storage/file/2019/09/29/5d90512bccb32.jpg"
+					}
+				]
+			}
+		},
 		onLoad() {
 			uni.setNavigationBarTitle({
 				title: 'mescroll ('+ uni.getSystemInfoSync().platform + ')'
