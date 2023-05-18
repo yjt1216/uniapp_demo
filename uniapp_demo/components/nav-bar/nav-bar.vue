@@ -77,7 +77,11 @@
 		},
 		methods: {
 			goBack() {
-				uni.navigateBack();
+				this.$emit('goBack')
+				if(this.back) {
+					uni.navigateBack()
+				}
+				// uni.navigateBack();
 			},
 			init() {
 				// #ifdef MP-WEIXIN

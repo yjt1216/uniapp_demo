@@ -1,7 +1,14 @@
 <!-- 评估表单内容 -->
 <template>
   <view class="appraise-form">
-		<nav-bar title="待评估" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
+		<nav-bar title="待评估" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)" @goBack="naviLeftClick"></nav-bar>
+		
+		<!-- <u-navbar title="待评估" :titleStyle="{color:'#fff'}" :bgColor="'#39C9BC'" @leftClick="naviLeftClick">
+			<view slot="left">
+				<u-icon name="arrow-left" size="19" color="#fff"></u-icon>
+			</view>
+		</u-navbar> -->
+		
 		<view class="header-cont">头部</view>
         <view class="list-cont">
 			<scroll-view class="scrool-more" style="height: 100%" scroll-y="true" scroll-with-animation="true">
@@ -23,8 +30,8 @@
 						<view class="space-fill"></view>
 						<u-radio-group placement="column" >
 							
-							<view v-for="(item,qIndex) in question.options">
-								<u-radio :customStyle="{marginBottom:'8px'}" :key="qIndex"
+							<view v-for="(item,qIndex) in question.options" :key="qIndex">
+								<u-radio :customStyle="{marginBottom:'8px'}" 
 								:label="item.no + '、' + item.title" 
 								:name="item.title" 
 								@change="radioChange($event, question,index)">
@@ -138,11 +145,19 @@
 				
 			};
 		},
-
+		onBackPress(event) {
+			console.log('导航栏返回 拦截event',event)
+		},
 		onLoad() {
 			this.getFormData()
 		},
 		methods: {
+			naviLeftClick(){
+				console.log('导航栏返回 拦截')
+				var pages = getCurrentPages();
+				console.log('导航栏pages',pages)
+				uni.navigateBack()
+			},
 			/* 获取评估表单数据 */
 			getFormData() {
 				apiAssessFromData().then(res=>{

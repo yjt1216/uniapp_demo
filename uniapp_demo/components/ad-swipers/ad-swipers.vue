@@ -1,15 +1,15 @@
 <!-- <ad-swipers height="340rpx" :lists="list"></ad-swipers> -->
 <template>
-	<view class="swiper-wrap" :style="{height, padding}" v-if="lists.length">
+	<view class="swiper-wrap" :style="{height, padding}" >
 		<view class="swiper-con" :style="{borderRadius: radius}">
 			<!-- 用于轮播图 -->
-			<template v-if="lists.length == 0">
+			<template v-if="lists.length > 0">
 				<swiper class="swiper" :autoplay="autoplay" :circular="circular" @change="swiperChange"
 					:previous-margin="previousMargin" display-multiple-items="1">
 					<swiper-item v-for="(item, index) in lists" :key="index">
 						<view class="swiper-item-view" :data-item="item" style="width:100%;height:100%;"  @click="goPage(item)">
-							<u-image mode="aspectFill" :width="'calc(100% - ' + previousMargin + ')'" height="100%"
-								:border-radius="radius" :src="item.image"></u-image>
+							<image mode="scaleToFill" :width="'calc(100% - ' + previousMargin + ')'" height="100%"
+								:border-radius="radius" :src="item.image"></image>
 						</view>
 						
 					</swiper-item>
@@ -21,9 +21,9 @@
 			</template>
 			<!-- 用于 占位 -->
 			<template v-else >
-				<view  style="width:100%;height:100%;" >
-					<u-image mode="aspectFill" :width="'calc(100% - ' + previousMargin + ')'" height="100%"
-						:border-radius="radius" :src="'https://didi.depin.tech/storage/file/2019/09/29/5d904d42e3222.jpg'"></u-image>
+				<view class="space-image" style="width:100%;height:100%;" >
+					<image mode="scaleToFill" :width="'calc(100% - ' + previousMargin + ')'" height="100%"
+						:border-radius="radius" :src="'/static/images/didi.jpg'"></image>
 				</view>
 			</template>
 		</view>
@@ -79,7 +79,9 @@
 		},
 		
 		methods: {
-			
+			goPage(item){
+				
+			},
 			swiperChange(e) {
 				this.currentSwiper = e.detail.current
 			}
@@ -91,6 +93,8 @@
 	.swiper-wrap {
 		overflow: hidden;
 		box-sizing: content-box;
+
+		
 
 		.swiper-con {
 			position: relative;
@@ -106,7 +110,7 @@
 			width: 100%;
 			height: 100%;
 			position: relative;
-			
+			text-align: center;
 			
 			.slide-image {
 				height: 100%;
@@ -134,6 +138,9 @@
 					background-color: $-color-primary;
 				}
 			}
+		}
+		.space-image{
+			text-align: center;
 		}
 	}
 </style>

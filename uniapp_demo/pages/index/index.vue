@@ -1,5 +1,6 @@
 <template>
 	<view class="index-page">
+		<!-- <u-navbar title="首页" bgColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></u-navbar> -->
 		<nav-bar title="首页" :back="false"  backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		
 		<view class="banner">
@@ -9,9 +10,7 @@
 		
 		<view class="group-title">功能示例</view>
 		
-		<navigator url="/pages/text_auto/text_auto">
-			<view class="demo-li">段落展开缩放</view>
-		</navigator>
+		
 		<navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
 			<view class="demo-li">轮播图+商品列表 吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>
@@ -78,12 +77,13 @@
 			return {
 				bannerList:[
 					{
-						img: "https://didi.depin.tech/storage/file/2019/09/29/5d904d42e3222.jpg"
+						image: "https://didi.depin.tech/storage/file/2019/09/29/5d904d42e3222.jpg"
 					},
 					{
-						img: "https://didi.depin.tech/storage/file/2019/09/29/5d90512bccb32.jpg"
+						image: "https://didi.depin.tech/storage/file/2019/09/29/5d90512bccb32.jpg"
 					}
-				]
+				],
+				bannerImages:[]
 			}
 		},
 		onLoad() {

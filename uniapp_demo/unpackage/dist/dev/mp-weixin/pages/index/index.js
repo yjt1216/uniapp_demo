@@ -101,10 +101,13 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 389))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 391))
+    },
+    adSwipers: function () {
+      return Promise.all(/*! import() | components/ad-swipers/ad-swipers */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/ad-swipers/ad-swipers")]).then(__webpack_require__.bind(null, /*! @/components/ad-swipers/ad-swipers.vue */ 398))
     },
     yTabbar: function () {
-      return Promise.all(/*! import() | components/y-tabbar/y-tabbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/y-tabbar/y-tabbar")]).then(__webpack_require__.bind(null, /*! @/components/y-tabbar/y-tabbar.vue */ 396))
+      return Promise.all(/*! import() | components/y-tabbar/y-tabbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/y-tabbar/y-tabbar")]).then(__webpack_require__.bind(null, /*! @/components/y-tabbar/y-tabbar.vue */ 405))
     },
   }
 } catch (e) {
@@ -234,7 +237,22 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
 var _default = {
+  data: function data() {
+    return {
+      bannerList: [{
+        image: "https://didi.depin.tech/storage/file/2019/09/29/5d904d42e3222.jpg"
+      }, {
+        image: "https://didi.depin.tech/storage/file/2019/09/29/5d90512bccb32.jpg"
+      }],
+      bannerImages: []
+    };
+  },
   onLoad: function onLoad() {
     uni.setNavigationBarTitle({
       title: 'mescroll (' + uni.getSystemInfoSync().platform + ')'

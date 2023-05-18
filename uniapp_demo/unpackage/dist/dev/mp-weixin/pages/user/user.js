@@ -101,7 +101,7 @@ var components
 try {
   components = {
     yTabbar: function () {
-      return Promise.all(/*! import() | components/y-tabbar/y-tabbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/y-tabbar/y-tabbar")]).then(__webpack_require__.bind(null, /*! @/components/y-tabbar/y-tabbar.vue */ 396))
+      return Promise.all(/*! import() | components/y-tabbar/y-tabbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/y-tabbar/y-tabbar")]).then(__webpack_require__.bind(null, /*! @/components/y-tabbar/y-tabbar.vue */ 405))
     },
   }
 } catch (e) {
