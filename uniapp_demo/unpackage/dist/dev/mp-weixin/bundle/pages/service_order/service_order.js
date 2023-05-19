@@ -101,16 +101,16 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 391))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 397))
     },
     meTabs: function () {
-      return __webpack_require__.e(/*! import() | components/me-tabs/me-tabs */ "components/me-tabs/me-tabs").then(__webpack_require__.bind(null, /*! @/components/me-tabs/me-tabs.vue */ 489))
+      return __webpack_require__.e(/*! import() | components/me-tabs/me-tabs */ "components/me-tabs/me-tabs").then(__webpack_require__.bind(null, /*! @/components/me-tabs/me-tabs.vue */ 504))
     },
     mescrollBody: function () {
-      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-body/mescroll-body */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-body/mescroll-body")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-body/mescroll-body.vue */ 413))
+      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-body/mescroll-body */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-body/mescroll-body")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-body/mescroll-body.vue */ 419))
     },
     orderList: function () {
-      return __webpack_require__.e(/*! import() | components/order-list/order-list */ "components/order-list/order-list").then(__webpack_require__.bind(null, /*! @/components/order-list/order-list.vue */ 507))
+      return __webpack_require__.e(/*! import() | components/order-list/order-list */ "components/order-list/order-list").then(__webpack_require__.bind(null, /*! @/components/order-list/order-list.vue */ 522))
     },
   }
 } catch (e) {

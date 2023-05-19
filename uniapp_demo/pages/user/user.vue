@@ -1,6 +1,8 @@
 <template>
 	<view class="user">
 		<view class="top-view" :style="[headBackground]">
+			
+			
 			<!-- 登录状态 头部信息 -->
 			<view v-if="isLogin" class="login-info" :style="{'padding-top':topH+'px'}">
 				<image class="header-image" src="../../static/user/default_header.png"></image>
@@ -108,6 +110,14 @@
 				</view>
 				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
 			</view>
+			<view class="divider"></view>
+			<view class="menu-item" >
+				<view class="u-r">
+					<u-icon name="scan" color="#39C9BC" size="20"></u-icon>
+					<view class="menu-text u-m-l-20">收款码</view>
+				</view>
+				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+			</view>
 			
 			<view class="divider"></view>
 			
@@ -171,6 +181,13 @@
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
+			
+			
+			.qr-code{
+				width: 60rpx;
+				height: 60rpx;
+				background-color: red
+			}
 			
 			.un-login-info{
 				.login-status {

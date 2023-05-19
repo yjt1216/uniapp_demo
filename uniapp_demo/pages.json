@@ -154,6 +154,18 @@
 					"style": {
 						"navigationBarTitleText": "卡片"
 					}
+				},
+				{
+					"path": "pages/video_player/video_player",
+					"style": {
+						"navigationBarTitleText": "video"
+					}
+				},
+				{
+					"path": "pages/native_video/native_video",
+					"style": {
+						"navigationBarTitleText": "native video"
+					}
 				}
 			]
 		}

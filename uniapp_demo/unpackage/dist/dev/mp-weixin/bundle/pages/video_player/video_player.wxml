@@ -1,0 +1,1 @@
+<view class="video-player"><view style="width:100vw;height:400rpx;"><hic-video-player vue-id="f6edd73e-1" src="{{video_url}}" poster="{{poster}}" title="明智之举" upperRightText="VAE" bind:__l="__l"></hic-video-player></view></view>

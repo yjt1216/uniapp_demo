@@ -65,6 +65,14 @@
 			<view class="demo-li"> 卡片list<text class="demo-tip"> 卡片 </text></view>
 		</navigator>
 		
+		<navigator url="/bundle/pages/video_player/video_player">
+			<view class="demo-li"> video player<text class="demo-tip"> video_player </text></view>
+		</navigator>
+		
+		<navigator url="/bundle/pages/native_video/native_video">
+			<view class="demo-li"> native video player<text class="demo-tip"> video_player </text></view>
+		</navigator>
+		
 		<y-tabbar ref="tabbar" native></y-tabbar>
 		
 	</view>

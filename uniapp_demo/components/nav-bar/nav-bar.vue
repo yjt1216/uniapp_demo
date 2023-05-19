@@ -76,6 +76,7 @@
 			this.init();
 		},
 		methods: {
+			/* 导航左键 返回 */
 			goBack() {
 				this.$emit('goBack')
 				if(this.back) {

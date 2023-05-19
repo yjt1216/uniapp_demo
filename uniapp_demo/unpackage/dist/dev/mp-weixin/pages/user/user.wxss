@@ -402,6 +402,11 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked.data-v-80842834::before {
   justify-content: center;
   align-items: center;
 }
+.user .top-view .qr-code.data-v-80842834 {
+  width: 60rpx;
+  height: 60rpx;
+  background-color: red;
+}
 .user .top-view .un-login-info .login-status.data-v-80842834 {
   color: white;
   text-align: center;
