@@ -166,6 +166,18 @@
 					"style": {
 						"navigationBarTitleText": "native video"
 					}
+				},
+				{
+					"path": "pages/video_live/video_live",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "pages/picker/picker",
+					"style": {
+						"navigationStyle": "custom"
+					}
 				}
 			]
 		}

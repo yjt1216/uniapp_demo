@@ -3,9 +3,9 @@
 		<!-- <u-navbar title="首页" bgColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></u-navbar> -->
 		<nav-bar title="首页" :back="false"  backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		
-		<view class="banner">
+		<!-- <view class="banner">
 			<ad-swipers height="340rpx" :lists="bannerList"></ad-swipers>
-		</view>
+		</view> -->
 		
 		
 		<view class="group-title">功能示例</view>
@@ -22,9 +22,13 @@
 			<view class="demo-li">服务订单<text class="demo-tip"> 切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/form_page/form_page">
-			<view class="demo-li">表单<text class="demo-tip"> 表单界面</text></view>
+		<navigator url="/bundle/pages/picker/picker">
+			<view class="demo-li">picker<text class="demo-tip"> 选择 </text></view>
 		</navigator>
+		
+		<!-- <navigator url="/bundle/pages/form_page/form_page">
+			<view class="demo-li">表单<text class="demo-tip"> 表单界面</text></view>
+		</navigator> -->
 		
 		<navigator url="/bundle/pages/upload_img/upload_img">
 			<view class="demo-li">上传照片<text class="demo-tip"> 证件照</text></view>
@@ -69,9 +73,16 @@
 			<view class="demo-li"> video player<text class="demo-tip"> video_player </text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/native_video/native_video">
+		<!-- <navigator url="/bundle/pages/native_video/native_video">
 			<view class="demo-li"> native video player<text class="demo-tip"> video_player </text></view>
+		</navigator> -->
+		
+		<navigator url="/bundle/pages/video_live/video_live">
+			<view class="demo-li"> video live <text class="demo-tip"> 直播 测试 </text></view>
 		</navigator>
+		
+		
+		
 		
 		<y-tabbar ref="tabbar" native></y-tabbar>
 		
