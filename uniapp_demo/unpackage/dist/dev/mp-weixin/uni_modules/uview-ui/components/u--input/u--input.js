@@ -133,10 +133,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _props = _interopRequireDefault(__webpack_require__(/*! ../u-input/props.js */ 466));
+var _props = _interopRequireDefault(__webpack_require__(/*! ../u-input/props.js */ 474));
 var uvInput = function uvInput() {
   Promise.all(/*! require.ensure | uni_modules/uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-input/u-input")]).then((function () {
-    return resolve(__webpack_require__(/*! ../u-input/u-input.vue */ 461));
+    return resolve(__webpack_require__(/*! ../u-input/u-input.vue */ 469));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {

@@ -507,4 +507,13 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked.data-v-80842834::before {
   width: 95%;
   height: 1rpx;
 }
+.user .storage-right.data-v-80842834 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.user .storage-size.data-v-80842834 {
+  margin-right: 10rpx;
+}
 

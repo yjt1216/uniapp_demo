@@ -78,7 +78,7 @@ var components
 try {
   components = {
     mescrollUni: function () {
-      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.vue */ 727))
+      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.vue */ 735))
     },
     orderList: function () {
       return __webpack_require__.e(/*! import() | components/order-list/order-list */ "components/order-list/order-list").then(__webpack_require__.bind(null, /*! @/components/order-list/order-list.vue */ 535))

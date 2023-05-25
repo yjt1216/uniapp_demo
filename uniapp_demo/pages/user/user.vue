@@ -120,6 +120,19 @@
 			</view>
 			
 			<view class="divider"></view>
+			<view class="menu-item" @click="clearStorage">
+				<view class="u-r">
+					<u-icon name="scan" color="#39C9BC" size="20"></u-icon>
+					<view class="menu-text u-m-l-20">清除缓存</view>
+				</view>
+				
+				<view class="storage-right">
+					<view class="storage-size">{{storageSize}}</view>
+					<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+				</view>
+			</view>
+			<view class="divider"></view>
+			
 			
 		</view>
 		<y-tabbar ref="tabbar" native></y-tabbar>
@@ -131,12 +144,15 @@
 	export default {
 		data() {
 			return {
-				topH: uni.getSystemInfoSync().statusBarHeight
+				topH: uni.getSystemInfoSync().statusBarHeight,
+				/* 小程序缓存 */
+				storageSize:'0M',
 			}
 		},
 		onLoad() {
 			console.log('on load')
 			console.log('user isLogin',this.isLogin)
+			this.getStorageSize()//获取缓存
 		},
 		methods: {
 			goLogin() {
@@ -152,8 +168,53 @@
 			// 服务对象
 			serviceObject(){
 				
-			}
-			
+			},
+			//获取app的缓存
+			getStorageSize:function(){
+				let that = this;
+				uni.getStorageInfo({
+					success(res) {
+						//console.log(res.keys);
+						//console.log(res.limitSize);
+						let size = res.currentSize;
+						if (size < 1024) {
+							that.storageSize = size + ' B';
+						} else if (size/1024>=1 && size/1024/1024<1) {
+							that.storageSize = Math.floor(size/1024*100)/100 + ' KB';
+						} else if (size/1024/1024>=1) {
+							that.storageSize = Math.floor(size/1024/1024*100)/100 + ' M';
+						}
+					}
+				})
+			},
+			//删除 缓存
+			clearStorage:function (){
+					let that = this;
+					uni.showModal({
+						title:'提示',
+						content:'确定清除缓存吗?',
+						confirmText:'立即清除',
+						success(res) {
+							if(res.confirm){
+								uni.clearStorageSync();
+								//重新获取并显示清除后的缓存大小
+								that.getStorageSize();
+								uni.showToast({
+									title:'清除成功',
+									icon:'none'
+								})
+								//清除完后跳到登录页面
+								setTimeout(()=>{
+									uni.redirectTo({
+										url:'/pages/login/login',
+										animationType: 'pop-in',
+										animationDuration: 200
+									})
+								},1300)
+							}
+						}
+					})
+			 },
 		},
 		computed: {
 			// 头部背景色
@@ -299,6 +360,15 @@
 				width: 95%;
 				height: 1rpx;
 			}
+		}
+		.storage-right{
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-around;
+		}
+		.storage-size{
+			margin-right: 10rpx;
 		}
 	}
 </style>

@@ -304,16 +304,33 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   data: function data() {
     return {
-      topH: uni.getSystemInfoSync().statusBarHeight
+      topH: uni.getSystemInfoSync().statusBarHeight,
+      /* 小程序缓存 */
+      storageSize: '0M'
     };
   },
   onLoad: function onLoad() {
     console.log('on load');
     console.log('user isLogin', this.isLogin);
+    this.getStorageSize(); //获取缓存
   },
+
   methods: {
     goLogin: function goLogin() {
       this.$Router.push({
@@ -326,7 +343,53 @@ var _default = {
       });
     },
     // 服务对象
-    serviceObject: function serviceObject() {}
+    serviceObject: function serviceObject() {},
+    //获取app的缓存
+    getStorageSize: function getStorageSize() {
+      var that = this;
+      uni.getStorageInfo({
+        success: function success(res) {
+          //console.log(res.keys);
+          //console.log(res.limitSize);
+          var size = res.currentSize;
+          if (size < 1024) {
+            that.storageSize = size + ' B';
+          } else if (size / 1024 >= 1 && size / 1024 / 1024 < 1) {
+            that.storageSize = Math.floor(size / 1024 * 100) / 100 + ' KB';
+          } else if (size / 1024 / 1024 >= 1) {
+            that.storageSize = Math.floor(size / 1024 / 1024 * 100) / 100 + ' M';
+          }
+        }
+      });
+    },
+    //删除 缓存
+    clearStorage: function clearStorage() {
+      var that = this;
+      uni.showModal({
+        title: '提示',
+        content: '确定清除缓存吗?',
+        confirmText: '立即清除',
+        success: function success(res) {
+          if (res.confirm) {
+            uni.clearStorageSync();
+            //重新获取并显示清除后的缓存大小
+            that.getStorageSize();
+            uni.showToast({
+              title: '清除成功',
+              icon: 'none'
+            });
+            //清除完后跳到登录页面
+            setTimeout(function () {
+              uni.redirectTo({
+                url: '/pages/login/login',
+                animationType: 'pop-in',
+                animationDuration: 200
+              });
+            }, 1300);
+          }
+        }
+      });
+    }
   },
   computed: {
     // 头部背景色
