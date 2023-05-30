@@ -320,11 +320,11 @@
 					return
 				}
 				
-				if(index === 2){
-					console.log('呼叫客服',index)
-					this.$refs.popup.open()
-					return
-				}
+				// if(index === 2){
+				// 	console.log('呼叫客服',index)
+				// 	this.$refs.popup.open()
+				// 	return
+				// }
 				
 				this.beforeData = {
 					newIndex: index,

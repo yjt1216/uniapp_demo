@@ -121,8 +121,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _mescrollUniOption = _interopRequireDefault(__webpack_require__(/*! ../mescroll-uni/mescroll-uni-option.js */ 438));
-var _mescrollI18n = _interopRequireDefault(__webpack_require__(/*! ../mescroll-uni/mescroll-i18n.js */ 439));
+var _mescrollUniOption = _interopRequireDefault(__webpack_require__(/*! ../mescroll-uni/mescroll-uni-option.js */ 445));
+var _mescrollI18n = _interopRequireDefault(__webpack_require__(/*! ../mescroll-uni/mescroll-i18n.js */ 446));
 //
 //
 //

@@ -81,7 +81,7 @@ try {
       return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.vue */ 735))
     },
     goodList: function () {
-      return __webpack_require__.e(/*! import() | components/good-list/good-list */ "components/good-list/good-list").then(__webpack_require__.bind(null, /*! @/components/good-list/good-list.vue */ 445))
+      return __webpack_require__.e(/*! import() | components/good-list/good-list */ "components/good-list/good-list").then(__webpack_require__.bind(null, /*! @/components/good-list/good-list.vue */ 452))
     },
   }
 } catch (e) {
