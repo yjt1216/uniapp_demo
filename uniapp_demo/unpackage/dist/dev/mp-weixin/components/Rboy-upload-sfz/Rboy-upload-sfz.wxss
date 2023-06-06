@@ -1,6 +1,7 @@
 .Rboy-box.data-v-2e67e762 {
   display: flex;
   justify-content: space-between;
+  padding: 10rpx;
 }
 .Rboy-box .Rboy-obverse.data-v-2e67e762 {
   border-radius: 10rpx;

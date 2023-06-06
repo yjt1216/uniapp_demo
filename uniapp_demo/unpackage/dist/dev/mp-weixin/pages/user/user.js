@@ -101,10 +101,10 @@ var components
 try {
   components = {
     uIcon: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-icon/u-icon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-icon/u-icon")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-icon/u-icon.vue */ 464))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-icon/u-icon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-icon/u-icon")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-icon/u-icon.vue */ 465))
     },
     yTabbar: function () {
-      return Promise.all(/*! import() | components/y-tabbar/y-tabbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/y-tabbar/y-tabbar")]).then(__webpack_require__.bind(null, /*! @/components/y-tabbar/y-tabbar.vue */ 429))
+      return Promise.all(/*! import() | components/y-tabbar/y-tabbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/y-tabbar/y-tabbar")]).then(__webpack_require__.bind(null, /*! @/components/y-tabbar/y-tabbar.vue */ 430))
     },
   }
 } catch (e) {

@@ -1,3 +1,8 @@
+<!-- 
+	<Rboy-upload-sfz :obverse-url="formData.obverseUrl" 
+		:reverse-url="formData.reverseUrl" 
+		@selectChange="sfz_chagne" @del="del_btn"></Rboy-upload-sfz> 
+-->
 <template>
 	<div>
 		<view class="Rboy-box">
@@ -115,6 +120,7 @@
 	.Rboy-box {
 		display: flex;
 		justify-content: space-between;
+		padding: 10rpx;
 		// align-items: center;
 
 		.Rboy-obverse {
@@ -125,6 +131,7 @@
 			display: flex;
 			flex-direction: column;
 			position: relative;
+			
 
 			.obverseimg {
 				width: @imgWidth;
