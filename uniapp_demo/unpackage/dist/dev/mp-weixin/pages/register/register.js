@@ -101,7 +101,7 @@ var components
 try {
   components = {
     ljsTop: function () {
-      return Promise.all(/*! import() | components/ljs-top/ljs-top */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/ljs-top/ljs-top")]).then(__webpack_require__.bind(null, /*! @/components/ljs-top/ljs-top.vue */ 492))
+      return Promise.all(/*! import() | components/ljs-top/ljs-top */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/ljs-top/ljs-top")]).then(__webpack_require__.bind(null, /*! @/components/ljs-top/ljs-top.vue */ 497))
     },
   }
 } catch (e) {
@@ -211,11 +211,13 @@ exports.default = void 0;
 var _default = {
   data: function data() {
     return {
+      /* 是否勾选协议 */
       gouxSta: false,
+      /* 验证码倒计时 */
       Qztime: '',
+      /* 倒计时是否开始 */
       QzyzmStare: false,
-      Qztext: '获取验证码',
-      isAgreement: false
+      Qztext: '获取验证码'
     };
   },
   onLoad: function onLoad() {},

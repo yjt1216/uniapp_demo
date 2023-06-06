@@ -3,48 +3,13 @@
 		<nav-bar title="picker"  backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		
 		<view class="content" style="padding: 30rpx;">
-			<view class="form-item-label"><text>时间选择器:</text></view>
-			<fy-picker v-model="timeValue" mode="date">
-				<view class="form-item-content">{{ !timeValue ? '请选择开始时间' : timeValue }}</view>
-			</fy-picker>
-		
-			<view class="form-item-label"><text>单列选择器:</text></view>
-			<fy-picker v-model="dataValue" :range="range" @confirm="onconfirm">
-				<view class="form-item-content">{{ dataValue !== 0 && !dataValue ? '请选择' : range[dataValue] }}</view>
-			</fy-picker>
-		
-		
-			<view class="form-item-label"><text>多列选择器:</text></view>
-			<fy-picker mode="multiSelector" v-model="data2Value" :range="range2" @confirm="onconfirm2">
-				<view class="form-item-content">{{ data2Text ? data2Text : '请选择' }}</view>
-			</fy-picker>
-		
-			<view class="form-item-label"><text>单列对象选择器:</text></view>
-			<fy-picker v-model="data3Value" :range="range3" range-key="text" @confirm="onconfirm3">
-				<view class="form-item-content">{{ data3Value !== 0 && !data3Value ? '请选择' : range3[data3Value]['text'] }}</view>
-			</fy-picker>
-		
-			<view class="form-item-label"><text>多列对象选择器:</text></view>
-			<fy-picker mode="multiSelector" v-model="data4Value" :range="range4" range-key="text" @confirm="onconfirm4">
-				<view class="form-item-content">{{ data4Text ? data4Text : '请选择' }}</view>
-			</fy-picker>
 			
+		
 			<view class="form-item-label"><text>护士等级:</text></view>
-			<!-- <fy-picker v-model="nurseLevelValue" :range="nurseLevelList" range-key="name" @confirm="onconfirm3">
-				<view class="form-item-content">{{ nurseLevelValue !== 0 && !nurseLevelValue ? '请选择' : nurseLevelList[nurseLevelValue]['name'] }}</view>
-			</fy-picker> -->
+			
 			
 			<u-form labelPosition="left"  :model="model" ref="form">
-				<!-- <u-form-item label="资   历:" :label-style="{'font-size':'20rpx'}" labelWidth="80" prop="numberValue">
-					<fy-picker v-model="nurseLevelValue" :range="nurseLevelList" range-key="name" @confirm="selectNurseLeve">
-						<view class="form-item-content">{{ nurseLevelValue !== 0 && !nurseLevelValue ? '请选择资历' : nurseLevelList[nurseLevelValue]['name'] }}</view>
-					</fy-picker>
-					<u-icon
-						slot="right"
-						name="arrow-right"
-						color="#39C9BC"
-					></u-icon>
-				</u-form-item> -->
+				
 				
 				<u-form-item label="资   历:" :label-style="{'font-size':'20rpx'}" labelWidth="80" prop="numberValue">
 					<view class="uni-list-cell-db">
@@ -62,20 +27,6 @@
 				
 			</u-form>
 			
-			<!-- <view class="uni-title uni-common-pl">地区选择器</view> -->
-			<!-- <view class="uni-list">
-				<view class="uni-list-cell">
-					<view class="uni-list-cell-left">
-						当前选择
-					</view>
-					<view class="uni-list-cell-db">
-						<picker @change="bindPickerChange" :value="index" :range="range">
-							<view class="uni-input">{{range[index]}}</view>
-						</picker>
-					</view>
-				</view>
-			</view> -->
-			
 			
 		</view>
 	</view>
@@ -84,27 +35,15 @@
 </template>
 
 <script>
-import FyPicker from '@/components/fy-picker/fy-picker.vue'
+
 export default {
-	components: { FyPicker },
+	
 	data() {
 		return {
 			timeValue: '2021-07-01',
 
 			index: 0,
-			dataValue: '',
-            range: ['中国', '美国', '巴西', '日本'],
-
-			data2Value: [],
-			data2Text: '',
-			range2: [["a","b"], ["c","d"]],
-
-			data3Value: '',
-			range3: [{ text: '中国', value: 1 }, { text: '美国', value: 2 }, { text: '巴西', value: 3 }, { text: '日本', value: 4 }],
-
-			data4Value: [],
-			data4Text: '',
-			range4: [[{ text: 'aa', value: 1 }, { text: 'bb', value: 2 }], [{ text: 'cc', value: 3 }, { text: 'dd', value: 4 }]],
+			
 			nurseLevelValue:'请选择资历',
 			nurseLevelList: 
 			[

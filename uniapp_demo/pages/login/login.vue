@@ -25,6 +25,8 @@
 			</view>
 			<view class="uni-form-item uni-column">
 				<u-input placeholder="请输入验证码" v-model="value" type="number" />
+				
+				<label class="regFrom_tom_yzlabel" :style="{ color : QzyzmStare?'#cccccc':'#2ebbfe'}" @click="QzyzmFun">{{Qztime}}{{Qztext}}</label>
 			</view>
 			<button form-type="submit" class="loginbtn" type="default">登录</button>
 		</form>
@@ -66,7 +68,12 @@
 				value: '',
 				loginWay: '短信验证登录',
 				seconds: 60,
-				tips: ''
+				tips: '',
+				/* 验证码倒计时 */
+				Qztime:'',
+				/* 倒计时是否开始 */
+				QzyzmStare:false,
+				Qztext:'获取验证码'
 			}
 		},
 		methods:{
@@ -75,7 +82,41 @@
 				console.log("页面跳转")
 			
 			},
-			//微信登录
+			/* 获取验证码 */
+			QzyzmFun(){
+				console.log("获取验证码")
+				var num = 60;
+				if(this.QzyzmStare == false){
+					this.rquestSendCodeFun()
+					console.log("获取验证码 if",this.Qztime)
+					this.Qztime ='60';
+					this.Qztext = 's后获取';
+					this.QzyzmStare = true;
+					var interval = setInterval(() =>{
+							--this.Qztime
+						},1000)
+					setTimeout(()=>{
+						clearInterval(interval)
+						this.Qztext = '获取验证码'
+						this.Qztime = ''
+						this.QzyzmStare = false
+						
+					},60000)				
+				}else{
+					console.log("获取验证码 期间 else",this.Qztime)
+					uni.showToast({
+						title:'正在获取验证码...',
+						icon:'none'
+					})
+				}
+			},
+			/* 请求发送验证码 server */
+			rquestSendCodeFun(){
+				console.log("请求发送验证码")
+			},
+			
+			
+			/* 微信登录 */
 			wechatLogin(){		
 				let _that = this;
 				uni.getSetting({
@@ -147,38 +188,8 @@
 				}
 				
 			},
-			//
-			codeChange(text) {
-				// console.log("codeChange",text)
-				this.tips = text;
-			},
-			//点击获取验证码倒计时
-			getCode(){
-				console.log("aa")
-				if(this.$refs.uCode.canGetCode) {
-					// 模拟向后端请求验证码
-					uni.showLoading({
-						title: '正在获取验证码'
-					})
-					setTimeout(() => {
-						uni.hideLoading();
-						// 这里此提示会被this.start()方法中的提示覆盖
-						this.$u.toast('验证码已发送');
-						// 通知验证码组件内部开始倒计时
-						this.$refs.uCode.start();
-					}, 2000);
-				} else {
-					
-					this.$u.toast('倒计时结束后再发送');
-				}
-			},
-			end() {
-				this.$u.toast('倒计时结束');
-			},
-			start() {
-				console.log("aa1111111")
-				this.$u.toast('倒计时开始');
-			}
+			
+			
 			
 		}
 	}
@@ -202,14 +213,6 @@
 			width: 100%;
 			padding: 30rpx;
 			
-			.loginbtn{
-				margin: 20rpx; 
-				margin-top: 60rpx;
-				background: #39C9BC;
-				color: #fff;
-				font-size: 30rpx;
-			}
-			
 			.uni-form-item{
 				display: flex;
 				align-items: center;
@@ -220,7 +223,23 @@
 				u-input{
 					flex: 1;
 				}
+				// .get-code{
+				// 	color: #C8C7CC;
+				// }
 				
+				.regFrom_tom_yzlabel{
+					width: 60%; 
+					text-align: right; 
+					font-size: 28rpx;
+				}
+			}
+			
+			.loginbtn{
+				margin: 20rpx; 
+				margin-top: 60rpx;
+				background: #39C9BC;
+				color: #fff;
+				font-size: 30rpx;
 			}
 		}
 		.account-login-form {

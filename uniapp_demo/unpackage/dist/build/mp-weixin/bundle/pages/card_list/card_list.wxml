@@ -1,1 +1,1 @@
-<view class="_div"></view>
+<view class="card-list"><nav-bar vue-id="5d0137e5-1" title="卡片列表" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)" bind:__l="__l"></nav-bar></view>

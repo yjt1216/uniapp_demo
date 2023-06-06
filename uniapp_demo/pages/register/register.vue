@@ -48,11 +48,13 @@
 
 	   data(){
 			return {
+				/* 是否勾选协议 */
 				gouxSta:false,
+				/* 验证码倒计时 */
 				Qztime:'',
+				/* 倒计时是否开始 */
 				QzyzmStare:false,
-				Qztext:'获取验证码',
-				isAgreement: false
+				Qztext:'获取验证码'
 			}
 		},
 		onLoad(){

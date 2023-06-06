@@ -13,13 +13,6 @@
   width: 100%;
   padding: 30rpx;
 }
-.loginWrap .sms-login-form .loginbtn {
-  margin: 20rpx;
-  margin-top: 60rpx;
-  background: #39C9BC;
-  color: #fff;
-  font-size: 30rpx;
-}
 .loginWrap .sms-login-form .uni-form-item {
   display: flex;
   align-items: center;
@@ -30,6 +23,18 @@
 }
 .loginWrap .sms-login-form .uni-form-item u-input {
   flex: 1;
+}
+.loginWrap .sms-login-form .uni-form-item .regFrom_tom_yzlabel {
+  width: 60%;
+  text-align: right;
+  font-size: 28rpx;
+}
+.loginWrap .sms-login-form .loginbtn {
+  margin: 20rpx;
+  margin-top: 60rpx;
+  background: #39C9BC;
+  color: #fff;
+  font-size: 30rpx;
 }
 .loginWrap .account-login-form {
   margin-top: 50rpx;

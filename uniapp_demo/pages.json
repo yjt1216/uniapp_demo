@@ -178,6 +178,13 @@
 					"style": {
 						"navigationStyle": "custom"
 					}
+				},
+				/* 身份认证 */
+				{
+					"path": "pages/nurse_auth/nurse_auth",
+					"style": {
+						"navigationStyle": "custom"
+					}
 				}
 			]
 		}

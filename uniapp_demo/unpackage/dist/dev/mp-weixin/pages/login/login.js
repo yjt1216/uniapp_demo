@@ -101,16 +101,16 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 417))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 422))
     },
     uInput: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-input/u-input.vue */ 468))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-input/u-input.vue */ 473))
     },
     uCheckboxGroup: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group.vue */ 476))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group.vue */ 481))
     },
     uCheckbox: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-checkbox/u-checkbox */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-checkbox/u-checkbox")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-checkbox/u-checkbox.vue */ 484))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-checkbox/u-checkbox */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-checkbox/u-checkbox")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-checkbox/u-checkbox.vue */ 489))
     },
   }
 } catch (e) {
@@ -231,6 +231,8 @@ exports.default = void 0;
 //
 //
 //
+//
+//
 var _default = {
   data: function data() {
     return {
@@ -240,7 +242,12 @@ var _default = {
       value: '',
       loginWay: '短信验证登录',
       seconds: 60,
-      tips: ''
+      tips: '',
+      /* 验证码倒计时 */
+      Qztime: '',
+      /* 倒计时是否开始 */
+      QzyzmStare: false,
+      Qztext: '获取验证码'
     };
   },
   methods: {
@@ -248,8 +255,37 @@ var _default = {
     formSubmit: function formSubmit() {
       console.log("页面跳转");
     },
-    //微信登录
-    wechatLogin: function wechatLogin() {
+    /* 获取验证码 */QzyzmFun: function QzyzmFun() {
+      var _this = this;
+      console.log("获取验证码");
+      var num = 60;
+      if (this.QzyzmStare == false) {
+        this.rquestSendCodeFun();
+        console.log("获取验证码 if", this.Qztime);
+        this.Qztime = '60';
+        this.Qztext = 's后获取';
+        this.QzyzmStare = true;
+        var interval = setInterval(function () {
+          --_this.Qztime;
+        }, 1000);
+        setTimeout(function () {
+          clearInterval(interval);
+          _this.Qztext = '获取验证码';
+          _this.Qztime = '';
+          _this.QzyzmStare = false;
+        }, 60000);
+      } else {
+        console.log("获取验证码 期间 else", this.Qztime);
+        uni.showToast({
+          title: '正在获取验证码...',
+          icon: 'none'
+        });
+      }
+    },
+    /* 请求发送验证码 server */rquestSendCodeFun: function rquestSendCodeFun() {
+      console.log("请求发送验证码");
+    },
+    /* 微信登录 */wechatLogin: function wechatLogin() {
       var _that = this;
       uni.getSetting({
         success: function success(res) {
@@ -315,38 +351,6 @@ var _default = {
         console.log("111111");
         this.loginWay = '短信验证登录';
       }
-    },
-    //
-    codeChange: function codeChange(text) {
-      // console.log("codeChange",text)
-      this.tips = text;
-    },
-    //点击获取验证码倒计时
-    getCode: function getCode() {
-      var _this = this;
-      console.log("aa");
-      if (this.$refs.uCode.canGetCode) {
-        // 模拟向后端请求验证码
-        uni.showLoading({
-          title: '正在获取验证码'
-        });
-        setTimeout(function () {
-          uni.hideLoading();
-          // 这里此提示会被this.start()方法中的提示覆盖
-          _this.$u.toast('验证码已发送');
-          // 通知验证码组件内部开始倒计时
-          _this.$refs.uCode.start();
-        }, 2000);
-      } else {
-        this.$u.toast('倒计时结束后再发送');
-      }
-    },
-    end: function end() {
-      this.$u.toast('倒计时结束');
-    },
-    start: function start() {
-      console.log("aa1111111");
-      this.$u.toast('倒计时开始');
     }
   }
 };

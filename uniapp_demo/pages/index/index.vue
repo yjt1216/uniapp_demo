@@ -81,7 +81,9 @@
 			<view class="demo-li"> video live <text class="demo-tip"> 直播 测试 </text></view>
 		</navigator>
 		
-		
+		<navigator url="/bundle/pages/nurse_auth/nurse_auth">
+			<view class="demo-li"> nurse auth <text class="demo-tip"> 资质热症 </text></view>
+		</navigator>
 		
 		
 		<y-tabbar ref="tabbar" native></y-tabbar>
