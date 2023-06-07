@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="nurse-auth">
 		<nav-bar title="资质认证" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		<!-- 身份证正反面 -->
 		<Rboy-upload-sfz 
@@ -9,11 +9,25 @@
 			@del="del_btn">
 		</Rboy-upload-sfz>
 		<!-- 地区选择 -->
-		<view>
-			<pick-regions :defaultRegion="defaultRegionCode" @getRegion="handleGetRegion">
-				<view>选择地区:{{regionName}}</view>
-			</pick-regions>
+		
+		<view class="form-info">
+			<u-form labelPosition="left"  :model="formData" ref="form" label-align="left">
+				<u-form-item label="所在地区" :label-style="{'font-size':'20rpx'}" labelWidth="80">
+					<view class="uni-list-cell-db">
+						<pick-regions :defaultRegion="defaultRegionCode" @getRegion="handleGetRegion">
+							<view>{{formData.address}}</view>
+						</pick-regions>
+					</view>
+					<u-icon
+						slot="right"
+						name="arrow-right"
+						color="#39C9BC"
+					></u-icon>
+				</u-form-item>
+			</u-form>
 		</view>
+		
+		
 	</view>
 </template>
 
@@ -33,11 +47,12 @@
 					obverseUrl: "",
 					// 反面
 					reverseUrl: "",
+					address:'请选择地址',
 				},
 				/* 地区 */
 				region:[],
-				defaultRegion: ['广东省','广州市','番禺区'],
-				defaultRegionCode:'440113'
+				// defaultRegion: ['广东省','广州市','番禺区'],
+				defaultRegionCode:'320505'
 			}
 		},
 		onLoad() {
@@ -65,7 +80,11 @@
 			    this.region = region
 				console.log('用户选择区域region',this.region)
 				const address =  this.region.map(item=>item.name).join('')
+				this.formData.address = address
 				console.log('用户选择区域address',address)
+				
+				const {code,name} = this.region[2]
+				console.log('用户选择区域code',code)
 				
 			}
 		},
@@ -79,4 +98,21 @@
 </script>
 
 <style lang="scss">
+	.nurse-auth{
+		background-color: #fff;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		font-size: 28rpx;
+		
+		.form-info{
+			padding: 10rpx 20rpx;
+			width: 98%;
+			font-size: 26rpx;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+	}
+	
 </style>

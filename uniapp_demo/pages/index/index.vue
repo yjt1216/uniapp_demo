@@ -22,8 +22,8 @@
 			<view class="demo-li">服务订单<text class="demo-tip"> 切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/picker/picker">
-			<view class="demo-li">picker<text class="demo-tip"> 选择 </text></view>
+		<navigator url="/bundle/pages/action_sheet/action_sheet">
+			<view class="demo-li">action sheet<text class="demo-tip"> 选择 </text></view>
 		</navigator>
 		
 		<!-- <navigator url="/bundle/pages/form_page/form_page">

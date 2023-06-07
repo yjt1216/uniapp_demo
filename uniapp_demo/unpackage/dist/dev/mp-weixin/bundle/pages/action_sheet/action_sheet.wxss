@@ -25,18 +25,4 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.form-item-label {
-  margin-top: 30rpx;
-}
-.form-item-content {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  border: 1px solid #e9e9e9;
-  height: 80rpx;
-  border-radius: 12rpx;
-  padding: 0 30rpx;
-  align-items: center;
-  justify-content: center;
-}
 

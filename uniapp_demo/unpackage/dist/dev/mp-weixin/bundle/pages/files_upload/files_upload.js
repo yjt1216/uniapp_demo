@@ -184,12 +184,12 @@ var _dp_request = _interopRequireDefault(__webpack_require__(/*! @/utils/dp_requ
 var _parse = _interopRequireDefault(__webpack_require__(/*! ../../../uni_modules/uview-ui/libs/config/props/parse */ 129));
 var zyTag = function zyTag() {
   __webpack_require__.e(/*! require.ensure | components/zy-tag/zy-tag */ "components/zy-tag/zy-tag").then((function () {
-    return resolve(__webpack_require__(/*! @/components/zy-tag/zy-tag.vue */ 666));
+    return resolve(__webpack_require__(/*! @/components/zy-tag/zy-tag.vue */ 674));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var catSignature = function catSignature() {
   __webpack_require__.e(/*! require.ensure | bundle/components/sign-canvas/sign-canvas */ "bundle/components/sign-canvas/sign-canvas").then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/sign-canvas/sign-canvas.vue */ 636));
+    return resolve(__webpack_require__(/*! @/bundle/components/sign-canvas/sign-canvas.vue */ 644));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var QQMapWX = __webpack_require__(/*! @/common/qqmap-wx-jssdk.min.js */ 253);
