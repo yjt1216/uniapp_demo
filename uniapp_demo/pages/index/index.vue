@@ -26,9 +26,9 @@
 			<view class="demo-li">action sheet<text class="demo-tip"> 选择 </text></view>
 		</navigator>
 		
-		<!-- <navigator url="/bundle/pages/form_page/form_page">
-			<view class="demo-li">表单<text class="demo-tip"> 表单界面</text></view>
-		</navigator> -->
+		<navigator url="/bundle/pages/sign_page/sign_page">
+			<view class="demo-li">签名<text class="demo-tip"> 签名界面</text></view>
+		</navigator>
 		
 		<navigator url="/bundle/pages/upload_img/upload_img">
 			<view class="demo-li">上传照片<text class="demo-tip"> 证件照</text></view>
@@ -39,16 +39,13 @@
 		</navigator>
 		
 		<navigator url="/bundle/pages/appraise_form/appraise_form">
-			<view class="demo-li">评估表单<text class="demo-tip"> 填空 单选 多选</text></view>
+			<view class="demo-li">评估表单<text class="demo-tip"> 填空 单选 多选 签名</text></view>
 		</navigator>
 		
 		<navigator url="/bundle/pages/header_footer/header_footer">
 			<view class="demo-li">头部底部<text class="demo-tip"> 头部 数据列表list 底部 </text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/user_sign/user_sign">
-			<view class="demo-li">user sign<text class="demo-tip"> user sign </text></view>
-		</navigator>
 		<navigator url="/pages/location/location">
 			<view class="demo-li">地图定位<text class="demo-tip"> QQ 地图定位功能 </text></view>
 		</navigator>

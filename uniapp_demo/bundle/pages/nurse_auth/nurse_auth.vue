@@ -32,8 +32,10 @@
 </template>
 
 <script>
-	import RboyUploadSfz from '@/components/Rboy-upload-sfz/Rboy-upload-sfz.vue'
-	import pickRegions from '@/components/pick-regions/pick-regions.vue'
+	/* 身份证组件 */
+	import RboyUploadSfz from '@/bundle/components/Rboy-upload-sfz/Rboy-upload-sfz.vue'
+	import pickRegions from '@/bundle/components/pick-regions/pick-regions.vue'
+	
 	export default {
 		components:{
 			RboyUploadSfz,
@@ -43,10 +45,11 @@
 			return {
 				// 表单
 				formData: {
-					// 正面
+					/* 身份证正面 */
 					obverseUrl: "",
-					// 反面
+					/* 身份证反面 */
 					reverseUrl: "",
+					/* 用户地址 */
 					address:'请选择地址',
 				},
 				/* 地区 */

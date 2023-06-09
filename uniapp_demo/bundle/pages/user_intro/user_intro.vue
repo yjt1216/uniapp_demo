@@ -8,8 +8,6 @@
 		</view>
 		
 		
-		
-		
 		<!-- 切换账号 退出登录 -->
 		<view class="bottom-view">
 			<view class="bottom-item" @click="changeIntroFun">修改</view>

@@ -129,7 +129,7 @@
 	import {
 		apiAssessFromData
 	} from '@/api/mock.js'
-	import Signature from '@/bundle/pages/sin-signature/sin-signature.vue'
+	import Signature from '@/bundle/components/sign-signature/sign-signature.vue'
 	
 	export default {
 		components:{

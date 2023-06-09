@@ -74,7 +74,7 @@
 	</view>
 </template>
 <script>
-	import zyTag from '@/components/zy-tag/zy-tag.vue'
+	import zyTag from '@/bundle/components/zy-tag/zy-tag.vue'
 	export default {
 		components: {
 			zyTag

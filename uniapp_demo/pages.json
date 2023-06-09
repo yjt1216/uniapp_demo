@@ -112,12 +112,7 @@
 						"navigationBarTitleText": "header footer"
 					}
 				},
-				{
-					"path": "pages/user_sign/user_sign",
-					"style": {
-						"navigationBarTitleText": "user sign"
-					}
-				},
+				
 				{
 					"path": "pages/take_photo/take_photo",
 					"style": {
@@ -167,6 +162,7 @@
 						"navigationBarTitleText": "native video"
 					}
 				},
+				/* 直播 需申请权限 */
 				{
 					"path": "pages/video_live/video_live",
 					"style": {
@@ -182,6 +178,13 @@
 				/* 身份认证 */
 				{
 					"path": "pages/nurse_auth/nurse_auth",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				},
+				/* 签名 */
+				{
+					"path": "pages/sign_page/sign_page",
 					"style": {
 						"navigationStyle": "custom"
 					}
