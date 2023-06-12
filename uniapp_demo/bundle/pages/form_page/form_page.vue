@@ -10,7 +10,7 @@
 			<text class="u-demo-block__title">基础使用</text>
 			<view class="u-demo-block__content">
 				<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
-				<u--form
+				<u-form
 					labelPosition="left"
 					:model="model1"
 					ref="form1">
@@ -18,30 +18,12 @@
 						label="姓名"
 						prop="userInfo.name"
 						ref="item1">
-						<u--input
+						<u-input
 							v-model="model1.userInfo.name"
 							border="none"
 							placeholder="姓名,只能为中文"
-						></u--input>
+						></u-input>
 					</u-form-item>
-					<!-- <u-form-item
-						label="性别"
-						prop="userInfo.sex"
-						@click="showSex = true; hideKeyboard()"
-						ref="item1">
-						<u--input
-							v-model="model1.userInfo.sex"
-							disabled
-							disabledColor="#ffffff"
-							placeholder="请选择性别"
-							border="bottom">
-						</u--input>
-						<u-icon
-							slot="right"
-							name="arrow-right"
-						></u-icon>
-					</u-form-item> -->
-					
 					
 					<u-form-item
 						label="性别"
@@ -58,21 +40,19 @@
 						<u-icon slot="right" name="arrow-right" ></u-icon>
 					</u-form-item>
 					
-					
-					
 					<u-form-item
 						label="住店时间"
 						prop="hotel"
 						labelWidth="80"
 						borderBottom
 						@click="showCalendar = true; hideKeyboard()">
-						<u--input
+						<u-input
 							v-model="model1.hotel"
 							disabled
 							disabledColor="#ffffff"
 							placeholder="请选择住店和离店时间"
 							border="none">
-						</u--input>
+						</u-input>
 						<u-icon
 							slot="right"
 							name="arrow-right">
@@ -83,11 +63,11 @@
 						prop="code"
 						labelWidth="80"
 						borderBottom>
-						<u--input
+						<u-input
 							v-model="model1.code"
 							border="none"
 							placeholder="请填写验证码"
-						></u--input>
+						></u-input>
 						<u-button
 							slot="right"
 							@tap="getCode"
@@ -103,19 +83,19 @@
 						borderBottom
 						@click="showBirthday = true; hideKeyboard()"
 						ref="item1">
-						<u--input
+						<u-input
 							v-model="model1.userInfo.birthday"
 							disabled
 							disabledColor="#ffffff"
 							placeholder="请选择生日"
 							border="none"
-						></u--input>
+						></u-input>
 						<u-icon
 							slot="right"
 							name="arrow-right"
 						></u-icon>
 					</u-form-item>
-				</u--form>
+				</u-form>
 				
 				<u-button
 					type="primary"
@@ -149,22 +129,15 @@
 					confirmDisabledText="请选择离店日期"
 					:formatter="formatter"
 				></u-calendar>
-				<u-code
+				<u-verification-code
 					ref="uCode"
 					@change="codeChange"
 					seconds="20"
 					@start="disabled1 = true"
 					@end="disabled1 = false"
-				></u-code>
-				<u-datetime-picker
-					:show="showBirthday"
-					:value="birthday"
-					mode="date"
-					closeOnClickOverlay
-					@confirm="birthdayConfirm"
-					@cancel="birthdayClose"
-					@close="birthdayClose"
-				></u-datetime-picker>
+				></u-verification-code>
+				
+				
 			</view>
 		</view>
 	</view>

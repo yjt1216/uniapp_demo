@@ -51,26 +51,12 @@
   background: rgba(0, 0, 0, 0.4);
   transition: opacity 0.3s;
 }
-.cat-signature .content {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  margin: auto;
-  width: 94%;
-  height: 500rpx;
-  background: #fff;
-  border-radius: 8rpx;
-  box-shadow: 0px 3px 3px #333;
-}
-.cat-signature .content .firstCanvas {
+.cat-signature .firstCanvas {
   background-color: #fff;
   width: 100%;
-  height: 400rpx;
+  height: 600rpx;
 }
-.cat-signature .content .btns {
+.cat-signature .btns {
   padding: 0 15px;
   height: 100rpx;
   overflow: hidden;
@@ -83,7 +69,7 @@
   flex-direction: row;
   justify-content: space-between;
 }
-.cat-signature .content .btns .btn {
+.cat-signature .btns .btn {
   width: 40%;
   text-align: center;
   font-size: 28rpx;
@@ -92,6 +78,28 @@
   background-color: #999;
   color: #fff;
   border-radius: 6rpx;
+}
+.cat-signature .content {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 94%;
+  height: 500rpx;
+  background: #f1d1f3;
+  border-radius: 8rpx;
+  box-shadow: 0px 3px 3px #333;
+}
+.cat-signature .signature-main {
+  background: white;
+  flex-direction: row-reverse;
+  display: flex;
+  align-items: stretch;
+  height: 101%;
+  overflow: scroll;
 }
 .visible .mask {
   display: block;

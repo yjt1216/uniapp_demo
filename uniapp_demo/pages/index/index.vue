@@ -26,8 +26,11 @@
 			<view class="demo-li">action sheet<text class="demo-tip"> 选择 </text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/sign_page/sign_page">
-			<view class="demo-li">签名<text class="demo-tip"> 签名界面</text></view>
+		<navigator url="/bundle/pages/sign_page/vertical_sign">
+			<view class="demo-li">竖屏签名<text class="demo-tip"> 签名界面</text></view>
+		</navigator>
+		<navigator url="/bundle/pages/sign_page/landscape_sign">
+			<view class="demo-li">横屏签名<text class="demo-tip"> 签名界面</text></view>
 		</navigator>
 		
 		<navigator url="/bundle/pages/upload_img/upload_img">

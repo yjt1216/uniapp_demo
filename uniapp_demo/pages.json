@@ -184,7 +184,13 @@
 				},
 				/* 签名 */
 				{
-					"path": "pages/sign_page/sign_page",
+					"path": "pages/sign_page/landscape_sign",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "pages/sign_page/vertical_sign",
 					"style": {
 						"navigationStyle": "custom"
 					}
@@ -238,7 +244,8 @@
 	},
 	"uniIdRouter": {},
 	"easycom": {
-		"autoscan": true
+		"autoscan": true,
+		"^u-(.*)": "@/uni_modules/vk-uview-ui/components/u-$1/u-$1.vue"
 	}
 }
 

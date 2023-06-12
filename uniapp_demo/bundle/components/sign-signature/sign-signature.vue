@@ -161,8 +161,8 @@
 					uni.canvasToTempFilePath({
 							canvasId: this.cid,
 							success: function(res) {
-								that.signImage = res.tempFilePath;
-								that.$emit('saveSign', res.tempFilePath);
+								
+								// that.$emit('saveSign', res.tempFilePath);
 								console.log('签名路径filePath',res)
 								that.$emit('input', res.tempFilePath);
 								uni.hideLoading();

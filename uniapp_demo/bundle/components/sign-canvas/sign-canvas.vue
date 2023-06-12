@@ -3,19 +3,21 @@
 	<view class="uni-list list-pd">
 		<view v-if="visibleSync" class="cat-signature" :class="{ visible: show }" @touchmove.stop.prevent="moveHandle">
 			<view class="mask" @tap="closeSign" />
-			<view class="content">
-				<canvas class="firstCanvas" :canvas-id="canvasId" name="autograph" 
+			<canvas  :canvas-id="canvasId" name="autograph"
 				@touchmove="move"
 				@touchstart="start($event)" 
 				@touchend="end" 
 				@touchcancel="cancel" @longtap="tap"
-					disable-scroll="true" @error="error" />
+				disable-scroll="true" @error="error">
 				<view class="btns">
 					<view class="btn" @tap="clear">清除</view>
 					<view class="btn" @tap="saveSign">保存</view>
-					
 				</view>
-			</view>
+			</canvas>
+			<!-- <view class="btns">
+				<view class="btn" @tap="clear">清除</view>
+				<view class="btn" @tap="saveSign">保存</view>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -218,6 +220,40 @@
 			background: rgba(0, 0, 0, 0.4);
 			transition: opacity 0.3s;
 		}
+		
+		// canvas
+		.firstCanvas {
+			background-color: #fff;
+			width: 100%;
+			height: 600rpx;
+		}
+		 
+		// canvas
+		 
+		.btns {
+			padding: 0 15px;
+			height: 100upx;
+			overflow: hidden;
+			position: absolute;
+			bottom: 10upx;
+			left: 0;
+			right: 0;
+			margin: auto;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+		 
+			.btn {
+				width: 40%;
+				text-align: center;
+				font-size: 28upx;
+				height: 60upx;
+				line-height: 60upx;
+				background-color: #999;
+				color: #fff;
+				border-radius: 6upx;
+			}
+		}
  
 		.content {
 			display: block;
@@ -229,44 +265,22 @@
 			margin: auto;
 			width: 94%;
 			height: 500upx;
-			background: #fff;
+			background: #f1d1f3;
 			border-radius: 8upx;
 			box-shadow: 0px 3px 3px #333;
  
-			// canvas
-			.firstCanvas {
-				background-color: #fff;
-				width: 100%;
-				height: 400upx;
-			}
- 
-			// canvas
- 
-			.btns {
-				padding: 0 15px;
-				height: 100upx;
-				overflow: hidden;
-				position: absolute;
-				bottom: 10upx;
-				left: 0;
-				right: 0;
-				margin: auto;
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
- 
-				.btn {
-					width: 40%;
-					text-align: center;
-					font-size: 28upx;
-					height: 60upx;
-					line-height: 60upx;
-					background-color: #999;
-					color: #fff;
-					border-radius: 6upx;
-				}
-			}
+			
 		}
+		
+		.signature-main {
+			background: white;
+			flex-direction: row-reverse;
+			display: flex;
+			align-items: stretch;
+			height: 101%;
+			overflow: scroll;
+		}
+		
 	}
  
 	.visible .mask {

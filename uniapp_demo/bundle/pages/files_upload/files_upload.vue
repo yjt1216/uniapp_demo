@@ -52,7 +52,7 @@
 				</view>
 				
 				<!-- 签名板  -->
-				<view class="logo_text">
+				<!-- <view class="logo_text">
 					<text class="option-required"> * </text> 
 					<text class="u-block__title"> 护理人员签名确认 </text>
 				</view>
@@ -62,7 +62,7 @@
 						<image v-if="signImage !=''" class="img" :src="signImage" mode="widthFix" style="margin: 0px 24px;"></image>
 					</view>
 					<catSignature canvasId="canvas1" @closeSign="closeSign" @saveSign="saveSign" :visible="isShowSign" ref="catSign"/>
-				</view>
+				</view> -->
 				
 				<!-- 当前签退地址 -->
 				<!-- <view class="location-address" >
@@ -93,7 +93,7 @@
 	import {pathToBase64} from '@/js_sdk/mmmm-image-tools/index.js'
 	
 	import http from '@/utils/dp_request.js'
-import parse from '../../../uni_modules/uview-ui/libs/config/props/parse'
+	
 	const QQMapWX = require('@/common/qqmap-wx-jssdk.min.js');
 	export default {
 		components:{

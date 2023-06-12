@@ -3,6 +3,7 @@
 		<nav-bar title="个人介绍" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		
 		<view class="intro-input">
+			
 			<u-textarea v-model="introValue" 
 			:disabled="!inputEnble" placeholder="请输入内容" maxlength="30" autoHeight count ></u-textarea>
 		</view>
