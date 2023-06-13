@@ -104,19 +104,19 @@ try {
       return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 341))
     },
     uForm: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-form/u-form */ "uni_modules/vk-uview-ui/components/u-form/u-form").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-form/u-form.vue */ 469))
+      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-form/u-form */ "uni_modules/vk-uview-ui/components/u-form/u-form").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-form/u-form.vue */ 461))
     },
     uFormItem: function () {
-      return Promise.all(/*! import() | uni_modules/vk-uview-ui/components/u-form-item/u-form-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/vk-uview-ui/components/u-form-item/u-form-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-form-item/u-form-item.vue */ 476))
+      return Promise.all(/*! import() | uni_modules/vk-uview-ui/components/u-form-item/u-form-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/vk-uview-ui/components/u-form-item/u-form-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-form-item/u-form-item.vue */ 468))
     },
     uInput: function () {
       return Promise.all(/*! import() | uni_modules/vk-uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/vk-uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-input/u-input.vue */ 390))
     },
     uActionSheet: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-action-sheet/u-action-sheet */ "uni_modules/vk-uview-ui/components/u-action-sheet/u-action-sheet").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-action-sheet/u-action-sheet.vue */ 493))
+      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-action-sheet/u-action-sheet */ "uni_modules/vk-uview-ui/components/u-action-sheet/u-action-sheet").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-action-sheet/u-action-sheet.vue */ 485))
     },
     uButton: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-button/u-button */ "uni_modules/vk-uview-ui/components/u-button/u-button").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-button/u-button.vue */ 486))
+      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-button/u-button */ "uni_modules/vk-uview-ui/components/u-button/u-button").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-button/u-button.vue */ 478))
     },
   }
 } catch (e) {

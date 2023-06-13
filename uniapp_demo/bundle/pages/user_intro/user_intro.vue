@@ -2,12 +2,16 @@
 	<view class="user-intro">
 		<nav-bar title="个人介绍" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		
-		<view class="intro-input">
-			
-			<u-textarea v-model="introValue" 
-			:disabled="!inputEnble" placeholder="请输入内容" maxlength="30" autoHeight count ></u-textarea>
+		<!-- <view class="intro-input">
+			<textarea v-model="introValue" :disabled="!inputEnble" placeholder="请输入内容" maxlength="240" @input="sumFontNum"></textarea>
+			<view><text>{{textCount}}</text>/240</view>
+		</view> -->
+		<view class="textarea_box">
+			<textarea class="textarea" placeholder="请填写10字以上的问题描述，以便我们更好的帮助您解决问题，提高产品质量。" 
+			placeholder-style="font-size:28rpx" maxlength="240" @input="descInput" v-model="desc" />
+			<view class="num">{{ desc.length }}/200</view>
 		</view>
-		
+
 		
 		<!-- 切换账号 退出登录 -->
 		<view class="bottom-view">
@@ -27,7 +31,9 @@
 		data(){
 			return {
 				introValue:'个人介绍',
-				inputEnble: false
+				inputEnble: false,
+				textCount:0,
+				desc: ''
 			}
 		},
 		onLoad() {
@@ -36,6 +42,10 @@
 		},
 		
 		methods: {
+			
+			descInput(e){
+				this.desc = e.detail.value
+			},
 			changeIntroFun() {
 				// console.log('修改 个人介绍')
 				this.inputEnble = !this.inputEnble
@@ -89,4 +99,17 @@
 			
 		}
 	}
+	.textarea_box{
+		padding: 20rpx;
+		background-color: #F2F2F2;
+		/deep/ .uni-textarea-textarea{
+			font-size: 28rpx;
+			line-height: 45rpx;
+		}
+		.num{
+			text-align: right;
+			color: gray
+		}
+	}
+
 </style>

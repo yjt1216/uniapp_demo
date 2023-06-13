@@ -73,9 +73,9 @@
 			<view class="demo-li"> video player<text class="demo-tip"> video_player </text></view>
 		</navigator>
 		
-		<!-- <navigator url="/bundle/pages/native_video/native_video">
-			<view class="demo-li"> native video player<text class="demo-tip"> video_player </text></view>
-		</navigator> -->
+		<navigator url="/bundle/pages/user-intro/user-intro">
+			<view class="demo-li"> user-intro<text class="demo-tip"> user-intro </text></view>
+		</navigator>
 		
 		<navigator url="/bundle/pages/video_live/video_live">
 			<view class="demo-li"> video live <text class="demo-tip"> 直播 测试 </text></view>

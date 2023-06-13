@@ -201,7 +201,7 @@ var _mock = __webpack_require__(/*! @/api/mock.js */ 118);
 //
 var Signature = function Signature() {
   Promise.all(/*! require.ensure | bundle/components/sign-signature/sign-signature */[__webpack_require__.e("bundle/common/vendor"), __webpack_require__.e("bundle/components/sign-signature/sign-signature")]).then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/sign-signature/sign-signature.vue */ 542));
+    return resolve(__webpack_require__(/*! @/bundle/components/sign-signature/sign-signature.vue */ 534));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {

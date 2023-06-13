@@ -103,9 +103,6 @@ try {
     navBar: function () {
       return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 341))
     },
-    uTextarea: function () {
-      return Promise.all(/*! import() | uni_modules/vk-uview-ui/components/u-textarea/u-textarea */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/vk-uview-ui/components/u-textarea/u-textarea")]).then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-textarea/u-textarea.vue */ 436))
-    },
   }
 } catch (e) {
   if (
@@ -128,6 +125,15 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var g0 = _vm.desc.length
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        g0: g0,
+      },
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -187,6 +193,10 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
 // import MyTextarea from "@/components/my-textarea/my-textarea.vue"
 var _default = {
   // components: {
@@ -195,7 +205,9 @@ var _default = {
   data: function data() {
     return {
       introValue: '个人介绍',
-      inputEnble: false
+      inputEnble: false,
+      textCount: 0,
+      desc: ''
     };
   },
   onLoad: function onLoad() {
@@ -204,6 +216,9 @@ var _default = {
   },
 
   methods: {
+    descInput: function descInput(e) {
+      this.desc = e.detail.value;
+    },
     changeIntroFun: function changeIntroFun() {
       // console.log('修改 个人介绍')
       this.inputEnble = !this.inputEnble;

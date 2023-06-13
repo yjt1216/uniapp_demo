@@ -104,10 +104,10 @@ try {
       return __webpack_require__.e(/*! import() | uni_modules/uni-card/components/uni-card/uni-card */ "uni_modules/uni-card/components/uni-card/uni-card").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-card/components/uni-card/uni-card.vue */ 421))
     },
     uDivider: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-divider/u-divider */ "uni_modules/vk-uview-ui/components/u-divider/u-divider").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-divider/u-divider.vue */ 556))
+      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-divider/u-divider */ "uni_modules/vk-uview-ui/components/u-divider/u-divider").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-divider/u-divider.vue */ 548))
     },
     uRate: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-rate/u-rate */ "uni_modules/vk-uview-ui/components/u-rate/u-rate").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-rate/u-rate.vue */ 563))
+      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-rate/u-rate */ "uni_modules/vk-uview-ui/components/u-rate/u-rate").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-rate/u-rate.vue */ 555))
     },
   }
 } catch (e) {

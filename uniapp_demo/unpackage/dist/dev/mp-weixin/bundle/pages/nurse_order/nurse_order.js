@@ -169,7 +169,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var MescrollItem = function MescrollItem() {
   Promise.all(/*! require.ensure | bundle/pages/nurse_order/order-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("bundle/common/vendor"), __webpack_require__.e("bundle/pages/nurse_order/order-item")]).then((function () {
-    return resolve(__webpack_require__(/*! ./order-item.vue */ 450));
+    return resolve(__webpack_require__(/*! ./order-item.vue */ 442));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {

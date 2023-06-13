@@ -183,12 +183,12 @@ var _index = __webpack_require__(/*! @/js_sdk/mmmm-image-tools/index.js */ 209);
 var _dp_request = _interopRequireDefault(__webpack_require__(/*! @/utils/dp_request.js */ 267));
 var zyTag = function zyTag() {
   __webpack_require__.e(/*! require.ensure | bundle/components/zy-tag/zy-tag */ "bundle/components/zy-tag/zy-tag").then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/zy-tag/zy-tag.vue */ 549));
+    return resolve(__webpack_require__(/*! @/bundle/components/zy-tag/zy-tag.vue */ 541));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var catSignature = function catSignature() {
   __webpack_require__.e(/*! require.ensure | bundle/components/sign-canvas/sign-canvas */ "bundle/components/sign-canvas/sign-canvas").then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/sign-canvas/sign-canvas.vue */ 535));
+    return resolve(__webpack_require__(/*! @/bundle/components/sign-canvas/sign-canvas.vue */ 527));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var QQMapWX = __webpack_require__(/*! @/common/qqmap-wx-jssdk.min.js */ 162);

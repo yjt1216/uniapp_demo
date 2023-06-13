@@ -59,4 +59,16 @@
   color: white;
   text-align: center;
 }
+.textarea_box {
+  padding: 20rpx;
+  background-color: #F2F2F2;
+}
+.textarea_box .uni-textarea-textarea {
+  font-size: 28rpx;
+  line-height: 45rpx;
+}
+.textarea_box .num {
+  text-align: right;
+  color: gray;
+}
 

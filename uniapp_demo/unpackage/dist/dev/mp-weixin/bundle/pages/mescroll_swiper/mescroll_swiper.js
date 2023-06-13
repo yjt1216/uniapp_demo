@@ -167,7 +167,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var MescrollItem = function MescrollItem() {
   Promise.all(/*! require.ensure | bundle/pages/mescroll_swiper/mescroll-swiper-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("bundle/common/vendor"), __webpack_require__.e("bundle/pages/mescroll_swiper/mescroll-swiper-item")]).then((function () {
-    return resolve(__webpack_require__(/*! ./mescroll-swiper-item.vue */ 444));
+    return resolve(__webpack_require__(/*! ./mescroll-swiper-item.vue */ 436));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {

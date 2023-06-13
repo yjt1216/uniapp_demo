@@ -7,7 +7,7 @@
 				<canvas
 					v-if="show"
 					class="hand-writing"
-					type="2d"
+					
 					disable-scroll
 					@touchstart="uploadScaleStart"
 					@touchmove="uploadScaleMove"
@@ -105,7 +105,7 @@ export default {
 					canvasId: CANVAS_ID,
 					quality: 1.0,
 					fileType: 'png',
-
+					
 					success(res) {
 						// self.resolve(res);
 						let path = res.tempFilePath;

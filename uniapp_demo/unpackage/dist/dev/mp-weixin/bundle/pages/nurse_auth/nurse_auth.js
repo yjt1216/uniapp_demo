@@ -104,10 +104,10 @@ try {
       return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 341))
     },
     uForm: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-form/u-form */ "uni_modules/vk-uview-ui/components/u-form/u-form").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-form/u-form.vue */ 469))
+      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-form/u-form */ "uni_modules/vk-uview-ui/components/u-form/u-form").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-form/u-form.vue */ 461))
     },
     uFormItem: function () {
-      return Promise.all(/*! import() | uni_modules/vk-uview-ui/components/u-form-item/u-form-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/vk-uview-ui/components/u-form-item/u-form-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-form-item/u-form-item.vue */ 476))
+      return Promise.all(/*! import() | uni_modules/vk-uview-ui/components/u-form-item/u-form-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/vk-uview-ui/components/u-form-item/u-form-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-form-item/u-form-item.vue */ 468))
     },
     uIcon: function () {
       return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-icon/u-icon */ "uni_modules/vk-uview-ui/components/u-icon/u-icon").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-icon/u-icon.vue */ 383))
@@ -186,12 +186,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var RboyUploadSfz = function RboyUploadSfz() {
   Promise.all(/*! require.ensure | bundle/components/Rboy-upload-sfz/Rboy-upload-sfz */[__webpack_require__.e("bundle/common/vendor"), __webpack_require__.e("bundle/components/Rboy-upload-sfz/Rboy-upload-sfz")]).then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/Rboy-upload-sfz/Rboy-upload-sfz.vue */ 578));
+    return resolve(__webpack_require__(/*! @/bundle/components/Rboy-upload-sfz/Rboy-upload-sfz.vue */ 570));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var pickRegions = function pickRegions() {
   Promise.all(/*! require.ensure | bundle/components/pick-regions/pick-regions */[__webpack_require__.e("bundle/common/vendor"), __webpack_require__.e("bundle/components/pick-regions/pick-regions")]).then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/pick-regions/pick-regions.vue */ 586));
+    return resolve(__webpack_require__(/*! @/bundle/components/pick-regions/pick-regions.vue */ 578));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {

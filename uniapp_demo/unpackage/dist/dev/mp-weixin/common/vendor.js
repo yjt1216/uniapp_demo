@@ -18237,144 +18237,6 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 441:
-/*!***********************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/components/u-textarea/props.js ***!
-  \***********************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 输入框的内容
-    value: {
-      type: [String, Number],
-      default: uni.$u.props.textarea.value
-    },
-    // 输入框为空时占位符
-    placeholder: {
-      type: [String, Number],
-      default: uni.$u.props.textarea.placeholder
-    },
-    // 指定placeholder的样式类，注意页面或组件的style中写了scoped时，需要在类名前写/deep/
-    placeholderClass: {
-      type: String,
-      default: uni.$u.props.input.placeholderClass
-    },
-    // 指定placeholder的样式
-    placeholderStyle: {
-      type: [String, Object],
-      default: uni.$u.props.input.placeholderStyle
-    },
-    // 输入框高度
-    height: {
-      type: [String, Number],
-      default: uni.$u.props.textarea.height
-    },
-    // 设置键盘右下角按钮的文字，仅微信小程序，App-vue和H5有效
-    confirmType: {
-      type: String,
-      default: uni.$u.props.textarea.confirmType
-    },
-    // 是否禁用
-    disabled: {
-      type: Boolean,
-      default: uni.$u.props.textarea.disabled
-    },
-    // 是否显示统计字数
-    count: {
-      type: Boolean,
-      default: uni.$u.props.textarea.count
-    },
-    // 是否自动获取焦点，nvue不支持，H5取决于浏览器的实现
-    focus: {
-      type: Boolean,
-      default: uni.$u.props.textarea.focus
-    },
-    // 是否自动增加高度
-    autoHeight: {
-      type: Boolean,
-      default: uni.$u.props.textarea.autoHeight
-    },
-    // 如果textarea是在一个position:fixed的区域，需要显示指定属性fixed为true
-    fixed: {
-      type: Boolean,
-      default: uni.$u.props.textarea.fixed
-    },
-    // 指定光标与键盘的距离
-    cursorSpacing: {
-      type: Number,
-      default: uni.$u.props.textarea.cursorSpacing
-    },
-    // 指定focus时的光标位置
-    cursor: {
-      type: [String, Number],
-      default: uni.$u.props.textarea.cursor
-    },
-    // 是否显示键盘上方带有”完成“按钮那一栏，
-    showConfirmBar: {
-      type: Boolean,
-      default: uni.$u.props.textarea.showConfirmBar
-    },
-    // 光标起始位置，自动聚焦时有效，需与selection-end搭配使用
-    selectionStart: {
-      type: Number,
-      default: uni.$u.props.textarea.selectionStart
-    },
-    // 光标结束位置，自动聚焦时有效，需与selection-start搭配使用
-    selectionEnd: {
-      type: Number,
-      default: uni.$u.props.textarea.selectionEnd
-    },
-    // 键盘弹起时，是否自动上推页面
-    adjustPosition: {
-      type: Boolean,
-      default: uni.$u.props.textarea.adjustPosition
-    },
-    // 是否去掉 iOS 下的默认内边距，只微信小程序有效
-    disableDefaultPadding: {
-      type: Boolean,
-      default: uni.$u.props.textarea.disableDefaultPadding
-    },
-    // focus时，点击页面的时候不收起键盘，只微信小程序有效
-    holdKeyboard: {
-      type: Boolean,
-      default: uni.$u.props.textarea.holdKeyboard
-    },
-    // 最大输入长度，设置为 -1 的时候不限制最大长度
-    maxlength: {
-      type: [String, Number],
-      default: uni.$u.props.textarea.maxlength
-    },
-    // 边框类型，surround-四周边框，bottom-底部边框
-    border: {
-      type: String,
-      default: uni.$u.props.textarea.border
-    },
-    // 用于处理或者过滤输入框内容的方法
-    formatter: {
-      type: [Function, null],
-      default: uni.$u.props.textarea.formatter
-    },
-    // 是否忽略组件内对文本合成系统事件的处理
-    ignoreCompositionEvent: {
-      type: Boolean,
-      default: true
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-
 /***/ 45:
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/deepClone.js ***!
@@ -18803,189 +18665,7 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 48:
-/*!***************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/route.js ***!
-  \***************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 49));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 51));
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
-var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
-/**
- * 路由跳转方法，该方法相对于直接使用uni.xxx的好处是使用更加简单快捷
- * 并且带有路由拦截功能
- */
-var Router = /*#__PURE__*/function () {
-  function Router() {
-    (0, _classCallCheck2.default)(this, Router);
-    // 原始属性定义
-    this.config = {
-      type: 'navigateTo',
-      url: '',
-      delta: 1,
-      // navigateBack页面后退时,回退的层数
-      params: {},
-      // 传递的参数
-      animationType: 'pop-in',
-      // 窗口动画,只在APP有效
-      animationDuration: 300,
-      // 窗口动画持续时间,单位毫秒,只在APP有效
-      intercept: false // 是否需要拦截
-    };
-    // 因为route方法是需要对外赋值给另外的对象使用，同时route内部有使用this，会导致route失去上下文
-    // 这里在构造函数中进行this绑定
-    this.route = this.route.bind(this);
-  }
-
-  // 判断url前面是否有"/"，如果没有则加上，否则无法跳转
-  (0, _createClass2.default)(Router, [{
-    key: "addRootPath",
-    value: function addRootPath(url) {
-      return url[0] === '/' ? url : "/".concat(url);
-    }
-
-    // 整合路由参数
-  }, {
-    key: "mixinParam",
-    value: function mixinParam(url, params) {
-      url = url && this.addRootPath(url);
-
-      // 使用正则匹配，主要依据是判断是否有"/","?","="等，如“/page/index/index?name=mary"
-      // 如果有url中有get参数，转换后无需带上"?"
-      var query = '';
-      if (/.*\/.*\?.*=.*/.test(url)) {
-        // object对象转为get类型的参数
-        query = uni.$u.queryParams(params, false);
-        // 因为已有get参数,所以后面拼接的参数需要带上"&"隔开
-        return url += "&" + query;
-      } else {
-        // 直接拼接参数，因为此处url中没有后面的query参数，也就没有"?/&"之类的符号
-        query = uni.$u.queryParams(params);
-        return url += query;
-      }
-    }
-
-    // 对外的方法名称
-  }, {
-    key: "route",
-    value: function () {
-      var _route = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-        var options,
-          params,
-          mergeConfig,
-          isNext,
-          _args = arguments;
-        return _regenerator.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                options = _args.length > 0 && _args[0] !== undefined ? _args[0] : {};
-                params = _args.length > 1 && _args[1] !== undefined ? _args[1] : {};
-                // 合并用户的配置和内部的默认配置
-                mergeConfig = {};
-                if (typeof options === 'string') {
-                  // 如果options为字符串，则为route(url, params)的形式
-                  mergeConfig.url = this.mixinParam(options, params);
-                  mergeConfig.type = 'navigateTo';
-                } else {
-                  mergeConfig = uni.$u.deepClone(options, this.config);
-                  // 否则正常使用mergeConfig中的url和params进行拼接
-                  mergeConfig.url = this.mixinParam(options.url, options.params);
-                }
-                if (params.intercept) {
-                  this.config.intercept = params.intercept;
-                }
-                // params参数也带给拦截器
-                mergeConfig.params = params;
-                // 合并内外部参数
-                mergeConfig = uni.$u.deepMerge(this.config, mergeConfig);
-                // 判断用户是否定义了拦截器
-                if (!(typeof uni.$u.routeIntercept === 'function')) {
-                  _context.next = 14;
-                  break;
-                }
-                _context.next = 10;
-                return new Promise(function (resolve, reject) {
-                  uni.$u.routeIntercept(mergeConfig, resolve);
-                });
-              case 10:
-                isNext = _context.sent;
-                // 如果isNext为true，则执行路由跳转
-                isNext && this.openPage(mergeConfig);
-                _context.next = 15;
-                break;
-              case 14:
-                this.openPage(mergeConfig);
-              case 15:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-      function route() {
-        return _route.apply(this, arguments);
-      }
-      return route;
-    }() // 执行路由跳转
-  }, {
-    key: "openPage",
-    value: function openPage(config) {
-      // 解构参数
-      var url = config.url,
-        type = config.type,
-        delta = config.delta,
-        animationType = config.animationType,
-        animationDuration = config.animationDuration;
-      if (config.type == 'navigateTo' || config.type == 'to') {
-        uni.navigateTo({
-          url: url,
-          animationType: animationType,
-          animationDuration: animationDuration
-        });
-      }
-      if (config.type == 'redirectTo' || config.type == 'redirect') {
-        uni.redirectTo({
-          url: url
-        });
-      }
-      if (config.type == 'switchTab' || config.type == 'tab') {
-        uni.switchTab({
-          url: url
-        });
-      }
-      if (config.type == 'reLaunch' || config.type == 'launch') {
-        uni.reLaunch({
-          url: url
-        });
-      }
-      if (config.type == 'navigateBack' || config.type == 'back') {
-        uni.navigateBack({
-          delta: delta
-        });
-      }
-    }
-  }]);
-  return Router;
-}();
-var _default = new Router().route;
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-
-/***/ 481:
+/***/ 473:
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/util/async-validator.js ***!
   \*********************************************************************************************************************************/
@@ -20163,11 +19843,11 @@ Schema.warning = warning;
 Schema.messages = messages;
 var _default = Schema;
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 482)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 474)))
 
 /***/ }),
 
-/***/ 482:
+/***/ 474:
 /*!********************************************************!*\
   !*** ./node_modules/node-libs-browser/mock/process.js ***!
   \********************************************************/
@@ -20198,7 +19878,7 @@ exports.binding = function (name) {
     var path;
     exports.cwd = function () { return cwd };
     exports.chdir = function (dir) {
-        if (!path) path = __webpack_require__(/*! path */ 483);
+        if (!path) path = __webpack_require__(/*! path */ 475);
         cwd = path.resolve(dir, cwd);
     };
 })();
@@ -20212,7 +19892,7 @@ exports.features = {};
 
 /***/ }),
 
-/***/ 483:
+/***/ 475:
 /*!***********************************************!*\
   !*** ./node_modules/path-browserify/index.js ***!
   \***********************************************/
@@ -20522,7 +20202,189 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 482)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 474)))
+
+/***/ }),
+
+/***/ 48:
+/*!***************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/route.js ***!
+  \***************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 49));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 51));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
+/**
+ * 路由跳转方法，该方法相对于直接使用uni.xxx的好处是使用更加简单快捷
+ * 并且带有路由拦截功能
+ */
+var Router = /*#__PURE__*/function () {
+  function Router() {
+    (0, _classCallCheck2.default)(this, Router);
+    // 原始属性定义
+    this.config = {
+      type: 'navigateTo',
+      url: '',
+      delta: 1,
+      // navigateBack页面后退时,回退的层数
+      params: {},
+      // 传递的参数
+      animationType: 'pop-in',
+      // 窗口动画,只在APP有效
+      animationDuration: 300,
+      // 窗口动画持续时间,单位毫秒,只在APP有效
+      intercept: false // 是否需要拦截
+    };
+    // 因为route方法是需要对外赋值给另外的对象使用，同时route内部有使用this，会导致route失去上下文
+    // 这里在构造函数中进行this绑定
+    this.route = this.route.bind(this);
+  }
+
+  // 判断url前面是否有"/"，如果没有则加上，否则无法跳转
+  (0, _createClass2.default)(Router, [{
+    key: "addRootPath",
+    value: function addRootPath(url) {
+      return url[0] === '/' ? url : "/".concat(url);
+    }
+
+    // 整合路由参数
+  }, {
+    key: "mixinParam",
+    value: function mixinParam(url, params) {
+      url = url && this.addRootPath(url);
+
+      // 使用正则匹配，主要依据是判断是否有"/","?","="等，如“/page/index/index?name=mary"
+      // 如果有url中有get参数，转换后无需带上"?"
+      var query = '';
+      if (/.*\/.*\?.*=.*/.test(url)) {
+        // object对象转为get类型的参数
+        query = uni.$u.queryParams(params, false);
+        // 因为已有get参数,所以后面拼接的参数需要带上"&"隔开
+        return url += "&" + query;
+      } else {
+        // 直接拼接参数，因为此处url中没有后面的query参数，也就没有"?/&"之类的符号
+        query = uni.$u.queryParams(params);
+        return url += query;
+      }
+    }
+
+    // 对外的方法名称
+  }, {
+    key: "route",
+    value: function () {
+      var _route = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+        var options,
+          params,
+          mergeConfig,
+          isNext,
+          _args = arguments;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                options = _args.length > 0 && _args[0] !== undefined ? _args[0] : {};
+                params = _args.length > 1 && _args[1] !== undefined ? _args[1] : {};
+                // 合并用户的配置和内部的默认配置
+                mergeConfig = {};
+                if (typeof options === 'string') {
+                  // 如果options为字符串，则为route(url, params)的形式
+                  mergeConfig.url = this.mixinParam(options, params);
+                  mergeConfig.type = 'navigateTo';
+                } else {
+                  mergeConfig = uni.$u.deepClone(options, this.config);
+                  // 否则正常使用mergeConfig中的url和params进行拼接
+                  mergeConfig.url = this.mixinParam(options.url, options.params);
+                }
+                if (params.intercept) {
+                  this.config.intercept = params.intercept;
+                }
+                // params参数也带给拦截器
+                mergeConfig.params = params;
+                // 合并内外部参数
+                mergeConfig = uni.$u.deepMerge(this.config, mergeConfig);
+                // 判断用户是否定义了拦截器
+                if (!(typeof uni.$u.routeIntercept === 'function')) {
+                  _context.next = 14;
+                  break;
+                }
+                _context.next = 10;
+                return new Promise(function (resolve, reject) {
+                  uni.$u.routeIntercept(mergeConfig, resolve);
+                });
+              case 10:
+                isNext = _context.sent;
+                // 如果isNext为true，则执行路由跳转
+                isNext && this.openPage(mergeConfig);
+                _context.next = 15;
+                break;
+              case 14:
+                this.openPage(mergeConfig);
+              case 15:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+      function route() {
+        return _route.apply(this, arguments);
+      }
+      return route;
+    }() // 执行路由跳转
+  }, {
+    key: "openPage",
+    value: function openPage(config) {
+      // 解构参数
+      var url = config.url,
+        type = config.type,
+        delta = config.delta,
+        animationType = config.animationType,
+        animationDuration = config.animationDuration;
+      if (config.type == 'navigateTo' || config.type == 'to') {
+        uni.navigateTo({
+          url: url,
+          animationType: animationType,
+          animationDuration: animationDuration
+        });
+      }
+      if (config.type == 'redirectTo' || config.type == 'redirect') {
+        uni.redirectTo({
+          url: url
+        });
+      }
+      if (config.type == 'switchTab' || config.type == 'tab') {
+        uni.switchTab({
+          url: url
+        });
+      }
+      if (config.type == 'reLaunch' || config.type == 'launch') {
+        uni.reLaunch({
+          url: url
+        });
+      }
+      if (config.type == 'navigateBack' || config.type == 'back') {
+        uni.navigateBack({
+          delta: delta
+        });
+      }
+    }
+  }]);
+  return Router;
+}();
+var _default = new Router().route;
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
 
@@ -21327,61 +21189,7 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 57:
-/*!*******************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/type2icon.js ***!
-  \*******************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-/**
- * 根据主题type值,获取对应的图标
- * @param String type 主题名称,primary|info|error|warning|success
- * @param String fill 是否使用fill填充实体的图标  
- */
-function type2icon() {
-  var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'success';
-  var fill = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-  // 如果非预置值,默认为success
-  if (['primary', 'info', 'error', 'warning', 'success'].indexOf(type) == -1) type = 'success';
-  var iconName = '';
-  // 目前(2019-12-12),info和primary使用同一个图标
-  switch (type) {
-    case 'primary':
-      iconName = 'info-circle';
-      break;
-    case 'info':
-      iconName = 'info-circle';
-      break;
-    case 'error':
-      iconName = 'close-circle';
-      break;
-    case 'warning':
-      iconName = 'error-circle';
-      break;
-    case 'success':
-      iconName = 'checkmark-circle';
-      break;
-    default:
-      iconName = 'checkmark-circle';
-  }
-  // 是否是实体类型,加上-fill,在icon组件库中,实体的类名是后面加-fill的
-  if (fill) iconName += '-fill';
-  return iconName;
-}
-var _default = type2icon;
-exports.default = _default;
-
-/***/ }),
-
-/***/ 575:
+/***/ 567:
 /*!************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/hic-video-player/utils/index.js ***!
   \************************************************************************************************************************/
@@ -21494,6 +21302,60 @@ function getExt(url) {
 
 /***/ }),
 
+/***/ 57:
+/*!*******************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/type2icon.js ***!
+  \*******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+/**
+ * 根据主题type值,获取对应的图标
+ * @param String type 主题名称,primary|info|error|warning|success
+ * @param String fill 是否使用fill填充实体的图标  
+ */
+function type2icon() {
+  var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'success';
+  var fill = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  // 如果非预置值,默认为success
+  if (['primary', 'info', 'error', 'warning', 'success'].indexOf(type) == -1) type = 'success';
+  var iconName = '';
+  // 目前(2019-12-12),info和primary使用同一个图标
+  switch (type) {
+    case 'primary':
+      iconName = 'info-circle';
+      break;
+    case 'info':
+      iconName = 'info-circle';
+      break;
+    case 'error':
+      iconName = 'close-circle';
+      break;
+    case 'warning':
+      iconName = 'error-circle';
+      break;
+    case 'success':
+      iconName = 'checkmark-circle';
+      break;
+    default:
+      iconName = 'checkmark-circle';
+  }
+  // 是否是实体类型,加上-fill,在icon组件库中,实体的类名是后面加-fill的
+  if (fill) iconName += '-fill';
+  return iconName;
+}
+var _default = type2icon;
+exports.default = _default;
+
+/***/ }),
+
 /***/ 58:
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/randomArray.js ***!
@@ -21548,48 +21410,7 @@ function addUnit() {
 
 /***/ }),
 
-/***/ 6:
-/*!***************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/arrayWithHoles.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-module.exports = _arrayWithHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ 60:
-/*!****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/random.js ***!
-  \****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-function random(min, max) {
-  if (min >= 0 && max > 0 && max >= min) {
-    var gab = max - min + 1;
-    return Math.floor(Math.random() * gab + min);
-  } else {
-    return 0;
-  }
-}
-var _default = random;
-exports.default = _default;
-
-/***/ }),
-
-/***/ 604:
+/***/ 596:
 /*!*****************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/components/SignaturePad/signature.js ***!
   \*****************************************************************************************************************/
@@ -22061,6 +21882,47 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ 6:
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/arrayWithHoles.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+module.exports = _arrayWithHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ 60:
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/random.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+function random(min, max) {
+  if (min >= 0 && max > 0 && max >= min) {
+    var gab = max - min + 1;
+    return Math.floor(Math.random() * gab + min);
+  } else {
+    return 0;
+  }
+}
+var _default = random;
+exports.default = _default;
+
+/***/ }),
+
 /***/ 61:
 /*!**************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/trim.js ***!
@@ -22228,7 +22090,7 @@ function $parent() {
 
 /***/ }),
 
-/***/ 649:
+/***/ 641:
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/hic-video-player/utils/autoFullScreen.js ***!
   \*********************************************************************************************************************************/
@@ -22462,63 +22324,7 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 67:
-/*!******************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/throttle.js ***!
-  \******************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var timeoutArr = [];
-var flagArr = [];
-/**
- * 节流函数
- * 节流原理：在一定时间内，只能触发一次
- * @param {Function} fn 要执行的回调函数 
- * @param {Number} time 延时的时间
- * @param {Boolean} isImmediate 是否立即执行
- * @param {String} timeoutName 定时器ID
- * @return null
- */
-function throttle(fn) {
-  var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
-  var isImmediate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-  var timeoutName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "default";
-  if (!timeoutArr[timeoutName]) timeoutArr[timeoutName] = null;
-  if (isImmediate) {
-    if (!flagArr[timeoutName]) {
-      flagArr[timeoutName] = true;
-      // 如果是立即执行，则在time毫秒内开始时执行
-      if (typeof fn === 'function') fn();
-      timeoutArr[timeoutName] = setTimeout(function () {
-        flagArr[timeoutName] = false;
-      }, time);
-    }
-  } else {
-    if (!flagArr[timeoutName]) {
-      flagArr[timeoutName] = true;
-      // 如果是非立即执行，则在time毫秒内的结束处执行
-      timeoutArr[timeoutName] = setTimeout(function () {
-        flagArr[timeoutName] = false;
-        if (typeof fn === 'function') fn();
-      }, time);
-    }
-  }
-}
-;
-var _default = throttle;
-exports.default = _default;
-
-/***/ }),
-
-/***/ 671:
+/***/ 663:
 /*!****************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uni-transition/components/uni-transition/createAnimation.js ***!
   \****************************************************************************************************************************************************/
@@ -22650,6 +22456,62 @@ function createAnimation(option, _this) {
   return new MPAnimation(option, _this);
 }
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
+/***/ 67:
+/*!******************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/vk-uview-ui/libs/function/throttle.js ***!
+  \******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var timeoutArr = [];
+var flagArr = [];
+/**
+ * 节流函数
+ * 节流原理：在一定时间内，只能触发一次
+ * @param {Function} fn 要执行的回调函数 
+ * @param {Number} time 延时的时间
+ * @param {Boolean} isImmediate 是否立即执行
+ * @param {String} timeoutName 定时器ID
+ * @return null
+ */
+function throttle(fn) {
+  var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+  var isImmediate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+  var timeoutName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "default";
+  if (!timeoutArr[timeoutName]) timeoutArr[timeoutName] = null;
+  if (isImmediate) {
+    if (!flagArr[timeoutName]) {
+      flagArr[timeoutName] = true;
+      // 如果是立即执行，则在time毫秒内开始时执行
+      if (typeof fn === 'function') fn();
+      timeoutArr[timeoutName] = setTimeout(function () {
+        flagArr[timeoutName] = false;
+      }, time);
+    }
+  } else {
+    if (!flagArr[timeoutName]) {
+      flagArr[timeoutName] = true;
+      // 如果是非立即执行，则在time毫秒内的结束处执行
+      timeoutArr[timeoutName] = setTimeout(function () {
+        flagArr[timeoutName] = false;
+        if (typeof fn === 'function') fn();
+      }, time);
+    }
+  }
+}
+;
+var _default = throttle;
+exports.default = _default;
 
 /***/ }),
 

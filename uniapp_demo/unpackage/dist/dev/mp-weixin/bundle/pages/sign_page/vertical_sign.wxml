@@ -2,4 +2,4 @@
 			努力成长为堪当民族复兴重任的时代新人。”在五四青年节即将到来之际，
 			习近平总书记来到中国人民大学考察调研，
 			对全国广大青年提出殷切希望：“牢记党的教诲，立志民族复兴，不负韶华，不负时代，不负人民，
-			在青春的赛道上奋力奔跑，争取跑出当代青年的最好成绩!”</view></view><view class="text-area"><button data-event-opts="{{[['tap',[['signatureAction',['$event']]]]]}}" bindtap="__e">签名</button></view><signature-pad class="vue-ref" vue-id="11067328-2" data-ref="signature" bind:__l="__l"></signature-pad><block wx:if="{{signFilePath}}"><u-image vue-id="11067328-3" width="700rpx" height="500rpx" src="{{signFilePath}}" bind:__l="__l"></u-image></block></view>
+			在青春的赛道上奋力奔跑，争取跑出当代青年的最好成绩!”</view></view><view class="text-area"><button data-event-opts="{{[['tap',[['signatureAction',['$event']]]]]}}" bindtap="__e">签名</button></view><signature-pad class="vue-ref" vue-id="11067328-2" data-ref="signature" bind:__l="__l"></signature-pad><view style="border:1rpx dashed #555555;"><block wx:if="{{signFilePath}}"><u-image vue-id="11067328-3" width="700rpx" height="500rpx" src="{{signFilePath}}" bind:__l="__l"></u-image></block></view></view>

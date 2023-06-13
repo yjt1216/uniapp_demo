@@ -104,10 +104,10 @@ try {
       return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 341))
     },
     uRadioGroup: function () {
-      return Promise.all(/*! import() | uni_modules/vk-uview-ui/components/u-radio-group/u-radio-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/vk-uview-ui/components/u-radio-group/u-radio-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-radio-group/u-radio-group.vue */ 521))
+      return Promise.all(/*! import() | uni_modules/vk-uview-ui/components/u-radio-group/u-radio-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/vk-uview-ui/components/u-radio-group/u-radio-group")]).then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-radio-group/u-radio-group.vue */ 513))
     },
     uRadio: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-radio/u-radio */ "uni_modules/vk-uview-ui/components/u-radio/u-radio").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-radio/u-radio.vue */ 528))
+      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-radio/u-radio */ "uni_modules/vk-uview-ui/components/u-radio/u-radio").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-radio/u-radio.vue */ 520))
     },
     uInput: function () {
       return Promise.all(/*! import() | uni_modules/vk-uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/vk-uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-input/u-input.vue */ 390))
@@ -312,7 +312,7 @@ var _mock = __webpack_require__(/*! @/api/mock.js */ 118);
 //
 var Signature = function Signature() {
   Promise.all(/*! require.ensure | bundle/components/sign-signature/sign-signature */[__webpack_require__.e("bundle/common/vendor"), __webpack_require__.e("bundle/components/sign-signature/sign-signature")]).then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/sign-signature/sign-signature.vue */ 542));
+    return resolve(__webpack_require__(/*! @/bundle/components/sign-signature/sign-signature.vue */ 534));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {

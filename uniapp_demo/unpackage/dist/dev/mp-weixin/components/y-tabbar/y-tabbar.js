@@ -80,10 +80,10 @@ var components
 try {
   components = {
     uniPopup: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 607))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 599))
     },
     uDivider: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-divider/u-divider */ "uni_modules/vk-uview-ui/components/u-divider/u-divider").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-divider/u-divider.vue */ 556))
+      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-divider/u-divider */ "uni_modules/vk-uview-ui/components/u-divider/u-divider").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-divider/u-divider.vue */ 548))
     },
   }
 } catch (e) {

@@ -104,7 +104,7 @@ try {
       return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 341))
     },
     uImage: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-image/u-image */ "uni_modules/vk-uview-ui/components/u-image/u-image").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-image/u-image.vue */ 592))
+      return __webpack_require__.e(/*! import() | uni_modules/vk-uview-ui/components/u-image/u-image */ "uni_modules/vk-uview-ui/components/u-image/u-image").then(__webpack_require__.bind(null, /*! @/uni_modules/vk-uview-ui/components/u-image/u-image.vue */ 584))
     },
   }
 } catch (e) {
@@ -169,7 +169,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var SignaturePad = function SignaturePad() {
   Promise.all(/*! require.ensure | components/SignaturePad/SignaturePad */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/SignaturePad/SignaturePad")]).then((function () {
-    return resolve(__webpack_require__(/*! @/components/SignaturePad/SignaturePad.vue */ 599));
+    return resolve(__webpack_require__(/*! @/components/SignaturePad/SignaturePad.vue */ 591));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {
@@ -194,8 +194,8 @@ var _default = {
       }).then(function (path) {
         // console.log(path);
         _this.signFilePath = path;
-      }).catch(function (e) {
-        console.log('取消签名', e);
+      }).catch(function (error) {
+        console.log('取消签名error', error);
       });
     }
   }

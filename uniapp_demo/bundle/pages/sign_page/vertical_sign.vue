@@ -18,9 +18,11 @@
 			<button @click="signatureAction">签名</button>
 		</view>
 		<signature-pad ref="signature"></signature-pad>
-		<u-image width="700rpx" height="500rpx" :src="signFilePath" v-if="signFilePath"></u-image>
 		
 		
+		<view style="border: 1rpx dashed #555555;">
+			<u-image width="700rpx" height="500rpx" :src="signFilePath" v-if="signFilePath"></u-image>
+		</view>
 		
 	</view>
 </template>
@@ -55,8 +57,8 @@
 						// console.log(path);
 						this.signFilePath = path
 					})
-					.catch(e => {
-						console.log('取消签名', e);
+					.catch(error => {
+						console.log('取消签名error', error);
 					});
 			}
 			
