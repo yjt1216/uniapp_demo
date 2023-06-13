@@ -129,13 +129,13 @@
 					confirmDisabledText="请选择离店日期"
 					:formatter="formatter"
 				></u-calendar>
-				<u-verification-code
+				<u-code
 					ref="uCode"
 					@change="codeChange"
 					seconds="20"
 					@start="disabled1 = true"
 					@end="disabled1 = false"
-				></u-verification-code>
+				></u-code>
 				
 				
 			</view>

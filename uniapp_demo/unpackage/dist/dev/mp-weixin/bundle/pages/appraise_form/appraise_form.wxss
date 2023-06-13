@@ -85,4 +85,21 @@ page {
   background-image: linear-gradient(to right, #39C9BC, #6DE8CC);
   color: white;
 }
+.footer .xuanxiang {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 10rpx;
+}
+.footer .xuanxiang .s {
+  width: 90%;
+  word-break: break-all;
+  font-size: 36rpx;
+}
+.footer .xuanxiang .s2 {
+  width: 50%;
+  word-break: break-all;
+}
 

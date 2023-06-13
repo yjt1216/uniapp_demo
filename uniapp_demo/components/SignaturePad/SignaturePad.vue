@@ -1,6 +1,7 @@
 <template>
 	
-	<u-popup safe-area-inset-bottom border-radius="25" closeable mode="bottom" v-model="show">
+	<u-popup round="25" mode="bottom" :closeOnClickOverlay="true" :show="show" 
+		:safeAreaInsetBottom="true" @close="close" >
 		<view class="container">
 			<view class="title">签名</view>
 			<view class="handCenter" :style="getStyle">
@@ -15,14 +16,17 @@
 					canvas-id="__signature__canvas"
 				></canvas>
 			</view>
-
+	
 			<view class="buttons">
 				<button class="button button_rewrite" @click="rewrite">重签</button>
 				<button class="button button_submit" @click="submit">提交</button>
 			</view>
 		</view>
-		<u-toast ref="uToast" />
+		
 	</u-popup>
+	
+	
+	
 </template>
 
 <script>
@@ -93,11 +97,13 @@ export default {
 			let self = this;
 
 			if (this.handwriting.isEmpty()) {
-				// 未签字
-				return this.$refs.uToast.show({
-					title: '请在框内签字',
-					type: 'error'
-				});
+				
+				uni.showToast({
+					title:'请在框内签字',
+					icon:'error'
+				})
+				
+				return
 			}
 
 			uni.canvasToTempFilePath(

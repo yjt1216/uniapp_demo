@@ -13,6 +13,10 @@
 			</view>
 		</view>
 		
+		<view class="logo_text">
+			<text class="option-required"> * </text> 
+			<text class="u-block__title"> 护理人员签名确认 </text>
+		</view>
 		<view class="text-area">
 			<!-- <text class="title">{{title}}</text> -->
 			<button @click="signatureAction">签名</button>
@@ -84,5 +88,7 @@
 		font-size: 36rpx;
 		color: #8f8f94;
 	}
-	
+	.logo_text{
+		padding:10rpx 20rpx;
+	}
 </style>

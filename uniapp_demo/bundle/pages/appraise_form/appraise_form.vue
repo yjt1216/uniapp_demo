@@ -28,34 +28,35 @@
 							<text class="u-block__title"> {{question.title}}</text>
 						</view>
 						<view class="space-fill"></view>
+						
+						<!-- <radio-group @change="radioChangeFun">
+							<label  v-for="(item, rindex) in question.options" :key="rindex">
+								<view>
+									<radio :value="item.title" :checked="rindex === current" />
+								</view>
+								<view>{{item.title}}</view>
+							</label>
+							<u-input v-if="item.isSelect && item.title == '其他'" class="radio-bottom-input"
+								placeholder="请输入原因"
+								border="bottom"  
+								@input="inputData($event, question.title)"></u-input>
+						</radio-group> -->
+						
+						
 						<u-radio-group placement="column" >
-							
 							<view v-for="(item,qIndex) in question.options" :key="qIndex">
 								<u-radio :customStyle="{marginBottom:'8px'}" 
 								:label="item.no + '、' + item.title" 
 								:name="item.title" 
 								@change="radioChange($event, question,index)">
-								
 								</u-radio>
 								<u-input v-if="item.isSelect && item.title == '其他'" class="radio-bottom-input"
 									placeholder="请输入原因"
 									border="bottom"  
 									@input="inputData($event, question.title)"></u-input>
 							</view>
-							
-							<!-- <u-radio v-for="(item,qIndex) in question.options" :customStyle="{marginBottom:'8px'}" :key="qIndex" 
-							:label="item.no + '、' + item.title" 
-							:name="item.title" 
-							@change="radioChange($event, question,index)">
-							
-							<u-input v-if="item.isSelect && item.title == '其他'" class="radio-bottom-input"
-								placeholder="请输入其他 原因"
-								border="bottom"  
-								@input="inputData($event, question.title)"></u-input>
-							
-							</u-radio> -->
-							
 						</u-radio-group>
+						
 					</view>
 					<!-- 多选题q_check -->
 					<view class="question-check" v-if="question.qTypeId == 'q_check'">
@@ -157,6 +158,14 @@
 				var pages = getCurrentPages();
 				console.log('导航栏pages',pages)
 				uni.navigateBack()
+			},
+			/* radio-group */
+			radioChangeFun(e){
+				console.log('评估表单radioChangeFun',e)
+			},
+			select(e){
+				console.log(e);
+				
 			},
 			/* 获取评估表单数据 */
 			getFormData() {
@@ -341,6 +350,28 @@
 			background-image: linear-gradient(to right, #39C9BC,#6DE8CC);
 			color: white;
 		}
+		
+		.xuanxiang{
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			align-items: flex-start;
+			justify-content: space-between;
+			margin-top: 10rpx;
+		}
+		
+		.xuanxiang .s{
+			width:90%;
+			word-break: break-all;
+			font-size: 36upx;
+		}
+		
+		.xuanxiang .s2{
+			width:50%;
+			word-break: break-all;
+		}
+		
+		
 	}
 </style>
 

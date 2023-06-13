@@ -18,17 +18,17 @@ var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ 27));
 var _store = _interopRequireDefault(__webpack_require__(/*! ./store */ 33));
 var _tools = __webpack_require__(/*! ./utils/tools */ 40);
 var _cache = _interopRequireDefault(__webpack_require__(/*! ./utils/cache */ 38));
-var _vkUviewUi = _interopRequireDefault(__webpack_require__(/*! @/uni_modules/vk-uview-ui */ 41));
-var _app = _interopRequireDefault(__webpack_require__(/*! @/mixins/app */ 71));
-var _router = __webpack_require__(/*! ./router.js */ 74);
-var _index = _interopRequireDefault(__webpack_require__(/*! @/js_sdk/luch-request/luch-request/index.js */ 77));
+var _uviewUi = _interopRequireDefault(__webpack_require__(/*! @/uni_modules/uview-ui */ 41));
+var _app = _interopRequireDefault(__webpack_require__(/*! @/mixins/app */ 166));
+var _router = __webpack_require__(/*! ./router.js */ 169);
+var _index = _interopRequireDefault(__webpack_require__(/*! @/js_sdk/luch-request/luch-request/index.js */ 172));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 // @ts-ignore
 wx.__webpack_require_UNI_MP_PLUGIN__ = __webpack_require__;
 var routerLink = function routerLink() {
   __webpack_require__.e(/*! require.ensure | js_sdk/uni-simple-router/link */ "js_sdk/uni-simple-router/link").then((function () {
-    return resolve(__webpack_require__(/*! ./js_sdk/uni-simple-router/link.vue */ 336));
+    return resolve(__webpack_require__(/*! ./js_sdk/uni-simple-router/link.vue */ 427));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 // Vue.component('mescroll-body', MescrollBody)
@@ -40,7 +40,7 @@ var http = new _index.default();
 _vue.default.prototype.$http = http;
 _vue.default.use(_router.router);
 _vue.default.mixin(_app.default);
-_vue.default.use(_vkUviewUi.default);
+_vue.default.use(_uviewUi.default);
 _App.default.mpType = 'app';
 var app = new _vue.default(_objectSpread(_objectSpread({}, _App.default), {}, {
   store: _store.default

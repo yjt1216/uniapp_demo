@@ -3,7 +3,7 @@ import App from './App'
 import store from './store'
 import {toast} from './utils/tools'
 import Cache from './utils/cache'
-import uView from "@/uni_modules/vk-uview-ui";
+import uView from "@/uni_modules/uview-ui";
 import minxinsApp from '@/mixins/app'
 // import MescrollBody from "@/components/mescroll-uni/mescroll-body.vue"
 import {router,RouterMount} from './router.js'
