@@ -194,6 +194,13 @@
 					"style": {
 						"navigationStyle": "custom"
 					}
+				},
+				/* z-paging 加载数据list */
+				{
+					"path": "pages/loading_page/loading_page",
+					"style": {
+						"navigationStyle": "custom"
+					}
 				}
 			]
 		}

@@ -28,7 +28,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 wx.__webpack_require_UNI_MP_PLUGIN__ = __webpack_require__;
 var routerLink = function routerLink() {
   __webpack_require__.e(/*! require.ensure | js_sdk/uni-simple-router/link */ "js_sdk/uni-simple-router/link").then((function () {
-    return resolve(__webpack_require__(/*! ./js_sdk/uni-simple-router/link.vue */ 427));
+    return resolve(__webpack_require__(/*! ./js_sdk/uni-simple-router/link.vue */ 435));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 // Vue.component('mescroll-body', MescrollBody)

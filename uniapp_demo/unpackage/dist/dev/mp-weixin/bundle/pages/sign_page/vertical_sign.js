@@ -101,10 +101,10 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 432))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 440))
     },
     uImage: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-image/u-image */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-image/u-image")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-image/u-image.vue */ 694))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-image/u-image */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-image/u-image")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-image/u-image.vue */ 702))
     },
   }
 } catch (e) {
@@ -169,7 +169,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var SignaturePad = function SignaturePad() {
   Promise.all(/*! require.ensure | components/SignaturePad/SignaturePad */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/SignaturePad/SignaturePad")]).then((function () {
-    return resolve(__webpack_require__(/*! @/components/SignaturePad/SignaturePad.vue */ 702));
+    return resolve(__webpack_require__(/*! @/components/SignaturePad/SignaturePad.vue */ 710));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {
@@ -184,6 +184,8 @@ var _default = {
   },
   onLoad: function onLoad() {},
   methods: {
+    // js 触发的函数:置空即可
+    moveHandle: function moveHandle() {},
     signatureAction: function signatureAction() {
       var _this = this;
       console.log('点击签名pop');

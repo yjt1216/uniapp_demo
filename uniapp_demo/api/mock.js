@@ -239,3 +239,20 @@ export function apiAssessFromData() {
 		},1000)
 	})
 }
+
+/* 评估订单数据 */
+export function apiOrderData() {
+	return new Promise((resolute, reject)=>{
+		//延时一秒,模拟联网
+		setTimeout(()=> {
+			try{
+				let data = orders
+				
+				resolute(data);
+			} catch (e) {
+				//模拟接口请求失败
+				reject(e);
+			}
+		},1000)
+	})
+}

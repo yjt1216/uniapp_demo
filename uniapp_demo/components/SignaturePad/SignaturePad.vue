@@ -1,29 +1,31 @@
 <template>
 	
-	<u-popup round="25" mode="bottom" :closeOnClickOverlay="true" :show="show" 
-		:safeAreaInsetBottom="true" @close="close" >
-		<view class="container">
-			<view class="title">签名</view>
-			<view class="handCenter" :style="getStyle">
-				<canvas
-					v-if="show"
-					class="hand-writing"
-					
-					disable-scroll
-					@touchstart="uploadScaleStart"
-					@touchmove="uploadScaleMove"
-					@touchend="uploadScaleEnd"
-					canvas-id="__signature__canvas"
-				></canvas>
-			</view>
-	
-			<view class="buttons">
-				<button class="button button_rewrite" @click="rewrite">重签</button>
-				<button class="button button_submit" @click="submit">提交</button>
-			</view>
-		</view>
+	<view>
+		<u-popup round="25" mode="bottom" :closeOnClickOverlay="true" :show="show"
+			:safeAreaInsetBottom="true" @close="close" >
+			<view class="container">
+				<view class="title">签名</view>
+				<view class="handCenter" :style="getStyle">
+					<canvas
+						v-if="show"
+						class="hand-writing"
+						
+						disable-scroll
+						@touchstart="uploadScaleStart"
+						@touchmove="uploadScaleMove"
+						@touchend="uploadScaleEnd"
+						canvas-id="__signature__canvas"
+					></canvas>
+				</view>
 		
-	</u-popup>
+				<view class="buttons">
+					<button class="button button_rewrite" @click="rewrite">重签</button>
+					<button class="button button_submit" @click="submit">提交</button>
+				</view>
+			</view>
+			
+		</u-popup>
+	</view>
 	
 	
 	

@@ -101,16 +101,16 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 432))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 440))
     },
     uForm: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-form/u-form */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-form/u-form")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-form/u-form.vue */ 557))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-form/u-form */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-form/u-form")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-form/u-form.vue */ 565))
     },
     uFormItem: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-form-item/u-form-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-form-item/u-form-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-form-item/u-form-item.vue */ 566))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-form-item/u-form-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-form-item/u-form-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-form-item/u-form-item.vue */ 574))
     },
     uIcon: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-icon/u-icon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-icon/u-icon")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-icon/u-icon.vue */ 474))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-icon/u-icon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-icon/u-icon")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-icon/u-icon.vue */ 482))
     },
   }
 } catch (e) {
@@ -186,12 +186,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var RboyUploadSfz = function RboyUploadSfz() {
   Promise.all(/*! require.ensure | bundle/components/Rboy-upload-sfz/Rboy-upload-sfz */[__webpack_require__.e("bundle/common/vendor"), __webpack_require__.e("bundle/components/Rboy-upload-sfz/Rboy-upload-sfz")]).then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/Rboy-upload-sfz/Rboy-upload-sfz.vue */ 680));
+    return resolve(__webpack_require__(/*! @/bundle/components/Rboy-upload-sfz/Rboy-upload-sfz.vue */ 688));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var pickRegions = function pickRegions() {
   Promise.all(/*! require.ensure | bundle/components/pick-regions/pick-regions */[__webpack_require__.e("bundle/common/vendor"), __webpack_require__.e("bundle/components/pick-regions/pick-regions")]).then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/pick-regions/pick-regions.vue */ 688));
+    return resolve(__webpack_require__(/*! @/bundle/components/pick-regions/pick-regions.vue */ 696));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {
