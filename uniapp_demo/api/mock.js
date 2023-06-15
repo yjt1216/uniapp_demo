@@ -241,13 +241,32 @@ export function apiAssessFromData() {
 }
 
 /* 评估订单数据 */
-export function apiOrderData() {
+export function apiOrderData(params) {
 	return new Promise((resolute, reject)=>{
 		//延时一秒,模拟联网
 		setTimeout(()=> {
 			try{
-				let data = orders
-				
+				if(!params.pageNum){
+					params.pageNum == 1
+				}
+				if(!params.pageSize){
+					params.pageSize == 10
+				}
+				const {
+					pageNum,pageSize
+				} = params
+				let data = {
+					list: [], // 数据列表
+					totalCount: 0, // 总数量
+					totalPage: 0, // 总页数
+					hasNext: false // 是否有下一页
+				}
+				// let data = orders
+				// 分页
+				for (let i = (pageNum - 1) * pageSize; i < pageNum * pageSize; i++) {
+					if (i >= orders.length) break
+					data.list.push(orders[i])
+				}
 				resolute(data);
 			} catch (e) {
 				//模拟接口请求失败

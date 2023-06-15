@@ -25029,12 +25029,34 @@ function apiAssessFromData() {
 }
 
 /* 评估订单数据 */
-function apiOrderData() {
+function apiOrderData(params) {
   return new Promise(function (resolute, reject) {
     //延时一秒,模拟联网
     setTimeout(function () {
       try {
-        var data = _orders.default;
+        if (!params.pageNum) {
+          params.pageNum == 1;
+        }
+        if (!params.pageSize) {
+          params.pageSize == 10;
+        }
+        var pageNum = params.pageNum,
+          pageSize = params.pageSize;
+        var data = {
+          list: [],
+          // 数据列表
+          totalCount: 0,
+          // 总数量
+          totalPage: 0,
+          // 总页数
+          hasNext: false // 是否有下一页
+        };
+        // let data = orders
+        // 分页
+        for (var i = (pageNum - 1) * pageSize; i < pageNum * pageSize; i++) {
+          if (i >= _orders.default.length) break;
+          data.list.push(_orders.default[i]);
+        }
         resolute(data);
       } catch (e) {
         //模拟接口请求失败

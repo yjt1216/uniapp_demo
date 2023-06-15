@@ -7,7 +7,7 @@
 			</template>
 			<view class="item" v-for="(order,index) in dataList" :key="index" @click="itemClickAction(order)">
 				<uni-card>
-					<view class="item-title">{{order.item_name}}</view>
+					<view class="item-title">{{order.order_id+order.item_name}}</view>
 					<view class="item-detail">{{order.intro}}</view>
 					<view class="item-address">{{order.address}}</view>
 				</uni-card>
@@ -43,10 +43,14 @@
 				uni.showLoading({
 					title: '加载中...'
 				})
-				apiOrderData().then(res=>{
+				const params = {
+					pageNum:pageNo,
+					pageSize:pageSize
+				}
+				apiOrderData(params).then(res=>{
 					console.log('评估表单res',res)
-					this.dataList = res
-					this.$refs.paging.complete(res);
+					this.dataList = res.list
+					this.$refs.paging.complete(res.list);
 					uni.hideLoading()
 				}).catch((err)=>{
 					console.log('评估表单err',err)

@@ -228,10 +228,14 @@ var _default = {
       uni.showLoading({
         title: '加载中...'
       });
-      (0, _mock.apiOrderData)().then(function (res) {
+      var params = {
+        pageNum: pageNo,
+        pageSize: pageSize
+      };
+      (0, _mock.apiOrderData)(params).then(function (res) {
         console.log('评估表单res', res);
-        _this.dataList = res;
-        _this.$refs.paging.complete(res);
+        _this.dataList = res.list;
+        _this.$refs.paging.complete(res.list);
         uni.hideLoading();
       }).catch(function (err) {
         console.log('评估表单err', err);
