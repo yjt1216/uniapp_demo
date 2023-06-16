@@ -51,26 +51,6 @@
 					</view>
 				</view>
 				
-				<!-- 签名板  -->
-				<!-- <view class="logo_text">
-					<text class="option-required"> * </text> 
-					<text class="u-block__title"> 护理人员签名确认 </text>
-				</view>
-				<view class="question-sign" >
-					<view class="imgs" @tap="doss" >
-						<text v-if="signImage ==''">点击此处签名确认</text>
-						<image v-if="signImage !=''" class="img" :src="signImage" mode="widthFix" style="margin: 0px 24px;"></image>
-					</view>
-					<catSignature canvasId="canvas1" @closeSign="closeSign" @saveSign="saveSign" :visible="isShowSign" ref="catSign"/>
-				</view> -->
-				
-				<!-- 当前签退地址 -->
-				<!-- <view class="location-address" >
-					<view class="logo_text"> 
-						<image class="img-loaction" :src="'/static/common/home_dingwei.png'"></image>
-						<text class="u-block__title"> {{nurserLocation.address}} </text>
-					</view>
-				</view> -->
 				<view class="question-space" >
 					
 				</view>

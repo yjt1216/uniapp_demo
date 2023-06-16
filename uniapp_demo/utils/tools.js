@@ -807,4 +807,55 @@ export const colorToRGB = (val, opa) => {
 	return rgbStr;
 }
 
+/* 图片上传 */
+export function uploadFile(path) {
+	return new Promise((resolve, reject) => {
+		uni.uploadFile({
+			url: baseURL + '/api/file/formimage',
+			filePath: path,
+			name: 'file',
+			header: {
+				token: store.getters.token,
+				// version: '1.2.1.20210717'
+			},
+			fileType: 'image',
+			cloudPath: '',
+			success: res => {
+				try {
+					console.log(path)
+					console.log('uploadFile res ==> ', res)
+					let data = JSON.parse(res.data);
 
+					if (data.code == 1) {
+						resolve(data.data);
+					} else {
+						reject()
+					}
+				} catch (e) {
+					console.log(e)
+					reject()
+				}
+			},
+			fail: (err) => {
+				console.log(err)
+				reject()
+			}
+		});
+	});
+
+}
+
+/* 选择图片 */
+export function chooseImages(imageMax){
+	return new Promise((resolve, reject) => {
+		uni.chooseImage({
+			count: imageMax,
+			success:function(res){
+				var imageLise = [];
+				for(var i = 0; i<imageMax; i++){
+					
+				}
+			}
+		})
+	});
+}
