@@ -816,7 +816,6 @@ export function uploadFile(path) {
 			name: 'file',
 			header: {
 				token: store.getters.token,
-				// version: '1.2.1.20210717'
 			},
 			fileType: 'image',
 			cloudPath: '',

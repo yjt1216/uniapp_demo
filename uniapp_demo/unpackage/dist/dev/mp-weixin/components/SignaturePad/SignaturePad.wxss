@@ -1,0 +1,58 @@
+
+.container.data-v-2fa2d964 {
+	width: 100%;
+	/* height: 822rpx; */
+	position: relative;
+	background-color: #fff;
+}
+.title.data-v-2fa2d964 {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	color: #3e3e3e;
+	font-size: 38rpx;
+	font-weight: bold;
+	margin-top: 35rpx;
+}
+.handCenter.data-v-2fa2d964 {
+	margin: 35rpx auto 0;
+	border: 1px dashed #979797;
+}
+.hand-writing.data-v-2fa2d964 {
+	width: 100%;
+	height: 100%;
+}
+.buttons.data-v-2fa2d964 {
+	width: 570rpx;
+	margin: 40rpx auto;
+	display: flex;
+	justify-content: space-between;
+}
+/* .btn {
+	width: 270rpx;
+	height: 78rpx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 14rpx;
+	font-size: 33rpx;
+} */
+.buttons .button.data-v-2fa2d964 {
+	width: 200rpx;
+	height: 78rpx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 14rpx;
+	font-size: 33rpx;
+}
+.buttons .button.button_rewrite.data-v-2fa2d964 {
+	border: 1px solid #ff3b3b;
+	background-color: #ffffff;
+	color: #ff4343;
+}
+.buttons .button.button_submit.data-v-2fa2d964 {
+	background-color: #ff824e;
+	color: #fff;
+}
+

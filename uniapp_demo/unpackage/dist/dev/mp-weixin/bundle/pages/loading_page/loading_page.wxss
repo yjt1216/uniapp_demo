@@ -1,0 +1,22 @@
+
+.item {
+	
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+.item-detail {
+	font-size: 28rpx;
+}
+.item-address{
+	font-size: 28rpx;
+}
+.item-line {
+	position: absolute;
+	bottom: 0rpx;
+	left: 0rpx;
+	height: 1px;
+	width: 100%;
+	background-color: #eeeeee;
+}
+
