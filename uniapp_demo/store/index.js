@@ -1,13 +1,20 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import modules from "./modules";
-import getters from "./getters";
+import { createPinia } from 'pinia';
+import piniaPersist from 'pinia-plugin-persist-uni';
 
-Vue.use(Vuex);
-const debug = process.env.NODE_ENV !== "production";
-
-export default new Vuex.Store({
-  modules,
-  getters,
-  strict: debug
+// 自动注入所有pinia模块
+const files = import.meta.globEager('./*.js');
+const modules = {};
+Object.keys(files).forEach((key) => {
+  modules[key.replace(/(.*\/)*([^.]+).*/gi, '$2')] = files[key].default;
 });
+
+export const setupPinia = (app) => {
+  const pinia = createPinia();
+  pinia.use(piniaPersist);
+
+  app.use(pinia);
+};
+
+export default (name) => {
+  return modules[name]();
+};

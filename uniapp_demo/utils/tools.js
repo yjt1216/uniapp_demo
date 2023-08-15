@@ -72,6 +72,17 @@ export function toast(info = {}, navigateOpt) {
 	}
 }
 
+/**
+ * 检查网络
+ * @param {Boolean} silence - 静默检查
+ */
+async function checkNetwork() {
+  const networkStatus = await uni.getNetworkType();
+  if (networkStatus.networkType == 'none') {
+    return Promise.resolve(false);
+  }
+  return Promise.resolve(true);
+}
 
 /**
  * 获取是否授权了定位权限
