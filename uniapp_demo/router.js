@@ -72,10 +72,10 @@ router.beforeEach((to, from, next) => {
 
 	console.log(to,from, 'beforeEach---开始跳转')
 	let index = whiteList.findIndex((item) => from.path.includes(item))
-	if (index == -1 && !store.getters.token) {
+	if (index == -1  ) {
 		Cache.set(BACK_URL, from.fullPath)
 	}
-	if (to.meta.auth && !store.getters.token) {
+	if (to.meta.auth) {
 		next('/pages/login/login');
 		return
 	} else {

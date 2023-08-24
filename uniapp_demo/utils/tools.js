@@ -826,7 +826,7 @@ export function uploadFile(path) {
 			filePath: path,
 			name: 'file',
 			header: {
-				token: store.getters.token,
+				token: 'store.getters.token',
 			},
 			fileType: 'image',
 			cloudPath: '',

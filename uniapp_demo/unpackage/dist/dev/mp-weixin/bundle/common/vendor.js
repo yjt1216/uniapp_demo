@@ -1,6 +1,6 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["bundle/common/vendor"],{
 
-/***/ 300:
+/***/ 315:
 /*!*************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/mmmm-image-tools/index.js ***!
   \*************************************************************************************************************/
@@ -214,7 +214,7 @@ function base64ToPath(base64) {
 
 /***/ }),
 
-/***/ 349:
+/***/ 364:
 /*!**********************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/bundle/static/icon_delete.png ***!
   \**********************************************************************************************************/
@@ -225,7 +225,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAA5CAYAAACM
 
 /***/ }),
 
-/***/ 358:
+/***/ 373:
 /*!************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/utils/dp_request.js ***!
   \************************************************************************************************/
@@ -240,7 +240,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _index = _interopRequireDefault(__webpack_require__(/*! @/js_sdk/luch-request/luch-request/index.js */ 172));
+var _index = _interopRequireDefault(__webpack_require__(/*! @/js_sdk/luch-request/luch-request/index.js */ 187));
 var BASE_API = 'https://api.depin.tech/api/';
 var http = new _index.default({
   baseURL: BASE_API,
@@ -288,7 +288,7 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 544:
+/***/ 566:
 /*!**********************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mixins/mescroll-more-item.js ***!
   \**********************************************************************************************************************************************************/
@@ -366,7 +366,7 @@ exports.default = _default2;
 
 /***/ }),
 
-/***/ 693:
+/***/ 715:
 /*!**********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/bundle/components/Rboy-upload-sfz/file.js ***!
   \**********************************************************************************************************************/
@@ -383,7 +383,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 701:
+/***/ 723:
 /*!************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/bundle/components/pick-regions/regions.json ***!
   \************************************************************************************************************************/

@@ -25,7 +25,26 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.form-page {
-  padding: 10rpx;
+.example {
+  padding: 15px;
+  background-color: #fff;
+}
+.segmented-control {
+  margin-bottom: 15px;
+}
+.button-group {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-around;
+}
+.form-item {
+  display: flex;
+  align-items: center;
+}
+.button {
+  display: flex;
+  align-items: center;
+  height: 35px;
+  margin-left: 10px;
 }
 

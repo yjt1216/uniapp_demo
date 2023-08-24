@@ -780,8 +780,8 @@ function populateParameters(result) {
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "3.8.7",
-    uniRuntimeVersion: "3.8.7",
+    uniCompileVersion: "3.8.12",
+    uniRuntimeVersion: "3.8.12",
     uniPlatform: undefined || "mp-weixin",
     deviceBrand: deviceBrand,
     deviceModel: model,
@@ -9636,1303 +9636,5047 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
-var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 25));
-var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 34));
-var _modules = _interopRequireDefault(__webpack_require__(/*! ./modules */ 35));
-var _getters = _interopRequireDefault(__webpack_require__(/*! ./getters */ 39));
-_vue.default.use(_vuex.default);
-var debug = "development" !== "production";
-var _default = new _vuex.default.Store({
-  modules: _modules.default,
-  getters: _getters.default,
-  strict: debug
-});
-exports.default = _default;
+exports.setupPinia = void 0;
+var _pinia = __webpack_require__(/*! pinia */ 34);
+var _piniaPluginPersistUni = _interopRequireDefault(__webpack_require__(/*! pinia-plugin-persist-uni */ 54));
+var setupPinia = function setupPinia(app) {
+  var pinia = (0, _pinia.createPinia)();
+  pinia.use(_piniaPluginPersistUni.default);
+  app.use(pinia);
+};
+exports.setupPinia = setupPinia;
 
 /***/ }),
 /* 34 */
-/*!**************************************************************************************!*\
-  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vuex3/dist/vuex.common.js ***!
-  \**************************************************************************************/
+/*!**************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/pinia/dist/pinia.mjs ***!
+  \**************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {/*!
- * vuex v3.6.2
- * (c) 2021 Evan You
+/* WEBPACK VAR INJECTION */(function(global) {
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PiniaVuePlugin = exports.MutationType = void 0;
+exports.acceptHMRUpdate = acceptHMRUpdate;
+exports.createPinia = createPinia;
+exports.defineStore = defineStore;
+exports.getActivePinia = void 0;
+exports.mapActions = mapActions;
+exports.mapGetters = void 0;
+exports.mapState = mapState;
+exports.mapStores = mapStores;
+exports.mapWritableState = mapWritableState;
+exports.setActivePinia = void 0;
+exports.setMapStoreSuffix = setMapStoreSuffix;
+exports.skipHydrate = skipHydrate;
+exports.storeToRefs = storeToRefs;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
+var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
+var _vueDemi = __webpack_require__(/*! vue-demi */ 38);
+var _devtoolsApi = __webpack_require__(/*! @vue/devtools-api */ 41);
+/*!
+ * pinia v2.1.6
+ * (c) 2023 Eduardo San Martin Morote
  * @license MIT
  */
 
-
-function applyMixin (Vue) {
-  var version = Number(Vue.version.split('.')[0]);
-
-  if (version >= 2) {
-    Vue.mixin({ beforeCreate: vuexInit });
-  } else {
-    // override init and inject vuex init procedure
-    // for 1.x backwards compatibility.
-    var _init = Vue.prototype._init;
-    Vue.prototype._init = function (options) {
-      if ( options === void 0 ) options = {};
-
-      options.init = options.init
-        ? [vuexInit].concat(options.init)
-        : vuexInit;
-      _init.call(this, options);
-    };
-  }
-
+/**
+ * setActivePinia must be called to handle SSR at the top of functions like
+ * `fetch`, `setup`, `serverPrefetch` and others
+ */
+var activePinia;
+/**
+ * Sets or unsets the active pinia. Used in SSR and internally when calling
+ * actions and getters
+ *
+ * @param pinia - Pinia instance
+ */
+// @ts-expect-error: cannot constrain the type of the return
+var setActivePinia = function setActivePinia(pinia) {
+  return activePinia = pinia;
+};
+/**
+ * Get the currently active pinia if there is any.
+ */
+exports.setActivePinia = setActivePinia;
+var getActivePinia = function getActivePinia() {
+  return (0, _vueDemi.hasInjectionContext)() && (0, _vueDemi.inject)(piniaSymbol) || activePinia;
+};
+exports.getActivePinia = getActivePinia;
+var piniaSymbol =  true ? Symbol('pinia') : /* istanbul ignore next */undefined;
+function isPlainObject(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+o) {
+  return o && (0, _typeof2.default)(o) === 'object' && Object.prototype.toString.call(o) === '[object Object]' && typeof o.toJSON !== 'function';
+}
+// type DeepReadonly<T> = { readonly [P in keyof T]: DeepReadonly<T[P]> }
+// TODO: can we change these to numbers?
+/**
+ * Possible types for SubscriptionCallback
+ */
+var MutationType;
+exports.MutationType = MutationType;
+(function (MutationType) {
   /**
-   * Vuex init hook, injected into each instances init hooks list.
+   * Direct mutation of the state:
+   *
+   * - `store.name = 'new name'`
+   * - `store.$state.name = 'new name'`
+   * - `store.list.push('new item')`
    */
-
-  function vuexInit () {
-    var options = this.$options;
-    // store injection
-    if (options.store) {
-      this.$store = typeof options.store === 'function'
-        ? options.store()
-        : options.store;
-    } else if (options.parent && options.parent.$store) {
-      this.$store = options.parent.$store;
-    }
-  }
-}
-
-var target = typeof window !== 'undefined'
-  ? window
-  : typeof global !== 'undefined'
-    ? global
-    : {};
-var devtoolHook = target.__VUE_DEVTOOLS_GLOBAL_HOOK__;
-
-function devtoolPlugin (store) {
-  if (!devtoolHook) { return }
-
-  store._devtoolHook = devtoolHook;
-
-  devtoolHook.emit('vuex:init', store);
-
-  devtoolHook.on('vuex:travel-to-state', function (targetState) {
-    store.replaceState(targetState);
-  });
-
-  store.subscribe(function (mutation, state) {
-    devtoolHook.emit('vuex:mutation', mutation, state);
-  }, { prepend: true });
-
-  store.subscribeAction(function (action, state) {
-    devtoolHook.emit('vuex:action', action, state);
-  }, { prepend: true });
-}
-
+  MutationType["direct"] = "direct";
+  /**
+   * Mutated the state with `$patch` and an object
+   *
+   * - `store.$patch({ name: 'newName' })`
+   */
+  MutationType["patchObject"] = "patch object";
+  /**
+   * Mutated the state with `$patch` and a function
+   *
+   * - `store.$patch(state => state.name = 'newName')`
+   */
+  MutationType["patchFunction"] = "patch function";
+  // maybe reset? for $state = {} and $reset
+})(MutationType || (exports.MutationType = MutationType = {}));
+var IS_CLIENT = typeof window !== 'undefined';
 /**
- * Get the first item that pass the test
- * by second argument function
+ * Should we add the devtools plugins.
+ * - only if dev mode or forced through the prod devtools flag
+ * - not in test
+ * - only if window exists (could change in the future)
+ */
+var USE_DEVTOOLS =  true && IS_CLIENT;
+
+/*
+ * FileSaver.js A saveAs() FileSaver implementation.
  *
- * @param {Array} list
- * @param {Function} f
- * @return {*}
- */
-function find (list, f) {
-  return list.filter(f)[0]
-}
-
-/**
- * Deep copy the given object considering circular structure.
- * This function caches all nested objects and its copies.
- * If it detects circular structure, use cached copy to avoid infinite loop.
+ * Originally by Eli Grey, adapted as an ESM module by Eduardo San Martin
+ * Morote.
  *
- * @param {*} obj
- * @param {Array<Object>} cache
- * @return {*}
+ * License : MIT
  */
-function deepCopy (obj, cache) {
-  if ( cache === void 0 ) cache = [];
-
-  // just return if obj is immutable value
-  if (obj === null || typeof obj !== 'object') {
-    return obj
-  }
-
-  // if obj is hit, it is in circular structure
-  var hit = find(cache, function (c) { return c.original === obj; });
-  if (hit) {
-    return hit.copy
-  }
-
-  var copy = Array.isArray(obj) ? [] : {};
-  // put the copy into cache at first
-  // because we want to refer it in recursive deepCopy
-  cache.push({
-    original: obj,
-    copy: copy
-  });
-
-  Object.keys(obj).forEach(function (key) {
-    copy[key] = deepCopy(obj[key], cache);
-  });
-
-  return copy
-}
-
-/**
- * forEach for object
- */
-function forEachValue (obj, fn) {
-  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
-}
-
-function isObject (obj) {
-  return obj !== null && typeof obj === 'object'
-}
-
-function isPromise (val) {
-  return val && typeof val.then === 'function'
-}
-
-function assert (condition, msg) {
-  if (!condition) { throw new Error(("[vuex] " + msg)) }
-}
-
-function partial (fn, arg) {
-  return function () {
-    return fn(arg)
-  }
-}
-
-// Base data struct for store's module, package with some attribute and method
-var Module = function Module (rawModule, runtime) {
-  this.runtime = runtime;
-  // Store some children item
-  this._children = Object.create(null);
-  // Store the origin module object which passed by programmer
-  this._rawModule = rawModule;
-  var rawState = rawModule.state;
-
-  // Store the origin module's state
-  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
-};
-
-var prototypeAccessors = { namespaced: { configurable: true } };
-
-prototypeAccessors.namespaced.get = function () {
-  return !!this._rawModule.namespaced
-};
-
-Module.prototype.addChild = function addChild (key, module) {
-  this._children[key] = module;
-};
-
-Module.prototype.removeChild = function removeChild (key) {
-  delete this._children[key];
-};
-
-Module.prototype.getChild = function getChild (key) {
-  return this._children[key]
-};
-
-Module.prototype.hasChild = function hasChild (key) {
-  return key in this._children
-};
-
-Module.prototype.update = function update (rawModule) {
-  this._rawModule.namespaced = rawModule.namespaced;
-  if (rawModule.actions) {
-    this._rawModule.actions = rawModule.actions;
-  }
-  if (rawModule.mutations) {
-    this._rawModule.mutations = rawModule.mutations;
-  }
-  if (rawModule.getters) {
-    this._rawModule.getters = rawModule.getters;
-  }
-};
-
-Module.prototype.forEachChild = function forEachChild (fn) {
-  forEachValue(this._children, fn);
-};
-
-Module.prototype.forEachGetter = function forEachGetter (fn) {
-  if (this._rawModule.getters) {
-    forEachValue(this._rawModule.getters, fn);
-  }
-};
-
-Module.prototype.forEachAction = function forEachAction (fn) {
-  if (this._rawModule.actions) {
-    forEachValue(this._rawModule.actions, fn);
-  }
-};
-
-Module.prototype.forEachMutation = function forEachMutation (fn) {
-  if (this._rawModule.mutations) {
-    forEachValue(this._rawModule.mutations, fn);
-  }
-};
-
-Object.defineProperties( Module.prototype, prototypeAccessors );
-
-var ModuleCollection = function ModuleCollection (rawRootModule) {
-  // register root module (Vuex.Store options)
-  this.register([], rawRootModule, false);
-};
-
-ModuleCollection.prototype.get = function get (path) {
-  return path.reduce(function (module, key) {
-    return module.getChild(key)
-  }, this.root)
-};
-
-ModuleCollection.prototype.getNamespace = function getNamespace (path) {
-  var module = this.root;
-  return path.reduce(function (namespace, key) {
-    module = module.getChild(key);
-    return namespace + (module.namespaced ? key + '/' : '')
-  }, '')
-};
-
-ModuleCollection.prototype.update = function update$1 (rawRootModule) {
-  update([], this.root, rawRootModule);
-};
-
-ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
-    var this$1 = this;
-    if ( runtime === void 0 ) runtime = true;
-
-  if ((true)) {
-    assertRawModule(path, rawModule);
-  }
-
-  var newModule = new Module(rawModule, runtime);
-  if (path.length === 0) {
-    this.root = newModule;
-  } else {
-    var parent = this.get(path.slice(0, -1));
-    parent.addChild(path[path.length - 1], newModule);
-  }
-
-  // register nested modules
-  if (rawModule.modules) {
-    forEachValue(rawModule.modules, function (rawChildModule, key) {
-      this$1.register(path.concat(key), rawChildModule, runtime);
-    });
-  }
-};
-
-ModuleCollection.prototype.unregister = function unregister (path) {
-  var parent = this.get(path.slice(0, -1));
-  var key = path[path.length - 1];
-  var child = parent.getChild(key);
-
-  if (!child) {
-    if ((true)) {
-      console.warn(
-        "[vuex] trying to unregister module '" + key + "', which is " +
-        "not registered"
-      );
-    }
-    return
-  }
-
-  if (!child.runtime) {
-    return
-  }
-
-  parent.removeChild(key);
-};
-
-ModuleCollection.prototype.isRegistered = function isRegistered (path) {
-  var parent = this.get(path.slice(0, -1));
-  var key = path[path.length - 1];
-
-  if (parent) {
-    return parent.hasChild(key)
-  }
-
-  return false
-};
-
-function update (path, targetModule, newModule) {
-  if ((true)) {
-    assertRawModule(path, newModule);
-  }
-
-  // update target module
-  targetModule.update(newModule);
-
-  // update nested modules
-  if (newModule.modules) {
-    for (var key in newModule.modules) {
-      if (!targetModule.getChild(key)) {
-        if ((true)) {
-          console.warn(
-            "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
-            'manual reload is needed'
-          );
-        }
-        return
-      }
-      update(
-        path.concat(key),
-        targetModule.getChild(key),
-        newModule.modules[key]
-      );
-    }
-  }
-}
-
-var functionAssert = {
-  assert: function (value) { return typeof value === 'function'; },
-  expected: 'function'
-};
-
-var objectAssert = {
-  assert: function (value) { return typeof value === 'function' ||
-    (typeof value === 'object' && typeof value.handler === 'function'); },
-  expected: 'function or object with "handler" function'
-};
-
-var assertTypes = {
-  getters: functionAssert,
-  mutations: functionAssert,
-  actions: objectAssert
-};
-
-function assertRawModule (path, rawModule) {
-  Object.keys(assertTypes).forEach(function (key) {
-    if (!rawModule[key]) { return }
-
-    var assertOptions = assertTypes[key];
-
-    forEachValue(rawModule[key], function (value, type) {
-      assert(
-        assertOptions.assert(value),
-        makeAssertionMessage(path, key, type, value, assertOptions.expected)
-      );
-    });
-  });
-}
-
-function makeAssertionMessage (path, key, type, value, expected) {
-  var buf = key + " should be " + expected + " but \"" + key + "." + type + "\"";
-  if (path.length > 0) {
-    buf += " in module \"" + (path.join('.')) + "\"";
-  }
-  buf += " is " + (JSON.stringify(value)) + ".";
-  return buf
-}
-
-var Vue; // bind on install
-
-var Store = function Store (options) {
-  var this$1 = this;
-  if ( options === void 0 ) options = {};
-
-  // Auto install if it is not done yet and `window` has `Vue`.
-  // To allow users to avoid auto-installation in some cases,
-  // this code should be placed here. See #731
-  if (!Vue && typeof window !== 'undefined' && window.Vue) {
-    install(window.Vue);
-  }
-
-  if ((true)) {
-    assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
-    assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
-    assert(this instanceof Store, "store must be called with the new operator.");
-  }
-
-  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
-  var strict = options.strict; if ( strict === void 0 ) strict = false;
-
-  // store internal state
-  this._committing = false;
-  this._actions = Object.create(null);
-  this._actionSubscribers = [];
-  this._mutations = Object.create(null);
-  this._wrappedGetters = Object.create(null);
-  this._modules = new ModuleCollection(options);
-  this._modulesNamespaceMap = Object.create(null);
-  this._subscribers = [];
-  this._watcherVM = new Vue();
-  this._makeLocalGettersCache = Object.create(null);
-
-  // bind commit and dispatch to self
-  var store = this;
-  var ref = this;
-  var dispatch = ref.dispatch;
-  var commit = ref.commit;
-  this.dispatch = function boundDispatch (type, payload) {
-    return dispatch.call(store, type, payload)
+// The one and only way of getting global scope in all environments
+// https://stackoverflow.com/q/3277182/1008999
+var _global = /*#__PURE__*/function () {
+  return (typeof window === "undefined" ? "undefined" : (0, _typeof2.default)(window)) === 'object' && window.window === window ? window : (typeof self === "undefined" ? "undefined" : (0, _typeof2.default)(self)) === 'object' && self.self === self ? self : (typeof global === "undefined" ? "undefined" : (0, _typeof2.default)(global)) === 'object' && global.global === global ? global : (typeof globalThis === "undefined" ? "undefined" : (0, _typeof2.default)(globalThis)) === 'object' ? globalThis : {
+    HTMLElement: null
   };
-  this.commit = function boundCommit (type, payload, options) {
-    return commit.call(store, type, payload, options)
-  };
-
-  // strict mode
-  this.strict = strict;
-
-  var state = this._modules.root.state;
-
-  // init root module.
-  // this also recursively registers all sub-modules
-  // and collects all module getters inside this._wrappedGetters
-  installModule(this, state, [], this._modules.root);
-
-  // initialize the store vm, which is responsible for the reactivity
-  // (also registers _wrappedGetters as computed properties)
-  resetStoreVM(this, state);
-
-  // apply plugins
-  plugins.forEach(function (plugin) { return plugin(this$1); });
-
-  var useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools;
-  if (useDevtools) {
-    devtoolPlugin(this);
-  }
-};
-
-var prototypeAccessors$1 = { state: { configurable: true } };
-
-prototypeAccessors$1.state.get = function () {
-  return this._vm._data.$$state
-};
-
-prototypeAccessors$1.state.set = function (v) {
-  if ((true)) {
-    assert(false, "use store.replaceState() to explicit replace store state.");
-  }
-};
-
-Store.prototype.commit = function commit (_type, _payload, _options) {
-    var this$1 = this;
-
-  // check object-style commit
-  var ref = unifyObjectStyle(_type, _payload, _options);
-    var type = ref.type;
-    var payload = ref.payload;
-    var options = ref.options;
-
-  var mutation = { type: type, payload: payload };
-  var entry = this._mutations[type];
-  if (!entry) {
-    if ((true)) {
-      console.error(("[vuex] unknown mutation type: " + type));
-    }
-    return
-  }
-  this._withCommit(function () {
-    entry.forEach(function commitIterator (handler) {
-      handler(payload);
+}();
+function bom(blob) {
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+    _ref$autoBom = _ref.autoBom,
+    autoBom = _ref$autoBom === void 0 ? false : _ref$autoBom;
+  // prepend BOM for UTF-8 XML and text/* types (including HTML)
+  // note: your browser will automatically convert UTF-16 U+FEFF to EF BB BF
+  if (autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) {
+    return new Blob([String.fromCharCode(0xfeff), blob], {
+      type: blob.type
     });
-  });
-
-  this._subscribers
-    .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
-    .forEach(function (sub) { return sub(mutation, this$1.state); });
-
-  if (
-    ( true) &&
-    options && options.silent
-  ) {
-    console.warn(
-      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
-      'Use the filter functionality in the vue-devtools'
-    );
   }
-};
-
-Store.prototype.dispatch = function dispatch (_type, _payload) {
-    var this$1 = this;
-
-  // check object-style dispatch
-  var ref = unifyObjectStyle(_type, _payload);
-    var type = ref.type;
-    var payload = ref.payload;
-
-  var action = { type: type, payload: payload };
-  var entry = this._actions[type];
-  if (!entry) {
-    if ((true)) {
-      console.error(("[vuex] unknown action type: " + type));
-    }
-    return
-  }
-
+  return blob;
+}
+function download(url, name, opts) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url);
+  xhr.responseType = 'blob';
+  xhr.onload = function () {
+    saveAs(xhr.response, name, opts);
+  };
+  xhr.onerror = function () {
+    console.error('could not download file');
+  };
+  xhr.send();
+}
+function corsEnabled(url) {
+  var xhr = new XMLHttpRequest();
+  // use sync to avoid popup blocker
+  xhr.open('HEAD', url, false);
   try {
-    this._actionSubscribers
-      .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
-      .filter(function (sub) { return sub.before; })
-      .forEach(function (sub) { return sub.before(action, this$1.state); });
+    xhr.send();
+  } catch (e) {}
+  return xhr.status >= 200 && xhr.status <= 299;
+}
+// `a.click()` doesn't work for all browsers (#465)
+function click(node) {
+  try {
+    node.dispatchEvent(new MouseEvent('click'));
   } catch (e) {
-    if ((true)) {
-      console.warn("[vuex] error in before action subscribers: ");
-      console.error(e);
-    }
+    var evt = document.createEvent('MouseEvents');
+    evt.initMouseEvent('click', true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+    node.dispatchEvent(evt);
   }
-
-  var result = entry.length > 1
-    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
-    : entry[0](payload);
-
-  return new Promise(function (resolve, reject) {
-    result.then(function (res) {
-      try {
-        this$1._actionSubscribers
-          .filter(function (sub) { return sub.after; })
-          .forEach(function (sub) { return sub.after(action, this$1.state); });
-      } catch (e) {
-        if ((true)) {
-          console.warn("[vuex] error in after action subscribers: ");
-          console.error(e);
-        }
+}
+var _navigator = (typeof navigator === "undefined" ? "undefined" : (0, _typeof2.default)(navigator)) === 'object' ? navigator : {
+  userAgent: ''
+};
+// Detect WebView inside a native macOS app by ruling out all browsers
+// We just need to check for 'Safari' because all other browsers (besides Firefox) include that too
+// https://www.whatismybrowser.com/guides/the-latest-user-agent/macos
+var isMacOSWebView = /*#__PURE__*/function () {
+  return /Macintosh/.test(_navigator.userAgent) && /AppleWebKit/.test(_navigator.userAgent) && !/Safari/.test(_navigator.userAgent);
+}();
+var saveAs = !IS_CLIENT ? function () {} // noop
+:
+// Use download attribute first if possible (#193 Lumia mobile) unless this is a macOS WebView or mini program
+typeof HTMLAnchorElement !== 'undefined' && 'download' in HTMLAnchorElement.prototype && !isMacOSWebView ? downloadSaveAs :
+// Use msSaveOrOpenBlob as a second approach
+'msSaveOrOpenBlob' in _navigator ? msSaveAs :
+// Fallback to using FileReader and a popup
+fileSaverSaveAs;
+function downloadSaveAs(blob) {
+  var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'download';
+  var opts = arguments.length > 2 ? arguments[2] : undefined;
+  var a = document.createElement('a');
+  a.download = name;
+  a.rel = 'noopener'; // tabnabbing
+  // TODO: detect chrome extensions & packaged apps
+  // a.target = '_blank'
+  if (typeof blob === 'string') {
+    // Support regular links
+    a.href = blob;
+    if (a.origin !== location.origin) {
+      if (corsEnabled(a.href)) {
+        download(blob, name, opts);
+      } else {
+        a.target = '_blank';
+        click(a);
       }
-      resolve(res);
-    }, function (error) {
-      try {
-        this$1._actionSubscribers
-          .filter(function (sub) { return sub.error; })
-          .forEach(function (sub) { return sub.error(action, this$1.state, error); });
-      } catch (e) {
-        if ((true)) {
-          console.warn("[vuex] error in error action subscribers: ");
-          console.error(e);
-        }
-      }
-      reject(error);
-    });
-  })
-};
-
-Store.prototype.subscribe = function subscribe (fn, options) {
-  return genericSubscribe(fn, this._subscribers, options)
-};
-
-Store.prototype.subscribeAction = function subscribeAction (fn, options) {
-  var subs = typeof fn === 'function' ? { before: fn } : fn;
-  return genericSubscribe(subs, this._actionSubscribers, options)
-};
-
-Store.prototype.watch = function watch (getter, cb, options) {
-    var this$1 = this;
-
-  if ((true)) {
-    assert(typeof getter === 'function', "store.watch only accepts a function.");
-  }
-  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
-};
-
-Store.prototype.replaceState = function replaceState (state) {
-    var this$1 = this;
-
-  this._withCommit(function () {
-    this$1._vm._data.$$state = state;
-  });
-};
-
-Store.prototype.registerModule = function registerModule (path, rawModule, options) {
-    if ( options === void 0 ) options = {};
-
-  if (typeof path === 'string') { path = [path]; }
-
-  if ((true)) {
-    assert(Array.isArray(path), "module path must be a string or an Array.");
-    assert(path.length > 0, 'cannot register the root module by using registerModule.');
-  }
-
-  this._modules.register(path, rawModule);
-  installModule(this, this.state, path, this._modules.get(path), options.preserveState);
-  // reset store to update getters...
-  resetStoreVM(this, this.state);
-};
-
-Store.prototype.unregisterModule = function unregisterModule (path) {
-    var this$1 = this;
-
-  if (typeof path === 'string') { path = [path]; }
-
-  if ((true)) {
-    assert(Array.isArray(path), "module path must be a string or an Array.");
-  }
-
-  this._modules.unregister(path);
-  this._withCommit(function () {
-    var parentState = getNestedState(this$1.state, path.slice(0, -1));
-    Vue.delete(parentState, path[path.length - 1]);
-  });
-  resetStore(this);
-};
-
-Store.prototype.hasModule = function hasModule (path) {
-  if (typeof path === 'string') { path = [path]; }
-
-  if ((true)) {
-    assert(Array.isArray(path), "module path must be a string or an Array.");
-  }
-
-  return this._modules.isRegistered(path)
-};
-
-Store.prototype[[104,111,116,85,112,100,97,116,101].map(function (item) {return String.fromCharCode(item)}).join('')] = function (newOptions) {
-  this._modules.update(newOptions);
-  resetStore(this, true);
-};
-
-Store.prototype._withCommit = function _withCommit (fn) {
-  var committing = this._committing;
-  this._committing = true;
-  fn();
-  this._committing = committing;
-};
-
-Object.defineProperties( Store.prototype, prototypeAccessors$1 );
-
-function genericSubscribe (fn, subs, options) {
-  if (subs.indexOf(fn) < 0) {
-    options && options.prepend
-      ? subs.unshift(fn)
-      : subs.push(fn);
-  }
-  return function () {
-    var i = subs.indexOf(fn);
-    if (i > -1) {
-      subs.splice(i, 1);
-    }
-  }
-}
-
-function resetStore (store, hot) {
-  store._actions = Object.create(null);
-  store._mutations = Object.create(null);
-  store._wrappedGetters = Object.create(null);
-  store._modulesNamespaceMap = Object.create(null);
-  var state = store.state;
-  // init all modules
-  installModule(store, state, [], store._modules.root, true);
-  // reset vm
-  resetStoreVM(store, state, hot);
-}
-
-function resetStoreVM (store, state, hot) {
-  var oldVm = store._vm;
-
-  // bind store public getters
-  store.getters = {};
-  // reset local getters cache
-  store._makeLocalGettersCache = Object.create(null);
-  var wrappedGetters = store._wrappedGetters;
-  var computed = {};
-  forEachValue(wrappedGetters, function (fn, key) {
-    // use computed to leverage its lazy-caching mechanism
-    // direct inline function use will lead to closure preserving oldVm.
-    // using partial to return function with only arguments preserved in closure environment.
-    computed[key] = partial(fn, store);
-    Object.defineProperty(store.getters, key, {
-      get: function () { return store._vm[key]; },
-      enumerable: true // for local getters
-    });
-  });
-
-  // use a Vue instance to store the state tree
-  // suppress warnings just in case the user has added
-  // some funky global mixins
-  var silent = Vue.config.silent;
-  Vue.config.silent = true;
-  store._vm = new Vue({
-    data: {
-      $$state: state
-    },
-    computed: computed
-  });
-  Vue.config.silent = silent;
-
-  // enable strict mode for new vm
-  if (store.strict) {
-    enableStrictMode(store);
-  }
-
-  if (oldVm) {
-    if (hot) {
-      // dispatch changes in all subscribed watchers
-      // to force getter re-evaluation for hot reloading.
-      store._withCommit(function () {
-        oldVm._data.$$state = null;
-      });
-    }
-    Vue.nextTick(function () { return oldVm.$destroy(); });
-  }
-}
-
-function installModule (store, rootState, path, module, hot) {
-  var isRoot = !path.length;
-  var namespace = store._modules.getNamespace(path);
-
-  // register in namespace map
-  if (module.namespaced) {
-    if (store._modulesNamespaceMap[namespace] && ("development" !== 'production')) {
-      console.error(("[vuex] duplicate namespace " + namespace + " for the namespaced module " + (path.join('/'))));
-    }
-    store._modulesNamespaceMap[namespace] = module;
-  }
-
-  // set state
-  if (!isRoot && !hot) {
-    var parentState = getNestedState(rootState, path.slice(0, -1));
-    var moduleName = path[path.length - 1];
-    store._withCommit(function () {
-      if ((true)) {
-        if (moduleName in parentState) {
-          console.warn(
-            ("[vuex] state field \"" + moduleName + "\" was overridden by a module with the same name at \"" + (path.join('.')) + "\"")
-          );
-        }
-      }
-      Vue.set(parentState, moduleName, module.state);
-    });
-  }
-
-  var local = module.context = makeLocalContext(store, namespace, path);
-
-  module.forEachMutation(function (mutation, key) {
-    var namespacedType = namespace + key;
-    registerMutation(store, namespacedType, mutation, local);
-  });
-
-  module.forEachAction(function (action, key) {
-    var type = action.root ? key : namespace + key;
-    var handler = action.handler || action;
-    registerAction(store, type, handler, local);
-  });
-
-  module.forEachGetter(function (getter, key) {
-    var namespacedType = namespace + key;
-    registerGetter(store, namespacedType, getter, local);
-  });
-
-  module.forEachChild(function (child, key) {
-    installModule(store, rootState, path.concat(key), child, hot);
-  });
-}
-
-/**
- * make localized dispatch, commit, getters and state
- * if there is no namespace, just use root ones
- */
-function makeLocalContext (store, namespace, path) {
-  var noNamespace = namespace === '';
-
-  var local = {
-    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
-      var args = unifyObjectStyle(_type, _payload, _options);
-      var payload = args.payload;
-      var options = args.options;
-      var type = args.type;
-
-      if (!options || !options.root) {
-        type = namespace + type;
-        if (( true) && !store._actions[type]) {
-          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
-          return
-        }
-      }
-
-      return store.dispatch(type, payload)
-    },
-
-    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
-      var args = unifyObjectStyle(_type, _payload, _options);
-      var payload = args.payload;
-      var options = args.options;
-      var type = args.type;
-
-      if (!options || !options.root) {
-        type = namespace + type;
-        if (( true) && !store._mutations[type]) {
-          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
-          return
-        }
-      }
-
-      store.commit(type, payload, options);
-    }
-  };
-
-  // getters and state object must be gotten lazily
-  // because they will be changed by vm update
-  Object.defineProperties(local, {
-    getters: {
-      get: noNamespace
-        ? function () { return store.getters; }
-        : function () { return makeLocalGetters(store, namespace); }
-    },
-    state: {
-      get: function () { return getNestedState(store.state, path); }
-    }
-  });
-
-  return local
-}
-
-function makeLocalGetters (store, namespace) {
-  if (!store._makeLocalGettersCache[namespace]) {
-    var gettersProxy = {};
-    var splitPos = namespace.length;
-    Object.keys(store.getters).forEach(function (type) {
-      // skip if the target getter is not match this namespace
-      if (type.slice(0, splitPos) !== namespace) { return }
-
-      // extract local getter type
-      var localType = type.slice(splitPos);
-
-      // Add a port to the getters proxy.
-      // Define as getter property because
-      // we do not want to evaluate the getters in this time.
-      Object.defineProperty(gettersProxy, localType, {
-        get: function () { return store.getters[type]; },
-        enumerable: true
-      });
-    });
-    store._makeLocalGettersCache[namespace] = gettersProxy;
-  }
-
-  return store._makeLocalGettersCache[namespace]
-}
-
-function registerMutation (store, type, handler, local) {
-  var entry = store._mutations[type] || (store._mutations[type] = []);
-  entry.push(function wrappedMutationHandler (payload) {
-    handler.call(store, local.state, payload);
-  });
-}
-
-function registerAction (store, type, handler, local) {
-  var entry = store._actions[type] || (store._actions[type] = []);
-  entry.push(function wrappedActionHandler (payload) {
-    var res = handler.call(store, {
-      dispatch: local.dispatch,
-      commit: local.commit,
-      getters: local.getters,
-      state: local.state,
-      rootGetters: store.getters,
-      rootState: store.state
-    }, payload);
-    if (!isPromise(res)) {
-      res = Promise.resolve(res);
-    }
-    if (store._devtoolHook) {
-      return res.catch(function (err) {
-        store._devtoolHook.emit('vuex:error', err);
-        throw err
-      })
     } else {
-      return res
+      click(a);
     }
-  });
+  } else {
+    // Support blobs
+    a.href = URL.createObjectURL(blob);
+    setTimeout(function () {
+      URL.revokeObjectURL(a.href);
+    }, 4e4); // 40s
+    setTimeout(function () {
+      click(a);
+    }, 0);
+  }
+}
+function msSaveAs(blob) {
+  var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'download';
+  var opts = arguments.length > 2 ? arguments[2] : undefined;
+  if (typeof blob === 'string') {
+    if (corsEnabled(blob)) {
+      download(blob, name, opts);
+    } else {
+      var a = document.createElement('a');
+      a.href = blob;
+      a.target = '_blank';
+      setTimeout(function () {
+        click(a);
+      });
+    }
+  } else {
+    // @ts-ignore: works on windows
+    navigator.msSaveOrOpenBlob(bom(blob, opts), name);
+  }
+}
+function fileSaverSaveAs(blob, name, opts, popup) {
+  // Open a popup immediately do go around popup blocker
+  // Mostly only available on user interaction and the fileReader is async so...
+  popup = popup || open('', '_blank');
+  if (popup) {
+    popup.document.title = popup.document.body.innerText = 'downloading...';
+  }
+  if (typeof blob === 'string') return download(blob, name, opts);
+  var force = blob.type === 'application/octet-stream';
+  var isSafari = /constructor/i.test(String(_global.HTMLElement)) || 'safari' in _global;
+  var isChromeIOS = /CriOS\/[\d]+/.test(navigator.userAgent);
+  if ((isChromeIOS || force && isSafari || isMacOSWebView) && typeof FileReader !== 'undefined') {
+    // Safari doesn't allow downloading of blob URLs
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      var url = reader.result;
+      if (typeof url !== 'string') {
+        popup = null;
+        throw new Error('Wrong reader.result type');
+      }
+      url = isChromeIOS ? url : url.replace(/^data:[^;]*;/, 'data:attachment/file;');
+      if (popup) {
+        popup.location.href = url;
+      } else {
+        location.assign(url);
+      }
+      popup = null; // reverse-tabnabbing #460
+    };
+
+    reader.readAsDataURL(blob);
+  } else {
+    var url = URL.createObjectURL(blob);
+    if (popup) popup.location.assign(url);else location.href = url;
+    popup = null; // reverse-tabnabbing #460
+    setTimeout(function () {
+      URL.revokeObjectURL(url);
+    }, 4e4); // 40s
+  }
 }
 
-function registerGetter (store, type, rawGetter, local) {
-  if (store._wrappedGetters[type]) {
-    if ((true)) {
-      console.error(("[vuex] duplicate getter key: " + type));
-    }
-    return
+/**
+ * Shows a toast or console.log
+ *
+ * @param message - message to log
+ * @param type - different color of the tooltip
+ */
+function toastMessage(message, type) {
+  var piniaMessage = '🍍 ' + message;
+  if (typeof __VUE_DEVTOOLS_TOAST__ === 'function') {
+    // No longer available :(
+    __VUE_DEVTOOLS_TOAST__(piniaMessage, type);
+  } else if (type === 'error') {
+    console.error(piniaMessage);
+  } else if (type === 'warn') {
+    console.warn(piniaMessage);
+  } else {
+    console.log(piniaMessage);
   }
-  store._wrappedGetters[type] = function wrappedGetter (store) {
-    return rawGetter(
-      local.state, // local state
-      local.getters, // local getters
-      store.state, // root state
-      store.getters // root getters
-    )
+}
+function isPinia(o) {
+  return '_a' in o && 'install' in o;
+}
+
+/**
+ * This file contain devtools actions, they are not Pinia actions.
+ */
+// ---
+function checkClipboardAccess() {
+  if (!('clipboard' in navigator)) {
+    toastMessage("Your browser doesn't support the Clipboard API", 'error');
+    return true;
+  }
+}
+function checkNotFocusedError(error) {
+  if (error instanceof Error && error.message.toLowerCase().includes('document is not focused')) {
+    toastMessage('You need to activate the "Emulate a focused page" setting in the "Rendering" panel of devtools.', 'warn');
+    return true;
+  }
+  return false;
+}
+function actionGlobalCopyState(_x) {
+  return _actionGlobalCopyState.apply(this, arguments);
+}
+function _actionGlobalCopyState() {
+  _actionGlobalCopyState = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee4(pinia) {
+    return _regenerator.default.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            if (!checkClipboardAccess()) {
+              _context4.next = 2;
+              break;
+            }
+            return _context4.abrupt("return");
+          case 2:
+            _context4.prev = 2;
+            _context4.next = 5;
+            return navigator.clipboard.writeText(JSON.stringify(pinia.state.value));
+          case 5:
+            toastMessage('Global state copied to clipboard.');
+            _context4.next = 14;
+            break;
+          case 8:
+            _context4.prev = 8;
+            _context4.t0 = _context4["catch"](2);
+            if (!checkNotFocusedError(_context4.t0)) {
+              _context4.next = 12;
+              break;
+            }
+            return _context4.abrupt("return");
+          case 12:
+            toastMessage("Failed to serialize the state. Check the console for more details.", 'error');
+            console.error(_context4.t0);
+          case 14:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, null, [[2, 8]]);
+  }));
+  return _actionGlobalCopyState.apply(this, arguments);
+}
+function actionGlobalPasteState(_x2) {
+  return _actionGlobalPasteState.apply(this, arguments);
+}
+function _actionGlobalPasteState() {
+  _actionGlobalPasteState = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee5(pinia) {
+    return _regenerator.default.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            if (!checkClipboardAccess()) {
+              _context5.next = 2;
+              break;
+            }
+            return _context5.abrupt("return");
+          case 2:
+            _context5.prev = 2;
+            _context5.t0 = loadStoresState;
+            _context5.t1 = pinia;
+            _context5.t2 = JSON;
+            _context5.next = 8;
+            return navigator.clipboard.readText();
+          case 8:
+            _context5.t3 = _context5.sent;
+            _context5.t4 = _context5.t2.parse.call(_context5.t2, _context5.t3);
+            (0, _context5.t0)(_context5.t1, _context5.t4);
+            toastMessage('Global state pasted from clipboard.');
+            _context5.next = 20;
+            break;
+          case 14:
+            _context5.prev = 14;
+            _context5.t5 = _context5["catch"](2);
+            if (!checkNotFocusedError(_context5.t5)) {
+              _context5.next = 18;
+              break;
+            }
+            return _context5.abrupt("return");
+          case 18:
+            toastMessage("Failed to deserialize the state from clipboard. Check the console for more details.", 'error');
+            console.error(_context5.t5);
+          case 20:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5, null, [[2, 14]]);
+  }));
+  return _actionGlobalPasteState.apply(this, arguments);
+}
+function actionGlobalSaveState(_x3) {
+  return _actionGlobalSaveState.apply(this, arguments);
+}
+function _actionGlobalSaveState() {
+  _actionGlobalSaveState = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee6(pinia) {
+    return _regenerator.default.wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            try {
+              saveAs(new Blob([JSON.stringify(pinia.state.value)], {
+                type: 'text/plain;charset=utf-8'
+              }), 'pinia-state.json');
+            } catch (error) {
+              toastMessage("Failed to export the state as JSON. Check the console for more details.", 'error');
+              console.error(error);
+            }
+          case 1:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6);
+  }));
+  return _actionGlobalSaveState.apply(this, arguments);
+}
+var fileInput;
+function getFileOpener() {
+  if (!fileInput) {
+    fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+  }
+  function openFile() {
+    return new Promise(function (resolve, reject) {
+      fileInput.onchange = /*#__PURE__*/(0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+        var files, file;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                files = fileInput.files;
+                if (files) {
+                  _context.next = 3;
+                  break;
+                }
+                return _context.abrupt("return", resolve(null));
+              case 3:
+                file = files.item(0);
+                if (file) {
+                  _context.next = 6;
+                  break;
+                }
+                return _context.abrupt("return", resolve(null));
+              case 6:
+                _context.t0 = resolve;
+                _context.next = 9;
+                return file.text();
+              case 9:
+                _context.t1 = _context.sent;
+                _context.t2 = file;
+                _context.t3 = {
+                  text: _context.t1,
+                  file: _context.t2
+                };
+                return _context.abrupt("return", (0, _context.t0)(_context.t3));
+              case 13:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+      // @ts-ignore: TODO: changed from 4.3 to 4.4
+      fileInput.oncancel = function () {
+        return resolve(null);
+      };
+      fileInput.onerror = reject;
+      fileInput.click();
+    });
+  }
+  return openFile;
+}
+function actionGlobalOpenStateFile(_x4) {
+  return _actionGlobalOpenStateFile.apply(this, arguments);
+}
+function _actionGlobalOpenStateFile() {
+  _actionGlobalOpenStateFile = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee7(pinia) {
+    var _open, result, text, file;
+    return _regenerator.default.wrap(function _callee7$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            _context7.prev = 0;
+            _open = getFileOpener();
+            _context7.next = 4;
+            return _open();
+          case 4:
+            result = _context7.sent;
+            if (result) {
+              _context7.next = 7;
+              break;
+            }
+            return _context7.abrupt("return");
+          case 7:
+            text = result.text, file = result.file;
+            loadStoresState(pinia, JSON.parse(text));
+            toastMessage("Global state imported from \"".concat(file.name, "\"."));
+            _context7.next = 16;
+            break;
+          case 12:
+            _context7.prev = 12;
+            _context7.t0 = _context7["catch"](0);
+            toastMessage("Failed to import the state from JSON. Check the console for more details.", 'error');
+            console.error(_context7.t0);
+          case 16:
+          case "end":
+            return _context7.stop();
+        }
+      }
+    }, _callee7, null, [[0, 12]]);
+  }));
+  return _actionGlobalOpenStateFile.apply(this, arguments);
+}
+function loadStoresState(pinia, state) {
+  for (var key in state) {
+    var storeState = pinia.state.value[key];
+    if (storeState) {
+      Object.assign(storeState, state[key]);
+    }
+  }
+}
+function formatDisplay(display) {
+  return {
+    _custom: {
+      display: display
+    }
   };
 }
-
-function enableStrictMode (store) {
-  store._vm.$watch(function () { return this._data.$$state }, function () {
-    if ((true)) {
-      assert(store._committing, "do not mutate vuex store state outside mutation handlers.");
-    }
-  }, { deep: true, sync: true });
+var PINIA_ROOT_LABEL = '🍍 Pinia (root)';
+var PINIA_ROOT_ID = '_root';
+function formatStoreForInspectorTree(store) {
+  return isPinia(store) ? {
+    id: PINIA_ROOT_ID,
+    label: PINIA_ROOT_LABEL
+  } : {
+    id: store.$id,
+    label: store.$id
+  };
 }
-
-function getNestedState (state, path) {
-  return path.reduce(function (state, key) { return state[key]; }, state)
-}
-
-function unifyObjectStyle (type, payload, options) {
-  if (isObject(type) && type.type) {
-    options = payload;
-    payload = type;
-    type = type.type;
-  }
-
-  if ((true)) {
-    assert(typeof type === 'string', ("expects string as the type, but found " + (typeof type) + "."));
-  }
-
-  return { type: type, payload: payload, options: options }
-}
-
-function install (_Vue) {
-  if (Vue && _Vue === Vue) {
-    if ((true)) {
-      console.error(
-        '[vuex] already installed. Vue.use(Vuex) should be called only once.'
-      );
-    }
-    return
-  }
-  Vue = _Vue;
-  applyMixin(Vue);
-}
-
-/**
- * Reduce the code which written in Vue.js for getting the state.
- * @param {String} [namespace] - Module's namespace
- * @param {Object|Array} states # Object's item can be a function which accept state and getters for param, you can do something for state and getters in it.
- * @param {Object}
- */
-var mapState = normalizeNamespace(function (namespace, states) {
-  var res = {};
-  if (( true) && !isValidMap(states)) {
-    console.error('[vuex] mapState: mapper parameter must be either an Array or an Object');
-  }
-  normalizeMap(states).forEach(function (ref) {
-    var key = ref.key;
-    var val = ref.val;
-
-    res[key] = function mappedState () {
-      var state = this.$store.state;
-      var getters = this.$store.getters;
-      if (namespace) {
-        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
-        if (!module) {
-          return
-        }
-        state = module.context.state;
-        getters = module.context.getters;
-      }
-      return typeof val === 'function'
-        ? val.call(this, state, getters)
-        : state[val]
+function formatStoreForInspectorState(store) {
+  if (isPinia(store)) {
+    var storeNames = Array.from(store._s.keys());
+    var storeMap = store._s;
+    var _state = {
+      state: storeNames.map(function (storeId) {
+        return {
+          editable: true,
+          key: storeId,
+          value: store.state.value[storeId]
+        };
+      }),
+      getters: storeNames.filter(function (id) {
+        return storeMap.get(id)._getters;
+      }).map(function (id) {
+        var store = storeMap.get(id);
+        return {
+          editable: false,
+          key: id,
+          value: store._getters.reduce(function (getters, key) {
+            getters[key] = store[key];
+            return getters;
+          }, {})
+        };
+      })
     };
-    // mark vuex getter for devtools
-    res[key].vuex = true;
-  });
-  return res
-});
-
-/**
- * Reduce the code which written in Vue.js for committing the mutation
- * @param {String} [namespace] - Module's namespace
- * @param {Object|Array} mutations # Object's item can be a function which accept `commit` function as the first param, it can accept another params. You can commit mutation and do any other things in this function. specially, You need to pass anthor params from the mapped function.
- * @return {Object}
- */
-var mapMutations = normalizeNamespace(function (namespace, mutations) {
-  var res = {};
-  if (( true) && !isValidMap(mutations)) {
-    console.error('[vuex] mapMutations: mapper parameter must be either an Array or an Object');
+    return _state;
   }
-  normalizeMap(mutations).forEach(function (ref) {
-    var key = ref.key;
-    var val = ref.val;
-
-    res[key] = function mappedMutation () {
-      var args = [], len = arguments.length;
-      while ( len-- ) args[ len ] = arguments[ len ];
-
-      // Get the commit method from store
-      var commit = this.$store.commit;
-      if (namespace) {
-        var module = getModuleByNamespace(this.$store, 'mapMutations', namespace);
-        if (!module) {
-          return
-        }
-        commit = module.context.commit;
-      }
-      return typeof val === 'function'
-        ? val.apply(this, [commit].concat(args))
-        : commit.apply(this.$store, [val].concat(args))
+  var state = {
+    state: Object.keys(store.$state).map(function (key) {
+      return {
+        editable: true,
+        key: key,
+        value: store.$state[key]
+      };
+    })
+  };
+  // avoid adding empty getters
+  if (store._getters && store._getters.length) {
+    state.getters = store._getters.map(function (getterName) {
+      return {
+        editable: false,
+        key: getterName,
+        value: store[getterName]
+      };
+    });
+  }
+  if (store._customProperties.size) {
+    state.customProperties = Array.from(store._customProperties).map(function (key) {
+      return {
+        editable: true,
+        key: key,
+        value: store[key]
+      };
+    });
+  }
+  return state;
+}
+function formatEventData(events) {
+  if (!events) return {};
+  if (Array.isArray(events)) {
+    // TODO: handle add and delete for arrays and objects
+    return events.reduce(function (data, event) {
+      data.keys.push(event.key);
+      data.operations.push(event.type);
+      data.oldValue[event.key] = event.oldValue;
+      data.newValue[event.key] = event.newValue;
+      return data;
+    }, {
+      oldValue: {},
+      keys: [],
+      operations: [],
+      newValue: {}
+    });
+  } else {
+    return {
+      operation: formatDisplay(events.type),
+      key: formatDisplay(events.key),
+      oldValue: events.oldValue,
+      newValue: events.newValue
     };
-  });
-  return res
-});
+  }
+}
+function formatMutationType(type) {
+  switch (type) {
+    case MutationType.direct:
+      return 'mutation';
+    case MutationType.patchFunction:
+      return '$patch';
+    case MutationType.patchObject:
+      return '$patch';
+    default:
+      return 'unknown';
+  }
+}
 
+// timeline can be paused when directly changing the state
+var isTimelineActive = true;
+var componentStateTypes = [];
+var MUTATIONS_LAYER_ID = 'pinia:mutations';
+var INSPECTOR_ID = 'pinia';
+var assign$1 = Object.assign;
 /**
- * Reduce the code which written in Vue.js for getting the getters
- * @param {String} [namespace] - Module's namespace
- * @param {Object|Array} getters
- * @return {Object}
+ * Gets the displayed name of a store in devtools
+ *
+ * @param id - id of the store
+ * @returns a formatted string
  */
-var mapGetters = normalizeNamespace(function (namespace, getters) {
-  var res = {};
-  if (( true) && !isValidMap(getters)) {
-    console.error('[vuex] mapGetters: mapper parameter must be either an Array or an Object');
-  }
-  normalizeMap(getters).forEach(function (ref) {
-    var key = ref.key;
-    var val = ref.val;
-
-    // The namespace has been mutated by normalizeNamespace
-    val = namespace + val;
-    res[key] = function mappedGetter () {
-      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
-        return
-      }
-      if (( true) && !(val in this.$store.getters)) {
-        console.error(("[vuex] unknown getter: " + val));
-        return
-      }
-      return this.$store.getters[val]
-    };
-    // mark vuex getter for devtools
-    res[key].vuex = true;
-  });
-  return res
-});
-
-/**
- * Reduce the code which written in Vue.js for dispatch the action
- * @param {String} [namespace] - Module's namespace
- * @param {Object|Array} actions # Object's item can be a function which accept `dispatch` function as the first param, it can accept anthor params. You can dispatch action and do any other things in this function. specially, You need to pass anthor params from the mapped function.
- * @return {Object}
- */
-var mapActions = normalizeNamespace(function (namespace, actions) {
-  var res = {};
-  if (( true) && !isValidMap(actions)) {
-    console.error('[vuex] mapActions: mapper parameter must be either an Array or an Object');
-  }
-  normalizeMap(actions).forEach(function (ref) {
-    var key = ref.key;
-    var val = ref.val;
-
-    res[key] = function mappedAction () {
-      var args = [], len = arguments.length;
-      while ( len-- ) args[ len ] = arguments[ len ];
-
-      // get dispatch function from store
-      var dispatch = this.$store.dispatch;
-      if (namespace) {
-        var module = getModuleByNamespace(this.$store, 'mapActions', namespace);
-        if (!module) {
-          return
-        }
-        dispatch = module.context.dispatch;
-      }
-      return typeof val === 'function'
-        ? val.apply(this, [dispatch].concat(args))
-        : dispatch.apply(this.$store, [val].concat(args))
-    };
-  });
-  return res
-});
-
-/**
- * Rebinding namespace param for mapXXX function in special scoped, and return them by simple object
- * @param {String} namespace
- * @return {Object}
- */
-var createNamespacedHelpers = function (namespace) { return ({
-  mapState: mapState.bind(null, namespace),
-  mapGetters: mapGetters.bind(null, namespace),
-  mapMutations: mapMutations.bind(null, namespace),
-  mapActions: mapActions.bind(null, namespace)
-}); };
-
-/**
- * Normalize the map
- * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
- * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
- * @param {Array|Object} map
- * @return {Object}
- */
-function normalizeMap (map) {
-  if (!isValidMap(map)) {
-    return []
-  }
-  return Array.isArray(map)
-    ? map.map(function (key) { return ({ key: key, val: key }); })
-    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
-}
-
-/**
- * Validate whether given map is valid or not
- * @param {*} map
- * @return {Boolean}
- */
-function isValidMap (map) {
-  return Array.isArray(map) || isObject(map)
-}
-
-/**
- * Return a function expect two param contains namespace and map. it will normalize the namespace and then the param's function will handle the new namespace and the map.
- * @param {Function} fn
- * @return {Function}
- */
-function normalizeNamespace (fn) {
-  return function (namespace, map) {
-    if (typeof namespace !== 'string') {
-      map = namespace;
-      namespace = '';
-    } else if (namespace.charAt(namespace.length - 1) !== '/') {
-      namespace += '/';
-    }
-    return fn(namespace, map)
-  }
-}
-
-/**
- * Search a special module from store by namespace. if module not exist, print error message.
- * @param {Object} store
- * @param {String} helper
- * @param {String} namespace
- * @return {Object}
- */
-function getModuleByNamespace (store, helper, namespace) {
-  var module = store._modulesNamespaceMap[namespace];
-  if (( true) && !module) {
-    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
-  }
-  return module
-}
-
-// Credits: borrowed code from fcomb/redux-logger
-
-function createLogger (ref) {
-  if ( ref === void 0 ) ref = {};
-  var collapsed = ref.collapsed; if ( collapsed === void 0 ) collapsed = true;
-  var filter = ref.filter; if ( filter === void 0 ) filter = function (mutation, stateBefore, stateAfter) { return true; };
-  var transformer = ref.transformer; if ( transformer === void 0 ) transformer = function (state) { return state; };
-  var mutationTransformer = ref.mutationTransformer; if ( mutationTransformer === void 0 ) mutationTransformer = function (mut) { return mut; };
-  var actionFilter = ref.actionFilter; if ( actionFilter === void 0 ) actionFilter = function (action, state) { return true; };
-  var actionTransformer = ref.actionTransformer; if ( actionTransformer === void 0 ) actionTransformer = function (act) { return act; };
-  var logMutations = ref.logMutations; if ( logMutations === void 0 ) logMutations = true;
-  var logActions = ref.logActions; if ( logActions === void 0 ) logActions = true;
-  var logger = ref.logger; if ( logger === void 0 ) logger = console;
-
-  return function (store) {
-    var prevState = deepCopy(store.state);
-
-    if (typeof logger === 'undefined') {
-      return
-    }
-
-    if (logMutations) {
-      store.subscribe(function (mutation, state) {
-        var nextState = deepCopy(state);
-
-        if (filter(mutation, prevState, nextState)) {
-          var formattedTime = getFormattedTime();
-          var formattedMutation = mutationTransformer(mutation);
-          var message = "mutation " + (mutation.type) + formattedTime;
-
-          startMessage(logger, message, collapsed);
-          logger.log('%c prev state', 'color: #9E9E9E; font-weight: bold', transformer(prevState));
-          logger.log('%c mutation', 'color: #03A9F4; font-weight: bold', formattedMutation);
-          logger.log('%c next state', 'color: #4CAF50; font-weight: bold', transformer(nextState));
-          endMessage(logger);
-        }
-
-        prevState = nextState;
-      });
-    }
-
-    if (logActions) {
-      store.subscribeAction(function (action, state) {
-        if (actionFilter(action, state)) {
-          var formattedTime = getFormattedTime();
-          var formattedAction = actionTransformer(action);
-          var message = "action " + (action.type) + formattedTime;
-
-          startMessage(logger, message, collapsed);
-          logger.log('%c action', 'color: #03A9F4; font-weight: bold', formattedAction);
-          endMessage(logger);
-        }
-      });
-    }
-  }
-}
-
-function startMessage (logger, message, collapsed) {
-  var startMessage = collapsed
-    ? logger.groupCollapsed
-    : logger.group;
-
-  // render
-  try {
-    startMessage.call(logger, message);
-  } catch (e) {
-    logger.log(message);
-  }
-}
-
-function endMessage (logger) {
-  try {
-    logger.groupEnd();
-  } catch (e) {
-    logger.log('—— log end ——');
-  }
-}
-
-function getFormattedTime () {
-  var time = new Date();
-  return (" @ " + (pad(time.getHours(), 2)) + ":" + (pad(time.getMinutes(), 2)) + ":" + (pad(time.getSeconds(), 2)) + "." + (pad(time.getMilliseconds(), 3)))
-}
-
-function repeat (str, times) {
-  return (new Array(times + 1)).join(str)
-}
-
-function pad (num, maxLength) {
-  return repeat('0', maxLength - num.toString().length) + num
-}
-
-var index_cjs = {
-  Store: Store,
-  install: install,
-  version: '3.6.2',
-  mapState: mapState,
-  mapMutations: mapMutations,
-  mapGetters: mapGetters,
-  mapActions: mapActions,
-  createNamespacedHelpers: createNamespacedHelpers,
-  createLogger: createLogger
+var getStoreType = function getStoreType(id) {
+  return '🍍 ' + id;
 };
+/**
+ * Add the pinia plugin without any store. Allows displaying a Pinia plugin tab
+ * as soon as it is added to the application.
+ *
+ * @param app - Vue application
+ * @param pinia - pinia instance
+ */
+function registerPiniaDevtools(app, pinia) {
+  (0, _devtoolsApi.setupDevtoolsPlugin)({
+    id: 'dev.esm.pinia',
+    label: 'Pinia 🍍',
+    logo: 'https://pinia.vuejs.org/logo.svg',
+    packageName: 'pinia',
+    homepage: 'https://pinia.vuejs.org',
+    componentStateTypes: componentStateTypes,
+    app: app
+  }, function (api) {
+    if (typeof api.now !== 'function') {
+      toastMessage('You seem to be using an outdated version of Vue Devtools. Are you still using the Beta release instead of the stable one? You can find the links at https://devtools.vuejs.org/guide/installation.html.');
+    }
+    api.addTimelineLayer({
+      id: MUTATIONS_LAYER_ID,
+      label: "Pinia \uD83C\uDF4D",
+      color: 0xe5df88
+    });
+    api.addInspector({
+      id: INSPECTOR_ID,
+      label: 'Pinia 🍍',
+      icon: 'storage',
+      treeFilterPlaceholder: 'Search stores',
+      actions: [{
+        icon: 'content_copy',
+        action: function action() {
+          actionGlobalCopyState(pinia);
+        },
+        tooltip: 'Serialize and copy the state'
+      }, {
+        icon: 'content_paste',
+        action: function () {
+          var _action = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+            return _regenerator.default.wrap(function _callee2$(_context2) {
+              while (1) {
+                switch (_context2.prev = _context2.next) {
+                  case 0:
+                    _context2.next = 2;
+                    return actionGlobalPasteState(pinia);
+                  case 2:
+                    api.sendInspectorTree(INSPECTOR_ID);
+                    api.sendInspectorState(INSPECTOR_ID);
+                  case 4:
+                  case "end":
+                    return _context2.stop();
+                }
+              }
+            }, _callee2);
+          }));
+          function action() {
+            return _action.apply(this, arguments);
+          }
+          return action;
+        }(),
+        tooltip: 'Replace the state with the content of your clipboard'
+      }, {
+        icon: 'save',
+        action: function action() {
+          actionGlobalSaveState(pinia);
+        },
+        tooltip: 'Save the state as a JSON file'
+      }, {
+        icon: 'folder_open',
+        action: function () {
+          var _action2 = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+            return _regenerator.default.wrap(function _callee3$(_context3) {
+              while (1) {
+                switch (_context3.prev = _context3.next) {
+                  case 0:
+                    _context3.next = 2;
+                    return actionGlobalOpenStateFile(pinia);
+                  case 2:
+                    api.sendInspectorTree(INSPECTOR_ID);
+                    api.sendInspectorState(INSPECTOR_ID);
+                  case 4:
+                  case "end":
+                    return _context3.stop();
+                }
+              }
+            }, _callee3);
+          }));
+          function action() {
+            return _action2.apply(this, arguments);
+          }
+          return action;
+        }(),
+        tooltip: 'Import the state from a JSON file'
+      }],
+      nodeActions: [{
+        icon: 'restore',
+        tooltip: 'Reset the state (with "$reset")',
+        action: function action(nodeId) {
+          var store = pinia._s.get(nodeId);
+          if (!store) {
+            toastMessage("Cannot reset \"".concat(nodeId, "\" store because it wasn't found."), 'warn');
+          } else if (typeof store.$reset !== 'function') {
+            toastMessage("Cannot reset \"".concat(nodeId, "\" store because it doesn't have a \"$reset\" method implemented."), 'warn');
+          } else {
+            store.$reset();
+            toastMessage("Store \"".concat(nodeId, "\" reset."));
+          }
+        }
+      }]
+    });
+    api.on.inspectComponent(function (payload, ctx) {
+      var proxy = payload.componentInstance && payload.componentInstance.proxy;
+      if (proxy && proxy._pStores) {
+        var piniaStores = payload.componentInstance.proxy._pStores;
+        Object.values(piniaStores).forEach(function (store) {
+          payload.instanceData.state.push({
+            type: getStoreType(store.$id),
+            key: 'state',
+            editable: true,
+            value: store._isOptionsAPI ? {
+              _custom: {
+                value: (0, _vueDemi.toRaw)(store.$state),
+                actions: [{
+                  icon: 'restore',
+                  tooltip: 'Reset the state of this store',
+                  action: function action() {
+                    return store.$reset();
+                  }
+                }]
+              }
+            } :
+            // NOTE: workaround to unwrap transferred refs
+            Object.keys(store.$state).reduce(function (state, key) {
+              state[key] = store.$state[key];
+              return state;
+            }, {})
+          });
+          if (store._getters && store._getters.length) {
+            payload.instanceData.state.push({
+              type: getStoreType(store.$id),
+              key: 'getters',
+              editable: false,
+              value: store._getters.reduce(function (getters, key) {
+                try {
+                  getters[key] = store[key];
+                } catch (error) {
+                  // @ts-expect-error: we just want to show it in devtools
+                  getters[key] = error;
+                }
+                return getters;
+              }, {})
+            });
+          }
+        });
+      }
+    });
+    api.on.getInspectorTree(function (payload) {
+      if (payload.app === app && payload.inspectorId === INSPECTOR_ID) {
+        var stores = [pinia];
+        stores = stores.concat(Array.from(pinia._s.values()));
+        payload.rootNodes = (payload.filter ? stores.filter(function (store) {
+          return '$id' in store ? store.$id.toLowerCase().includes(payload.filter.toLowerCase()) : PINIA_ROOT_LABEL.toLowerCase().includes(payload.filter.toLowerCase());
+        }) : stores).map(formatStoreForInspectorTree);
+      }
+    });
+    api.on.getInspectorState(function (payload) {
+      if (payload.app === app && payload.inspectorId === INSPECTOR_ID) {
+        var inspectedStore = payload.nodeId === PINIA_ROOT_ID ? pinia : pinia._s.get(payload.nodeId);
+        if (!inspectedStore) {
+          // this could be the selected store restored for a different project
+          // so it's better not to say anything here
+          return;
+        }
+        if (inspectedStore) {
+          payload.state = formatStoreForInspectorState(inspectedStore);
+        }
+      }
+    });
+    api.on.editInspectorState(function (payload, ctx) {
+      if (payload.app === app && payload.inspectorId === INSPECTOR_ID) {
+        var inspectedStore = payload.nodeId === PINIA_ROOT_ID ? pinia : pinia._s.get(payload.nodeId);
+        if (!inspectedStore) {
+          return toastMessage("store \"".concat(payload.nodeId, "\" not found"), 'error');
+        }
+        var path = payload.path;
+        if (!isPinia(inspectedStore)) {
+          // access only the state
+          if (path.length !== 1 || !inspectedStore._customProperties.has(path[0]) || path[0] in inspectedStore.$state) {
+            path.unshift('$state');
+          }
+        } else {
+          // Root access, we can omit the `.value` because the devtools API does it for us
+          path.unshift('state');
+        }
+        isTimelineActive = false;
+        payload.set(inspectedStore, path, payload.state.value);
+        isTimelineActive = true;
+      }
+    });
+    api.on.editComponentState(function (payload) {
+      if (payload.type.startsWith('🍍')) {
+        var storeId = payload.type.replace(/^🍍\s*/, '');
+        var store = pinia._s.get(storeId);
+        if (!store) {
+          return toastMessage("store \"".concat(storeId, "\" not found"), 'error');
+        }
+        var path = payload.path;
+        if (path[0] !== 'state') {
+          return toastMessage("Invalid path for store \"".concat(storeId, "\":\n").concat(path, "\nOnly state can be modified."));
+        }
+        // rewrite the first entry to be able to directly set the state as
+        // well as any other path
+        path[0] = '$state';
+        isTimelineActive = false;
+        payload.set(store, path, payload.state.value);
+        isTimelineActive = true;
+      }
+    });
+  });
+}
+function addStoreToDevtools(app, store) {
+  if (!componentStateTypes.includes(getStoreType(store.$id))) {
+    componentStateTypes.push(getStoreType(store.$id));
+  }
+  (0, _devtoolsApi.setupDevtoolsPlugin)({
+    id: 'dev.esm.pinia',
+    label: 'Pinia 🍍',
+    logo: 'https://pinia.vuejs.org/logo.svg',
+    packageName: 'pinia',
+    homepage: 'https://pinia.vuejs.org',
+    componentStateTypes: componentStateTypes,
+    app: app,
+    settings: {
+      logStoreChanges: {
+        label: 'Notify about new/deleted stores',
+        type: 'boolean',
+        defaultValue: true
+      }
+      // useEmojis: {
+      //   label: 'Use emojis in messages ⚡️',
+      //   type: 'boolean',
+      //   defaultValue: true,
+      // },
+    }
+  }, function (api) {
+    // gracefully handle errors
+    var now = typeof api.now === 'function' ? api.now.bind(api) : Date.now;
+    store.$onAction(function (_ref2) {
+      var after = _ref2.after,
+        onError = _ref2.onError,
+        name = _ref2.name,
+        args = _ref2.args;
+      var groupId = runningActionId++;
+      api.addTimelineEvent({
+        layerId: MUTATIONS_LAYER_ID,
+        event: {
+          time: now(),
+          title: '🛫 ' + name,
+          subtitle: 'start',
+          data: {
+            store: formatDisplay(store.$id),
+            action: formatDisplay(name),
+            args: args
+          },
+          groupId: groupId
+        }
+      });
+      after(function (result) {
+        activeAction = undefined;
+        api.addTimelineEvent({
+          layerId: MUTATIONS_LAYER_ID,
+          event: {
+            time: now(),
+            title: '🛬 ' + name,
+            subtitle: 'end',
+            data: {
+              store: formatDisplay(store.$id),
+              action: formatDisplay(name),
+              args: args,
+              result: result
+            },
+            groupId: groupId
+          }
+        });
+      });
+      onError(function (error) {
+        activeAction = undefined;
+        api.addTimelineEvent({
+          layerId: MUTATIONS_LAYER_ID,
+          event: {
+            time: now(),
+            logType: 'error',
+            title: '💥 ' + name,
+            subtitle: 'end',
+            data: {
+              store: formatDisplay(store.$id),
+              action: formatDisplay(name),
+              args: args,
+              error: error
+            },
+            groupId: groupId
+          }
+        });
+      });
+    }, true);
+    store._customProperties.forEach(function (name) {
+      (0, _vueDemi.watch)(function () {
+        return (0, _vueDemi.unref)(store[name]);
+      }, function (newValue, oldValue) {
+        api.notifyComponentUpdate();
+        api.sendInspectorState(INSPECTOR_ID);
+        if (isTimelineActive) {
+          api.addTimelineEvent({
+            layerId: MUTATIONS_LAYER_ID,
+            event: {
+              time: now(),
+              title: 'Change',
+              subtitle: name,
+              data: {
+                newValue: newValue,
+                oldValue: oldValue
+              },
+              groupId: activeAction
+            }
+          });
+        }
+      }, {
+        deep: true
+      });
+    });
+    store.$subscribe(function (_ref3, state) {
+      var events = _ref3.events,
+        type = _ref3.type;
+      api.notifyComponentUpdate();
+      api.sendInspectorState(INSPECTOR_ID);
+      if (!isTimelineActive) return;
+      // rootStore.state[store.id] = state
+      var eventData = {
+        time: now(),
+        title: formatMutationType(type),
+        data: assign$1({
+          store: formatDisplay(store.$id)
+        }, formatEventData(events)),
+        groupId: activeAction
+      };
+      if (type === MutationType.patchFunction) {
+        eventData.subtitle = '⤵️';
+      } else if (type === MutationType.patchObject) {
+        eventData.subtitle = '🧩';
+      } else if (events && !Array.isArray(events)) {
+        eventData.subtitle = events.type;
+      }
+      if (events) {
+        eventData.data['rawEvent(s)'] = {
+          _custom: {
+            display: 'DebuggerEvent',
+            type: 'object',
+            tooltip: 'raw DebuggerEvent[]',
+            value: events
+          }
+        };
+      }
+      api.addTimelineEvent({
+        layerId: MUTATIONS_LAYER_ID,
+        event: eventData
+      });
+    }, {
+      detached: true,
+      flush: 'sync'
+    });
+    var hotUpdate = store._hotUpdate;
+    store._hotUpdate = (0, _vueDemi.markRaw)(function (newStore) {
+      hotUpdate(newStore);
+      api.addTimelineEvent({
+        layerId: MUTATIONS_LAYER_ID,
+        event: {
+          time: now(),
+          title: '🔥 ' + store.$id,
+          subtitle: 'HMR update',
+          data: {
+            store: formatDisplay(store.$id),
+            info: formatDisplay("HMR update")
+          }
+        }
+      });
+      // update the devtools too
+      api.notifyComponentUpdate();
+      api.sendInspectorTree(INSPECTOR_ID);
+      api.sendInspectorState(INSPECTOR_ID);
+    });
+    var $dispose = store.$dispose;
+    store.$dispose = function () {
+      $dispose();
+      api.notifyComponentUpdate();
+      api.sendInspectorTree(INSPECTOR_ID);
+      api.sendInspectorState(INSPECTOR_ID);
+      api.getSettings().logStoreChanges && toastMessage("Disposed \"".concat(store.$id, "\" store \uD83D\uDDD1"));
+    };
+    // trigger an update so it can display new registered stores
+    api.notifyComponentUpdate();
+    api.sendInspectorTree(INSPECTOR_ID);
+    api.sendInspectorState(INSPECTOR_ID);
+    api.getSettings().logStoreChanges && toastMessage("\"".concat(store.$id, "\" store installed \uD83C\uDD95"));
+  });
+}
+var runningActionId = 0;
+var activeAction;
+/**
+ * Patches a store to enable action grouping in devtools by wrapping the store with a Proxy that is passed as the
+ * context of all actions, allowing us to set `runningAction` on each access and effectively associating any state
+ * mutation to the action.
+ *
+ * @param store - store to patch
+ * @param actionNames - list of actionst to patch
+ */
+function patchActionForGrouping(store, actionNames, wrapWithProxy) {
+  // original actions of the store as they are given by pinia. We are going to override them
+  var actions = actionNames.reduce(function (storeActions, actionName) {
+    // use toRaw to avoid tracking #541
+    storeActions[actionName] = (0, _vueDemi.toRaw)(store)[actionName];
+    return storeActions;
+  }, {});
+  var _loop = function _loop(actionName) {
+    store[actionName] = function () {
+      // the running action id is incremented in a before action hook
+      var _actionId = runningActionId;
+      var trackedStore = wrapWithProxy ? new Proxy(store, {
+        get: function get() {
+          activeAction = _actionId;
+          return Reflect.get.apply(Reflect, arguments);
+        },
+        set: function set() {
+          activeAction = _actionId;
+          return Reflect.set.apply(Reflect, arguments);
+        }
+      }) : store;
+      // For Setup Stores we need https://github.com/tc39/proposal-async-context
+      activeAction = _actionId;
+      var retValue = actions[actionName].apply(trackedStore, arguments);
+      // this is safer as async actions in Setup Stores would associate mutations done outside of the action
+      activeAction = undefined;
+      return retValue;
+    };
+  };
+  for (var actionName in actions) {
+    _loop(actionName);
+  }
+}
+/**
+ * pinia.use(devtoolsPlugin)
+ */
+function devtoolsPlugin(_ref4) {
+  var app = _ref4.app,
+    store = _ref4.store,
+    options = _ref4.options;
+  // HMR module
+  if (store.$id.startsWith('__hot:')) {
+    return;
+  }
+  // detect option api vs setup api
+  store._isOptionsAPI = !!options.state;
+  patchActionForGrouping(store, Object.keys(options.actions), store._isOptionsAPI);
+  // Upgrade the HMR to also update the new actions
+  var originalHotUpdate = store._hotUpdate;
+  (0, _vueDemi.toRaw)(store)._hotUpdate = function (newStore) {
+    originalHotUpdate.apply(this, arguments);
+    patchActionForGrouping(store, Object.keys(newStore._hmrPayload.actions), !!store._isOptionsAPI);
+  };
+  addStoreToDevtools(app,
+  // FIXME: is there a way to allow the assignment from Store<Id, S, G, A> to StoreGeneric?
+  store);
+}
 
-module.exports = index_cjs;
+/**
+ * Creates a Pinia instance to be used by the application
+ */
+function createPinia() {
+  var scope = (0, _vueDemi.effectScope)(true);
+  // NOTE: here we could check the window object for a state and directly set it
+  // if there is anything like it with Vue 3 SSR
+  var state = scope.run(function () {
+    return (0, _vueDemi.ref)({});
+  });
+  var _p = [];
+  // plugins added before calling app.use(pinia)
+  var toBeInstalled = [];
+  var pinia = (0, _vueDemi.markRaw)({
+    install: function install(app) {
+      // this allows calling useStore() outside of a component setup after
+      // installing pinia's plugin
+      setActivePinia(pinia);
+      if (!_vueDemi.isVue2) {
+        pinia._a = app;
+        app.provide(piniaSymbol, pinia);
+        app.config.globalProperties.$pinia = pinia;
+        /* istanbul ignore else */
+        if (USE_DEVTOOLS) {
+          registerPiniaDevtools(app, pinia);
+        }
+        toBeInstalled.forEach(function (plugin) {
+          return _p.push(plugin);
+        });
+        toBeInstalled = [];
+      }
+    },
+    use: function use(plugin) {
+      if (!this._a && !_vueDemi.isVue2) {
+        toBeInstalled.push(plugin);
+      } else {
+        _p.push(plugin);
+      }
+      return this;
+    },
+    _p: _p,
+    // it's actually undefined here
+    // @ts-expect-error
+    _a: null,
+    _e: scope,
+    _s: new Map(),
+    state: state
+  });
+  // pinia devtools rely on dev only features so they cannot be forced unless
+  // the dev build of Vue is used. Avoid old browsers like IE11.
+  if (USE_DEVTOOLS && typeof Proxy !== 'undefined') {
+    pinia.use(devtoolsPlugin);
+  }
+  return pinia;
+}
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../webpack/buildin/global.js */ 3)))
+/**
+ * Checks if a function is a `StoreDefinition`.
+ *
+ * @param fn - object to test
+ * @returns true if `fn` is a StoreDefinition
+ */
+var isUseStore = function isUseStore(fn) {
+  return typeof fn === 'function' && typeof fn.$id === 'string';
+};
+/**
+ * Mutates in place `newState` with `oldState` to _hot update_ it. It will
+ * remove any key not existing in `newState` and recursively merge plain
+ * objects.
+ *
+ * @param newState - new state object to be patched
+ * @param oldState - old state that should be used to patch newState
+ * @returns - newState
+ */
+function patchObject(newState, oldState) {
+  // no need to go through symbols because they cannot be serialized anyway
+  for (var key in oldState) {
+    var subPatch = oldState[key];
+    // skip the whole sub tree
+    if (!(key in newState)) {
+      continue;
+    }
+    var targetValue = newState[key];
+    if (isPlainObject(targetValue) && isPlainObject(subPatch) && !(0, _vueDemi.isRef)(subPatch) && !(0, _vueDemi.isReactive)(subPatch)) {
+      newState[key] = patchObject(targetValue, subPatch);
+    } else {
+      // objects are either a bit more complex (e.g. refs) or primitives, so we
+      // just set the whole thing
+      if (_vueDemi.isVue2) {
+        (0, _vueDemi.set)(newState, key, subPatch);
+      } else {
+        newState[key] = subPatch;
+      }
+    }
+  }
+  return newState;
+}
+/**
+ * Creates an _accept_ function to pass to `import.meta.hot` in Vite applications.
+ *
+ * @example
+ * ```js
+ * const useUser = defineStore(...)
+ * if (import.meta.hot) {
+ *   import.meta.hot.accept(acceptHMRUpdate(useUser, import.meta.hot))
+ * }
+ * ```
+ *
+ * @param initialUseStore - return of the defineStore to hot update
+ * @param hot - `import.meta.hot`
+ */
+function acceptHMRUpdate(initialUseStore, hot) {
+  // strip as much as possible from iife.prod
+  if (false) {}
+  return function (newModule) {
+    var pinia = hot.data.pinia || initialUseStore._pinia;
+    if (!pinia) {
+      // this store is still not used
+      return;
+    }
+    // preserve the pinia instance across loads
+    hot.data.pinia = pinia;
+    // console.log('got data', newStore)
+    for (var exportName in newModule) {
+      var useStore = newModule[exportName];
+      // console.log('checking for', exportName)
+      if (isUseStore(useStore) && pinia._s.has(useStore.$id)) {
+        // console.log('Accepting update for', useStore.$id)
+        var id = useStore.$id;
+        if (id !== initialUseStore.$id) {
+          console.warn("The id of the store changed from \"".concat(initialUseStore.$id, "\" to \"").concat(id, "\". Reloading."));
+          // return import.meta.hot.invalidate()
+          return hot.invalidate();
+        }
+        var existingStore = pinia._s.get(id);
+        if (!existingStore) {
+          console.log("[Pinia]: skipping hmr because store doesn't exist yet");
+          return;
+        }
+        useStore(pinia, existingStore);
+      }
+    }
+  };
+}
+var noop = function noop() {};
+function addSubscription(subscriptions, callback, detached) {
+  var onCleanup = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : noop;
+  subscriptions.push(callback);
+  var removeSubscription = function removeSubscription() {
+    var idx = subscriptions.indexOf(callback);
+    if (idx > -1) {
+      subscriptions.splice(idx, 1);
+      onCleanup();
+    }
+  };
+  if (!detached && (0, _vueDemi.getCurrentScope)()) {
+    (0, _vueDemi.onScopeDispose)(removeSubscription);
+  }
+  return removeSubscription;
+}
+function triggerSubscriptions(subscriptions) {
+  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+  subscriptions.slice().forEach(function (callback) {
+    callback.apply(void 0, args);
+  });
+}
+var fallbackRunWithContext = function fallbackRunWithContext(fn) {
+  return fn();
+};
+function mergeReactiveObjects(target, patchToApply) {
+  // Handle Map instances
+  if (target instanceof Map && patchToApply instanceof Map) {
+    patchToApply.forEach(function (value, key) {
+      return target.set(key, value);
+    });
+  }
+  // Handle Set instances
+  if (target instanceof Set && patchToApply instanceof Set) {
+    patchToApply.forEach(target.add, target);
+  }
+  // no need to go through symbols because they cannot be serialized anyway
+  for (var key in patchToApply) {
+    if (!patchToApply.hasOwnProperty(key)) continue;
+    var subPatch = patchToApply[key];
+    var targetValue = target[key];
+    if (isPlainObject(targetValue) && isPlainObject(subPatch) && target.hasOwnProperty(key) && !(0, _vueDemi.isRef)(subPatch) && !(0, _vueDemi.isReactive)(subPatch)) {
+      // NOTE: here I wanted to warn about inconsistent types but it's not possible because in setup stores one might
+      // start the value of a property as a certain type e.g. a Map, and then for some reason, during SSR, change that
+      // to `undefined`. When trying to hydrate, we want to override the Map with `undefined`.
+      target[key] = mergeReactiveObjects(targetValue, subPatch);
+    } else {
+      // @ts-expect-error: subPatch is a valid value
+      target[key] = subPatch;
+    }
+  }
+  return target;
+}
+var skipHydrateSymbol =  true ? Symbol('pinia:skipHydration') : /* istanbul ignore next */undefined;
+var skipHydrateMap = /*#__PURE__*/new WeakMap();
+/**
+ * Tells Pinia to skip the hydration process of a given object. This is useful in setup stores (only) when you return a
+ * stateful object in the store but it isn't really state. e.g. returning a router instance in a setup store.
+ *
+ * @param obj - target object
+ * @returns obj
+ */
+function skipHydrate(obj) {
+  return _vueDemi.isVue2 ?
+  // in @vue/composition-api, the refs are sealed so defineProperty doesn't work...
+  /* istanbul ignore next */
+  skipHydrateMap.set(obj, 1) && obj : Object.defineProperty(obj, skipHydrateSymbol, {});
+}
+/**
+ * Returns whether a value should be hydrated
+ *
+ * @param obj - target variable
+ * @returns true if `obj` should be hydrated
+ */
+function shouldHydrate(obj) {
+  return _vueDemi.isVue2 ? /* istanbul ignore next */!skipHydrateMap.has(obj) : !isPlainObject(obj) || !obj.hasOwnProperty(skipHydrateSymbol);
+}
+var assign = Object.assign;
+function isComputed(o) {
+  return !!((0, _vueDemi.isRef)(o) && o.effect);
+}
+function createOptionsStore(id, options, pinia, hot) {
+  var state = options.state,
+    actions = options.actions,
+    getters = options.getters;
+  var initialState = pinia.state.value[id];
+  var store;
+  function setup() {
+    if (!initialState && ( false || !hot)) {
+      /* istanbul ignore if */
+      if (_vueDemi.isVue2) {
+        (0, _vueDemi.set)(pinia.state.value, id, state ? state() : {});
+      } else {
+        pinia.state.value[id] = state ? state() : {};
+      }
+    }
+    // avoid creating a state in pinia.state.value
+    var localState =  true && hot ?
+    // use ref() to unwrap refs inside state TODO: check if this is still necessary
+    (0, _vueDemi.toRefs)((0, _vueDemi.ref)(state ? state() : {}).value) : (0, _vueDemi.toRefs)(pinia.state.value[id]);
+    return assign(localState, actions, Object.keys(getters || {}).reduce(function (computedGetters, name) {
+      if ( true && name in localState) {
+        console.warn("[\uD83C\uDF4D]: A getter cannot have the same name as another state property. Rename one of them. Found with \"".concat(name, "\" in store \"").concat(id, "\"."));
+      }
+      computedGetters[name] = (0, _vueDemi.markRaw)((0, _vueDemi.computed)(function () {
+        setActivePinia(pinia);
+        // it was created just before
+        var store = pinia._s.get(id);
+        // allow cross using stores
+        /* istanbul ignore next */
+        if (_vueDemi.isVue2 && !store._r) return;
+        // @ts-expect-error
+        // return getters![name].call(context, context)
+        // TODO: avoid reading the getter while assigning with a global variable
+        return getters[name].call(store, store);
+      }));
+      return computedGetters;
+    }, {}));
+  }
+  store = createSetupStore(id, setup, options, pinia, hot, true);
+  return store;
+}
+function createSetupStore($id, setup) {
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var pinia = arguments.length > 3 ? arguments[3] : undefined;
+  var hot = arguments.length > 4 ? arguments[4] : undefined;
+  var isOptionsStore = arguments.length > 5 ? arguments[5] : undefined;
+  var scope;
+  var optionsForPlugin = assign({
+    actions: {}
+  }, options);
+  /* istanbul ignore if */
+  if ( true && !pinia._e.active) {
+    throw new Error('Pinia destroyed');
+  }
+  // watcher options for $subscribe
+  var $subscribeOptions = {
+    deep: true
+    // flush: 'post',
+  };
+  /* istanbul ignore else */
+  if ( true && !_vueDemi.isVue2) {
+    $subscribeOptions.onTrigger = function (event) {
+      /* istanbul ignore else */
+      if (isListening) {
+        debuggerEvents = event;
+        // avoid triggering this while the store is being built and the state is being set in pinia
+      } else if (isListening == false && !store._hotUpdating) {
+        // let patch send all the events together later
+        /* istanbul ignore else */
+        if (Array.isArray(debuggerEvents)) {
+          debuggerEvents.push(event);
+        } else {
+          console.error('🍍 debuggerEvents should be an array. This is most likely an internal Pinia bug.');
+        }
+      }
+    };
+  }
+  // internal state
+  var isListening; // set to true at the end
+  var isSyncListening; // set to true at the end
+  var subscriptions = [];
+  var actionSubscriptions = [];
+  var debuggerEvents;
+  var initialState = pinia.state.value[$id];
+  // avoid setting the state for option stores if it is set
+  // by the setup
+  if (!isOptionsStore && !initialState && ( false || !hot)) {
+    /* istanbul ignore if */
+    if (_vueDemi.isVue2) {
+      (0, _vueDemi.set)(pinia.state.value, $id, {});
+    } else {
+      pinia.state.value[$id] = {};
+    }
+  }
+  var hotState = (0, _vueDemi.ref)({});
+  // avoid triggering too many listeners
+  // https://github.com/vuejs/pinia/issues/1129
+  var activeListener;
+  function $patch(partialStateOrMutator) {
+    var subscriptionMutation;
+    isListening = isSyncListening = false;
+    // reset the debugger events since patches are sync
+    /* istanbul ignore else */
+    if (true) {
+      debuggerEvents = [];
+    }
+    if (typeof partialStateOrMutator === 'function') {
+      partialStateOrMutator(pinia.state.value[$id]);
+      subscriptionMutation = {
+        type: MutationType.patchFunction,
+        storeId: $id,
+        events: debuggerEvents
+      };
+    } else {
+      mergeReactiveObjects(pinia.state.value[$id], partialStateOrMutator);
+      subscriptionMutation = {
+        type: MutationType.patchObject,
+        payload: partialStateOrMutator,
+        storeId: $id,
+        events: debuggerEvents
+      };
+    }
+    var myListenerId = activeListener = Symbol();
+    (0, _vueDemi.nextTick)().then(function () {
+      if (activeListener === myListenerId) {
+        isListening = true;
+      }
+    });
+    isSyncListening = true;
+    // because we paused the watcher, we need to manually call the subscriptions
+    triggerSubscriptions(subscriptions, subscriptionMutation, pinia.state.value[$id]);
+  }
+  var $reset = isOptionsStore ? function $reset() {
+    var state = options.state;
+    var newState = state ? state() : {};
+    // we use a patch to group all changes into one single subscription
+    this.$patch(function ($state) {
+      assign($state, newState);
+    });
+  } : /* istanbul ignore next */
+   true ? function () {
+    throw new Error("\uD83C\uDF4D: Store \"".concat($id, "\" is built using the setup syntax and does not implement $reset()."));
+  } : undefined;
+  function $dispose() {
+    scope.stop();
+    subscriptions = [];
+    actionSubscriptions = [];
+    pinia._s.delete($id);
+  }
+  /**
+   * Wraps an action to handle subscriptions.
+   *
+   * @param name - name of the action
+   * @param action - action to wrap
+   * @returns a wrapped action to handle subscriptions
+   */
+  function wrapAction(name, action) {
+    return function () {
+      setActivePinia(pinia);
+      var args = Array.from(arguments);
+      var afterCallbackList = [];
+      var onErrorCallbackList = [];
+      function after(callback) {
+        afterCallbackList.push(callback);
+      }
+      function onError(callback) {
+        onErrorCallbackList.push(callback);
+      }
+      // @ts-expect-error
+      triggerSubscriptions(actionSubscriptions, {
+        args: args,
+        name: name,
+        store: store,
+        after: after,
+        onError: onError
+      });
+      var ret;
+      try {
+        ret = action.apply(this && this.$id === $id ? this : store, args);
+        // handle sync errors
+      } catch (error) {
+        triggerSubscriptions(onErrorCallbackList, error);
+        throw error;
+      }
+      if (ret instanceof Promise) {
+        return ret.then(function (value) {
+          triggerSubscriptions(afterCallbackList, value);
+          return value;
+        }).catch(function (error) {
+          triggerSubscriptions(onErrorCallbackList, error);
+          return Promise.reject(error);
+        });
+      }
+      // trigger after callbacks
+      triggerSubscriptions(afterCallbackList, ret);
+      return ret;
+    };
+  }
+  var _hmrPayload = /*#__PURE__*/(0, _vueDemi.markRaw)({
+    actions: {},
+    getters: {},
+    state: [],
+    hotState: hotState
+  });
+  var partialStore = {
+    _p: pinia,
+    // _s: scope,
+    $id: $id,
+    $onAction: addSubscription.bind(null, actionSubscriptions),
+    $patch: $patch,
+    $reset: $reset,
+    $subscribe: function $subscribe(callback) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var removeSubscription = addSubscription(subscriptions, callback, options.detached, function () {
+        return stopWatcher();
+      });
+      var stopWatcher = scope.run(function () {
+        return (0, _vueDemi.watch)(function () {
+          return pinia.state.value[$id];
+        }, function (state) {
+          if (options.flush === 'sync' ? isSyncListening : isListening) {
+            callback({
+              storeId: $id,
+              type: MutationType.direct,
+              events: debuggerEvents
+            }, state);
+          }
+        }, assign({}, $subscribeOptions, options));
+      });
+      return removeSubscription;
+    },
+    $dispose: $dispose
+  };
+  /* istanbul ignore if */
+  if (_vueDemi.isVue2) {
+    // start as non ready
+    partialStore._r = false;
+  }
+  var store = (0, _vueDemi.reactive)( true ? assign({
+    _hmrPayload: _hmrPayload,
+    _customProperties: (0, _vueDemi.markRaw)(new Set()) // devtools custom properties
+  }, partialStore
+  // must be added later
+  // setupStore
+  ) : undefined);
+  // store the partial store now so the setup of stores can instantiate each other before they are finished without
+  // creating infinite loops.
+  pinia._s.set($id, store);
+  var runWithContext = pinia._a && pinia._a.runWithContext || fallbackRunWithContext;
+  // TODO: idea create skipSerialize that marks properties as non serializable and they are skipped
+  var setupStore = pinia._e.run(function () {
+    scope = (0, _vueDemi.effectScope)();
+    return runWithContext(function () {
+      return scope.run(setup);
+    });
+  });
+  // overwrite existing actions to support $onAction
+  for (var key in setupStore) {
+    var prop = setupStore[key];
+    if ((0, _vueDemi.isRef)(prop) && !isComputed(prop) || (0, _vueDemi.isReactive)(prop)) {
+      // mark it as a piece of state to be serialized
+      if ( true && hot) {
+        (0, _vueDemi.set)(hotState.value, key, (0, _vueDemi.toRef)(setupStore, key));
+        // createOptionStore directly sets the state in pinia.state.value so we
+        // can just skip that
+      } else if (!isOptionsStore) {
+        // in setup stores we must hydrate the state and sync pinia state tree with the refs the user just created
+        if (initialState && shouldHydrate(prop)) {
+          if ((0, _vueDemi.isRef)(prop)) {
+            prop.value = initialState[key];
+          } else {
+            // probably a reactive object, lets recursively assign
+            // @ts-expect-error: prop is unknown
+            mergeReactiveObjects(prop, initialState[key]);
+          }
+        }
+        // transfer the ref to the pinia state to keep everything in sync
+        /* istanbul ignore if */
+        if (_vueDemi.isVue2) {
+          (0, _vueDemi.set)(pinia.state.value[$id], key, prop);
+        } else {
+          pinia.state.value[$id][key] = prop;
+        }
+      }
+      /* istanbul ignore else */
+      if (true) {
+        _hmrPayload.state.push(key);
+      }
+      // action
+    } else if (typeof prop === 'function') {
+      // @ts-expect-error: we are overriding the function we avoid wrapping if
+      var actionValue =  true && hot ? prop : wrapAction(key, prop);
+      // this a hot module replacement store because the hotUpdate method needs
+      // to do it with the right context
+      /* istanbul ignore if */
+      if (_vueDemi.isVue2) {
+        (0, _vueDemi.set)(setupStore, key, actionValue);
+      } else {
+        // @ts-expect-error
+        setupStore[key] = actionValue;
+      }
+      /* istanbul ignore else */
+      if (true) {
+        _hmrPayload.actions[key] = prop;
+      }
+      // list actions so they can be used in plugins
+      // @ts-expect-error
+      optionsForPlugin.actions[key] = prop;
+    } else if (true) {
+      // add getters for devtools
+      if (isComputed(prop)) {
+        _hmrPayload.getters[key] = isOptionsStore ?
+        // @ts-expect-error
+        options.getters[key] : prop;
+        if (IS_CLIENT) {
+          var getters = setupStore._getters || (
+          // @ts-expect-error: same
+          setupStore._getters = (0, _vueDemi.markRaw)([]));
+          getters.push(key);
+        }
+      }
+    }
+  }
+  // add the state, getters, and action properties
+  /* istanbul ignore if */
+  if (_vueDemi.isVue2) {
+    Object.keys(setupStore).forEach(function (key) {
+      (0, _vueDemi.set)(store, key, setupStore[key]);
+    });
+  } else {
+    assign(store, setupStore);
+    // allows retrieving reactive objects with `storeToRefs()`. Must be called after assigning to the reactive object.
+    // Make `storeToRefs()` work with `reactive()` #799
+    assign((0, _vueDemi.toRaw)(store), setupStore);
+  }
+  // use this instead of a computed with setter to be able to create it anywhere
+  // without linking the computed lifespan to wherever the store is first
+  // created.
+  Object.defineProperty(store, '$state', {
+    get: function get() {
+      return  true && hot ? hotState.value : pinia.state.value[$id];
+    },
+    set: function set(state) {
+      /* istanbul ignore if */
+      if ( true && hot) {
+        throw new Error('cannot set hotState');
+      }
+      $patch(function ($state) {
+        assign($state, state);
+      });
+    }
+  });
+  // add the hotUpdate before plugins to allow them to override it
+  /* istanbul ignore else */
+  if (true) {
+    store._hotUpdate = (0, _vueDemi.markRaw)(function (newStore) {
+      store._hotUpdating = true;
+      newStore._hmrPayload.state.forEach(function (stateKey) {
+        if (stateKey in store.$state) {
+          var newStateTarget = newStore.$state[stateKey];
+          var oldStateSource = store.$state[stateKey];
+          if ((0, _typeof2.default)(newStateTarget) === 'object' && isPlainObject(newStateTarget) && isPlainObject(oldStateSource)) {
+            patchObject(newStateTarget, oldStateSource);
+          } else {
+            // transfer the ref
+            newStore.$state[stateKey] = oldStateSource;
+          }
+        }
+        // patch direct access properties to allow store.stateProperty to work as
+        // store.$state.stateProperty
+        (0, _vueDemi.set)(store, stateKey, (0, _vueDemi.toRef)(newStore.$state, stateKey));
+      });
+      // remove deleted state properties
+      Object.keys(store.$state).forEach(function (stateKey) {
+        if (!(stateKey in newStore.$state)) {
+          (0, _vueDemi.del)(store, stateKey);
+        }
+      });
+      // avoid devtools logging this as a mutation
+      isListening = false;
+      isSyncListening = false;
+      pinia.state.value[$id] = (0, _vueDemi.toRef)(newStore._hmrPayload, 'hotState');
+      isSyncListening = true;
+      (0, _vueDemi.nextTick)().then(function () {
+        isListening = true;
+      });
+      for (var actionName in newStore._hmrPayload.actions) {
+        var action = newStore[actionName];
+        (0, _vueDemi.set)(store, actionName, wrapAction(actionName, action));
+      }
+      // TODO: does this work in both setup and option store?
+      var _loop2 = function _loop2(getterName) {
+        var getter = newStore._hmrPayload.getters[getterName];
+        var getterValue = isOptionsStore ?
+        // special handling of options api
+        (0, _vueDemi.computed)(function () {
+          setActivePinia(pinia);
+          return getter.call(store, store);
+        }) : getter;
+        (0, _vueDemi.set)(store, getterName, getterValue);
+      };
+      for (var getterName in newStore._hmrPayload.getters) {
+        _loop2(getterName);
+      }
+      // remove deleted getters
+      Object.keys(store._hmrPayload.getters).forEach(function (key) {
+        if (!(key in newStore._hmrPayload.getters)) {
+          (0, _vueDemi.del)(store, key);
+        }
+      });
+      // remove old actions
+      Object.keys(store._hmrPayload.actions).forEach(function (key) {
+        if (!(key in newStore._hmrPayload.actions)) {
+          (0, _vueDemi.del)(store, key);
+        }
+      });
+      // update the values used in devtools and to allow deleting new properties later on
+      store._hmrPayload = newStore._hmrPayload;
+      store._getters = newStore._getters;
+      store._hotUpdating = false;
+    });
+  }
+  if (USE_DEVTOOLS) {
+    var nonEnumerable = {
+      writable: true,
+      configurable: true,
+      // avoid warning on devtools trying to display this property
+      enumerable: false
+    };
+    ['_p', '_hmrPayload', '_getters', '_customProperties'].forEach(function (p) {
+      Object.defineProperty(store, p, assign({
+        value: store[p]
+      }, nonEnumerable));
+    });
+  }
+  /* istanbul ignore if */
+  if (_vueDemi.isVue2) {
+    // mark the store as ready before plugins
+    store._r = true;
+  }
+  // apply all plugins
+  pinia._p.forEach(function (extender) {
+    /* istanbul ignore else */
+    if (USE_DEVTOOLS) {
+      var extensions = scope.run(function () {
+        return extender({
+          store: store,
+          app: pinia._a,
+          pinia: pinia,
+          options: optionsForPlugin
+        });
+      });
+      Object.keys(extensions || {}).forEach(function (key) {
+        return store._customProperties.add(key);
+      });
+      assign(store, extensions);
+    } else {
+      assign(store, scope.run(function () {
+        return extender({
+          store: store,
+          app: pinia._a,
+          pinia: pinia,
+          options: optionsForPlugin
+        });
+      }));
+    }
+  });
+  if ( true && store.$state && (0, _typeof2.default)(store.$state) === 'object' && typeof store.$state.constructor === 'function' && !store.$state.constructor.toString().includes('[native code]')) {
+    console.warn("[\uD83C\uDF4D]: The \"state\" must be a plain object. It cannot be\n" + "\tstate: () => new MyClass()\n" + "Found in store \"".concat(store.$id, "\"."));
+  }
+  // only apply hydrate to option stores with an initial state in pinia
+  if (initialState && isOptionsStore && options.hydrate) {
+    options.hydrate(store.$state, initialState);
+  }
+  isListening = true;
+  isSyncListening = true;
+  return store;
+}
+function defineStore(
+// TODO: add proper types from above
+idOrOptions, setup, setupOptions) {
+  var id;
+  var options;
+  var isSetupStore = typeof setup === 'function';
+  if (typeof idOrOptions === 'string') {
+    id = idOrOptions;
+    // the option store setup will contain the actual options in this case
+    options = isSetupStore ? setupOptions : setup;
+  } else {
+    options = idOrOptions;
+    id = idOrOptions.id;
+    if ( true && typeof id !== 'string') {
+      throw new Error("[\uD83C\uDF4D]: \"defineStore()\" must be passed a store id as its first argument.");
+    }
+  }
+  function useStore(pinia, hot) {
+    var hasContext = (0, _vueDemi.hasInjectionContext)();
+    pinia =
+    // in test mode, ignore the argument provided as we can always retrieve a
+    // pinia instance with getActivePinia()
+    ( false ? undefined : pinia) || (hasContext ? (0, _vueDemi.inject)(piniaSymbol, null) : null);
+    if (pinia) setActivePinia(pinia);
+    if ( true && !activePinia) {
+      throw new Error("[\uD83C\uDF4D]: \"getActivePinia()\" was called but there was no active Pinia. Did you forget to install pinia?\n" + "\tconst pinia = createPinia()\n" + "\tapp.use(pinia)\n" + "This will fail in production.");
+    }
+    pinia = activePinia;
+    if (!pinia._s.has(id)) {
+      // creating the store registers it in `pinia._s`
+      if (isSetupStore) {
+        createSetupStore(id, setup, options, pinia);
+      } else {
+        createOptionsStore(id, options, pinia);
+      }
+      /* istanbul ignore else */
+      if (true) {
+        // @ts-expect-error: not the right inferred type
+        useStore._pinia = pinia;
+      }
+    }
+    var store = pinia._s.get(id);
+    if ( true && hot) {
+      var hotId = '__hot:' + id;
+      var newStore = isSetupStore ? createSetupStore(hotId, setup, options, pinia, true) : createOptionsStore(hotId, assign({}, options), pinia, true);
+      hot._hotUpdate(newStore);
+      // cleanup the state properties and the store from the cache
+      delete pinia.state.value[hotId];
+      pinia._s.delete(hotId);
+    }
+    if ( true && IS_CLIENT) {
+      var currentInstance = (0, _vueDemi.getCurrentInstance)();
+      // save stores in instances to access them devtools
+      if (currentInstance && currentInstance.proxy &&
+      // avoid adding stores that are just built for hot module replacement
+      !hot) {
+        var vm = currentInstance.proxy;
+        var cache = '_pStores' in vm ? vm._pStores : vm._pStores = {};
+        cache[id] = store;
+      }
+    }
+    // StoreGeneric cannot be casted towards Store
+    return store;
+  }
+  useStore.$id = id;
+  return useStore;
+}
+var mapStoreSuffix = 'Store';
+/**
+ * Changes the suffix added by `mapStores()`. Can be set to an empty string.
+ * Defaults to `"Store"`. Make sure to extend the MapStoresCustomization
+ * interface if you are using TypeScript.
+ *
+ * @param suffix - new suffix
+ */
+function setMapStoreSuffix(suffix // could be 'Store' but that would be annoying for JS
+) {
+  mapStoreSuffix = suffix;
+}
+/**
+ * Allows using stores without the composition API (`setup()`) by generating an
+ * object to be spread in the `computed` field of a component. It accepts a list
+ * of store definitions.
+ *
+ * @example
+ * ```js
+ * export default {
+ *   computed: {
+ *     // other computed properties
+ *     ...mapStores(useUserStore, useCartStore)
+ *   },
+ *
+ *   created() {
+ *     this.userStore // store with id "user"
+ *     this.cartStore // store with id "cart"
+ *   }
+ * }
+ * ```
+ *
+ * @param stores - list of stores to map to an object
+ */
+function mapStores() {
+  for (var _len2 = arguments.length, stores = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    stores[_key2] = arguments[_key2];
+  }
+  if ( true && Array.isArray(stores[0])) {
+    console.warn("[\uD83C\uDF4D]: Directly pass all stores to \"mapStores()\" without putting them in an array:\n" + "Replace\n" + "\tmapStores([useAuthStore, useCartStore])\n" + "with\n" + "\tmapStores(useAuthStore, useCartStore)\n" + "This will fail in production if not fixed.");
+    stores = stores[0];
+  }
+  return stores.reduce(function (reduced, useStore) {
+    // @ts-expect-error: $id is added by defineStore
+    reduced[useStore.$id + mapStoreSuffix] = function () {
+      return useStore(this.$pinia);
+    };
+    return reduced;
+  }, {});
+}
+/**
+ * Allows using state and getters from one store without using the composition
+ * API (`setup()`) by generating an object to be spread in the `computed` field
+ * of a component.
+ *
+ * @param useStore - store to map from
+ * @param keysOrMapper - array or object
+ */
+function mapState(useStore, keysOrMapper) {
+  return Array.isArray(keysOrMapper) ? keysOrMapper.reduce(function (reduced, key) {
+    reduced[key] = function () {
+      return useStore(this.$pinia)[key];
+    };
+    return reduced;
+  }, {}) : Object.keys(keysOrMapper).reduce(function (reduced, key) {
+    // @ts-expect-error
+    reduced[key] = function () {
+      var store = useStore(this.$pinia);
+      var storeKey = keysOrMapper[key];
+      // for some reason TS is unable to infer the type of storeKey to be a
+      // function
+      return typeof storeKey === 'function' ? storeKey.call(this, store) : store[storeKey];
+    };
+    return reduced;
+  }, {});
+}
+/**
+ * Alias for `mapState()`. You should use `mapState()` instead.
+ * @deprecated use `mapState()` instead.
+ */
+var mapGetters = mapState;
+/**
+ * Allows directly using actions from your store without using the composition
+ * API (`setup()`) by generating an object to be spread in the `methods` field
+ * of a component.
+ *
+ * @param useStore - store to map from
+ * @param keysOrMapper - array or object
+ */
+exports.mapGetters = mapGetters;
+function mapActions(useStore, keysOrMapper) {
+  return Array.isArray(keysOrMapper) ? keysOrMapper.reduce(function (reduced, key) {
+    // @ts-expect-error
+    reduced[key] = function () {
+      var _useStore;
+      return (_useStore = useStore(this.$pinia))[key].apply(_useStore, arguments);
+    };
+    return reduced;
+  }, {}) : Object.keys(keysOrMapper).reduce(function (reduced, key) {
+    // @ts-expect-error
+    reduced[key] = function () {
+      var _useStore2;
+      return (_useStore2 = useStore(this.$pinia))[keysOrMapper[key]].apply(_useStore2, arguments);
+    };
+    return reduced;
+  }, {});
+}
+/**
+ * Allows using state and getters from one store without using the composition
+ * API (`setup()`) by generating an object to be spread in the `computed` field
+ * of a component.
+ *
+ * @param useStore - store to map from
+ * @param keysOrMapper - array or object
+ */
+function mapWritableState(useStore, keysOrMapper) {
+  return Array.isArray(keysOrMapper) ? keysOrMapper.reduce(function (reduced, key) {
+    // @ts-ignore
+    reduced[key] = {
+      get: function get() {
+        return useStore(this.$pinia)[key];
+      },
+      set: function set(value) {
+        // it's easier to type it here as any
+        return useStore(this.$pinia)[key] = value;
+      }
+    };
+    return reduced;
+  }, {}) : Object.keys(keysOrMapper).reduce(function (reduced, key) {
+    // @ts-ignore
+    reduced[key] = {
+      get: function get() {
+        return useStore(this.$pinia)[keysOrMapper[key]];
+      },
+      set: function set(value) {
+        // it's easier to type it here as any
+        return useStore(this.$pinia)[keysOrMapper[key]] = value;
+      }
+    };
+    return reduced;
+  }, {});
+}
+
+/**
+ * Creates an object of references with all the state, getters, and plugin-added
+ * state properties of the store. Similar to `toRefs()` but specifically
+ * designed for Pinia stores so methods and non reactive properties are
+ * completely ignored.
+ *
+ * @param store - store to extract the refs from
+ */
+function storeToRefs(store) {
+  // See https://github.com/vuejs/pinia/issues/852
+  // It's easier to just use toRefs() even if it includes more stuff
+  if (_vueDemi.isVue2) {
+    // @ts-expect-error: toRefs include methods and others
+    return (0, _vueDemi.toRefs)(store);
+  } else {
+    store = (0, _vueDemi.toRaw)(store);
+    var refs = {};
+    for (var key in store) {
+      var value = store[key];
+      if ((0, _vueDemi.isRef)(value) || (0, _vueDemi.isReactive)(value)) {
+        // @ts-expect-error: the key is state or getter
+        refs[key] =
+        // ---
+        (0, _vueDemi.toRef)(store, key);
+      }
+    }
+    return refs;
+  }
+}
+
+/**
+ * Vue 2 Plugin that must be installed for pinia to work. Note **you don't need
+ * this plugin if you are using Nuxt.js**. Use the `buildModule` instead:
+ * https://pinia.vuejs.org/ssr/nuxt.html.
+ *
+ * @example
+ * ```js
+ * import Vue from 'vue'
+ * import { PiniaVuePlugin, createPinia } from 'pinia'
+ *
+ * Vue.use(PiniaVuePlugin)
+ * const pinia = createPinia()
+ *
+ * new Vue({
+ *   el: '#app',
+ *   // ...
+ *   pinia,
+ * })
+ * ```
+ *
+ * @param _Vue - `Vue` imported from 'vue'.
+ */
+var PiniaVuePlugin = function PiniaVuePlugin(_Vue) {
+  // Equivalent of
+  // app.config.globalProperties.$pinia = pinia
+  _Vue.mixin({
+    beforeCreate: function beforeCreate() {
+      var options = this.$options;
+      if (options.pinia) {
+        var pinia = options.pinia;
+        // HACK: taken from provide(): https://github.com/vuejs/composition-api/blob/main/src/apis/inject.ts#L31
+        /* istanbul ignore else */
+        if (!this._provided) {
+          var provideCache = {};
+          Object.defineProperty(this, '_provided', {
+            get: function get() {
+              return provideCache;
+            },
+            set: function set(v) {
+              return Object.assign(provideCache, v);
+            }
+          });
+        }
+        this._provided[piniaSymbol] = pinia;
+        // propagate the pinia instance in an SSR friendly way
+        // avoid adding it to nuxt twice
+        /* istanbul ignore else */
+        if (!this.$pinia) {
+          this.$pinia = pinia;
+        }
+        pinia._a = this;
+        if (IS_CLIENT) {
+          // this allows calling useStore() outside of a component setup after
+          // installing pinia's plugin
+          setActivePinia(pinia);
+        }
+        if (USE_DEVTOOLS) {
+          registerPiniaDevtools(pinia._a, pinia);
+        }
+      } else if (!this.$pinia && options.parent && options.parent.$pinia) {
+        this.$pinia = options.parent.$pinia;
+      }
+    },
+    destroyed: function destroyed() {
+      delete this._pStores;
+    }
+  });
+};
+exports.PiniaVuePlugin = PiniaVuePlugin;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/global.js */ 3)))
 
 /***/ }),
 /* 35 */
-/*!***************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/store/modules/index.js ***!
-  \***************************************************************************************************/
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@babel/runtime/regenerator/index.js ***!
+  \************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+// TODO(Babel 8): Remove this file.
 
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _app = _interopRequireDefault(__webpack_require__(/*! ./app.js */ 36));
-var _default = {
-  app: _app.default
-};
-exports.default = _default;
+var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 36)();
+module.exports = runtime;
 
 /***/ }),
 /* 36 */
-/*!*************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/store/modules/app.js ***!
-  \*************************************************************************************************/
+/*!*******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/regeneratorRuntime.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = __webpack_require__(/*! ./typeof.js */ 13)["default"];
+function _regeneratorRuntime() {
+  "use strict";
+
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+  module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
+    return exports;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports;
+  var exports = {},
+    Op = Object.prototype,
+    hasOwn = Op.hasOwnProperty,
+    defineProperty = Object.defineProperty || function (obj, key, desc) {
+      obj[key] = desc.value;
+    },
+    $Symbol = "function" == typeof Symbol ? Symbol : {},
+    iteratorSymbol = $Symbol.iterator || "@@iterator",
+    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
+    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+  function define(obj, key, value) {
+    return Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: !0,
+      configurable: !0,
+      writable: !0
+    }), obj[key];
+  }
+  try {
+    define({}, "");
+  } catch (err) {
+    define = function define(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
+      generator = Object.create(protoGenerator.prototype),
+      context = new Context(tryLocsList || []);
+    return defineProperty(generator, "_invoke", {
+      value: makeInvokeMethod(innerFn, self, context)
+    }), generator;
+  }
+  function tryCatch(fn, obj, arg) {
+    try {
+      return {
+        type: "normal",
+        arg: fn.call(obj, arg)
+      };
+    } catch (err) {
+      return {
+        type: "throw",
+        arg: err
+      };
+    }
+  }
+  exports.wrap = wrap;
+  var ContinueSentinel = {};
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+  var IteratorPrototype = {};
+  define(IteratorPrototype, iteratorSymbol, function () {
+    return this;
+  });
+  var getProto = Object.getPrototypeOf,
+    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
+  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function (method) {
+      define(prototype, method, function (arg) {
+        return this._invoke(method, arg);
+      });
+    });
+  }
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if ("throw" !== record.type) {
+        var result = record.arg,
+          value = result.value;
+        return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
+          invoke("next", value, resolve, reject);
+        }, function (err) {
+          invoke("throw", err, resolve, reject);
+        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
+          result.value = unwrapped, resolve(result);
+        }, function (error) {
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+      reject(record.arg);
+    }
+    var previousPromise;
+    defineProperty(this, "_invoke", {
+      value: function value(method, arg) {
+        function callInvokeWithMethodAndArg() {
+          return new PromiseImpl(function (resolve, reject) {
+            invoke(method, arg, resolve, reject);
+          });
+        }
+        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+      }
+    });
+  }
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = "suspendedStart";
+    return function (method, arg) {
+      if ("executing" === state) throw new Error("Generator is already running");
+      if ("completed" === state) {
+        if ("throw" === method) throw arg;
+        return doneResult();
+      }
+      for (context.method = method, context.arg = arg;;) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
+          if ("suspendedStart" === state) throw state = "completed", context.arg;
+          context.dispatchException(context.arg);
+        } else "return" === context.method && context.abrupt("return", context.arg);
+        state = "executing";
+        var record = tryCatch(innerFn, self, context);
+        if ("normal" === record.type) {
+          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+          return {
+            value: record.arg,
+            done: context.done
+          };
+        }
+        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+      }
+    };
+  }
+  function maybeInvokeDelegate(delegate, context) {
+    var methodName = context.method,
+      method = delegate.iterator[methodName];
+    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
+    var record = tryCatch(method, delegate.iterator, context.arg);
+    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
+    var info = record.arg;
+    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
+  }
+  function pushTryEntry(locs) {
+    var entry = {
+      tryLoc: locs[0]
+    };
+    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
+  }
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal", delete record.arg, entry.completion = record;
+  }
+  function Context(tryLocsList) {
+    this.tryEntries = [{
+      tryLoc: "root"
+    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
+  }
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) return iteratorMethod.call(iterable);
+      if ("function" == typeof iterable.next) return iterable;
+      if (!isNaN(iterable.length)) {
+        var i = -1,
+          next = function next() {
+            for (; ++i < iterable.length;) {
+              if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
+            }
+            return next.value = undefined, next.done = !0, next;
+          };
+        return next.next = next;
+      }
+    }
+    return {
+      next: doneResult
+    };
+  }
+  function doneResult() {
+    return {
+      value: undefined,
+      done: !0
+    };
+  }
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: !0
+  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: !0
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
+    var ctor = "function" == typeof genFun && genFun.constructor;
+    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
+  }, exports.mark = function (genFun) {
+    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
+  }, exports.awrap = function (arg) {
+    return {
+      __await: arg
+    };
+  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+    return this;
+  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    void 0 === PromiseImpl && (PromiseImpl = Promise);
+    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
+    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
+      return result.done ? result.value : iter.next();
+    });
+  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
+    return this;
+  }), define(Gp, "toString", function () {
+    return "[object Generator]";
+  }), exports.keys = function (val) {
+    var object = Object(val),
+      keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    return keys.reverse(), function next() {
+      for (; keys.length;) {
+        var key = keys.pop();
+        if (key in object) return next.value = key, next.done = !1, next;
+      }
+      return next.done = !0, next;
+    };
+  }, exports.values = values, Context.prototype = {
+    constructor: Context,
+    reset: function reset(skipTempReset) {
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
+        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
+      }
+    },
+    stop: function stop() {
+      this.done = !0;
+      var rootRecord = this.tryEntries[0].completion;
+      if ("throw" === rootRecord.type) throw rootRecord.arg;
+      return this.rval;
+    },
+    dispatchException: function dispatchException(exception) {
+      if (this.done) throw exception;
+      var context = this;
+      function handle(loc, caught) {
+        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
+      }
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i],
+          record = entry.completion;
+        if ("root" === entry.tryLoc) return handle("end");
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc"),
+            hasFinally = hasOwn.call(entry, "finallyLoc");
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
+            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
+          } else {
+            if (!hasFinally) throw new Error("try statement without catch or finally");
+            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
+          }
+        }
+      }
+    },
+    abrupt: function abrupt(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
+      var record = finallyEntry ? finallyEntry.completion : {};
+      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
+    },
+    complete: function complete(record, afterLoc) {
+      if ("throw" === record.type) throw record.arg;
+      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
+    },
+    finish: function finish(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
+      }
+    },
+    "catch": function _catch(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if ("throw" === record.type) {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+      throw new Error("illegal catch attempt");
+    },
+    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
+      return this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
+    }
+  }, exports;
+}
+module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+/* 37 */
+/*!*****************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+      args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+      _next(undefined);
+    });
+  };
+}
+module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+/* 38 */
+/*!****************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/vue-demi/lib/index.cjs ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Vue = __webpack_require__(/*! vue */ 25)
+var VueCompositionAPI = __webpack_require__(/*! @vue/composition-api */ 39)
+
+function install(_vue) {
+  var vueLib = _vue || Vue
+  if (vueLib && 'default' in vueLib) {
+    vueLib = vueLib.default
+  }
+
+  if (vueLib && !vueLib['__composition_api_installed__']) {
+    if (VueCompositionAPI && 'default' in VueCompositionAPI)
+      vueLib.use(VueCompositionAPI.default)
+    else if (VueCompositionAPI)
+      vueLib.use(VueCompositionAPI)
+  }
+}
+
+install(Vue)
+
+Object.keys(VueCompositionAPI).forEach(function(key) {
+  exports[key] = VueCompositionAPI[key]
+})
+
+exports.Vue = Vue
+exports.Vue2 = Vue
+exports.isVue2 = true
+exports.isVue3 = false
+exports.install = install
+exports.version = Vue.version
+
+// Not implemented https://github.com/vuejs/core/pull/8111, falls back to getCurrentInstance()
+exports.hasInjectionContext = () => !!VueCompositionAPI.getCurrentInstance()
+
+
+/***/ }),
+/* 39 */
+/*!******************************************************************************************!*\
+  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@vue/composition-api/index.js ***!
+  \******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+if (false) {} else {
+  module.exports = __webpack_require__(/*! ./dist/vue-composition-api.common.js */ 40)
+}
+
+
+/***/ }),
+/* 40 */
+/*!********************************************************************************************************************!*\
+  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@vue/composition-api/dist/vue-composition-api.common.js ***!
+  \********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+}
+
+/**
+ * Displays a warning message (using console.error) with a stack trace if the
+ * function is called inside of active component.
+ *
+ * @param message warning message to be displayed
+ */
+function warn$1(message) {
+    var _a;
+    warn(message, (_a = getCurrentInstance()) === null || _a === void 0 ? void 0 : _a.proxy);
+}
+
+var activeEffectScope;
+var effectScopeStack = [];
+var EffectScopeImpl = /** @class */ (function () {
+    function EffectScopeImpl(vm) {
+        this.active = true;
+        this.effects = [];
+        this.cleanups = [];
+        this.vm = vm;
+    }
+    EffectScopeImpl.prototype.run = function (fn) {
+        if (this.active) {
+            try {
+                this.on();
+                return fn();
+            }
+            finally {
+                this.off();
+            }
+        }
+        else {
+            warn$1("cannot run an inactive effect scope.");
+        }
+        return;
+    };
+    EffectScopeImpl.prototype.on = function () {
+        if (this.active) {
+            effectScopeStack.push(this);
+            activeEffectScope = this;
+        }
+    };
+    EffectScopeImpl.prototype.off = function () {
+        if (this.active) {
+            effectScopeStack.pop();
+            activeEffectScope = effectScopeStack[effectScopeStack.length - 1];
+        }
+    };
+    EffectScopeImpl.prototype.stop = function () {
+        if (this.active) {
+            this.vm.$destroy();
+            this.effects.forEach(function (e) { return e.stop(); });
+            this.cleanups.forEach(function (cleanup) { return cleanup(); });
+            this.active = false;
+        }
+    };
+    return EffectScopeImpl;
+}());
+var EffectScope = /** @class */ (function (_super) {
+    __extends(EffectScope, _super);
+    function EffectScope(detached) {
+        if (detached === void 0) { detached = false; }
+        var _this = this;
+        var vm = undefined;
+        withCurrentInstanceTrackingDisabled(function () {
+            vm = defineComponentInstance(getVueConstructor());
+        });
+        _this = _super.call(this, vm) || this;
+        if (!detached) {
+            recordEffectScope(_this);
+        }
+        return _this;
+    }
+    return EffectScope;
+}(EffectScopeImpl));
+function recordEffectScope(effect, scope) {
+    var _a;
+    scope = scope || activeEffectScope;
+    if (scope && scope.active) {
+        scope.effects.push(effect);
+        return;
+    }
+    // destroy on parent component unmounted
+    var vm = (_a = getCurrentInstance()) === null || _a === void 0 ? void 0 : _a.proxy;
+    vm && vm.$on('hook:destroyed', function () { return effect.stop(); });
+}
+function effectScope(detached) {
+    return new EffectScope(detached);
+}
+function getCurrentScope() {
+    return activeEffectScope;
+}
+function onScopeDispose(fn) {
+    if (activeEffectScope) {
+        activeEffectScope.cleanups.push(fn);
+    }
+    else {
+        warn$1("onScopeDispose() is called when there is no active effect scope" +
+            " to be associated with.");
+    }
+}
+/**
+ * @internal
+ **/
+function getCurrentScopeVM() {
+    var _a, _b;
+    return ((_a = getCurrentScope()) === null || _a === void 0 ? void 0 : _a.vm) || ((_b = getCurrentInstance()) === null || _b === void 0 ? void 0 : _b.proxy);
+}
+/**
+ * @internal
+ **/
+function bindCurrentScopeToVM(vm) {
+    if (!vm.scope) {
+        var scope_1 = new EffectScopeImpl(vm.proxy);
+        vm.scope = scope_1;
+        vm.proxy.$on('hook:destroyed', function () { return scope_1.stop(); });
+    }
+    return vm.scope;
+}
+
+var vueDependency = undefined;
+try {
+    var requiredVue = __webpack_require__(/*! vue */ 25);
+    if (requiredVue && isVue(requiredVue)) {
+        vueDependency = requiredVue;
+    }
+    else if (requiredVue &&
+        'default' in requiredVue &&
+        isVue(requiredVue.default)) {
+        vueDependency = requiredVue.default;
+    }
+}
+catch (_a) {
+    // not available
+}
+var vueConstructor = null;
+var currentInstance = null;
+var currentInstanceTracking = true;
+var PluginInstalledFlag = '__composition_api_installed__';
+function isVue(obj) {
+    return obj && isFunction(obj) && obj.name === 'Vue';
+}
+function isVueRegistered(Vue) {
+    // resolve issue: https://github.com/vuejs/composition-api/issues/876#issue-1087619365
+    return vueConstructor && hasOwn(Vue, PluginInstalledFlag);
+}
+function getVueConstructor() {
+    {
+        assert(vueConstructor, "must call Vue.use(VueCompositionAPI) before using any function.");
+    }
+    return vueConstructor;
+}
+// returns registered vue or `vue` dependency
+function getRegisteredVueOrDefault() {
+    var constructor = vueConstructor || vueDependency;
+    {
+        assert(constructor, "No vue dependency found.");
+    }
+    return constructor;
+}
+function setVueConstructor(Vue) {
+    // @ts-ignore
+    if (vueConstructor && Vue.__proto__ !== vueConstructor.__proto__) {
+        warn('[vue-composition-api] another instance of Vue installed');
+    }
+    vueConstructor = Vue;
+    Object.defineProperty(Vue, PluginInstalledFlag, {
+        configurable: true,
+        writable: true,
+        value: true,
+    });
+}
+/**
+ * For `effectScope` to create instance without populate the current instance
+ * @internal
+ **/
+function withCurrentInstanceTrackingDisabled(fn) {
+    var prev = currentInstanceTracking;
+    currentInstanceTracking = false;
+    try {
+        fn();
+    }
+    finally {
+        currentInstanceTracking = prev;
+    }
+}
+function setCurrentInstance(instance) {
+    if (!currentInstanceTracking)
+        return;
+    var prev = currentInstance;
+    prev === null || prev === void 0 ? void 0 : prev.scope.off();
+    currentInstance = instance;
+    currentInstance === null || currentInstance === void 0 ? void 0 : currentInstance.scope.on();
+}
+function getCurrentInstance() {
+    return currentInstance;
+}
+var instanceMapCache = new WeakMap();
+function toVue3ComponentInstance(vm) {
+    if (instanceMapCache.has(vm)) {
+        return instanceMapCache.get(vm);
+    }
+    var instance = {
+        proxy: vm,
+        update: vm.$forceUpdate,
+        type: vm.$options,
+        uid: vm._uid,
+        // $emit is defined on prototype and it expected to be bound
+        emit: vm.$emit.bind(vm),
+        parent: null,
+        root: null, // to be immediately set
+    };
+    bindCurrentScopeToVM(instance);
+    // map vm.$props =
+    var instanceProps = [
+        'data',
+        'props',
+        'attrs',
+        'refs',
+        'vnode',
+        'slots',
+    ];
+    instanceProps.forEach(function (prop) {
+        proxy(instance, prop, {
+            get: function () {
+                return vm["$".concat(prop)];
+            },
+        });
+    });
+    proxy(instance, 'isMounted', {
+        get: function () {
+            // @ts-expect-error private api
+            return vm._isMounted;
+        },
+    });
+    proxy(instance, 'isUnmounted', {
+        get: function () {
+            // @ts-expect-error private api
+            return vm._isDestroyed;
+        },
+    });
+    proxy(instance, 'isDeactivated', {
+        get: function () {
+            // @ts-expect-error private api
+            return vm._inactive;
+        },
+    });
+    proxy(instance, 'emitted', {
+        get: function () {
+            // @ts-expect-error private api
+            return vm._events;
+        },
+    });
+    instanceMapCache.set(vm, instance);
+    if (vm.$parent) {
+        instance.parent = toVue3ComponentInstance(vm.$parent);
+    }
+    if (vm.$root) {
+        instance.root = toVue3ComponentInstance(vm.$root);
+    }
+    return instance;
+}
+
+var toString = function (x) { return Object.prototype.toString.call(x); };
+function isNative(Ctor) {
+    return typeof Ctor === 'function' && /native code/.test(Ctor.toString());
+}
+var hasSymbol = typeof Symbol !== 'undefined' &&
+    isNative(Symbol) &&
+    typeof Reflect !== 'undefined' &&
+    isNative(Reflect.ownKeys);
+var noopFn = function (_) { return _; };
+function proxy(target, key, _a) {
+    var get = _a.get, set = _a.set;
+    Object.defineProperty(target, key, {
+        enumerable: true,
+        configurable: true,
+        get: get || noopFn,
+        set: set || noopFn,
+    });
+}
+function def(obj, key, val, enumerable) {
+    Object.defineProperty(obj, key, {
+        value: val,
+        enumerable: !!enumerable,
+        writable: true,
+        configurable: true,
+    });
+}
+function hasOwn(obj, key) {
+    return Object.hasOwnProperty.call(obj, key);
+}
+function assert(condition, msg) {
+    if (!condition) {
+        throw new Error("[vue-composition-api] ".concat(msg));
+    }
+}
+function isPrimitive(value) {
+    return (typeof value === 'string' ||
+        typeof value === 'number' ||
+        // $flow-disable-line
+        typeof value === 'symbol' ||
+        typeof value === 'boolean');
+}
+function isArray(x) {
+    return Array.isArray(x);
+}
+var objectToString = Object.prototype.toString;
+var toTypeString = function (value) {
+    return objectToString.call(value);
+};
+var isMap = function (val) {
+    return toTypeString(val) === '[object Map]';
+};
+var isSet = function (val) {
+    return toTypeString(val) === '[object Set]';
+};
+var MAX_VALID_ARRAY_LENGTH = 4294967295; // Math.pow(2, 32) - 1
+function isValidArrayIndex(val) {
+    var n = parseFloat(String(val));
+    return (n >= 0 &&
+        Math.floor(n) === n &&
+        isFinite(val) &&
+        n <= MAX_VALID_ARRAY_LENGTH);
+}
+function isObject(val) {
+    return val !== null && typeof val === 'object';
+}
+function isPlainObject(x) {
+    return toString(x) === '[object Object]';
+}
+function isFunction(x) {
+    return typeof x === 'function';
+}
+function isUndef(v) {
+    return v === undefined || v === null;
+}
+function warn(msg, vm) {
+    var Vue = getRegisteredVueOrDefault();
+    if (!Vue || !Vue.util)
+        console.warn("[vue-composition-api] ".concat(msg));
+    else
+        Vue.util.warn(msg, vm);
+}
+function logError(err, vm, info) {
+    {
+        warn("Error in ".concat(info, ": \"").concat(err.toString(), "\""), vm);
+    }
+    if (typeof window !== 'undefined' && typeof console !== 'undefined') {
+        console.error(err);
+    }
+    else {
+        throw err;
+    }
+}
+/**
+ * Object.is polyfill
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+ * */
+function isSame(value1, value2) {
+    if (value1 === value2) {
+        return value1 !== 0 || 1 / value1 === 1 / value2;
+    }
+    else {
+        return value1 !== value1 && value2 !== value2;
+    }
+}
+
+function getCurrentInstanceForFn(hook, target) {
+    target = target || getCurrentInstance();
+    if (!target) {
+        warn("".concat(hook, " is called when there is no active component instance to be ") +
+            "associated with. " +
+            "Lifecycle injection APIs can only be used during execution of setup().");
+    }
+    return target;
+}
+function defineComponentInstance(Ctor, options) {
+    if (options === void 0) { options = {}; }
+    var silent = Ctor.config.silent;
+    Ctor.config.silent = true;
+    var vm = new Ctor(options);
+    Ctor.config.silent = silent;
+    return vm;
+}
+function isComponentInstance(obj) {
+    var Vue = getVueConstructor();
+    return Vue && obj instanceof Vue;
+}
+function createSlotProxy(vm, slotName) {
+    return (function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        if (!vm.$scopedSlots[slotName]) {
+            return warn("slots.".concat(slotName, "() got called outside of the \"render()\" scope"), vm);
+        }
+        return vm.$scopedSlots[slotName].apply(vm, args);
+    });
+}
+function resolveSlots(slots, normalSlots) {
+    var res;
+    if (!slots) {
+        res = {};
+    }
+    else if (slots._normalized) {
+        // fast path 1: child component re-render only, parent did not change
+        return slots._normalized;
+    }
+    else {
+        res = {};
+        for (var key in slots) {
+            if (slots[key] && key[0] !== '$') {
+                res[key] = true;
+            }
+        }
+    }
+    // expose normal slots on scopedSlots
+    for (var key in normalSlots) {
+        if (!(key in res)) {
+            res[key] = true;
+        }
+    }
+    return res;
+}
+var vueInternalClasses;
+var getVueInternalClasses = function () {
+    if (!vueInternalClasses) {
+        var vm = defineComponentInstance(getVueConstructor(), {
+            computed: {
+                value: function () {
+                    return 0;
+                },
+            },
+        });
+        // to get Watcher class
+        var Watcher = vm._computedWatchers.value.constructor;
+        // to get Dep class
+        var Dep = vm._data.__ob__.dep.constructor;
+        vueInternalClasses = {
+            Watcher: Watcher,
+            Dep: Dep,
+        };
+        vm.$destroy();
+    }
+    return vueInternalClasses;
+};
+
+function createSymbol(name) {
+    return hasSymbol ? Symbol.for(name) : name;
+}
+var WatcherPreFlushQueueKey = createSymbol('composition-api.preFlushQueue');
+var WatcherPostFlushQueueKey = createSymbol('composition-api.postFlushQueue');
+// must be a string, symbol key is ignored in reactive
+var RefKey = 'composition-api.refKey';
+
+var accessModifiedSet = new WeakMap();
+var rawSet = new WeakMap();
+var readonlySet = new WeakMap();
+
+/**
+ * Set a property on an object. Adds the new property, triggers change
+ * notification and intercept it's subsequent access if the property doesn't
+ * already exist.
+ */
+function set$1(target, key, val) {
+    var Vue = getVueConstructor();
+    // @ts-expect-error https://github.com/vuejs/vue/pull/12132
+    var _a = Vue.util, warn = _a.warn, defineReactive = _a.defineReactive;
+    if ((isUndef(target) || isPrimitive(target))) {
+        warn("Cannot set reactive property on undefined, null, or primitive value: ".concat(target));
+    }
+    var ob = target.__ob__;
+    function ssrMockReactivity() {
+        // in SSR, there is no __ob__. Mock for reactivity check
+        if (ob && isObject(val) && !hasOwn(val, '__ob__')) {
+            mockReactivityDeep(val);
+        }
+    }
+    if (isArray(target)) {
+        if (isValidArrayIndex(key)) {
+            target.length = Math.max(target.length, key);
+            target.splice(key, 1, val);
+            ssrMockReactivity();
+            return val;
+        }
+        else if (key === 'length' && val !== target.length) {
+            target.length = val;
+            ob === null || ob === void 0 ? void 0 : ob.dep.notify();
+            return val;
+        }
+    }
+    if (key in target && !(key in Object.prototype)) {
+        target[key] = val;
+        ssrMockReactivity();
+        return val;
+    }
+    if (target._isVue || (ob && ob.vmCount)) {
+        warn('Avoid adding reactive properties to a Vue instance or its root $data ' +
+                'at runtime - declare it upfront in the data option.');
+        return val;
+    }
+    if (!ob) {
+        target[key] = val;
+        return val;
+    }
+    defineReactive(ob.value, key, val);
+    // IMPORTANT: define access control before trigger watcher
+    defineAccessControl(target, key, val);
+    ssrMockReactivity();
+    ob.dep.notify();
+    return val;
+}
+
+var _isForceTrigger = false;
+function isForceTrigger() {
+    return _isForceTrigger;
+}
+function setForceTrigger(v) {
+    _isForceTrigger = v;
+}
+
+var RefImpl = /** @class */ (function () {
+    function RefImpl(_a) {
+        var get = _a.get, set = _a.set;
+        proxy(this, 'value', {
+            get: get,
+            set: set,
+        });
+    }
+    return RefImpl;
+}());
+function createRef(options, isReadonly, isComputed) {
+    if (isReadonly === void 0) { isReadonly = false; }
+    if (isComputed === void 0) { isComputed = false; }
+    var r = new RefImpl(options);
+    // add effect to differentiate refs from computed
+    if (isComputed)
+        r.effect = true;
+    // seal the ref, this could prevent ref from being observed
+    // It's safe to seal the ref, since we really shouldn't extend it.
+    // related issues: #79
+    var sealed = Object.seal(r);
+    if (isReadonly)
+        readonlySet.set(sealed, true);
+    return sealed;
+}
+function ref(raw) {
+    var _a;
+    if (isRef(raw)) {
+        return raw;
+    }
+    var value = reactive((_a = {}, _a[RefKey] = raw, _a));
+    return createRef({
+        get: function () { return value[RefKey]; },
+        set: function (v) { return (value[RefKey] = v); },
+    });
+}
+function isRef(value) {
+    return value instanceof RefImpl;
+}
+function unref(ref) {
+    return isRef(ref) ? ref.value : ref;
+}
+function toRefs(obj) {
+    if (!isReactive(obj)) {
+        warn("toRefs() expects a reactive object but received a plain one.");
+    }
+    if (!isPlainObject(obj))
+        return obj;
+    var ret = {};
+    for (var key in obj) {
+        ret[key] = toRef(obj, key);
+    }
+    return ret;
+}
+function customRef(factory) {
+    var version = ref(0);
+    return createRef(factory(function () { return void version.value; }, function () {
+        ++version.value;
+    }));
+}
+function toRef(object, key) {
+    if (!(key in object))
+        set$1(object, key, undefined);
+    var v = object[key];
+    if (isRef(v))
+        return v;
+    return createRef({
+        get: function () { return object[key]; },
+        set: function (v) { return (object[key] = v); },
+    });
+}
+function shallowRef(raw) {
+    var _a;
+    if (isRef(raw)) {
+        return raw;
+    }
+    var value = shallowReactive((_a = {}, _a[RefKey] = raw, _a));
+    return createRef({
+        get: function () { return value[RefKey]; },
+        set: function (v) { return (value[RefKey] = v); },
+    });
+}
+function triggerRef(value) {
+    if (!isRef(value))
+        return;
+    setForceTrigger(true);
+    value.value = value.value;
+    setForceTrigger(false);
+}
+function proxyRefs(objectWithRefs) {
+    var _a, e_1, _b;
+    if (isReactive(objectWithRefs)) {
+        return objectWithRefs;
+    }
+    var value = reactive((_a = {}, _a[RefKey] = objectWithRefs, _a));
+    def(value, RefKey, value[RefKey], false);
+    var _loop_1 = function (key) {
+        proxy(value, key, {
+            get: function () {
+                if (isRef(value[RefKey][key])) {
+                    return value[RefKey][key].value;
+                }
+                return value[RefKey][key];
+            },
+            set: function (v) {
+                if (isRef(value[RefKey][key])) {
+                    return (value[RefKey][key].value = unref(v));
+                }
+                value[RefKey][key] = unref(v);
+            },
+        });
+    };
+    try {
+        for (var _c = __values(Object.keys(objectWithRefs)), _d = _c.next(); !_d.done; _d = _c.next()) {
+            var key = _d.value;
+            _loop_1(key);
+        }
+    }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try {
+            if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
+        }
+        finally { if (e_1) throw e_1.error; }
+    }
+    return value;
+}
+
+var SKIPFLAG = '__v_skip';
+function isRaw(obj) {
+    var _a;
+    return Boolean(obj &&
+        hasOwn(obj, '__ob__') &&
+        typeof obj.__ob__ === 'object' &&
+        ((_a = obj.__ob__) === null || _a === void 0 ? void 0 : _a[SKIPFLAG]));
+}
+function isReactive(obj) {
+    var _a;
+    return Boolean(obj &&
+        hasOwn(obj, '__ob__') &&
+        typeof obj.__ob__ === 'object' &&
+        !((_a = obj.__ob__) === null || _a === void 0 ? void 0 : _a[SKIPFLAG]));
+}
+/**
+ * Proxing property access of target.
+ * We can do unwrapping and other things here.
+ */
+function setupAccessControl(target) {
+    if (!isPlainObject(target) ||
+        isRaw(target) ||
+        isArray(target) ||
+        isRef(target) ||
+        isComponentInstance(target) ||
+        accessModifiedSet.has(target))
+        return;
+    accessModifiedSet.set(target, true);
+    var keys = Object.keys(target);
+    for (var i = 0; i < keys.length; i++) {
+        defineAccessControl(target, keys[i]);
+    }
+}
+/**
+ * Auto unwrapping when access property
+ */
+function defineAccessControl(target, key, val) {
+    if (key === '__ob__')
+        return;
+    if (isRaw(target[key]))
+        return;
+    var getter;
+    var setter;
+    var property = Object.getOwnPropertyDescriptor(target, key);
+    if (property) {
+        if (property.configurable === false) {
+            return;
+        }
+        getter = property.get;
+        setter = property.set;
+        if ((!getter || setter) /* not only have getter */ &&
+            arguments.length === 2) {
+            val = target[key];
+        }
+    }
+    setupAccessControl(val);
+    proxy(target, key, {
+        get: function getterHandler() {
+            var value = getter ? getter.call(target) : val;
+            // if the key is equal to RefKey, skip the unwrap logic
+            if (key !== RefKey && isRef(value)) {
+                return value.value;
+            }
+            else {
+                return value;
+            }
+        },
+        set: function setterHandler(newVal) {
+            if (getter && !setter)
+                return;
+            // If the key is equal to RefKey, skip the unwrap logic
+            // If and only if "value" is ref and "newVal" is not a ref,
+            // the assignment should be proxied to "value" ref.
+            if (key !== RefKey && isRef(val) && !isRef(newVal)) {
+                val.value = newVal;
+            }
+            else if (setter) {
+                setter.call(target, newVal);
+                val = newVal;
+            }
+            else {
+                val = newVal;
+            }
+            setupAccessControl(newVal);
+        },
+    });
+}
+function observe(obj) {
+    var Vue = getRegisteredVueOrDefault();
+    var observed;
+    if (Vue.observable) {
+        observed = Vue.observable(obj);
+    }
+    else {
+        var vm = defineComponentInstance(Vue, {
+            data: {
+                $$state: obj,
+            },
+        });
+        observed = vm._data.$$state;
+    }
+    // in SSR, there is no __ob__. Mock for reactivity check
+    if (!hasOwn(observed, '__ob__')) {
+        mockReactivityDeep(observed);
+    }
+    return observed;
+}
+/**
+ * Mock __ob__ for object recursively
+ */
+function mockReactivityDeep(obj, seen) {
+    var e_1, _a;
+    if (seen === void 0) { seen = new Set(); }
+    if (seen.has(obj) || hasOwn(obj, '__ob__') || !Object.isExtensible(obj))
+        return;
+    def(obj, '__ob__', mockObserver(obj));
+    seen.add(obj);
+    try {
+        for (var _b = __values(Object.keys(obj)), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var key = _c.value;
+            var value = obj[key];
+            if (!(isPlainObject(value) || isArray(value)) ||
+                isRaw(value) ||
+                !Object.isExtensible(value)) {
+                continue;
+            }
+            mockReactivityDeep(value, seen);
+        }
+    }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try {
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+        }
+        finally { if (e_1) throw e_1.error; }
+    }
+}
+function mockObserver(value) {
+    if (value === void 0) { value = {}; }
+    return {
+        value: value,
+        dep: {
+            notify: noopFn,
+            depend: noopFn,
+            addSub: noopFn,
+            removeSub: noopFn,
+        },
+    };
+}
+function createObserver() {
+    return observe({}).__ob__;
+}
+function shallowReactive(obj) {
+    var e_2, _a;
+    if (!isObject(obj)) {
+        {
+            warn('"shallowReactive()" must be called on an object.');
+        }
+        return obj;
+    }
+    if (!(isPlainObject(obj) || isArray(obj)) ||
+        isRaw(obj) ||
+        !Object.isExtensible(obj)) {
+        return obj;
+    }
+    var observed = observe(isArray(obj) ? [] : {});
+    var ob = observed.__ob__;
+    var _loop_1 = function (key) {
+        var val = obj[key];
+        var getter;
+        var setter;
+        var property = Object.getOwnPropertyDescriptor(obj, key);
+        if (property) {
+            if (property.configurable === false) {
+                return "continue";
+            }
+            getter = property.get;
+            setter = property.set;
+        }
+        proxy(observed, key, {
+            get: function getterHandler() {
+                var _a;
+                (_a = ob.dep) === null || _a === void 0 ? void 0 : _a.depend();
+                return val;
+            },
+            set: function setterHandler(newVal) {
+                var _a;
+                if (getter && !setter)
+                    return;
+                if (!isForceTrigger() && val === newVal)
+                    return;
+                if (setter) {
+                    setter.call(obj, newVal);
+                }
+                else {
+                    val = newVal;
+                }
+                (_a = ob.dep) === null || _a === void 0 ? void 0 : _a.notify();
+            },
+        });
+    };
+    try {
+        for (var _b = __values(Object.keys(obj)), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var key = _c.value;
+            _loop_1(key);
+        }
+    }
+    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+    finally {
+        try {
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+        }
+        finally { if (e_2) throw e_2.error; }
+    }
+    return observed;
+}
+/**
+ * Make obj reactivity
+ */
+function reactive(obj) {
+    if (!isObject(obj)) {
+        {
+            warn('"reactive()" must be called on an object.');
+        }
+        return obj;
+    }
+    if (!(isPlainObject(obj) || isArray(obj)) ||
+        isRaw(obj) ||
+        !Object.isExtensible(obj)) {
+        return obj;
+    }
+    var observed = observe(obj);
+    setupAccessControl(observed);
+    return observed;
+}
+/**
+ * Make sure obj can't be a reactive
+ */
+function markRaw(obj) {
+    if (!(isPlainObject(obj) || isArray(obj)) || !Object.isExtensible(obj)) {
+        return obj;
+    }
+    // set the vue observable flag at obj
+    var ob = createObserver();
+    ob[SKIPFLAG] = true;
+    def(obj, '__ob__', ob);
+    // mark as Raw
+    rawSet.set(obj, true);
+    return obj;
+}
+function toRaw(observed) {
+    var _a;
+    if (isRaw(observed) || !Object.isExtensible(observed)) {
+        return observed;
+    }
+    return ((_a = observed === null || observed === void 0 ? void 0 : observed.__ob__) === null || _a === void 0 ? void 0 : _a.value) || observed;
+}
+
+function isReadonly(obj) {
+    return readonlySet.has(obj);
+}
+/**
+ * **In @vue/composition-api, `reactive` only provides type-level readonly check**
+ *
+ * Creates a readonly copy of the original object. Note the returned copy is not
+ * made reactive, but `readonly` can be called on an already reactive object.
+ */
+function readonly(target) {
+    if (!isObject(target)) {
+        warn("value cannot be made reactive: ".concat(String(target)));
+    }
+    else {
+        readonlySet.set(target, true);
+    }
+    return target;
+}
+function shallowReadonly(obj) {
+    var e_1, _a;
+    if (!isObject(obj)) {
+        {
+            warn("value cannot be made reactive: ".concat(String(obj)));
+        }
+        return obj;
+    }
+    if (!(isPlainObject(obj) || isArray(obj)) ||
+        (!Object.isExtensible(obj) && !isRef(obj))) {
+        return obj;
+    }
+    var readonlyObj = isRef(obj)
+        ? new RefImpl({})
+        : isReactive(obj)
+            ? observe({})
+            : {};
+    var source = reactive({});
+    var ob = source.__ob__;
+    var _loop_1 = function (key) {
+        var val = obj[key];
+        var getter;
+        var property = Object.getOwnPropertyDescriptor(obj, key);
+        if (property) {
+            if (property.configurable === false && !isRef(obj)) {
+                return "continue";
+            }
+            getter = property.get;
+        }
+        proxy(readonlyObj, key, {
+            get: function getterHandler() {
+                var value = getter ? getter.call(obj) : val;
+                ob.dep.depend();
+                return value;
+            },
+            set: function (v) {
+                {
+                    warn("Set operation on key \"".concat(key, "\" failed: target is readonly."));
+                }
+            },
+        });
+    };
+    try {
+        for (var _b = __values(Object.keys(obj)), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var key = _c.value;
+            _loop_1(key);
+        }
+    }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try {
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+        }
+        finally { if (e_1) throw e_1.error; }
+    }
+    readonlySet.set(readonlyObj, true);
+    return readonlyObj;
+}
+
+/**
+ * Delete a property and trigger change if necessary.
+ */
+function del(target, key) {
+    var Vue = getVueConstructor();
+    var warn = Vue.util.warn;
+    if ((isUndef(target) || isPrimitive(target))) {
+        warn("Cannot delete reactive property on undefined, null, or primitive value: ".concat(target));
+    }
+    if (isArray(target) && isValidArrayIndex(key)) {
+        target.splice(key, 1);
+        return;
+    }
+    var ob = target.__ob__;
+    if (target._isVue || (ob && ob.vmCount)) {
+        warn('Avoid deleting properties on a Vue instance or its root $data ' +
+                '- just set it to null.');
+        return;
+    }
+    if (!hasOwn(target, key)) {
+        return;
+    }
+    delete target[key];
+    if (!ob) {
+        return;
+    }
+    ob.dep.notify();
+}
+
+var genName = function (name) { return "on".concat(name[0].toUpperCase() + name.slice(1)); };
+function createLifeCycle(lifeCyclehook) {
+    return function (callback, target) {
+        var instance = getCurrentInstanceForFn(genName(lifeCyclehook), target);
+        return (instance &&
+            injectHookOption(getVueConstructor(), instance, lifeCyclehook, callback));
+    };
+}
+function injectHookOption(Vue, instance, hook, val) {
+    var options = instance.proxy.$options;
+    var mergeFn = Vue.config.optionMergeStrategies[hook];
+    var wrappedHook = wrapHookCall(instance, val);
+    options[hook] = mergeFn(options[hook], wrappedHook);
+    return wrappedHook;
+}
+function wrapHookCall(instance, fn) {
+    return function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        var prev = getCurrentInstance();
+        setCurrentInstance(instance);
+        try {
+            return fn.apply(void 0, __spreadArray([], __read(args), false));
+        }
+        finally {
+            setCurrentInstance(prev);
+        }
+    };
+}
+var onBeforeMount = createLifeCycle('beforeMount');
+var onMounted = createLifeCycle('mounted');
+var onBeforeUpdate = createLifeCycle('beforeUpdate');
+var onUpdated = createLifeCycle('updated');
+var onBeforeUnmount = createLifeCycle('beforeDestroy');
+var onUnmounted = createLifeCycle('destroyed');
+var onErrorCaptured = createLifeCycle('errorCaptured');
+var onActivated = createLifeCycle('activated');
+var onDeactivated = createLifeCycle('deactivated');
+var onServerPrefetch = createLifeCycle('serverPrefetch');
+
+var fallbackVM;
+function flushPreQueue() {
+    flushQueue(this, WatcherPreFlushQueueKey);
+}
+function flushPostQueue() {
+    flushQueue(this, WatcherPostFlushQueueKey);
+}
+function hasWatchEnv(vm) {
+    return vm[WatcherPreFlushQueueKey] !== undefined;
+}
+function installWatchEnv(vm) {
+    vm[WatcherPreFlushQueueKey] = [];
+    vm[WatcherPostFlushQueueKey] = [];
+    vm.$on('hook:beforeUpdate', flushPreQueue);
+    vm.$on('hook:updated', flushPostQueue);
+}
+function getWatcherOption(options) {
+    return __assign({
+        immediate: false,
+        deep: false,
+        flush: 'pre',
+    }, options);
+}
+function getWatchEffectOption(options) {
+    return __assign({
+        flush: 'pre',
+    }, options);
+}
+function getWatcherVM() {
+    var vm = getCurrentScopeVM();
+    if (!vm) {
+        if (!fallbackVM) {
+            fallbackVM = defineComponentInstance(getVueConstructor());
+        }
+        vm = fallbackVM;
+    }
+    else if (!hasWatchEnv(vm)) {
+        installWatchEnv(vm);
+    }
+    return vm;
+}
+function flushQueue(vm, key) {
+    var queue = vm[key];
+    for (var index = 0; index < queue.length; index++) {
+        queue[index]();
+    }
+    queue.length = 0;
+}
+function queueFlushJob(vm, fn, mode) {
+    // flush all when beforeUpdate and updated are not fired
+    var fallbackFlush = function () {
+        vm.$nextTick(function () {
+            if (vm[WatcherPreFlushQueueKey].length) {
+                flushQueue(vm, WatcherPreFlushQueueKey);
+            }
+            if (vm[WatcherPostFlushQueueKey].length) {
+                flushQueue(vm, WatcherPostFlushQueueKey);
+            }
+        });
+    };
+    switch (mode) {
+        case 'pre':
+            fallbackFlush();
+            vm[WatcherPreFlushQueueKey].push(fn);
+            break;
+        case 'post':
+            fallbackFlush();
+            vm[WatcherPostFlushQueueKey].push(fn);
+            break;
+        default:
+            assert(false, "flush must be one of [\"post\", \"pre\", \"sync\"], but got ".concat(mode));
+            break;
+    }
+}
+function createVueWatcher(vm, getter, callback, options) {
+    var index = vm._watchers.length;
+    // @ts-ignore: use undocumented options
+    vm.$watch(getter, callback, {
+        immediate: options.immediateInvokeCallback,
+        deep: options.deep,
+        lazy: options.noRun,
+        sync: options.sync,
+        before: options.before,
+    });
+    return vm._watchers[index];
+}
+// We have to monkeypatch the teardown function so Vue will run
+// runCleanup() when it tears down the watcher on unmounted.
+function patchWatcherTeardown(watcher, runCleanup) {
+    var _teardown = watcher.teardown;
+    watcher.teardown = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        _teardown.apply(watcher, args);
+        runCleanup();
+    };
+}
+function createWatcher(vm, source, cb, options) {
+    var _a;
+    if (!cb) {
+        if (options.immediate !== undefined) {
+            warn("watch() \"immediate\" option is only respected when using the " +
+                "watch(source, callback, options?) signature.");
+        }
+        if (options.deep !== undefined) {
+            warn("watch() \"deep\" option is only respected when using the " +
+                "watch(source, callback, options?) signature.");
+        }
+    }
+    var flushMode = options.flush;
+    var isSync = flushMode === 'sync';
+    var cleanup;
+    var registerCleanup = function (fn) {
+        cleanup = function () {
+            try {
+                fn();
+            }
+            catch (
+            // FIXME: remove any
+            error) {
+                logError(error, vm, 'onCleanup()');
+            }
+        };
+    };
+    // cleanup before running getter again
+    var runCleanup = function () {
+        if (cleanup) {
+            cleanup();
+            cleanup = null;
+        }
+    };
+    var createScheduler = function (fn) {
+        if (isSync ||
+            /* without a current active instance, ignore pre|post mode */ vm ===
+                fallbackVM) {
+            return fn;
+        }
+        return (function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return queueFlushJob(vm, function () {
+                fn.apply(void 0, __spreadArray([], __read(args), false));
+            }, flushMode);
+        });
+    };
+    // effect watch
+    if (cb === null) {
+        var running_1 = false;
+        var getter_1 = function () {
+            // preventing the watch callback being call in the same execution
+            if (running_1) {
+                return;
+            }
+            try {
+                running_1 = true;
+                source(registerCleanup);
+            }
+            finally {
+                running_1 = false;
+            }
+        };
+        var watcher_1 = createVueWatcher(vm, getter_1, noopFn, {
+            deep: options.deep || false,
+            sync: isSync,
+            before: runCleanup,
+        });
+        patchWatcherTeardown(watcher_1, runCleanup);
+        // enable the watcher update
+        watcher_1.lazy = false;
+        var originGet = watcher_1.get.bind(watcher_1);
+        // always run watchEffect
+        watcher_1.get = createScheduler(originGet);
+        return function () {
+            watcher_1.teardown();
+        };
+    }
+    var deep = options.deep;
+    var isMultiSource = false;
+    var getter;
+    if (isRef(source)) {
+        getter = function () { return source.value; };
+    }
+    else if (isReactive(source)) {
+        getter = function () { return source; };
+        deep = true;
+    }
+    else if (isArray(source)) {
+        isMultiSource = true;
+        getter = function () {
+            return source.map(function (s) {
+                if (isRef(s)) {
+                    return s.value;
+                }
+                else if (isReactive(s)) {
+                    return traverse(s);
+                }
+                else if (isFunction(s)) {
+                    return s();
+                }
+                else {
+                    warn("Invalid watch source: ".concat(JSON.stringify(s), ".\n          A watch source can only be a getter/effect function, a ref, a reactive object, or an array of these types."), vm);
+                    return noopFn;
+                }
+            });
+        };
+    }
+    else if (isFunction(source)) {
+        getter = source;
+    }
+    else {
+        getter = noopFn;
+        warn("Invalid watch source: ".concat(JSON.stringify(source), ".\n      A watch source can only be a getter/effect function, a ref, a reactive object, or an array of these types."), vm);
+    }
+    if (deep) {
+        var baseGetter_1 = getter;
+        getter = function () { return traverse(baseGetter_1()); };
+    }
+    var applyCb = function (n, o) {
+        if (!deep &&
+            isMultiSource &&
+            n.every(function (v, i) { return isSame(v, o[i]); }))
+            return;
+        // cleanup before running cb again
+        runCleanup();
+        return cb(n, o, registerCleanup);
+    };
+    var callback = createScheduler(applyCb);
+    if (options.immediate) {
+        var originalCallback_1 = callback;
+        // `shiftCallback` is used to handle the first sync effect run.
+        // The subsequent callbacks will redirect to `callback`.
+        var shiftCallback_1 = function (n, o) {
+            shiftCallback_1 = originalCallback_1;
+            // o is undefined on the first call
+            return applyCb(n, isArray(n) ? [] : o);
+        };
+        callback = function (n, o) {
+            return shiftCallback_1(n, o);
+        };
+    }
+    // @ts-ignore: use undocumented option "sync"
+    var stop = vm.$watch(getter, callback, {
+        immediate: options.immediate,
+        deep: deep,
+        sync: isSync,
+    });
+    // Once again, we have to hack the watcher for proper teardown
+    var watcher = vm._watchers[vm._watchers.length - 1];
+    // if the return value is reactive and deep:true
+    // watch for changes, this might happen when new key is added
+    if (isReactive(watcher.value) && ((_a = watcher.value.__ob__) === null || _a === void 0 ? void 0 : _a.dep) && deep) {
+        watcher.value.__ob__.dep.addSub({
+            update: function () {
+                // this will force the source to be revaluated and the callback
+                // executed if needed
+                watcher.run();
+            },
+        });
+    }
+    patchWatcherTeardown(watcher, runCleanup);
+    return function () {
+        stop();
+    };
+}
+function watchEffect(effect, options) {
+    var opts = getWatchEffectOption(options);
+    var vm = getWatcherVM();
+    return createWatcher(vm, effect, null, opts);
+}
+function watchPostEffect(effect) {
+    return watchEffect(effect, { flush: 'post' });
+}
+function watchSyncEffect(effect) {
+    return watchEffect(effect, { flush: 'sync' });
+}
+// implementation
+function watch(source, cb, options) {
+    var callback = null;
+    if (isFunction(cb)) {
+        // source watch
+        callback = cb;
+    }
+    else {
+        // effect watch
+        {
+            warn("`watch(fn, options?)` signature has been moved to a separate API. " +
+                "Use `watchEffect(fn, options?)` instead. `watch` now only " +
+                "supports `watch(source, cb, options?) signature.");
+        }
+        options = cb;
+        callback = null;
+    }
+    var opts = getWatcherOption(options);
+    var vm = getWatcherVM();
+    return createWatcher(vm, source, callback, opts);
+}
+function traverse(value, seen) {
+    if (seen === void 0) { seen = new Set(); }
+    if (!isObject(value) || seen.has(value) || rawSet.has(value)) {
+        return value;
+    }
+    seen.add(value);
+    if (isRef(value)) {
+        traverse(value.value, seen);
+    }
+    else if (isArray(value)) {
+        for (var i = 0; i < value.length; i++) {
+            traverse(value[i], seen);
+        }
+    }
+    else if (isSet(value) || isMap(value)) {
+        value.forEach(function (v) {
+            traverse(v, seen);
+        });
+    }
+    else if (isPlainObject(value)) {
+        for (var key in value) {
+            traverse(value[key], seen);
+        }
+    }
+    return value;
+}
+
+// implement
+function computed(getterOrOptions) {
+    var vm = getCurrentScopeVM();
+    var getter;
+    var setter;
+    if (isFunction(getterOrOptions)) {
+        getter = getterOrOptions;
+    }
+    else {
+        getter = getterOrOptions.get;
+        setter = getterOrOptions.set;
+    }
+    var computedSetter;
+    var computedGetter;
+    if (vm && !vm.$isServer) {
+        var _a = getVueInternalClasses(), Watcher_1 = _a.Watcher, Dep_1 = _a.Dep;
+        var watcher_1;
+        computedGetter = function () {
+            if (!watcher_1) {
+                watcher_1 = new Watcher_1(vm, getter, noopFn, { lazy: true });
+            }
+            if (watcher_1.dirty) {
+                watcher_1.evaluate();
+            }
+            if (Dep_1.target) {
+                watcher_1.depend();
+            }
+            return watcher_1.value;
+        };
+        computedSetter = function (v) {
+            if (!setter) {
+                warn('Write operation failed: computed value is readonly.', vm);
+                return;
+            }
+            if (setter) {
+                setter(v);
+            }
+        };
+    }
+    else {
+        // fallback
+        var computedHost_1 = defineComponentInstance(getVueConstructor(), {
+            computed: {
+                $$state: {
+                    get: getter,
+                    set: setter,
+                },
+            },
+        });
+        vm && vm.$on('hook:destroyed', function () { return computedHost_1.$destroy(); });
+        computedGetter = function () { return computedHost_1.$$state; };
+        computedSetter = function (v) {
+            if (!setter) {
+                warn('Write operation failed: computed value is readonly.', vm);
+                return;
+            }
+            computedHost_1.$$state = v;
+        };
+    }
+    return createRef({
+        get: computedGetter,
+        set: computedSetter,
+    }, !setter, true);
+}
+
+var NOT_FOUND = {};
+function resolveInject(provideKey, vm) {
+    var source = vm;
+    while (source) {
+        // @ts-ignore
+        if (source._provided && hasOwn(source._provided, provideKey)) {
+            //@ts-ignore
+            return source._provided[provideKey];
+        }
+        source = source.$parent;
+    }
+    return NOT_FOUND;
+}
+function provide(key, value) {
+    var _a;
+    var vm = (_a = getCurrentInstanceForFn('provide')) === null || _a === void 0 ? void 0 : _a.proxy;
+    if (!vm)
+        return;
+    if (!vm._provided) {
+        var provideCache_1 = {};
+        proxy(vm, '_provided', {
+            get: function () { return provideCache_1; },
+            set: function (v) { return Object.assign(provideCache_1, v); },
+        });
+    }
+    vm._provided[key] = value;
+}
+function inject(key, defaultValue, treatDefaultAsFactory) {
+    var _a;
+    if (treatDefaultAsFactory === void 0) { treatDefaultAsFactory = false; }
+    var vm = (_a = getCurrentInstance()) === null || _a === void 0 ? void 0 : _a.proxy;
+    if (!vm) {
+        warn("inject() can only be used inside setup() or functional components.");
+        return;
+    }
+    if (!key) {
+        warn("injection \"".concat(String(key), "\" not found."), vm);
+        return defaultValue;
+    }
+    var val = resolveInject(key, vm);
+    if (val !== NOT_FOUND) {
+        return val;
+    }
+    else if (arguments.length > 1) {
+        return treatDefaultAsFactory && isFunction(defaultValue)
+            ? defaultValue()
+            : defaultValue;
+    }
+    else {
+        warn("Injection \"".concat(String(key), "\" not found."), vm);
+    }
+}
+
+var EMPTY_OBJ = Object.freeze({})
+    ;
+var useCssModule = function (name) {
+    var _a;
+    if (name === void 0) { name = '$style'; }
+    var instance = getCurrentInstance();
+    if (!instance) {
+        warn("useCssModule must be called inside setup()");
+        return EMPTY_OBJ;
+    }
+    var mod = (_a = instance.proxy) === null || _a === void 0 ? void 0 : _a[name];
+    if (!mod) {
+        warn("Current instance does not have CSS module named \"".concat(name, "\"."));
+        return EMPTY_OBJ;
+    }
+    return mod;
+};
+/**
+ * @deprecated use `useCssModule` instead.
+ */
+var useCSSModule = useCssModule;
+
+function createApp(rootComponent, rootProps) {
+    if (rootProps === void 0) { rootProps = undefined; }
+    var V = getVueConstructor();
+    var mountedVM = undefined;
+    var provide = {};
+    var app = {
+        config: V.config,
+        use: V.use.bind(V),
+        mixin: V.mixin.bind(V),
+        component: V.component.bind(V),
+        provide: function (key, value) {
+            provide[key] = value;
+            return this;
+        },
+        directive: function (name, dir) {
+            if (dir) {
+                V.directive(name, dir);
+                return app;
+            }
+            else {
+                return V.directive(name);
+            }
+        },
+        mount: function (el, hydrating) {
+            if (!mountedVM) {
+                mountedVM = new V(__assign(__assign({ propsData: rootProps }, rootComponent), { provide: __assign(__assign({}, provide), rootComponent.provide) }));
+                mountedVM.$mount(el, hydrating);
+                return mountedVM;
+            }
+            else {
+                {
+                    warn("App has already been mounted.\n" +
+                        "If you want to remount the same app, move your app creation logic " +
+                        "into a factory function and create fresh app instances for each " +
+                        "mount - e.g. `const createMyApp = () => createApp(App)`");
+                }
+                return mountedVM;
+            }
+        },
+        unmount: function () {
+            if (mountedVM) {
+                mountedVM.$destroy();
+                mountedVM = undefined;
+            }
+            else {
+                warn("Cannot unmount an app that is not mounted.");
+            }
+        },
+    };
+    return app;
+}
+
+var nextTick = function nextTick() {
+    var _a;
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return (_a = getVueConstructor()) === null || _a === void 0 ? void 0 : _a.nextTick.apply(this, args);
+};
+
+var fallbackCreateElement;
+var createElement = function createElement() {
+    var _a;
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    var instance = (this === null || this === void 0 ? void 0 : this.proxy) || ((_a = getCurrentInstance()) === null || _a === void 0 ? void 0 : _a.proxy);
+    if (!instance) {
+        warn('`createElement()` has been called outside of render function.');
+        if (!fallbackCreateElement) {
+            fallbackCreateElement = defineComponentInstance(getVueConstructor()).$createElement;
+        }
+        return fallbackCreateElement.apply(fallbackCreateElement, args);
+    }
+    return instance.$createElement.apply(instance, args);
+};
+
+function useSlots() {
+    return getContext().slots;
+}
+function useAttrs() {
+    return getContext().attrs;
+}
+function getContext() {
+    var i = getCurrentInstance();
+    if (!i) {
+        warn("useContext() called without active instance.");
+    }
+    return i.setupContext;
+}
+
+function set(vm, key, value) {
+    var state = (vm.__composition_api_state__ =
+        vm.__composition_api_state__ || {});
+    state[key] = value;
+}
+function get(vm, key) {
+    return (vm.__composition_api_state__ || {})[key];
+}
+var vmStateManager = {
+    set: set,
+    get: get,
+};
+
+function asVmProperty(vm, propName, propValue) {
+    var props = vm.$options.props;
+    if (!(propName in vm) && !(props && hasOwn(props, propName))) {
+        if (isRef(propValue)) {
+            proxy(vm, propName, {
+                get: function () { return propValue.value; },
+                set: function (val) {
+                    propValue.value = val;
+                },
+            });
+        }
+        else {
+            proxy(vm, propName, {
+                get: function () {
+                    if (isReactive(propValue)) {
+                        propValue.__ob__.dep.depend();
+                    }
+                    return propValue;
+                },
+                set: function (val) {
+                    propValue = val;
+                },
+            });
+        }
+        {
+            // expose binding to Vue Devtool as a data property
+            // delay this until state has been resolved to prevent repeated works
+            vm.$nextTick(function () {
+                if (Object.keys(vm._data).indexOf(propName) !== -1) {
+                    return;
+                }
+                if (isRef(propValue)) {
+                    proxy(vm._data, propName, {
+                        get: function () { return propValue.value; },
+                        set: function (val) {
+                            propValue.value = val;
+                        },
+                    });
+                }
+                else {
+                    proxy(vm._data, propName, {
+                        get: function () { return propValue; },
+                        set: function (val) {
+                            propValue = val;
+                        },
+                    });
+                }
+            });
+        }
+    }
+    else {
+        if (props && hasOwn(props, propName)) {
+            warn("The setup binding property \"".concat(propName, "\" is already declared as a prop."), vm);
+        }
+        else {
+            warn("The setup binding property \"".concat(propName, "\" is already declared."), vm);
+        }
+    }
+}
+function updateTemplateRef(vm) {
+    var rawBindings = vmStateManager.get(vm, 'rawBindings') || {};
+    if (!rawBindings || !Object.keys(rawBindings).length)
+        return;
+    var refs = vm.$refs;
+    var oldRefKeys = vmStateManager.get(vm, 'refs') || [];
+    for (var index = 0; index < oldRefKeys.length; index++) {
+        var key = oldRefKeys[index];
+        var setupValue = rawBindings[key];
+        if (!refs[key] && setupValue && isRef(setupValue)) {
+            setupValue.value = null;
+        }
+    }
+    var newKeys = Object.keys(refs);
+    var validNewKeys = [];
+    for (var index = 0; index < newKeys.length; index++) {
+        var key = newKeys[index];
+        var setupValue = rawBindings[key];
+        if (refs[key] && setupValue && isRef(setupValue)) {
+            setupValue.value = refs[key];
+            validNewKeys.push(key);
+        }
+    }
+    vmStateManager.set(vm, 'refs', validNewKeys);
+}
+function afterRender(vm) {
+    var stack = [vm._vnode];
+    var updated;
+    while (stack.length) {
+        var vnode = stack.pop();
+        if (vnode) {
+            if (vnode.context) {
+                updateTemplateRef(vnode.context);
+                updated = true;
+            }
+            if (vnode.children) {
+                for (var i = 0; i < vnode.children.length; ++i) {
+                    stack.push(vnode.children[i]);
+                }
+            }
+        }
+    }
+    if (!updated) {
+        updateTemplateRef(vm);
+    }
+}
+function updateVmAttrs(vm, ctx) {
+    var e_1, _a;
+    if (!vm) {
+        return;
+    }
+    var attrBindings = vmStateManager.get(vm, 'attrBindings');
+    if (!attrBindings && !ctx) {
+        // fix 840
+        return;
+    }
+    if (!attrBindings) {
+        var observedData = reactive({});
+        attrBindings = { ctx: ctx, data: observedData };
+        vmStateManager.set(vm, 'attrBindings', attrBindings);
+        proxy(ctx, 'attrs', {
+            get: function () {
+                return attrBindings === null || attrBindings === void 0 ? void 0 : attrBindings.data;
+            },
+            set: function () {
+                warn("Cannot assign to '$attrs' because it is a read-only property", vm);
+            },
+        });
+    }
+    var source = vm.$attrs;
+    var _loop_1 = function (attr) {
+        if (!hasOwn(attrBindings.data, attr)) {
+            proxy(attrBindings.data, attr, {
+                get: function () {
+                    // to ensure it always return the latest value
+                    return vm.$attrs[attr];
+                },
+            });
+        }
+    };
+    try {
+        for (var _b = __values(Object.keys(source)), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var attr = _c.value;
+            _loop_1(attr);
+        }
+    }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try {
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+        }
+        finally { if (e_1) throw e_1.error; }
+    }
+}
+function resolveScopedSlots(vm, slotsProxy) {
+    var parentVNode = vm.$options._parentVnode;
+    if (!parentVNode)
+        return;
+    var prevSlots = vmStateManager.get(vm, 'slots') || [];
+    var curSlots = resolveSlots(parentVNode.data.scopedSlots, vm.$slots);
+    // remove staled slots
+    for (var index = 0; index < prevSlots.length; index++) {
+        var key = prevSlots[index];
+        if (!curSlots[key]) {
+            delete slotsProxy[key];
+        }
+    }
+    // proxy fresh slots
+    var slotNames = Object.keys(curSlots);
+    for (var index = 0; index < slotNames.length; index++) {
+        var key = slotNames[index];
+        if (!slotsProxy[key]) {
+            slotsProxy[key] = createSlotProxy(vm, key);
+        }
+    }
+    vmStateManager.set(vm, 'slots', slotNames);
+}
+function activateCurrentInstance(instance, fn, onError) {
+    var preVm = getCurrentInstance();
+    setCurrentInstance(instance);
+    try {
+        return fn(instance);
+    }
+    catch (
+    // FIXME: remove any
+    err) {
+        if (onError) {
+            onError(err);
+        }
+        else {
+            throw err;
+        }
+    }
+    finally {
+        setCurrentInstance(preVm);
+    }
+}
+
+function mixin(Vue) {
+    Vue.mixin({
+        beforeCreate: functionApiInit,
+        mounted: function () {
+            afterRender(this);
+        },
+        beforeUpdate: function () {
+            updateVmAttrs(this);
+        },
+        updated: function () {
+            afterRender(this);
+        },
+    });
+    /**
+     * Vuex init hook, injected into each instances init hooks list.
+     */
+    function functionApiInit() {
+        var vm = this;
+        var $options = vm.$options;
+        var setup = $options.setup, render = $options.render;
+        if (render) {
+            // keep currentInstance accessible for createElement
+            $options.render = function () {
+                var _this = this;
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                return activateCurrentInstance(toVue3ComponentInstance(vm), function () {
+                    return render.apply(_this, args);
+                });
+            };
+        }
+        if (!setup) {
+            return;
+        }
+        if (!isFunction(setup)) {
+            {
+                warn('The "setup" option should be a function that returns a object in component definitions.', vm);
+            }
+            return;
+        }
+        var data = $options.data;
+        // wrapper the data option, so we can invoke setup before data get resolved
+        $options.data = function wrappedData() {
+            initSetup(vm, vm.$props);
+            return isFunction(data)
+                ? data.call(vm, vm)
+                : data || {};
+        };
+    }
+    function initSetup(vm, props) {
+        if (props === void 0) { props = {}; }
+        var setup = vm.$options.setup;
+        var ctx = createSetupContext(vm);
+        var instance = toVue3ComponentInstance(vm);
+        instance.setupContext = ctx;
+        // fake reactive for `toRefs(props)`
+        def(props, '__ob__', createObserver());
+        // resolve scopedSlots and slots to functions
+        resolveScopedSlots(vm, ctx.slots);
+        var binding;
+        activateCurrentInstance(instance, function () {
+            // make props to be fake reactive, this is for `toRefs(props)`
+            binding = setup(props, ctx);
+        });
+        if (!binding)
+            return;
+        if (isFunction(binding)) {
+            // keep typescript happy with the binding type.
+            var bindingFunc_1 = binding;
+            // keep currentInstance accessible for createElement
+            vm.$options.render = function () {
+                resolveScopedSlots(vm, ctx.slots);
+                return activateCurrentInstance(instance, function () { return bindingFunc_1(); });
+            };
+            return;
+        }
+        else if (isObject(binding)) {
+            if (isReactive(binding)) {
+                binding = toRefs(binding);
+            }
+            vmStateManager.set(vm, 'rawBindings', binding);
+            var bindingObj_1 = binding;
+            Object.keys(bindingObj_1).forEach(function (name) {
+                var bindingValue = bindingObj_1[name];
+                if (!isRef(bindingValue)) {
+                    if (!isReactive(bindingValue)) {
+                        if (isFunction(bindingValue)) {
+                            var copy_1 = bindingValue;
+                            bindingValue = bindingValue.bind(vm);
+                            Object.keys(copy_1).forEach(function (ele) {
+                                bindingValue[ele] = copy_1[ele];
+                            });
+                        }
+                        else if (!isObject(bindingValue)) {
+                            bindingValue = ref(bindingValue);
+                        }
+                        else if (hasReactiveArrayChild(bindingValue)) {
+                            // creates a custom reactive properties without make the object explicitly reactive
+                            // NOTE we should try to avoid this, better implementation needed
+                            customReactive(bindingValue);
+                        }
+                    }
+                    else if (isArray(bindingValue)) {
+                        bindingValue = ref(bindingValue);
+                    }
+                }
+                asVmProperty(vm, name, bindingValue);
+            });
+            return;
+        }
+        {
+            assert(false, "\"setup\" must return a \"Object\" or a \"Function\", got \"".concat(Object.prototype.toString
+                .call(binding)
+                .slice(8, -1), "\""));
+        }
+    }
+    function customReactive(target, seen) {
+        if (seen === void 0) { seen = new Set(); }
+        if (seen.has(target))
+            return;
+        if (!isPlainObject(target) ||
+            isRef(target) ||
+            isReactive(target) ||
+            isRaw(target))
+            return;
+        var Vue = getVueConstructor();
+        // @ts-expect-error https://github.com/vuejs/vue/pull/12132
+        var defineReactive = Vue.util.defineReactive;
+        Object.keys(target).forEach(function (k) {
+            var val = target[k];
+            defineReactive(target, k, val);
+            if (val) {
+                seen.add(val);
+                customReactive(val, seen);
+            }
+            return;
+        });
+    }
+    function hasReactiveArrayChild(target, visited) {
+        if (visited === void 0) { visited = new Map(); }
+        if (visited.has(target)) {
+            return visited.get(target);
+        }
+        visited.set(target, false);
+        if (isArray(target) && isReactive(target)) {
+            visited.set(target, true);
+            return true;
+        }
+        if (!isPlainObject(target) || isRaw(target) || isRef(target)) {
+            return false;
+        }
+        return Object.keys(target).some(function (x) {
+            return hasReactiveArrayChild(target[x], visited);
+        });
+    }
+    function createSetupContext(vm) {
+        var ctx = { slots: {} };
+        var propsPlain = [
+            'root',
+            'parent',
+            'refs',
+            'listeners',
+            'isServer',
+            'ssrContext',
+        ];
+        var methodReturnVoid = ['emit'];
+        propsPlain.forEach(function (key) {
+            var srcKey = "$".concat(key);
+            proxy(ctx, key, {
+                get: function () { return vm[srcKey]; },
+                set: function () {
+                    warn("Cannot assign to '".concat(key, "' because it is a read-only property"), vm);
+                },
+            });
+        });
+        updateVmAttrs(vm, ctx);
+        methodReturnVoid.forEach(function (key) {
+            var srcKey = "$".concat(key);
+            proxy(ctx, key, {
+                get: function () {
+                    return function () {
+                        var args = [];
+                        for (var _i = 0; _i < arguments.length; _i++) {
+                            args[_i] = arguments[_i];
+                        }
+                        var fn = vm[srcKey];
+                        fn.apply(vm, args);
+                    };
+                },
+            });
+        });
+        return ctx;
+    }
+}
+
+/**
+ * Helper that recursively merges two data objects together.
+ */
+function mergeData(from, to) {
+    if (!from)
+        return to;
+    if (!to)
+        return from;
+    var key;
+    var toVal;
+    var fromVal;
+    var keys = hasSymbol ? Reflect.ownKeys(from) : Object.keys(from);
+    for (var i = 0; i < keys.length; i++) {
+        key = keys[i];
+        // in case the object is already observed...
+        if (key === '__ob__')
+            continue;
+        toVal = to[key];
+        fromVal = from[key];
+        if (!hasOwn(to, key)) {
+            to[key] = fromVal;
+        }
+        else if (toVal !== fromVal &&
+            isPlainObject(toVal) &&
+            !isRef(toVal) &&
+            isPlainObject(fromVal) &&
+            !isRef(fromVal)) {
+            mergeData(fromVal, toVal);
+        }
+    }
+    return to;
+}
+function install(Vue) {
+    if (isVueRegistered(Vue)) {
+        {
+            warn('[vue-composition-api] already installed. Vue.use(VueCompositionAPI) should be called only once.');
+        }
+        return;
+    }
+    {
+        if (Vue.version) {
+            if (Vue.version[0] !== '2' || Vue.version[1] !== '.') {
+                warn("[vue-composition-api] only works with Vue 2, v".concat(Vue.version, " found."));
+            }
+        }
+        else {
+            warn('[vue-composition-api] no Vue version found');
+        }
+    }
+    Vue.config.optionMergeStrategies.setup = function (parent, child) {
+        return function mergedSetupFn(props, context) {
+            return mergeData(isFunction(parent) ? parent(props, context) || {} : undefined, isFunction(child) ? child(props, context) || {} : undefined);
+        };
+    };
+    setVueConstructor(Vue);
+    mixin(Vue);
+}
+var Plugin = {
+    install: function (Vue) { return install(Vue); },
+};
+
+// implementation, close to no-op
+function defineComponent(options) {
+    return options;
+}
+
+function defineAsyncComponent(source) {
+    if (isFunction(source)) {
+        source = { loader: source };
+    }
+    var loader = source.loader, loadingComponent = source.loadingComponent, errorComponent = source.errorComponent, _a = source.delay, delay = _a === void 0 ? 200 : _a, timeout = source.timeout, // undefined = never times out
+    _b = source.suspensible, // undefined = never times out
+    suspensible = _b === void 0 ? false : _b, // in Vue 3 default is true
+    userOnError = source.onError;
+    if (suspensible) {
+        warn("The suspensiblbe option for async components is not supported in Vue2. It is ignored.");
+    }
+    var pendingRequest = null;
+    var retries = 0;
+    var retry = function () {
+        retries++;
+        pendingRequest = null;
+        return load();
+    };
+    var load = function () {
+        var thisRequest;
+        return (pendingRequest ||
+            (thisRequest = pendingRequest =
+                loader()
+                    .catch(function (err) {
+                    err = err instanceof Error ? err : new Error(String(err));
+                    if (userOnError) {
+                        return new Promise(function (resolve, reject) {
+                            var userRetry = function () { return resolve(retry()); };
+                            var userFail = function () { return reject(err); };
+                            userOnError(err, userRetry, userFail, retries + 1);
+                        });
+                    }
+                    else {
+                        throw err;
+                    }
+                })
+                    .then(function (comp) {
+                    if (thisRequest !== pendingRequest && pendingRequest) {
+                        return pendingRequest;
+                    }
+                    if (!comp) {
+                        warn("Async component loader resolved to undefined. " +
+                            "If you are using retry(), make sure to return its return value.");
+                    }
+                    // interop module default
+                    if (comp &&
+                        (comp.__esModule || comp[Symbol.toStringTag] === 'Module')) {
+                        comp = comp.default;
+                    }
+                    if (comp && !isObject(comp) && !isFunction(comp)) {
+                        throw new Error("Invalid async component load result: ".concat(comp));
+                    }
+                    return comp;
+                })));
+    };
+    return function () {
+        var component = load();
+        return {
+            component: component,
+            delay: delay,
+            timeout: timeout,
+            error: errorComponent,
+            loading: loadingComponent,
+        };
+    };
+}
+
+var version = "1.7.0";
+// auto install when using CDN
+if (typeof window !== 'undefined' && window.Vue) {
+    window.Vue.use(Plugin);
+}
+
+exports.EffectScope = EffectScope;
+exports.computed = computed;
+exports.createApp = createApp;
+exports.createLifeCycle = createLifeCycle;
+exports.createRef = createRef;
+exports.customRef = customRef;
+exports["default"] = Plugin;
+exports.defineAsyncComponent = defineAsyncComponent;
+exports.defineComponent = defineComponent;
+exports.del = del;
+exports.effectScope = effectScope;
+exports.getCurrentInstance = getCurrentInstance;
+exports.getCurrentScope = getCurrentScope;
+exports.h = createElement;
+exports.inject = inject;
+exports.isRaw = isRaw;
+exports.isReactive = isReactive;
+exports.isReadonly = isReadonly;
+exports.isRef = isRef;
+exports.markRaw = markRaw;
+exports.nextTick = nextTick;
+exports.onActivated = onActivated;
+exports.onBeforeMount = onBeforeMount;
+exports.onBeforeUnmount = onBeforeUnmount;
+exports.onBeforeUpdate = onBeforeUpdate;
+exports.onDeactivated = onDeactivated;
+exports.onErrorCaptured = onErrorCaptured;
+exports.onMounted = onMounted;
+exports.onScopeDispose = onScopeDispose;
+exports.onServerPrefetch = onServerPrefetch;
+exports.onUnmounted = onUnmounted;
+exports.onUpdated = onUpdated;
+exports.provide = provide;
+exports.proxyRefs = proxyRefs;
+exports.reactive = reactive;
+exports.readonly = readonly;
+exports.ref = ref;
+exports.set = set$1;
+exports.shallowReactive = shallowReactive;
+exports.shallowReadonly = shallowReadonly;
+exports.shallowRef = shallowRef;
+exports.toRaw = toRaw;
+exports.toRef = toRef;
+exports.toRefs = toRefs;
+exports.triggerRef = triggerRef;
+exports.unref = unref;
+exports.useAttrs = useAttrs;
+exports.useCSSModule = useCSSModule;
+exports.useCssModule = useCssModule;
+exports.useSlots = useSlots;
+exports.version = version;
+exports.warn = warn$1;
+exports.watch = watch;
+exports.watchEffect = watchEffect;
+exports.watchPostEffect = watchPostEffect;
+exports.watchSyncEffect = watchSyncEffect;
+
+
+/***/ }),
+/* 41 */
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/index.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _exportNames = {
+  setupDevtoolsPlugin: true
+};
+exports.setupDevtoolsPlugin = setupDevtoolsPlugin;
+var _env = __webpack_require__(/*! ./env.js */ 42);
+var _const = __webpack_require__(/*! ./const.js */ 43);
+var _proxy = __webpack_require__(/*! ./proxy.js */ 44);
+var _index = __webpack_require__(/*! ./api/index.js */ 46);
+Object.keys(_index).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _index[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _index[key];
+    }
+  });
+});
+var _plugin = __webpack_require__(/*! ./plugin.js */ 53);
+Object.keys(_plugin).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _plugin[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _plugin[key];
+    }
+  });
+});
+var _time = __webpack_require__(/*! ./time.js */ 45);
+Object.keys(_time).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _time[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _time[key];
+    }
+  });
+});
+function setupDevtoolsPlugin(pluginDescriptor, setupFn) {
+  var descriptor = pluginDescriptor;
+  var target = (0, _env.getTarget)();
+  var hook = (0, _env.getDevtoolsGlobalHook)();
+  var enableProxy = _env.isProxyAvailable && descriptor.enableEarlyProxy;
+  if (hook && (target.__VUE_DEVTOOLS_PLUGIN_API_AVAILABLE__ || !enableProxy)) {
+    hook.emit(_const.HOOK_SETUP, pluginDescriptor, setupFn);
+  } else {
+    var proxy = enableProxy ? new _proxy.ApiProxy(descriptor, hook) : null;
+    var list = target.__VUE_DEVTOOLS_PLUGINS__ = target.__VUE_DEVTOOLS_PLUGINS__ || [];
+    list.push({
+      pluginDescriptor: descriptor,
+      setupFn: setupFn,
+      proxy: proxy
+    });
+    if (proxy) setupFn(proxy.proxiedTarget);
+  }
+}
+
+/***/ }),
+/* 42 */
+/*!**************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/env.js ***!
+  \**************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getDevtoolsGlobalHook = getDevtoolsGlobalHook;
+exports.getTarget = getTarget;
+exports.isProxyAvailable = void 0;
+function getDevtoolsGlobalHook() {
+  return getTarget().__VUE_DEVTOOLS_GLOBAL_HOOK__;
+}
+function getTarget() {
+  // @ts-ignore
+  return typeof navigator !== 'undefined' && typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
+}
+var isProxyAvailable = typeof Proxy === 'function';
+exports.isProxyAvailable = isProxyAvailable;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/global.js */ 3)))
+
+/***/ }),
+/* 43 */
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/const.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.HOOK_SETUP = exports.HOOK_PLUGIN_SETTINGS_SET = void 0;
+var HOOK_SETUP = 'devtools-plugin:setup';
+exports.HOOK_SETUP = HOOK_SETUP;
+var HOOK_PLUGIN_SETTINGS_SET = 'plugin:settings:set';
+exports.HOOK_PLUGIN_SETTINGS_SET = HOOK_PLUGIN_SETTINGS_SET;
+
+/***/ }),
+/* 44 */
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/proxy.js ***!
+  \****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10943,126 +14687,491 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
-var _cachekey = __webpack_require__(/*! @/config/cachekey.js */ 37);
-var _cache = _interopRequireDefault(__webpack_require__(/*! @/utils/cache.js */ 38));
-// app 状态管理
-var state = {
-  token: _cache.default.get(_cachekey.TOKEN) || null
-};
-var actions = {};
-var _default = {
-  state: state
-};
-exports.default = _default;
+exports.ApiProxy = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ 18));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
+var _const = __webpack_require__(/*! ./const.js */ 43);
+var _time = __webpack_require__(/*! ./time.js */ 45);
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+var ApiProxy = /*#__PURE__*/function () {
+  function ApiProxy(plugin, hook) {
+    var _this = this;
+    (0, _classCallCheck2.default)(this, ApiProxy);
+    this.target = null;
+    this.targetQueue = [];
+    this.onQueue = [];
+    this.plugin = plugin;
+    this.hook = hook;
+    var defaultSettings = {};
+    if (plugin.settings) {
+      for (var id in plugin.settings) {
+        var item = plugin.settings[id];
+        defaultSettings[id] = item.defaultValue;
+      }
+    }
+    var localSettingsSaveId = "__vue-devtools-plugin-settings__".concat(plugin.id);
+    var currentSettings = Object.assign({}, defaultSettings);
+    try {
+      var raw = localStorage.getItem(localSettingsSaveId);
+      var data = JSON.parse(raw);
+      Object.assign(currentSettings, data);
+    } catch (e) {
+      // noop
+    }
+    this.fallbacks = {
+      getSettings: function getSettings() {
+        return currentSettings;
+      },
+      setSettings: function setSettings(value) {
+        try {
+          localStorage.setItem(localSettingsSaveId, JSON.stringify(value));
+        } catch (e) {
+          // noop
+        }
+        currentSettings = value;
+      },
+      now: function now() {
+        return (0, _time.now)();
+      }
+    };
+    if (hook) {
+      hook.on(_const.HOOK_PLUGIN_SETTINGS_SET, function (pluginId, value) {
+        if (pluginId === _this.plugin.id) {
+          _this.fallbacks.setSettings(value);
+        }
+      });
+    }
+    this.proxiedOn = new Proxy({}, {
+      get: function get(_target, prop) {
+        if (_this.target) {
+          return _this.target.on[prop];
+        } else {
+          return function () {
+            for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+              args[_key] = arguments[_key];
+            }
+            _this.onQueue.push({
+              method: prop,
+              args: args
+            });
+          };
+        }
+      }
+    });
+    this.proxiedTarget = new Proxy({}, {
+      get: function get(_target, prop) {
+        if (_this.target) {
+          return _this.target[prop];
+        } else if (prop === 'on') {
+          return _this.proxiedOn;
+        } else if (Object.keys(_this.fallbacks).includes(prop)) {
+          return function () {
+            var _this$fallbacks;
+            for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+              args[_key2] = arguments[_key2];
+            }
+            _this.targetQueue.push({
+              method: prop,
+              args: args,
+              resolve: function resolve() {}
+            });
+            return (_this$fallbacks = _this.fallbacks)[prop].apply(_this$fallbacks, args);
+          };
+        } else {
+          return function () {
+            for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+              args[_key3] = arguments[_key3];
+            }
+            return new Promise(function (resolve) {
+              _this.targetQueue.push({
+                method: prop,
+                args: args,
+                resolve: resolve
+              });
+            });
+          };
+        }
+      }
+    });
+  }
+  (0, _createClass2.default)(ApiProxy, [{
+    key: "setRealTarget",
+    value: function () {
+      var _setRealTarget = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(target) {
+        var _iterator, _step, _this$target$on, item, _iterator2, _step2, _this$target, _item;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.target = target;
+                _iterator = _createForOfIteratorHelper(this.onQueue);
+                try {
+                  for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                    item = _step.value;
+                    (_this$target$on = this.target.on)[item.method].apply(_this$target$on, (0, _toConsumableArray2.default)(item.args));
+                  }
+                } catch (err) {
+                  _iterator.e(err);
+                } finally {
+                  _iterator.f();
+                }
+                _iterator2 = _createForOfIteratorHelper(this.targetQueue);
+                _context.prev = 4;
+                _iterator2.s();
+              case 6:
+                if ((_step2 = _iterator2.n()).done) {
+                  _context.next = 15;
+                  break;
+                }
+                _item = _step2.value;
+                _context.t0 = _item;
+                _context.next = 11;
+                return (_this$target = this.target)[_item.method].apply(_this$target, (0, _toConsumableArray2.default)(_item.args));
+              case 11:
+                _context.t1 = _context.sent;
+                _context.t0.resolve.call(_context.t0, _context.t1);
+              case 13:
+                _context.next = 6;
+                break;
+              case 15:
+                _context.next = 20;
+                break;
+              case 17:
+                _context.prev = 17;
+                _context.t2 = _context["catch"](4);
+                _iterator2.e(_context.t2);
+              case 20:
+                _context.prev = 20;
+                _iterator2.f();
+                return _context.finish(20);
+              case 23:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[4, 17, 20, 23]]);
+      }));
+      function setRealTarget(_x) {
+        return _setRealTarget.apply(this, arguments);
+      }
+      return setRealTarget;
+    }()
+  }]);
+  return ApiProxy;
+}();
+exports.ApiProxy = ApiProxy;
 
 /***/ }),
-/* 37 */
-/*!***********************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/config/cachekey.js ***!
-  \***********************************************************************************************/
+/* 45 */
+/*!***************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/time.js ***!
+  \***************************************************************************************************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = {
-  USER_INFO: 'USER_INFO',
-  TOKEN: 'TOKEN',
-  BACK_URL: 'BACK_URL',
-  CONFIG: 'CONFIG',
-  INVITE_CODE: 'INVITE_CODE',
-  TEMP_TOKEN: 'TEMP_TOKEN'
-};
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isPerformanceSupported = isPerformanceSupported;
+exports.now = now;
+var supported;
+var perf;
+function isPerformanceSupported() {
+  var _a;
+  if (supported !== undefined) {
+    return supported;
+  }
+  if (typeof window !== 'undefined' && window.performance) {
+    supported = true;
+    perf = window.performance;
+  } else if (typeof global !== 'undefined' && ((_a = global.perf_hooks) === null || _a === void 0 ? void 0 : _a.performance)) {
+    supported = true;
+    perf = global.perf_hooks.performance;
+  } else {
+    supported = false;
+  }
+  return supported;
+}
+function now() {
+  return isPerformanceSupported() ? perf.now() : Date.now();
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/global.js */ 3)))
 
 /***/ }),
-/* 38 */
-/*!*******************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/utils/cache.js ***!
-  \*******************************************************************************************/
+/* 46 */
+/*!********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/api/index.js ***!
+  \********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _api = __webpack_require__(/*! ./api.js */ 47);
+Object.keys(_api).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _api[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _api[key];
+    }
+  });
+});
+var _app = __webpack_require__(/*! ./app.js */ 48);
+Object.keys(_app).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _app[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _app[key];
+    }
+  });
+});
+var _component = __webpack_require__(/*! ./component.js */ 49);
+Object.keys(_component).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _component[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _component[key];
+    }
+  });
+});
+var _context = __webpack_require__(/*! ./context.js */ 50);
+Object.keys(_context).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _context[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _context[key];
+    }
+  });
+});
+var _hooks = __webpack_require__(/*! ./hooks.js */ 51);
+Object.keys(_hooks).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _hooks[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _hooks[key];
+    }
+  });
+});
+var _util = __webpack_require__(/*! ./util.js */ 52);
+Object.keys(_util).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _util[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _util[key];
+    }
+  });
+});
+
+/***/ }),
+/* 47 */
+/*!******************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/api/api.js ***!
+  \******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+/* 48 */
+/*!******************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/api/app.js ***!
+  \******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+/* 49 */
+/*!************************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/api/component.js ***!
+  \************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+/* 50 */
+/*!**********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/api/context.js ***!
+  \**********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+/* 51 */
+/*!********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/api/hooks.js ***!
+  \********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+/* 52 */
+/*!*******************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/api/util.js ***!
+  \*******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+/* 53 */
+/*!*****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/@vue/devtools-api/lib/esm/plugin.js ***!
+  \*****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/***/ }),
+/* 54 */
+/*!***********************************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/node_modules/pinia-plugin-persist-uni/dist/pinia-persist-uni.es.js ***!
+  \***********************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
-/*
-* app 本地缓存
-*/
-
-var Cache = {
-  //设置缓存(expire为缓存时效)
-  set: function set(key, value, expire) {
-    var data = {
-      expire: expire ? this.time() + expire : "",
-      value: value
-    };
-    if ((0, _typeof2.default)(data) === 'object') data = JSON.stringify(data);
-    try {
-      uni.setStorageSync(key, data);
-    } catch (e) {
-      return false;
+var isH5 = typeof alert === "function";
+var updateStorage = function updateStorage(strategy, store, options) {
+  var storage = strategy.storage;
+  var storeKey = strategy.key || store.$id;
+  var isCustomStorage = isH5 || (options == null ? void 0 : options.enforceCustomStorage);
+  if (strategy.paths) {
+    var partialState = strategy.paths.reduce(function (finalObj, key) {
+      finalObj[key] = store.$state[key];
+      return finalObj;
+    }, {});
+    if (isCustomStorage && storage) {
+      storage.setItem(storeKey, JSON.stringify(partialState));
+    } else {
+      uni.setStorage({
+        key: storeKey,
+        data: JSON.stringify(partialState)
+      });
     }
-  },
-  get: function get(key) {
-    try {
-      var data = uni.getStorageSync(key);
-      var _JSON$parse = JSON.parse(data),
-        value = _JSON$parse.value,
-        expire = _JSON$parse.expire;
-      if (expire && expire < this.time()) {
-        uni.removeStorageSync(key);
-        return false;
-      } else {
-        return value;
-      }
-    } catch (e) {
-      return false;
-    }
-  },
-  //获取当前时间
-  time: function time() {
-    return Math.round(new Date() / 1000);
-  },
-  remove: function remove(key) {
-    if (key) uni.removeStorageSync(key);
+  } else if (isCustomStorage && storage) {
+    storage.setItem(storeKey, JSON.stringify(store.$state));
+  } else {
+    uni.setStorage({
+      key: storeKey,
+      data: JSON.stringify(store.$state)
+    });
   }
 };
-var _default = Cache;
-exports.default = _default;
+var index = function index(_ref) {
+  var options = _ref.options,
+    store = _ref.store;
+  var _a, _b, _c, _d, _e, _f;
+  if ((_a = options.persist) == null ? void 0 : _a.enabled) {
+    var defaultStrat = [{
+      key: store.$id,
+      storage: ((_b = options.persist) == null ? void 0 : _b.H5Storage) || (window == null ? void 0 : window.sessionStorage)
+    }];
+    var strategies = ((_d = (_c = options.persist) == null ? void 0 : _c.strategies) == null ? void 0 : _d.length) ? (_e = options.persist) == null ? void 0 : _e.strategies : defaultStrat;
+    strategies.forEach(function (strategy) {
+      var _a2, _b2;
+      var storage = strategy.storage || ((_a2 = options.persist) == null ? void 0 : _a2.H5Storage) || (window == null ? void 0 : window.sessionStorage);
+      var storeKey = strategy.key || store.$id;
+      var storageResult;
+      if (isH5 || ((_b2 = options.persist) == null ? void 0 : _b2.enforceCustomStorage)) {
+        storageResult = storage.getItem(storeKey);
+      } else {
+        storageResult = uni.getStorageSync(storeKey);
+      }
+      if (storageResult) {
+        store.$patch(JSON.parse(storageResult));
+        updateStorage(strategy, store, options.persist);
+      }
+    });
+    store.$subscribe(function () {
+      strategies.forEach(function (strategy) {
+        updateStorage(strategy, store, options.persist);
+      });
+    }, {
+      detached: ((_f = options.persist) == null ? void 0 : _f.detached) ? true : false
+    });
+  }
+};
+exports.default = index;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 39 */
-/*!*********************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/store/getters.js ***!
-  \*********************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  token: function token(state) {
-    return state.app.token;
-  },
-  isLogin: function isLogin(state) {
-    return !!state.app.token;
-  }
-};
-exports.default = _default;
-
-/***/ }),
-/* 40 */
+/* 55 */
 /*!*******************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/utils/tools.js ***!
   \*******************************************************************************************/
@@ -11101,6 +15210,8 @@ exports.unique = void 0;
 exports.uniqueId = uniqueId;
 exports.uploadFile = uploadFile;
 exports.urlencode = urlencode;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
 var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
 var _arguments = typeof arguments === "undefined" ? void 0 : arguments;
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
@@ -11181,10 +15292,44 @@ function toast() {
 }
 
 /**
+ * 检查网络
+ * @param {Boolean} silence - 静默检查
+ */
+function checkNetwork() {
+  return _checkNetwork.apply(this, arguments);
+}
+/**
  * 获取是否授权了定位权限
  * @param { Boolean } launchAuth: 是否发起授权请求, 初次有效
  * @return { Boolean }
  */
+function _checkNetwork() {
+  _checkNetwork = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+    var networkStatus;
+    return _regenerator.default.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return uni.getNetworkType();
+          case 2:
+            networkStatus = _context.sent;
+            if (!(networkStatus.networkType == 'none')) {
+              _context.next = 5;
+              break;
+            }
+            return _context.abrupt("return", Promise.resolve(false));
+          case 5:
+            return _context.abrupt("return", Promise.resolve(true));
+          case 6:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _checkNetwork.apply(this, arguments);
+}
 function getLocationAuth(launchAuth) {
   return new Promise(function (resolve) {
     uni.getSetting({
@@ -11966,7 +16111,7 @@ function uploadFile(path) {
       filePath: path,
       name: 'file',
       header: {
-        token: store.getters.token
+        token: 'store.getters.token'
       },
       fileType: 'image',
       cloudPath: '',
@@ -12008,7 +16153,70 @@ function chooseImages(imageMax) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 41 */
+/* 56 */
+/*!*******************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/utils/cache.js ***!
+  \*******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
+/*
+* app 本地缓存
+*/
+
+var Cache = {
+  //设置缓存(expire为缓存时效)
+  set: function set(key, value, expire) {
+    var data = {
+      expire: expire ? this.time() + expire : "",
+      value: value
+    };
+    if ((0, _typeof2.default)(data) === 'object') data = JSON.stringify(data);
+    try {
+      uni.setStorageSync(key, data);
+    } catch (e) {
+      return false;
+    }
+  },
+  get: function get(key) {
+    try {
+      var data = uni.getStorageSync(key);
+      var _JSON$parse = JSON.parse(data),
+        value = _JSON$parse.value,
+        expire = _JSON$parse.expire;
+      if (expire && expire < this.time()) {
+        uni.removeStorageSync(key);
+        return false;
+      } else {
+        return value;
+      }
+    } catch (e) {
+      return false;
+    }
+  },
+  //获取当前时间
+  time: function time() {
+    return Math.round(new Date() / 1000);
+  },
+  remove: function remove(key) {
+    if (key) uni.removeStorageSync(key);
+  }
+};
+var _default = Cache;
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 57 */
 /*!**********************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/index.js ***!
   \**********************************************************************************************************/
@@ -12024,20 +16232,20 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _mixin = _interopRequireDefault(__webpack_require__(/*! ./libs/mixin/mixin.js */ 42));
-var _mpMixin = _interopRequireDefault(__webpack_require__(/*! ./libs/mixin/mpMixin.js */ 43));
-var _luchRequest = _interopRequireDefault(__webpack_require__(/*! ./libs/luch-request */ 44));
-var _route = _interopRequireDefault(__webpack_require__(/*! ./libs/util/route.js */ 62));
-var _colorGradient = _interopRequireDefault(__webpack_require__(/*! ./libs/function/colorGradient.js */ 66));
-var _test = _interopRequireDefault(__webpack_require__(/*! ./libs/function/test.js */ 67));
-var _debounce = _interopRequireDefault(__webpack_require__(/*! ./libs/function/debounce.js */ 68));
-var _throttle = _interopRequireDefault(__webpack_require__(/*! ./libs/function/throttle.js */ 69));
-var _index = _interopRequireDefault(__webpack_require__(/*! ./libs/function/index.js */ 70));
-var _config = _interopRequireDefault(__webpack_require__(/*! ./libs/config/config.js */ 73));
-var _props = _interopRequireDefault(__webpack_require__(/*! ./libs/config/props.js */ 74));
-var _zIndex = _interopRequireDefault(__webpack_require__(/*! ./libs/config/zIndex.js */ 164));
-var _color = _interopRequireDefault(__webpack_require__(/*! ./libs/config/color.js */ 122));
-var _platform = _interopRequireDefault(__webpack_require__(/*! ./libs/function/platform */ 165));
+var _mixin = _interopRequireDefault(__webpack_require__(/*! ./libs/mixin/mixin.js */ 58));
+var _mpMixin = _interopRequireDefault(__webpack_require__(/*! ./libs/mixin/mpMixin.js */ 59));
+var _luchRequest = _interopRequireDefault(__webpack_require__(/*! ./libs/luch-request */ 60));
+var _route = _interopRequireDefault(__webpack_require__(/*! ./libs/util/route.js */ 78));
+var _colorGradient = _interopRequireDefault(__webpack_require__(/*! ./libs/function/colorGradient.js */ 79));
+var _test = _interopRequireDefault(__webpack_require__(/*! ./libs/function/test.js */ 80));
+var _debounce = _interopRequireDefault(__webpack_require__(/*! ./libs/function/debounce.js */ 81));
+var _throttle = _interopRequireDefault(__webpack_require__(/*! ./libs/function/throttle.js */ 82));
+var _index = _interopRequireDefault(__webpack_require__(/*! ./libs/function/index.js */ 83));
+var _config = _interopRequireDefault(__webpack_require__(/*! ./libs/config/config.js */ 86));
+var _props = _interopRequireDefault(__webpack_require__(/*! ./libs/config/props.js */ 87));
+var _zIndex = _interopRequireDefault(__webpack_require__(/*! ./libs/config/zIndex.js */ 177));
+var _color = _interopRequireDefault(__webpack_require__(/*! ./libs/config/color.js */ 135));
+var _platform = _interopRequireDefault(__webpack_require__(/*! ./libs/function/platform */ 178));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 // 看到此报错，是因为没有配置vue.config.js的【transpileDependencies】，详见：https://www.uviewui.com/components/npmSetting.html#_5-cli模式额外配置
@@ -12097,7 +16305,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 42 */
+/* 58 */
 /*!*********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/mixin/mixin.js ***!
   \*********************************************************************************************************************/
@@ -12265,7 +16473,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 43 */
+/* 59 */
 /*!***********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/mixin/mpMixin.js ***!
   \***********************************************************************************************************************/
@@ -12288,7 +16496,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 44 */
+/* 60 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/index.js ***!
   \****************************************************************************************************************************/
@@ -12303,12 +16511,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _Request = _interopRequireDefault(__webpack_require__(/*! ./core/Request */ 45));
+var _Request = _interopRequireDefault(__webpack_require__(/*! ./core/Request */ 61));
 var _default = _Request.default;
 exports.default = _default;
 
 /***/ }),
-/* 45 */
+/* 61 */
 /*!***********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/core/Request.js ***!
   \***********************************************************************************************************************************/
@@ -12326,12 +16534,12 @@ exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
-var _dispatchRequest = _interopRequireDefault(__webpack_require__(/*! ./dispatchRequest */ 46));
-var _InterceptorManager = _interopRequireDefault(__webpack_require__(/*! ./InterceptorManager */ 54));
-var _mergeConfig = _interopRequireDefault(__webpack_require__(/*! ./mergeConfig */ 55));
-var _defaults = _interopRequireDefault(__webpack_require__(/*! ./defaults */ 56));
-var _utils = __webpack_require__(/*! ../utils */ 49);
-var _clone = _interopRequireDefault(__webpack_require__(/*! ../utils/clone */ 57));
+var _dispatchRequest = _interopRequireDefault(__webpack_require__(/*! ./dispatchRequest */ 62));
+var _InterceptorManager = _interopRequireDefault(__webpack_require__(/*! ./InterceptorManager */ 70));
+var _mergeConfig = _interopRequireDefault(__webpack_require__(/*! ./mergeConfig */ 71));
+var _defaults = _interopRequireDefault(__webpack_require__(/*! ./defaults */ 72));
+var _utils = __webpack_require__(/*! ../utils */ 65);
+var _clone = _interopRequireDefault(__webpack_require__(/*! ../utils/clone */ 73));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var Request = /*#__PURE__*/function () {
@@ -12514,7 +16722,7 @@ var Request = /*#__PURE__*/function () {
 exports.default = Request;
 
 /***/ }),
-/* 46 */
+/* 62 */
 /*!*******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/core/dispatchRequest.js ***!
   \*******************************************************************************************************************************************/
@@ -12529,14 +16737,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _index = _interopRequireDefault(__webpack_require__(/*! ../adapters/index */ 47));
+var _index = _interopRequireDefault(__webpack_require__(/*! ../adapters/index */ 63));
 var _default = function _default(config) {
   return (0, _index.default)(config);
 };
 exports.default = _default;
 
 /***/ }),
-/* 47 */
+/* 63 */
 /*!*************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/adapters/index.js ***!
   \*************************************************************************************************************************************/
@@ -12552,10 +16760,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _buildURL = _interopRequireDefault(__webpack_require__(/*! ../helpers/buildURL */ 48));
-var _buildFullPath = _interopRequireDefault(__webpack_require__(/*! ../core/buildFullPath */ 50));
-var _settle = _interopRequireDefault(__webpack_require__(/*! ../core/settle */ 53));
-var _utils = __webpack_require__(/*! ../utils */ 49);
+var _buildURL = _interopRequireDefault(__webpack_require__(/*! ../helpers/buildURL */ 64));
+var _buildFullPath = _interopRequireDefault(__webpack_require__(/*! ../core/buildFullPath */ 66));
+var _settle = _interopRequireDefault(__webpack_require__(/*! ../core/settle */ 69));
+var _utils = __webpack_require__(/*! ../utils */ 65);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 /**
@@ -12617,7 +16825,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 48 */
+/* 64 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/helpers/buildURL.js ***!
   \***************************************************************************************************************************************/
@@ -12632,7 +16840,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = buildURL;
-var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ 49));
+var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ 65));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function encode(val) {
@@ -12687,7 +16895,7 @@ function buildURL(url, params) {
 }
 
 /***/ }),
-/* 49 */
+/* 65 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/utils.js ***!
   \****************************************************************************************************************************/
@@ -12840,7 +17048,7 @@ function isUndefined(val) {
 }
 
 /***/ }),
-/* 50 */
+/* 66 */
 /*!*****************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/core/buildFullPath.js ***!
   \*****************************************************************************************************************************************/
@@ -12855,8 +17063,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = buildFullPath;
-var _isAbsoluteURL = _interopRequireDefault(__webpack_require__(/*! ../helpers/isAbsoluteURL */ 51));
-var _combineURLs = _interopRequireDefault(__webpack_require__(/*! ../helpers/combineURLs */ 52));
+var _isAbsoluteURL = _interopRequireDefault(__webpack_require__(/*! ../helpers/isAbsoluteURL */ 67));
+var _combineURLs = _interopRequireDefault(__webpack_require__(/*! ../helpers/combineURLs */ 68));
 /**
  * Creates a new URL by combining the baseURL with the requestedURL,
  * only when the requestedURL is not already an absolute URL.
@@ -12874,7 +17082,7 @@ function buildFullPath(baseURL, requestedURL) {
 }
 
 /***/ }),
-/* 51 */
+/* 67 */
 /*!********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/helpers/isAbsoluteURL.js ***!
   \********************************************************************************************************************************************/
@@ -12902,7 +17110,7 @@ function isAbsoluteURL(url) {
 }
 
 /***/ }),
-/* 52 */
+/* 68 */
 /*!******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/helpers/combineURLs.js ***!
   \******************************************************************************************************************************************/
@@ -12928,7 +17136,7 @@ function combineURLs(baseURL, relativeURL) {
 }
 
 /***/ }),
-/* 53 */
+/* 69 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/core/settle.js ***!
   \**********************************************************************************************************************************/
@@ -12960,7 +17168,7 @@ function settle(resolve, reject, response) {
 }
 
 /***/ }),
-/* 54 */
+/* 70 */
 /*!**********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/core/InterceptorManager.js ***!
   \**********************************************************************************************************************************************/
@@ -13024,7 +17232,7 @@ var _default = InterceptorManager;
 exports.default = _default;
 
 /***/ }),
-/* 55 */
+/* 71 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/core/mergeConfig.js ***!
   \***************************************************************************************************************************************/
@@ -13040,7 +17248,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _utils = __webpack_require__(/*! ../utils */ 49);
+var _utils = __webpack_require__(/*! ../utils */ 65);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 /**
@@ -13100,7 +17308,7 @@ var _default = function _default(globalsConfig) {
 exports.default = _default;
 
 /***/ }),
-/* 56 */
+/* 72 */
 /*!************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/core/defaults.js ***!
   \************************************************************************************************************************************/
@@ -13132,7 +17340,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 57 */
+/* 73 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/luch-request/utils/clone.js ***!
   \**********************************************************************************************************************************/
@@ -13381,10 +17589,10 @@ var clone = function () {
 }();
 var _default = clone;
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/buffer/index.js */ 58).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/buffer/index.js */ 74).Buffer))
 
 /***/ }),
-/* 58 */
+/* 74 */
 /*!**************************************!*\
   !*** ./node_modules/buffer/index.js ***!
   \**************************************/
@@ -13402,9 +17610,9 @@ exports.default = _default;
 
 
 
-var base64 = __webpack_require__(/*! base64-js */ 59)
-var ieee754 = __webpack_require__(/*! ieee754 */ 60)
-var isArray = __webpack_require__(/*! isarray */ 61)
+var base64 = __webpack_require__(/*! base64-js */ 75)
+var ieee754 = __webpack_require__(/*! ieee754 */ 76)
+var isArray = __webpack_require__(/*! isarray */ 77)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -15185,7 +19393,7 @@ function isnan (val) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ 3)))
 
 /***/ }),
-/* 59 */
+/* 75 */
 /*!*****************************************!*\
   !*** ./node_modules/base64-js/index.js ***!
   \*****************************************/
@@ -15346,7 +19554,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 60 */
+/* 76 */
 /*!***************************************!*\
   !*** ./node_modules/ieee754/index.js ***!
   \***************************************/
@@ -15441,7 +19649,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 61 */
+/* 77 */
 /*!***************************************!*\
   !*** ./node_modules/isarray/index.js ***!
   \***************************************/
@@ -15456,7 +19664,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 62 */
+/* 78 */
 /*!********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/route.js ***!
   \********************************************************************************************************************/
@@ -15471,8 +19679,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
 /**
@@ -15644,381 +19852,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 63 */
-/*!************************************************************************************************!*\
-  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@babel/runtime/regenerator/index.js ***!
-  \************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// TODO(Babel 8): Remove this file.
-
-var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 64)();
-module.exports = runtime;
-
-/***/ }),
-/* 64 */
-/*!*******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/regeneratorRuntime.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _typeof = __webpack_require__(/*! ./typeof.js */ 13)["default"];
-function _regeneratorRuntime() {
-  "use strict";
-
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
-  module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
-    return exports;
-  }, module.exports.__esModule = true, module.exports["default"] = module.exports;
-  var exports = {},
-    Op = Object.prototype,
-    hasOwn = Op.hasOwnProperty,
-    defineProperty = Object.defineProperty || function (obj, key, desc) {
-      obj[key] = desc.value;
-    },
-    $Symbol = "function" == typeof Symbol ? Symbol : {},
-    iteratorSymbol = $Symbol.iterator || "@@iterator",
-    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-  function define(obj, key, value) {
-    return Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: !0,
-      configurable: !0,
-      writable: !0
-    }), obj[key];
-  }
-  try {
-    define({}, "");
-  } catch (err) {
-    define = function define(obj, key, value) {
-      return obj[key] = value;
-    };
-  }
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-      generator = Object.create(protoGenerator.prototype),
-      context = new Context(tryLocsList || []);
-    return defineProperty(generator, "_invoke", {
-      value: makeInvokeMethod(innerFn, self, context)
-    }), generator;
-  }
-  function tryCatch(fn, obj, arg) {
-    try {
-      return {
-        type: "normal",
-        arg: fn.call(obj, arg)
-      };
-    } catch (err) {
-      return {
-        type: "throw",
-        arg: err
-      };
-    }
-  }
-  exports.wrap = wrap;
-  var ContinueSentinel = {};
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
-    return this;
-  });
-  var getProto = Object.getPrototypeOf,
-    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (arg) {
-        return this._invoke(method, arg);
-      });
-    });
-  }
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if ("throw" !== record.type) {
-        var result = record.arg,
-          value = result.value;
-        return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
-          invoke("next", value, resolve, reject);
-        }, function (err) {
-          invoke("throw", err, resolve, reject);
-        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
-          result.value = unwrapped, resolve(result);
-        }, function (error) {
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-      reject(record.arg);
-    }
-    var previousPromise;
-    defineProperty(this, "_invoke", {
-      value: function value(method, arg) {
-        function callInvokeWithMethodAndArg() {
-          return new PromiseImpl(function (resolve, reject) {
-            invoke(method, arg, resolve, reject);
-          });
-        }
-        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
-      }
-    });
-  }
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = "suspendedStart";
-    return function (method, arg) {
-      if ("executing" === state) throw new Error("Generator is already running");
-      if ("completed" === state) {
-        if ("throw" === method) throw arg;
-        return doneResult();
-      }
-      for (context.method = method, context.arg = arg;;) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-          if ("suspendedStart" === state) throw state = "completed", context.arg;
-          context.dispatchException(context.arg);
-        } else "return" === context.method && context.abrupt("return", context.arg);
-        state = "executing";
-        var record = tryCatch(innerFn, self, context);
-        if ("normal" === record.type) {
-          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
-          return {
-            value: record.arg,
-            done: context.done
-          };
-        }
-        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
-      }
-    };
-  }
-  function maybeInvokeDelegate(delegate, context) {
-    var methodName = context.method,
-      method = delegate.iterator[methodName];
-    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
-    var record = tryCatch(method, delegate.iterator, context.arg);
-    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
-    var info = record.arg;
-    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
-  }
-  function pushTryEntry(locs) {
-    var entry = {
-      tryLoc: locs[0]
-    };
-    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
-  }
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal", delete record.arg, entry.completion = record;
-  }
-  function Context(tryLocsList) {
-    this.tryEntries = [{
-      tryLoc: "root"
-    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
-  }
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) return iteratorMethod.call(iterable);
-      if ("function" == typeof iterable.next) return iterable;
-      if (!isNaN(iterable.length)) {
-        var i = -1,
-          next = function next() {
-            for (; ++i < iterable.length;) {
-              if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-            }
-            return next.value = undefined, next.done = !0, next;
-          };
-        return next.next = next;
-      }
-    }
-    return {
-      next: doneResult
-    };
-  }
-  function doneResult() {
-    return {
-      value: undefined,
-      done: !0
-    };
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
-    value: GeneratorFunctionPrototype,
-    configurable: !0
-  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
-    value: GeneratorFunction,
-    configurable: !0
-  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
-    var ctor = "function" == typeof genFun && genFun.constructor;
-    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
-  }, exports.mark = function (genFun) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
-  }, exports.awrap = function (arg) {
-    return {
-      __await: arg
-    };
-  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
-    return this;
-  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    void 0 === PromiseImpl && (PromiseImpl = Promise);
-    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
-    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
-      return result.done ? result.value : iter.next();
-    });
-  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
-    return this;
-  }), define(Gp, "toString", function () {
-    return "[object Generator]";
-  }), exports.keys = function (val) {
-    var object = Object(val),
-      keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    return keys.reverse(), function next() {
-      for (; keys.length;) {
-        var key = keys.pop();
-        if (key in object) return next.value = key, next.done = !1, next;
-      }
-      return next.done = !0, next;
-    };
-  }, exports.values = values, Context.prototype = {
-    constructor: Context,
-    reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
-        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
-      }
-    },
-    stop: function stop() {
-      this.done = !0;
-      var rootRecord = this.tryEntries[0].completion;
-      if ("throw" === rootRecord.type) throw rootRecord.arg;
-      return this.rval;
-    },
-    dispatchException: function dispatchException(exception) {
-      if (this.done) throw exception;
-      var context = this;
-      function handle(loc, caught) {
-        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
-      }
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i],
-          record = entry.completion;
-        if ("root" === entry.tryLoc) return handle("end");
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc"),
-            hasFinally = hasOwn.call(entry, "finallyLoc");
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-          } else {
-            if (!hasFinally) throw new Error("try statement without catch or finally");
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          }
-        }
-      }
-    },
-    abrupt: function abrupt(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
-      var record = finallyEntry ? finallyEntry.completion : {};
-      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
-    },
-    complete: function complete(record, afterLoc) {
-      if ("throw" === record.type) throw record.arg;
-      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
-    },
-    finish: function finish(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
-      }
-    },
-    "catch": function _catch(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if ("throw" === record.type) {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-      throw new Error("illegal catch attempt");
-    },
-    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
-      return this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
-    }
-  }, exports;
-}
-module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-/* 65 */
-/*!*****************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
-  if (info.done) {
-    resolve(value);
-  } else {
-    Promise.resolve(value).then(_next, _throw);
-  }
-}
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-      args = arguments;
-    return new Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-      _next(undefined);
-    });
-  };
-}
-module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-/* 66 */
+/* 79 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/function/colorGradient.js ***!
   \********************************************************************************************************************************/
@@ -16173,7 +20007,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 67 */
+/* 80 */
 /*!***********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/function/test.js ***!
   \***********************************************************************************************************************/
@@ -16478,7 +20312,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 68 */
+/* 81 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/function/debounce.js ***!
   \***************************************************************************************************************************/
@@ -16525,7 +20359,7 @@ var _default = debounce;
 exports.default = _default;
 
 /***/ }),
-/* 69 */
+/* 82 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/function/throttle.js ***!
   \***************************************************************************************************************************/
@@ -16574,7 +20408,7 @@ var _default = throttle;
 exports.default = _default;
 
 /***/ }),
-/* 70 */
+/* 83 */
 /*!************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/function/index.js ***!
   \************************************************************************************************************************/
@@ -16591,8 +20425,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ 5));
 var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
-var _test = _interopRequireDefault(__webpack_require__(/*! ./test.js */ 67));
-var _digit = __webpack_require__(/*! ./digit.js */ 71);
+var _test = _interopRequireDefault(__webpack_require__(/*! ./test.js */ 80));
+var _digit = __webpack_require__(/*! ./digit.js */ 84);
 /**
  * @description 如果value小于min，取min；如果value大于max，取max
  * @param {number} min
@@ -17375,7 +21209,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 71 */
+/* 84 */
 /*!************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/function/digit.js ***!
   \************************************************************************************************************************/
@@ -17396,7 +21230,7 @@ exports.minus = minus;
 exports.plus = plus;
 exports.round = round;
 exports.times = times;
-var _toArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toArray */ 72));
+var _toArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toArray */ 85));
 var _boundaryCheckingState = true; // 是否进行越界检查的全局开关
 
 /**
@@ -17577,7 +21411,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 72 */
+/* 85 */
 /*!********************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/toArray.js ***!
   \********************************************************/
@@ -17594,7 +21428,7 @@ function _toArray(arr) {
 module.exports = _toArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 73 */
+/* 86 */
 /*!***********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/config.js ***!
   \***********************************************************************************************************************/
@@ -17638,7 +21472,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 74 */
+/* 87 */
 /*!**********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props.js ***!
   \**********************************************************************************************************************/
@@ -17654,95 +21488,95 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _config = _interopRequireDefault(__webpack_require__(/*! ./config */ 73));
-var _actionSheet = _interopRequireDefault(__webpack_require__(/*! ./props/actionSheet.js */ 75));
-var _album = _interopRequireDefault(__webpack_require__(/*! ./props/album.js */ 76));
-var _alert = _interopRequireDefault(__webpack_require__(/*! ./props/alert.js */ 77));
-var _avatar = _interopRequireDefault(__webpack_require__(/*! ./props/avatar */ 78));
-var _avatarGroup = _interopRequireDefault(__webpack_require__(/*! ./props/avatarGroup */ 79));
-var _backtop = _interopRequireDefault(__webpack_require__(/*! ./props/backtop */ 80));
-var _badge = _interopRequireDefault(__webpack_require__(/*! ./props/badge */ 81));
-var _button = _interopRequireDefault(__webpack_require__(/*! ./props/button */ 82));
-var _calendar = _interopRequireDefault(__webpack_require__(/*! ./props/calendar */ 83));
-var _carKeyboard = _interopRequireDefault(__webpack_require__(/*! ./props/carKeyboard */ 84));
-var _cell = _interopRequireDefault(__webpack_require__(/*! ./props/cell */ 85));
-var _cellGroup = _interopRequireDefault(__webpack_require__(/*! ./props/cellGroup */ 86));
-var _checkbox = _interopRequireDefault(__webpack_require__(/*! ./props/checkbox */ 87));
-var _checkboxGroup = _interopRequireDefault(__webpack_require__(/*! ./props/checkboxGroup */ 88));
-var _circleProgress = _interopRequireDefault(__webpack_require__(/*! ./props/circleProgress */ 89));
-var _code = _interopRequireDefault(__webpack_require__(/*! ./props/code */ 90));
-var _codeInput = _interopRequireDefault(__webpack_require__(/*! ./props/codeInput */ 91));
-var _col = _interopRequireDefault(__webpack_require__(/*! ./props/col */ 92));
-var _collapse = _interopRequireDefault(__webpack_require__(/*! ./props/collapse */ 93));
-var _collapseItem = _interopRequireDefault(__webpack_require__(/*! ./props/collapseItem */ 94));
-var _columnNotice = _interopRequireDefault(__webpack_require__(/*! ./props/columnNotice */ 95));
-var _countDown = _interopRequireDefault(__webpack_require__(/*! ./props/countDown */ 96));
-var _countTo = _interopRequireDefault(__webpack_require__(/*! ./props/countTo */ 97));
-var _datetimePicker = _interopRequireDefault(__webpack_require__(/*! ./props/datetimePicker */ 98));
-var _divider = _interopRequireDefault(__webpack_require__(/*! ./props/divider */ 99));
-var _empty = _interopRequireDefault(__webpack_require__(/*! ./props/empty */ 100));
-var _form = _interopRequireDefault(__webpack_require__(/*! ./props/form */ 101));
-var _formItem = _interopRequireDefault(__webpack_require__(/*! ./props/formItem */ 102));
-var _gap = _interopRequireDefault(__webpack_require__(/*! ./props/gap */ 103));
-var _grid = _interopRequireDefault(__webpack_require__(/*! ./props/grid */ 104));
-var _gridItem = _interopRequireDefault(__webpack_require__(/*! ./props/gridItem */ 105));
-var _icon = _interopRequireDefault(__webpack_require__(/*! ./props/icon */ 106));
-var _image = _interopRequireDefault(__webpack_require__(/*! ./props/image */ 107));
-var _indexAnchor = _interopRequireDefault(__webpack_require__(/*! ./props/indexAnchor */ 108));
-var _indexList = _interopRequireDefault(__webpack_require__(/*! ./props/indexList */ 109));
-var _input = _interopRequireDefault(__webpack_require__(/*! ./props/input */ 110));
-var _keyboard = _interopRequireDefault(__webpack_require__(/*! ./props/keyboard */ 111));
-var _line = _interopRequireDefault(__webpack_require__(/*! ./props/line */ 112));
-var _lineProgress = _interopRequireDefault(__webpack_require__(/*! ./props/lineProgress */ 113));
-var _link = _interopRequireDefault(__webpack_require__(/*! ./props/link */ 114));
-var _list = _interopRequireDefault(__webpack_require__(/*! ./props/list */ 115));
-var _listItem = _interopRequireDefault(__webpack_require__(/*! ./props/listItem */ 116));
-var _loadingIcon = _interopRequireDefault(__webpack_require__(/*! ./props/loadingIcon */ 117));
-var _loadingPage = _interopRequireDefault(__webpack_require__(/*! ./props/loadingPage */ 118));
-var _loadmore = _interopRequireDefault(__webpack_require__(/*! ./props/loadmore */ 119));
-var _modal = _interopRequireDefault(__webpack_require__(/*! ./props/modal */ 120));
-var _navbar = _interopRequireDefault(__webpack_require__(/*! ./props/navbar */ 121));
-var _noNetwork = _interopRequireDefault(__webpack_require__(/*! ./props/noNetwork */ 123));
-var _noticeBar = _interopRequireDefault(__webpack_require__(/*! ./props/noticeBar */ 124));
-var _notify = _interopRequireDefault(__webpack_require__(/*! ./props/notify */ 125));
-var _numberBox = _interopRequireDefault(__webpack_require__(/*! ./props/numberBox */ 126));
-var _numberKeyboard = _interopRequireDefault(__webpack_require__(/*! ./props/numberKeyboard */ 127));
-var _overlay = _interopRequireDefault(__webpack_require__(/*! ./props/overlay */ 128));
-var _parse = _interopRequireDefault(__webpack_require__(/*! ./props/parse */ 129));
-var _picker = _interopRequireDefault(__webpack_require__(/*! ./props/picker */ 130));
-var _popup = _interopRequireDefault(__webpack_require__(/*! ./props/popup */ 131));
-var _radio = _interopRequireDefault(__webpack_require__(/*! ./props/radio */ 132));
-var _radioGroup = _interopRequireDefault(__webpack_require__(/*! ./props/radioGroup */ 133));
-var _rate = _interopRequireDefault(__webpack_require__(/*! ./props/rate */ 134));
-var _readMore = _interopRequireDefault(__webpack_require__(/*! ./props/readMore */ 135));
-var _row = _interopRequireDefault(__webpack_require__(/*! ./props/row */ 136));
-var _rowNotice = _interopRequireDefault(__webpack_require__(/*! ./props/rowNotice */ 137));
-var _scrollList = _interopRequireDefault(__webpack_require__(/*! ./props/scrollList */ 138));
-var _search = _interopRequireDefault(__webpack_require__(/*! ./props/search */ 139));
-var _section = _interopRequireDefault(__webpack_require__(/*! ./props/section */ 140));
-var _skeleton = _interopRequireDefault(__webpack_require__(/*! ./props/skeleton */ 141));
-var _slider = _interopRequireDefault(__webpack_require__(/*! ./props/slider */ 142));
-var _statusBar = _interopRequireDefault(__webpack_require__(/*! ./props/statusBar */ 143));
-var _steps = _interopRequireDefault(__webpack_require__(/*! ./props/steps */ 144));
-var _stepsItem = _interopRequireDefault(__webpack_require__(/*! ./props/stepsItem */ 145));
-var _sticky = _interopRequireDefault(__webpack_require__(/*! ./props/sticky */ 146));
-var _subsection = _interopRequireDefault(__webpack_require__(/*! ./props/subsection */ 147));
-var _swipeAction = _interopRequireDefault(__webpack_require__(/*! ./props/swipeAction */ 148));
-var _swipeActionItem = _interopRequireDefault(__webpack_require__(/*! ./props/swipeActionItem */ 149));
-var _swiper = _interopRequireDefault(__webpack_require__(/*! ./props/swiper */ 150));
-var _swipterIndicator = _interopRequireDefault(__webpack_require__(/*! ./props/swipterIndicator */ 151));
-var _switch2 = _interopRequireDefault(__webpack_require__(/*! ./props/switch */ 152));
-var _tabbar = _interopRequireDefault(__webpack_require__(/*! ./props/tabbar */ 153));
-var _tabbarItem = _interopRequireDefault(__webpack_require__(/*! ./props/tabbarItem */ 154));
-var _tabs = _interopRequireDefault(__webpack_require__(/*! ./props/tabs */ 155));
-var _tag = _interopRequireDefault(__webpack_require__(/*! ./props/tag */ 156));
-var _text = _interopRequireDefault(__webpack_require__(/*! ./props/text */ 157));
-var _textarea = _interopRequireDefault(__webpack_require__(/*! ./props/textarea */ 158));
-var _toast = _interopRequireDefault(__webpack_require__(/*! ./props/toast */ 159));
-var _toolbar = _interopRequireDefault(__webpack_require__(/*! ./props/toolbar */ 160));
-var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./props/tooltip */ 161));
-var _transition = _interopRequireDefault(__webpack_require__(/*! ./props/transition */ 162));
-var _upload = _interopRequireDefault(__webpack_require__(/*! ./props/upload */ 163));
+var _config = _interopRequireDefault(__webpack_require__(/*! ./config */ 86));
+var _actionSheet = _interopRequireDefault(__webpack_require__(/*! ./props/actionSheet.js */ 88));
+var _album = _interopRequireDefault(__webpack_require__(/*! ./props/album.js */ 89));
+var _alert = _interopRequireDefault(__webpack_require__(/*! ./props/alert.js */ 90));
+var _avatar = _interopRequireDefault(__webpack_require__(/*! ./props/avatar */ 91));
+var _avatarGroup = _interopRequireDefault(__webpack_require__(/*! ./props/avatarGroup */ 92));
+var _backtop = _interopRequireDefault(__webpack_require__(/*! ./props/backtop */ 93));
+var _badge = _interopRequireDefault(__webpack_require__(/*! ./props/badge */ 94));
+var _button = _interopRequireDefault(__webpack_require__(/*! ./props/button */ 95));
+var _calendar = _interopRequireDefault(__webpack_require__(/*! ./props/calendar */ 96));
+var _carKeyboard = _interopRequireDefault(__webpack_require__(/*! ./props/carKeyboard */ 97));
+var _cell = _interopRequireDefault(__webpack_require__(/*! ./props/cell */ 98));
+var _cellGroup = _interopRequireDefault(__webpack_require__(/*! ./props/cellGroup */ 99));
+var _checkbox = _interopRequireDefault(__webpack_require__(/*! ./props/checkbox */ 100));
+var _checkboxGroup = _interopRequireDefault(__webpack_require__(/*! ./props/checkboxGroup */ 101));
+var _circleProgress = _interopRequireDefault(__webpack_require__(/*! ./props/circleProgress */ 102));
+var _code = _interopRequireDefault(__webpack_require__(/*! ./props/code */ 103));
+var _codeInput = _interopRequireDefault(__webpack_require__(/*! ./props/codeInput */ 104));
+var _col = _interopRequireDefault(__webpack_require__(/*! ./props/col */ 105));
+var _collapse = _interopRequireDefault(__webpack_require__(/*! ./props/collapse */ 106));
+var _collapseItem = _interopRequireDefault(__webpack_require__(/*! ./props/collapseItem */ 107));
+var _columnNotice = _interopRequireDefault(__webpack_require__(/*! ./props/columnNotice */ 108));
+var _countDown = _interopRequireDefault(__webpack_require__(/*! ./props/countDown */ 109));
+var _countTo = _interopRequireDefault(__webpack_require__(/*! ./props/countTo */ 110));
+var _datetimePicker = _interopRequireDefault(__webpack_require__(/*! ./props/datetimePicker */ 111));
+var _divider = _interopRequireDefault(__webpack_require__(/*! ./props/divider */ 112));
+var _empty = _interopRequireDefault(__webpack_require__(/*! ./props/empty */ 113));
+var _form = _interopRequireDefault(__webpack_require__(/*! ./props/form */ 114));
+var _formItem = _interopRequireDefault(__webpack_require__(/*! ./props/formItem */ 115));
+var _gap = _interopRequireDefault(__webpack_require__(/*! ./props/gap */ 116));
+var _grid = _interopRequireDefault(__webpack_require__(/*! ./props/grid */ 117));
+var _gridItem = _interopRequireDefault(__webpack_require__(/*! ./props/gridItem */ 118));
+var _icon = _interopRequireDefault(__webpack_require__(/*! ./props/icon */ 119));
+var _image = _interopRequireDefault(__webpack_require__(/*! ./props/image */ 120));
+var _indexAnchor = _interopRequireDefault(__webpack_require__(/*! ./props/indexAnchor */ 121));
+var _indexList = _interopRequireDefault(__webpack_require__(/*! ./props/indexList */ 122));
+var _input = _interopRequireDefault(__webpack_require__(/*! ./props/input */ 123));
+var _keyboard = _interopRequireDefault(__webpack_require__(/*! ./props/keyboard */ 124));
+var _line = _interopRequireDefault(__webpack_require__(/*! ./props/line */ 125));
+var _lineProgress = _interopRequireDefault(__webpack_require__(/*! ./props/lineProgress */ 126));
+var _link = _interopRequireDefault(__webpack_require__(/*! ./props/link */ 127));
+var _list = _interopRequireDefault(__webpack_require__(/*! ./props/list */ 128));
+var _listItem = _interopRequireDefault(__webpack_require__(/*! ./props/listItem */ 129));
+var _loadingIcon = _interopRequireDefault(__webpack_require__(/*! ./props/loadingIcon */ 130));
+var _loadingPage = _interopRequireDefault(__webpack_require__(/*! ./props/loadingPage */ 131));
+var _loadmore = _interopRequireDefault(__webpack_require__(/*! ./props/loadmore */ 132));
+var _modal = _interopRequireDefault(__webpack_require__(/*! ./props/modal */ 133));
+var _navbar = _interopRequireDefault(__webpack_require__(/*! ./props/navbar */ 134));
+var _noNetwork = _interopRequireDefault(__webpack_require__(/*! ./props/noNetwork */ 136));
+var _noticeBar = _interopRequireDefault(__webpack_require__(/*! ./props/noticeBar */ 137));
+var _notify = _interopRequireDefault(__webpack_require__(/*! ./props/notify */ 138));
+var _numberBox = _interopRequireDefault(__webpack_require__(/*! ./props/numberBox */ 139));
+var _numberKeyboard = _interopRequireDefault(__webpack_require__(/*! ./props/numberKeyboard */ 140));
+var _overlay = _interopRequireDefault(__webpack_require__(/*! ./props/overlay */ 141));
+var _parse = _interopRequireDefault(__webpack_require__(/*! ./props/parse */ 142));
+var _picker = _interopRequireDefault(__webpack_require__(/*! ./props/picker */ 143));
+var _popup = _interopRequireDefault(__webpack_require__(/*! ./props/popup */ 144));
+var _radio = _interopRequireDefault(__webpack_require__(/*! ./props/radio */ 145));
+var _radioGroup = _interopRequireDefault(__webpack_require__(/*! ./props/radioGroup */ 146));
+var _rate = _interopRequireDefault(__webpack_require__(/*! ./props/rate */ 147));
+var _readMore = _interopRequireDefault(__webpack_require__(/*! ./props/readMore */ 148));
+var _row = _interopRequireDefault(__webpack_require__(/*! ./props/row */ 149));
+var _rowNotice = _interopRequireDefault(__webpack_require__(/*! ./props/rowNotice */ 150));
+var _scrollList = _interopRequireDefault(__webpack_require__(/*! ./props/scrollList */ 151));
+var _search = _interopRequireDefault(__webpack_require__(/*! ./props/search */ 152));
+var _section = _interopRequireDefault(__webpack_require__(/*! ./props/section */ 153));
+var _skeleton = _interopRequireDefault(__webpack_require__(/*! ./props/skeleton */ 154));
+var _slider = _interopRequireDefault(__webpack_require__(/*! ./props/slider */ 155));
+var _statusBar = _interopRequireDefault(__webpack_require__(/*! ./props/statusBar */ 156));
+var _steps = _interopRequireDefault(__webpack_require__(/*! ./props/steps */ 157));
+var _stepsItem = _interopRequireDefault(__webpack_require__(/*! ./props/stepsItem */ 158));
+var _sticky = _interopRequireDefault(__webpack_require__(/*! ./props/sticky */ 159));
+var _subsection = _interopRequireDefault(__webpack_require__(/*! ./props/subsection */ 160));
+var _swipeAction = _interopRequireDefault(__webpack_require__(/*! ./props/swipeAction */ 161));
+var _swipeActionItem = _interopRequireDefault(__webpack_require__(/*! ./props/swipeActionItem */ 162));
+var _swiper = _interopRequireDefault(__webpack_require__(/*! ./props/swiper */ 163));
+var _swipterIndicator = _interopRequireDefault(__webpack_require__(/*! ./props/swipterIndicator */ 164));
+var _switch2 = _interopRequireDefault(__webpack_require__(/*! ./props/switch */ 165));
+var _tabbar = _interopRequireDefault(__webpack_require__(/*! ./props/tabbar */ 166));
+var _tabbarItem = _interopRequireDefault(__webpack_require__(/*! ./props/tabbarItem */ 167));
+var _tabs = _interopRequireDefault(__webpack_require__(/*! ./props/tabs */ 168));
+var _tag = _interopRequireDefault(__webpack_require__(/*! ./props/tag */ 169));
+var _text = _interopRequireDefault(__webpack_require__(/*! ./props/text */ 170));
+var _textarea = _interopRequireDefault(__webpack_require__(/*! ./props/textarea */ 171));
+var _toast = _interopRequireDefault(__webpack_require__(/*! ./props/toast */ 172));
+var _toolbar = _interopRequireDefault(__webpack_require__(/*! ./props/toolbar */ 173));
+var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./props/tooltip */ 174));
+var _transition = _interopRequireDefault(__webpack_require__(/*! ./props/transition */ 175));
+var _upload = _interopRequireDefault(__webpack_require__(/*! ./props/upload */ 176));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var color = _config.default.color;
@@ -17750,7 +21584,7 @@ var _default = _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSp
 exports.default = _default;
 
 /***/ }),
-/* 75 */
+/* 88 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/actionSheet.js ***!
   \**********************************************************************************************************************************/
@@ -17794,7 +21628,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 76 */
+/* 89 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/album.js ***!
   \****************************************************************************************************************************/
@@ -17838,7 +21672,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 77 */
+/* 90 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/alert.js ***!
   \****************************************************************************************************************************/
@@ -17877,7 +21711,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 78 */
+/* 91 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/avatar.js ***!
   \*****************************************************************************************************************************/
@@ -17922,7 +21756,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 79 */
+/* 92 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/avatarGroup.js ***!
   \**********************************************************************************************************************************/
@@ -17964,7 +21798,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 80 */
+/* 93 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/backtop.js ***!
   \******************************************************************************************************************************/
@@ -18010,7 +21844,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 81 */
+/* 94 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/badge.js ***!
   \****************************************************************************************************************************/
@@ -18056,7 +21890,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 82 */
+/* 95 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/button.js ***!
   \*****************************************************************************************************************************/
@@ -18115,7 +21949,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 83 */
+/* 96 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/calendar.js ***!
   \*******************************************************************************************************************************/
@@ -18178,7 +22012,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 84 */
+/* 97 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/carKeyboard.js ***!
   \**********************************************************************************************************************************/
@@ -18210,7 +22044,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 85 */
+/* 98 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/cell.js ***!
   \***************************************************************************************************************************/
@@ -18262,7 +22096,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 86 */
+/* 99 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/cellGroup.js ***!
   \********************************************************************************************************************************/
@@ -18296,7 +22130,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 87 */
+/* 100 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/checkbox.js ***!
   \*******************************************************************************************************************************/
@@ -18340,7 +22174,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 88 */
+/* 101 */
 /*!************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/checkboxGroup.js ***!
   \************************************************************************************************************************************/
@@ -18388,7 +22222,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 89 */
+/* 102 */
 /*!*************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/circleProgress.js ***!
   \*************************************************************************************************************************************/
@@ -18420,7 +22254,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 90 */
+/* 103 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/code.js ***!
   \***************************************************************************************************************************/
@@ -18457,7 +22291,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 91 */
+/* 104 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/codeInput.js ***!
   \********************************************************************************************************************************/
@@ -18503,7 +22337,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 92 */
+/* 105 */
 /*!**************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/col.js ***!
   \**************************************************************************************************************************/
@@ -18539,7 +22373,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 93 */
+/* 106 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/collapse.js ***!
   \*******************************************************************************************************************************/
@@ -18573,7 +22407,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 94 */
+/* 107 */
 /*!***********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/collapseItem.js ***!
   \***********************************************************************************************************************************/
@@ -18615,7 +22449,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 95 */
+/* 108 */
 /*!***********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/columnNotice.js ***!
   \***********************************************************************************************************************************/
@@ -18656,7 +22490,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 96 */
+/* 109 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/countDown.js ***!
   \********************************************************************************************************************************/
@@ -18691,7 +22525,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 97 */
+/* 110 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/countTo.js ***!
   \******************************************************************************************************************************/
@@ -18733,7 +22567,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 98 */
+/* 111 */
 /*!*************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/datetimePicker.js ***!
   \*************************************************************************************************************************************/
@@ -18788,7 +22622,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 99 */
+/* 112 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/divider.js ***!
   \******************************************************************************************************************************/
@@ -18827,7 +22661,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 100 */
+/* 113 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/empty.js ***!
   \****************************************************************************************************************************/
@@ -18869,7 +22703,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 101 */
+/* 114 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/form.js ***!
   \***************************************************************************************************************************/
@@ -18914,7 +22748,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 102 */
+/* 115 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/formItem.js ***!
   \*******************************************************************************************************************************/
@@ -18954,7 +22788,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 103 */
+/* 116 */
 /*!**************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/gap.js ***!
   \**************************************************************************************************************************/
@@ -18990,7 +22824,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 104 */
+/* 117 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/grid.js ***!
   \***************************************************************************************************************************/
@@ -19024,7 +22858,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 105 */
+/* 118 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/gridItem.js ***!
   \*******************************************************************************************************************************/
@@ -19057,7 +22891,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 106 */
+/* 119 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/icon.js ***!
   \***************************************************************************************************************************/
@@ -19072,7 +22906,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _config = _interopRequireDefault(__webpack_require__(/*! ../config */ 73));
+var _config = _interopRequireDefault(__webpack_require__(/*! ../config */ 86));
 /*
  * @Author       : LQ
  * @Description  :
@@ -19109,7 +22943,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 107 */
+/* 120 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/image.js ***!
   \****************************************************************************************************************************/
@@ -19156,7 +22990,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 108 */
+/* 121 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/indexAnchor.js ***!
   \**********************************************************************************************************************************/
@@ -19192,7 +23026,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 109 */
+/* 122 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/indexList.js ***!
   \********************************************************************************************************************************/
@@ -19230,7 +23064,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 110 */
+/* 123 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/input.js ***!
   \****************************************************************************************************************************/
@@ -19295,7 +23129,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 111 */
+/* 124 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/keyboard.js ***!
   \*******************************************************************************************************************************/
@@ -19342,7 +23176,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 112 */
+/* 125 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/line.js ***!
   \***************************************************************************************************************************/
@@ -19379,7 +23213,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 113 */
+/* 126 */
 /*!***********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/lineProgress.js ***!
   \***********************************************************************************************************************************/
@@ -19415,7 +23249,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 114 */
+/* 127 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/link.js ***!
   \***************************************************************************************************************************/
@@ -19430,7 +23264,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _config = _interopRequireDefault(__webpack_require__(/*! ../config */ 73));
+var _config = _interopRequireDefault(__webpack_require__(/*! ../config */ 86));
 /*
  * @Author       : LQ
  * @Description  :
@@ -19457,7 +23291,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 115 */
+/* 128 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/list.js ***!
   \***************************************************************************************************************************/
@@ -19502,7 +23336,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 116 */
+/* 129 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/listItem.js ***!
   \*******************************************************************************************************************************/
@@ -19534,7 +23368,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 117 */
+/* 130 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/loadingIcon.js ***!
   \**********************************************************************************************************************************/
@@ -19549,7 +23383,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _config = _interopRequireDefault(__webpack_require__(/*! ../config */ 73));
+var _config = _interopRequireDefault(__webpack_require__(/*! ../config */ 86));
 /*
  * @Author       : LQ
  * @Description  :
@@ -19580,7 +23414,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 118 */
+/* 131 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/loadingPage.js ***!
   \**********************************************************************************************************************************/
@@ -19620,7 +23454,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 119 */
+/* 132 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/loadmore.js ***!
   \*******************************************************************************************************************************/
@@ -19669,7 +23503,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 120 */
+/* 133 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/modal.js ***!
   \****************************************************************************************************************************/
@@ -19716,7 +23550,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 121 */
+/* 134 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/navbar.js ***!
   \*****************************************************************************************************************************/
@@ -19731,7 +23565,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _color = _interopRequireDefault(__webpack_require__(/*! ../color */ 122));
+var _color = _interopRequireDefault(__webpack_require__(/*! ../color */ 135));
 /*
  * @Author       : LQ
  * @Description  :
@@ -19765,7 +23599,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 122 */
+/* 135 */
 /*!**********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/color.js ***!
   \**********************************************************************************************************************/
@@ -19798,7 +23632,7 @@ var _default = color;
 exports.default = _default;
 
 /***/ }),
-/* 123 */
+/* 136 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/noNetwork.js ***!
   \********************************************************************************************************************************/
@@ -19832,7 +23666,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 124 */
+/* 137 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/noticeBar.js ***!
   \********************************************************************************************************************************/
@@ -19878,7 +23712,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 125 */
+/* 138 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/notify.js ***!
   \*****************************************************************************************************************************/
@@ -19917,7 +23751,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 126 */
+/* 139 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/numberBox.js ***!
   \********************************************************************************************************************************/
@@ -19969,7 +23803,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 127 */
+/* 140 */
 /*!*************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/numberKeyboard.js ***!
   \*************************************************************************************************************************************/
@@ -20003,7 +23837,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 128 */
+/* 141 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/overlay.js ***!
   \******************************************************************************************************************************/
@@ -20038,7 +23872,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 129 */
+/* 142 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/parse.js ***!
   \****************************************************************************************************************************/
@@ -20077,7 +23911,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 130 */
+/* 143 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/picker.js ***!
   \*****************************************************************************************************************************/
@@ -20127,7 +23961,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 131 */
+/* 144 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/popup.js ***!
   \****************************************************************************************************************************/
@@ -20173,7 +24007,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 132 */
+/* 145 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/radio.js ***!
   \****************************************************************************************************************************/
@@ -20217,7 +24051,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 133 */
+/* 146 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/radioGroup.js ***!
   \*********************************************************************************************************************************/
@@ -20264,7 +24098,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 134 */
+/* 147 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/rate.js ***!
   \***************************************************************************************************************************/
@@ -20307,7 +24141,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 135 */
+/* 148 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/readMore.js ***!
   \*******************************************************************************************************************************/
@@ -20346,7 +24180,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 136 */
+/* 149 */
 /*!**************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/row.js ***!
   \**************************************************************************************************************************/
@@ -20380,7 +24214,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 137 */
+/* 150 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/rowNotice.js ***!
   \********************************************************************************************************************************/
@@ -20418,7 +24252,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 138 */
+/* 151 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/scrollList.js ***!
   \*********************************************************************************************************************************/
@@ -20455,7 +24289,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 139 */
+/* 152 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/search.js ***!
   \*****************************************************************************************************************************/
@@ -20513,7 +24347,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 140 */
+/* 153 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/section.js ***!
   \******************************************************************************************************************************/
@@ -20554,7 +24388,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 141 */
+/* 154 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/skeleton.js ***!
   \*******************************************************************************************************************************/
@@ -20596,7 +24430,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 142 */
+/* 155 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/slider.js ***!
   \*****************************************************************************************************************************/
@@ -20638,7 +24472,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 143 */
+/* 156 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/statusBar.js ***!
   \********************************************************************************************************************************/
@@ -20670,7 +24504,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 144 */
+/* 157 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/steps.js ***!
   \****************************************************************************************************************************/
@@ -20708,7 +24542,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 145 */
+/* 158 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/stepsItem.js ***!
   \********************************************************************************************************************************/
@@ -20743,7 +24577,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 146 */
+/* 159 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/sticky.js ***!
   \*****************************************************************************************************************************/
@@ -20780,7 +24614,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 147 */
+/* 160 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/subsection.js ***!
   \*********************************************************************************************************************************/
@@ -20820,7 +24654,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 148 */
+/* 161 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/swipeAction.js ***!
   \**********************************************************************************************************************************/
@@ -20852,7 +24686,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 149 */
+/* 162 */
 /*!**************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/swipeActionItem.js ***!
   \**************************************************************************************************************************************/
@@ -20890,7 +24724,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 150 */
+/* 163 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/swiper.js ***!
   \*****************************************************************************************************************************/
@@ -20947,7 +24781,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 151 */
+/* 164 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/swipterIndicator.js ***!
   \***************************************************************************************************************************************/
@@ -20983,7 +24817,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 152 */
+/* 165 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/switch.js ***!
   \*****************************************************************************************************************************/
@@ -21024,7 +24858,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 153 */
+/* 166 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/tabbar.js ***!
   \*****************************************************************************************************************************/
@@ -21063,7 +24897,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 154 */
+/* 167 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/tabbarItem.js ***!
   \*********************************************************************************************************************************/
@@ -21100,7 +24934,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 155 */
+/* 168 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/tabs.js ***!
   \***************************************************************************************************************************/
@@ -21157,7 +24991,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 156 */
+/* 169 */
 /*!**************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/tag.js ***!
   \**************************************************************************************************************************/
@@ -21203,7 +25037,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 157 */
+/* 170 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/text.js ***!
   \***************************************************************************************************************************/
@@ -21259,7 +25093,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 158 */
+/* 171 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/textarea.js ***!
   \*******************************************************************************************************************************/
@@ -21312,7 +25146,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 159 */
+/* 172 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/toast.js ***!
   \****************************************************************************************************************************/
@@ -21358,7 +25192,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 160 */
+/* 173 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/toolbar.js ***!
   \******************************************************************************************************************************/
@@ -21395,7 +25229,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 161 */
+/* 174 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/tooltip.js ***!
   \******************************************************************************************************************************/
@@ -21439,7 +25273,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 162 */
+/* 175 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/transition.js ***!
   \*********************************************************************************************************************************/
@@ -21474,7 +25308,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 163 */
+/* 176 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/props/upload.js ***!
   \*****************************************************************************************************************************/
@@ -21533,7 +25367,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 164 */
+/* 177 */
 /*!***********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/config/zIndex.js ***!
   \***********************************************************************************************************************/
@@ -21569,7 +25403,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 165 */
+/* 178 */
 /*!***************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/function/platform.js ***!
   \***************************************************************************************************************************/
@@ -21599,7 +25433,7 @@ var _default = platform;
 exports.default = _default;
 
 /***/ }),
-/* 166 */
+/* 179 */
 /*!******************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/mixins/app.js ***!
   \******************************************************************************************/
@@ -21614,16 +25448,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
-var _vuex = __webpack_require__(/*! vuex */ 34);
-var _wechath = _interopRequireDefault(__webpack_require__(/*! @/utils/wechath5 */ 167));
-var _tools = __webpack_require__(/*! @/utils/tools */ 40);
-var _cache = _interopRequireDefault(__webpack_require__(/*! @/utils/cache */ 38));
-var _color = _interopRequireDefault(__webpack_require__(/*! @/config/color */ 168));
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
+var _vuex = __webpack_require__(/*! vuex */ 180);
+var _wechath = _interopRequireDefault(__webpack_require__(/*! @/utils/wechath5 */ 181));
+var _tools = __webpack_require__(/*! @/utils/tools */ 55);
+var _cache = _interopRequireDefault(__webpack_require__(/*! @/utils/cache */ 56));
+var _color = _interopRequireDefault(__webpack_require__(/*! @/config/color */ 182));
 var _default = {
   data: function data() {
     return {
@@ -21644,7 +25475,6 @@ var _default = {
     }))();
   },
   methods: {},
-  computed: _objectSpread({}, (0, _vuex.mapGetters)(['isLogin'])),
   // 全局配置分享
   onShareAppMessage: function onShareAppMessage() {
     var _this$appConfig$share = this.appConfig.share,
@@ -21675,7 +25505,1263 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 167 */
+/* 180 */
+/*!**************************************************************************************!*\
+  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vuex3/dist/vuex.common.js ***!
+  \**************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {/*!
+ * vuex v3.6.2
+ * (c) 2021 Evan You
+ * @license MIT
+ */
+
+
+function applyMixin (Vue) {
+  var version = Number(Vue.version.split('.')[0]);
+
+  if (version >= 2) {
+    Vue.mixin({ beforeCreate: vuexInit });
+  } else {
+    // override init and inject vuex init procedure
+    // for 1.x backwards compatibility.
+    var _init = Vue.prototype._init;
+    Vue.prototype._init = function (options) {
+      if ( options === void 0 ) options = {};
+
+      options.init = options.init
+        ? [vuexInit].concat(options.init)
+        : vuexInit;
+      _init.call(this, options);
+    };
+  }
+
+  /**
+   * Vuex init hook, injected into each instances init hooks list.
+   */
+
+  function vuexInit () {
+    var options = this.$options;
+    // store injection
+    if (options.store) {
+      this.$store = typeof options.store === 'function'
+        ? options.store()
+        : options.store;
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store;
+    }
+  }
+}
+
+var target = typeof window !== 'undefined'
+  ? window
+  : typeof global !== 'undefined'
+    ? global
+    : {};
+var devtoolHook = target.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+function devtoolPlugin (store) {
+  if (!devtoolHook) { return }
+
+  store._devtoolHook = devtoolHook;
+
+  devtoolHook.emit('vuex:init', store);
+
+  devtoolHook.on('vuex:travel-to-state', function (targetState) {
+    store.replaceState(targetState);
+  });
+
+  store.subscribe(function (mutation, state) {
+    devtoolHook.emit('vuex:mutation', mutation, state);
+  }, { prepend: true });
+
+  store.subscribeAction(function (action, state) {
+    devtoolHook.emit('vuex:action', action, state);
+  }, { prepend: true });
+}
+
+/**
+ * Get the first item that pass the test
+ * by second argument function
+ *
+ * @param {Array} list
+ * @param {Function} f
+ * @return {*}
+ */
+function find (list, f) {
+  return list.filter(f)[0]
+}
+
+/**
+ * Deep copy the given object considering circular structure.
+ * This function caches all nested objects and its copies.
+ * If it detects circular structure, use cached copy to avoid infinite loop.
+ *
+ * @param {*} obj
+ * @param {Array<Object>} cache
+ * @return {*}
+ */
+function deepCopy (obj, cache) {
+  if ( cache === void 0 ) cache = [];
+
+  // just return if obj is immutable value
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+
+  // if obj is hit, it is in circular structure
+  var hit = find(cache, function (c) { return c.original === obj; });
+  if (hit) {
+    return hit.copy
+  }
+
+  var copy = Array.isArray(obj) ? [] : {};
+  // put the copy into cache at first
+  // because we want to refer it in recursive deepCopy
+  cache.push({
+    original: obj,
+    copy: copy
+  });
+
+  Object.keys(obj).forEach(function (key) {
+    copy[key] = deepCopy(obj[key], cache);
+  });
+
+  return copy
+}
+
+/**
+ * forEach for object
+ */
+function forEachValue (obj, fn) {
+  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
+}
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function assert (condition, msg) {
+  if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+function partial (fn, arg) {
+  return function () {
+    return fn(arg)
+  }
+}
+
+// Base data struct for store's module, package with some attribute and method
+var Module = function Module (rawModule, runtime) {
+  this.runtime = runtime;
+  // Store some children item
+  this._children = Object.create(null);
+  // Store the origin module object which passed by programmer
+  this._rawModule = rawModule;
+  var rawState = rawModule.state;
+
+  // Store the origin module's state
+  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
+};
+
+var prototypeAccessors = { namespaced: { configurable: true } };
+
+prototypeAccessors.namespaced.get = function () {
+  return !!this._rawModule.namespaced
+};
+
+Module.prototype.addChild = function addChild (key, module) {
+  this._children[key] = module;
+};
+
+Module.prototype.removeChild = function removeChild (key) {
+  delete this._children[key];
+};
+
+Module.prototype.getChild = function getChild (key) {
+  return this._children[key]
+};
+
+Module.prototype.hasChild = function hasChild (key) {
+  return key in this._children
+};
+
+Module.prototype.update = function update (rawModule) {
+  this._rawModule.namespaced = rawModule.namespaced;
+  if (rawModule.actions) {
+    this._rawModule.actions = rawModule.actions;
+  }
+  if (rawModule.mutations) {
+    this._rawModule.mutations = rawModule.mutations;
+  }
+  if (rawModule.getters) {
+    this._rawModule.getters = rawModule.getters;
+  }
+};
+
+Module.prototype.forEachChild = function forEachChild (fn) {
+  forEachValue(this._children, fn);
+};
+
+Module.prototype.forEachGetter = function forEachGetter (fn) {
+  if (this._rawModule.getters) {
+    forEachValue(this._rawModule.getters, fn);
+  }
+};
+
+Module.prototype.forEachAction = function forEachAction (fn) {
+  if (this._rawModule.actions) {
+    forEachValue(this._rawModule.actions, fn);
+  }
+};
+
+Module.prototype.forEachMutation = function forEachMutation (fn) {
+  if (this._rawModule.mutations) {
+    forEachValue(this._rawModule.mutations, fn);
+  }
+};
+
+Object.defineProperties( Module.prototype, prototypeAccessors );
+
+var ModuleCollection = function ModuleCollection (rawRootModule) {
+  // register root module (Vuex.Store options)
+  this.register([], rawRootModule, false);
+};
+
+ModuleCollection.prototype.get = function get (path) {
+  return path.reduce(function (module, key) {
+    return module.getChild(key)
+  }, this.root)
+};
+
+ModuleCollection.prototype.getNamespace = function getNamespace (path) {
+  var module = this.root;
+  return path.reduce(function (namespace, key) {
+    module = module.getChild(key);
+    return namespace + (module.namespaced ? key + '/' : '')
+  }, '')
+};
+
+ModuleCollection.prototype.update = function update$1 (rawRootModule) {
+  update([], this.root, rawRootModule);
+};
+
+ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
+    var this$1 = this;
+    if ( runtime === void 0 ) runtime = true;
+
+  if ((true)) {
+    assertRawModule(path, rawModule);
+  }
+
+  var newModule = new Module(rawModule, runtime);
+  if (path.length === 0) {
+    this.root = newModule;
+  } else {
+    var parent = this.get(path.slice(0, -1));
+    parent.addChild(path[path.length - 1], newModule);
+  }
+
+  // register nested modules
+  if (rawModule.modules) {
+    forEachValue(rawModule.modules, function (rawChildModule, key) {
+      this$1.register(path.concat(key), rawChildModule, runtime);
+    });
+  }
+};
+
+ModuleCollection.prototype.unregister = function unregister (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+  var child = parent.getChild(key);
+
+  if (!child) {
+    if ((true)) {
+      console.warn(
+        "[vuex] trying to unregister module '" + key + "', which is " +
+        "not registered"
+      );
+    }
+    return
+  }
+
+  if (!child.runtime) {
+    return
+  }
+
+  parent.removeChild(key);
+};
+
+ModuleCollection.prototype.isRegistered = function isRegistered (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+
+  if (parent) {
+    return parent.hasChild(key)
+  }
+
+  return false
+};
+
+function update (path, targetModule, newModule) {
+  if ((true)) {
+    assertRawModule(path, newModule);
+  }
+
+  // update target module
+  targetModule.update(newModule);
+
+  // update nested modules
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!targetModule.getChild(key)) {
+        if ((true)) {
+          console.warn(
+            "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
+            'manual reload is needed'
+          );
+        }
+        return
+      }
+      update(
+        path.concat(key),
+        targetModule.getChild(key),
+        newModule.modules[key]
+      );
+    }
+  }
+}
+
+var functionAssert = {
+  assert: function (value) { return typeof value === 'function'; },
+  expected: 'function'
+};
+
+var objectAssert = {
+  assert: function (value) { return typeof value === 'function' ||
+    (typeof value === 'object' && typeof value.handler === 'function'); },
+  expected: 'function or object with "handler" function'
+};
+
+var assertTypes = {
+  getters: functionAssert,
+  mutations: functionAssert,
+  actions: objectAssert
+};
+
+function assertRawModule (path, rawModule) {
+  Object.keys(assertTypes).forEach(function (key) {
+    if (!rawModule[key]) { return }
+
+    var assertOptions = assertTypes[key];
+
+    forEachValue(rawModule[key], function (value, type) {
+      assert(
+        assertOptions.assert(value),
+        makeAssertionMessage(path, key, type, value, assertOptions.expected)
+      );
+    });
+  });
+}
+
+function makeAssertionMessage (path, key, type, value, expected) {
+  var buf = key + " should be " + expected + " but \"" + key + "." + type + "\"";
+  if (path.length > 0) {
+    buf += " in module \"" + (path.join('.')) + "\"";
+  }
+  buf += " is " + (JSON.stringify(value)) + ".";
+  return buf
+}
+
+var Vue; // bind on install
+
+var Store = function Store (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  // Auto install if it is not done yet and `window` has `Vue`.
+  // To allow users to avoid auto-installation in some cases,
+  // this code should be placed here. See #731
+  if (!Vue && typeof window !== 'undefined' && window.Vue) {
+    install(window.Vue);
+  }
+
+  if ((true)) {
+    assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
+    assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
+    assert(this instanceof Store, "store must be called with the new operator.");
+  }
+
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+
+  // store internal state
+  this._committing = false;
+  this._actions = Object.create(null);
+  this._actionSubscribers = [];
+  this._mutations = Object.create(null);
+  this._wrappedGetters = Object.create(null);
+  this._modules = new ModuleCollection(options);
+  this._modulesNamespaceMap = Object.create(null);
+  this._subscribers = [];
+  this._watcherVM = new Vue();
+  this._makeLocalGettersCache = Object.create(null);
+
+  // bind commit and dispatch to self
+  var store = this;
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+  };
+  this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  };
+
+  // strict mode
+  this.strict = strict;
+
+  var state = this._modules.root.state;
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], this._modules.root);
+
+  // initialize the store vm, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreVM(this, state);
+
+  // apply plugins
+  plugins.forEach(function (plugin) { return plugin(this$1); });
+
+  var useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools;
+  if (useDevtools) {
+    devtoolPlugin(this);
+  }
+};
+
+var prototypeAccessors$1 = { state: { configurable: true } };
+
+prototypeAccessors$1.state.get = function () {
+  return this._vm._data.$$state
+};
+
+prototypeAccessors$1.state.set = function (v) {
+  if ((true)) {
+    assert(false, "use store.replaceState() to explicit replace store state.");
+  }
+};
+
+Store.prototype.commit = function commit (_type, _payload, _options) {
+    var this$1 = this;
+
+  // check object-style commit
+  var ref = unifyObjectStyle(_type, _payload, _options);
+    var type = ref.type;
+    var payload = ref.payload;
+    var options = ref.options;
+
+  var mutation = { type: type, payload: payload };
+  var entry = this._mutations[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown mutation type: " + type));
+    }
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload);
+    });
+  });
+
+  this._subscribers
+    .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+    .forEach(function (sub) { return sub(mutation, this$1.state); });
+
+  if (
+    ( true) &&
+    options && options.silent
+  ) {
+    console.warn(
+      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
+      'Use the filter functionality in the vue-devtools'
+    );
+  }
+};
+
+Store.prototype.dispatch = function dispatch (_type, _payload) {
+    var this$1 = this;
+
+  // check object-style dispatch
+  var ref = unifyObjectStyle(_type, _payload);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var action = { type: type, payload: payload };
+  var entry = this._actions[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown action type: " + type));
+    }
+    return
+  }
+
+  try {
+    this._actionSubscribers
+      .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+      .filter(function (sub) { return sub.before; })
+      .forEach(function (sub) { return sub.before(action, this$1.state); });
+  } catch (e) {
+    if ((true)) {
+      console.warn("[vuex] error in before action subscribers: ");
+      console.error(e);
+    }
+  }
+
+  var result = entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload);
+
+  return new Promise(function (resolve, reject) {
+    result.then(function (res) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.after; })
+          .forEach(function (sub) { return sub.after(action, this$1.state); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in after action subscribers: ");
+          console.error(e);
+        }
+      }
+      resolve(res);
+    }, function (error) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.error; })
+          .forEach(function (sub) { return sub.error(action, this$1.state, error); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in error action subscribers: ");
+          console.error(e);
+        }
+      }
+      reject(error);
+    });
+  })
+};
+
+Store.prototype.subscribe = function subscribe (fn, options) {
+  return genericSubscribe(fn, this._subscribers, options)
+};
+
+Store.prototype.subscribeAction = function subscribeAction (fn, options) {
+  var subs = typeof fn === 'function' ? { before: fn } : fn;
+  return genericSubscribe(subs, this._actionSubscribers, options)
+};
+
+Store.prototype.watch = function watch (getter, cb, options) {
+    var this$1 = this;
+
+  if ((true)) {
+    assert(typeof getter === 'function', "store.watch only accepts a function.");
+  }
+  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1 = this;
+
+  this._withCommit(function () {
+    this$1._vm._data.$$state = state;
+  });
+};
+
+Store.prototype.registerModule = function registerModule (path, rawModule, options) {
+    if ( options === void 0 ) options = {};
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+    assert(path.length > 0, 'cannot register the root module by using registerModule.');
+  }
+
+  this._modules.register(path, rawModule);
+  installModule(this, this.state, path, this._modules.get(path), options.preserveState);
+  // reset store to update getters...
+  resetStoreVM(this, this.state);
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1 = this;
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  this._modules.unregister(path);
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1.state, path.slice(0, -1));
+    Vue.delete(parentState, path[path.length - 1]);
+  });
+  resetStore(this);
+};
+
+Store.prototype.hasModule = function hasModule (path) {
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  return this._modules.isRegistered(path)
+};
+
+Store.prototype[[104,111,116,85,112,100,97,116,101].map(function (item) {return String.fromCharCode(item)}).join('')] = function (newOptions) {
+  this._modules.update(newOptions);
+  resetStore(this, true);
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing;
+  this._committing = true;
+  fn();
+  this._committing = committing;
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors$1 );
+
+function genericSubscribe (fn, subs, options) {
+  if (subs.indexOf(fn) < 0) {
+    options && options.prepend
+      ? subs.unshift(fn)
+      : subs.push(fn);
+  }
+  return function () {
+    var i = subs.indexOf(fn);
+    if (i > -1) {
+      subs.splice(i, 1);
+    }
+  }
+}
+
+function resetStore (store, hot) {
+  store._actions = Object.create(null);
+  store._mutations = Object.create(null);
+  store._wrappedGetters = Object.create(null);
+  store._modulesNamespaceMap = Object.create(null);
+  var state = store.state;
+  // init all modules
+  installModule(store, state, [], store._modules.root, true);
+  // reset vm
+  resetStoreVM(store, state, hot);
+}
+
+function resetStoreVM (store, state, hot) {
+  var oldVm = store._vm;
+
+  // bind store public getters
+  store.getters = {};
+  // reset local getters cache
+  store._makeLocalGettersCache = Object.create(null);
+  var wrappedGetters = store._wrappedGetters;
+  var computed = {};
+  forEachValue(wrappedGetters, function (fn, key) {
+    // use computed to leverage its lazy-caching mechanism
+    // direct inline function use will lead to closure preserving oldVm.
+    // using partial to return function with only arguments preserved in closure environment.
+    computed[key] = partial(fn, store);
+    Object.defineProperty(store.getters, key, {
+      get: function () { return store._vm[key]; },
+      enumerable: true // for local getters
+    });
+  });
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  var silent = Vue.config.silent;
+  Vue.config.silent = true;
+  store._vm = new Vue({
+    data: {
+      $$state: state
+    },
+    computed: computed
+  });
+  Vue.config.silent = silent;
+
+  // enable strict mode for new vm
+  if (store.strict) {
+    enableStrictMode(store);
+  }
+
+  if (oldVm) {
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(function () {
+        oldVm._data.$$state = null;
+      });
+    }
+    Vue.nextTick(function () { return oldVm.$destroy(); });
+  }
+}
+
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length;
+  var namespace = store._modules.getNamespace(path);
+
+  // register in namespace map
+  if (module.namespaced) {
+    if (store._modulesNamespaceMap[namespace] && ("development" !== 'production')) {
+      console.error(("[vuex] duplicate namespace " + namespace + " for the namespaced module " + (path.join('/'))));
+    }
+    store._modulesNamespaceMap[namespace] = module;
+  }
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1));
+    var moduleName = path[path.length - 1];
+    store._withCommit(function () {
+      if ((true)) {
+        if (moduleName in parentState) {
+          console.warn(
+            ("[vuex] state field \"" + moduleName + "\" was overridden by a module with the same name at \"" + (path.join('.')) + "\"")
+          );
+        }
+      }
+      Vue.set(parentState, moduleName, module.state);
+    });
+  }
+
+  var local = module.context = makeLocalContext(store, namespace, path);
+
+  module.forEachMutation(function (mutation, key) {
+    var namespacedType = namespace + key;
+    registerMutation(store, namespacedType, mutation, local);
+  });
+
+  module.forEachAction(function (action, key) {
+    var type = action.root ? key : namespace + key;
+    var handler = action.handler || action;
+    registerAction(store, type, handler, local);
+  });
+
+  module.forEachGetter(function (getter, key) {
+    var namespacedType = namespace + key;
+    registerGetter(store, namespacedType, getter, local);
+  });
+
+  module.forEachChild(function (child, key) {
+    installModule(store, rootState, path.concat(key), child, hot);
+  });
+}
+
+/**
+ * make localized dispatch, commit, getters and state
+ * if there is no namespace, just use root ones
+ */
+function makeLocalContext (store, namespace, path) {
+  var noNamespace = namespace === '';
+
+  var local = {
+    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._actions[type]) {
+          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      return store.dispatch(type, payload)
+    },
+
+    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._mutations[type]) {
+          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      store.commit(type, payload, options);
+    }
+  };
+
+  // getters and state object must be gotten lazily
+  // because they will be changed by vm update
+  Object.defineProperties(local, {
+    getters: {
+      get: noNamespace
+        ? function () { return store.getters; }
+        : function () { return makeLocalGetters(store, namespace); }
+    },
+    state: {
+      get: function () { return getNestedState(store.state, path); }
+    }
+  });
+
+  return local
+}
+
+function makeLocalGetters (store, namespace) {
+  if (!store._makeLocalGettersCache[namespace]) {
+    var gettersProxy = {};
+    var splitPos = namespace.length;
+    Object.keys(store.getters).forEach(function (type) {
+      // skip if the target getter is not match this namespace
+      if (type.slice(0, splitPos) !== namespace) { return }
+
+      // extract local getter type
+      var localType = type.slice(splitPos);
+
+      // Add a port to the getters proxy.
+      // Define as getter property because
+      // we do not want to evaluate the getters in this time.
+      Object.defineProperty(gettersProxy, localType, {
+        get: function () { return store.getters[type]; },
+        enumerable: true
+      });
+    });
+    store._makeLocalGettersCache[namespace] = gettersProxy;
+  }
+
+  return store._makeLocalGettersCache[namespace]
+}
+
+function registerMutation (store, type, handler, local) {
+  var entry = store._mutations[type] || (store._mutations[type] = []);
+  entry.push(function wrappedMutationHandler (payload) {
+    handler.call(store, local.state, payload);
+  });
+}
+
+function registerAction (store, type, handler, local) {
+  var entry = store._actions[type] || (store._actions[type] = []);
+  entry.push(function wrappedActionHandler (payload) {
+    var res = handler.call(store, {
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload);
+    if (!isPromise(res)) {
+      res = Promise.resolve(res);
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err);
+        throw err
+      })
+    } else {
+      return res
+    }
+  });
+}
+
+function registerGetter (store, type, rawGetter, local) {
+  if (store._wrappedGetters[type]) {
+    if ((true)) {
+      console.error(("[vuex] duplicate getter key: " + type));
+    }
+    return
+  }
+  store._wrappedGetters[type] = function wrappedGetter (store) {
+    return rawGetter(
+      local.state, // local state
+      local.getters, // local getters
+      store.state, // root state
+      store.getters // root getters
+    )
+  };
+}
+
+function enableStrictMode (store) {
+  store._vm.$watch(function () { return this._data.$$state }, function () {
+    if ((true)) {
+      assert(store._committing, "do not mutate vuex store state outside mutation handlers.");
+    }
+  }, { deep: true, sync: true });
+}
+
+function getNestedState (state, path) {
+  return path.reduce(function (state, key) { return state[key]; }, state)
+}
+
+function unifyObjectStyle (type, payload, options) {
+  if (isObject(type) && type.type) {
+    options = payload;
+    payload = type;
+    type = type.type;
+  }
+
+  if ((true)) {
+    assert(typeof type === 'string', ("expects string as the type, but found " + (typeof type) + "."));
+  }
+
+  return { type: type, payload: payload, options: options }
+}
+
+function install (_Vue) {
+  if (Vue && _Vue === Vue) {
+    if ((true)) {
+      console.error(
+        '[vuex] already installed. Vue.use(Vuex) should be called only once.'
+      );
+    }
+    return
+  }
+  Vue = _Vue;
+  applyMixin(Vue);
+}
+
+/**
+ * Reduce the code which written in Vue.js for getting the state.
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} states # Object's item can be a function which accept state and getters for param, you can do something for state and getters in it.
+ * @param {Object}
+ */
+var mapState = normalizeNamespace(function (namespace, states) {
+  var res = {};
+  if (( true) && !isValidMap(states)) {
+    console.error('[vuex] mapState: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(states).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedState () {
+      var state = this.$store.state;
+      var getters = this.$store.getters;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
+        if (!module) {
+          return
+        }
+        state = module.context.state;
+        getters = module.context.getters;
+      }
+      return typeof val === 'function'
+        ? val.call(this, state, getters)
+        : state[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for committing the mutation
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} mutations # Object's item can be a function which accept `commit` function as the first param, it can accept another params. You can commit mutation and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapMutations = normalizeNamespace(function (namespace, mutations) {
+  var res = {};
+  if (( true) && !isValidMap(mutations)) {
+    console.error('[vuex] mapMutations: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(mutations).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedMutation () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // Get the commit method from store
+      var commit = this.$store.commit;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapMutations', namespace);
+        if (!module) {
+          return
+        }
+        commit = module.context.commit;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [commit].concat(args))
+        : commit.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for getting the getters
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} getters
+ * @return {Object}
+ */
+var mapGetters = normalizeNamespace(function (namespace, getters) {
+  var res = {};
+  if (( true) && !isValidMap(getters)) {
+    console.error('[vuex] mapGetters: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(getters).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    // The namespace has been mutated by normalizeNamespace
+    val = namespace + val;
+    res[key] = function mappedGetter () {
+      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
+        return
+      }
+      if (( true) && !(val in this.$store.getters)) {
+        console.error(("[vuex] unknown getter: " + val));
+        return
+      }
+      return this.$store.getters[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for dispatch the action
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} actions # Object's item can be a function which accept `dispatch` function as the first param, it can accept anthor params. You can dispatch action and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapActions = normalizeNamespace(function (namespace, actions) {
+  var res = {};
+  if (( true) && !isValidMap(actions)) {
+    console.error('[vuex] mapActions: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(actions).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedAction () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // get dispatch function from store
+      var dispatch = this.$store.dispatch;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapActions', namespace);
+        if (!module) {
+          return
+        }
+        dispatch = module.context.dispatch;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [dispatch].concat(args))
+        : dispatch.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Rebinding namespace param for mapXXX function in special scoped, and return them by simple object
+ * @param {String} namespace
+ * @return {Object}
+ */
+var createNamespacedHelpers = function (namespace) { return ({
+  mapState: mapState.bind(null, namespace),
+  mapGetters: mapGetters.bind(null, namespace),
+  mapMutations: mapMutations.bind(null, namespace),
+  mapActions: mapActions.bind(null, namespace)
+}); };
+
+/**
+ * Normalize the map
+ * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
+ * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
+ * @param {Array|Object} map
+ * @return {Object}
+ */
+function normalizeMap (map) {
+  if (!isValidMap(map)) {
+    return []
+  }
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+/**
+ * Validate whether given map is valid or not
+ * @param {*} map
+ * @return {Boolean}
+ */
+function isValidMap (map) {
+  return Array.isArray(map) || isObject(map)
+}
+
+/**
+ * Return a function expect two param contains namespace and map. it will normalize the namespace and then the param's function will handle the new namespace and the map.
+ * @param {Function} fn
+ * @return {Function}
+ */
+function normalizeNamespace (fn) {
+  return function (namespace, map) {
+    if (typeof namespace !== 'string') {
+      map = namespace;
+      namespace = '';
+    } else if (namespace.charAt(namespace.length - 1) !== '/') {
+      namespace += '/';
+    }
+    return fn(namespace, map)
+  }
+}
+
+/**
+ * Search a special module from store by namespace. if module not exist, print error message.
+ * @param {Object} store
+ * @param {String} helper
+ * @param {String} namespace
+ * @return {Object}
+ */
+function getModuleByNamespace (store, helper, namespace) {
+  var module = store._modulesNamespaceMap[namespace];
+  if (( true) && !module) {
+    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
+  }
+  return module
+}
+
+// Credits: borrowed code from fcomb/redux-logger
+
+function createLogger (ref) {
+  if ( ref === void 0 ) ref = {};
+  var collapsed = ref.collapsed; if ( collapsed === void 0 ) collapsed = true;
+  var filter = ref.filter; if ( filter === void 0 ) filter = function (mutation, stateBefore, stateAfter) { return true; };
+  var transformer = ref.transformer; if ( transformer === void 0 ) transformer = function (state) { return state; };
+  var mutationTransformer = ref.mutationTransformer; if ( mutationTransformer === void 0 ) mutationTransformer = function (mut) { return mut; };
+  var actionFilter = ref.actionFilter; if ( actionFilter === void 0 ) actionFilter = function (action, state) { return true; };
+  var actionTransformer = ref.actionTransformer; if ( actionTransformer === void 0 ) actionTransformer = function (act) { return act; };
+  var logMutations = ref.logMutations; if ( logMutations === void 0 ) logMutations = true;
+  var logActions = ref.logActions; if ( logActions === void 0 ) logActions = true;
+  var logger = ref.logger; if ( logger === void 0 ) logger = console;
+
+  return function (store) {
+    var prevState = deepCopy(store.state);
+
+    if (typeof logger === 'undefined') {
+      return
+    }
+
+    if (logMutations) {
+      store.subscribe(function (mutation, state) {
+        var nextState = deepCopy(state);
+
+        if (filter(mutation, prevState, nextState)) {
+          var formattedTime = getFormattedTime();
+          var formattedMutation = mutationTransformer(mutation);
+          var message = "mutation " + (mutation.type) + formattedTime;
+
+          startMessage(logger, message, collapsed);
+          logger.log('%c prev state', 'color: #9E9E9E; font-weight: bold', transformer(prevState));
+          logger.log('%c mutation', 'color: #03A9F4; font-weight: bold', formattedMutation);
+          logger.log('%c next state', 'color: #4CAF50; font-weight: bold', transformer(nextState));
+          endMessage(logger);
+        }
+
+        prevState = nextState;
+      });
+    }
+
+    if (logActions) {
+      store.subscribeAction(function (action, state) {
+        if (actionFilter(action, state)) {
+          var formattedTime = getFormattedTime();
+          var formattedAction = actionTransformer(action);
+          var message = "action " + (action.type) + formattedTime;
+
+          startMessage(logger, message, collapsed);
+          logger.log('%c action', 'color: #03A9F4; font-weight: bold', formattedAction);
+          endMessage(logger);
+        }
+      });
+    }
+  }
+}
+
+function startMessage (logger, message, collapsed) {
+  var startMessage = collapsed
+    ? logger.groupCollapsed
+    : logger.group;
+
+  // render
+  try {
+    startMessage.call(logger, message);
+  } catch (e) {
+    logger.log(message);
+  }
+}
+
+function endMessage (logger) {
+  try {
+    logger.groupEnd();
+  } catch (e) {
+    logger.log('—— log end ——');
+  }
+}
+
+function getFormattedTime () {
+  var time = new Date();
+  return (" @ " + (pad(time.getHours(), 2)) + ":" + (pad(time.getMinutes(), 2)) + ":" + (pad(time.getSeconds(), 2)) + "." + (pad(time.getMilliseconds(), 3)))
+}
+
+function repeat (str, times) {
+  return (new Array(times + 1)).join(str)
+}
+
+function pad (num, maxLength) {
+  return repeat('0', maxLength - num.toString().length) + num
+}
+
+var index_cjs = {
+  Store: Store,
+  install: install,
+  version: '3.6.2',
+  mapState: mapState,
+  mapMutations: mapMutations,
+  mapGetters: mapGetters,
+  mapActions: mapActions,
+  createNamespacedHelpers: createNamespacedHelpers,
+  createLogger: createLogger
+};
+
+module.exports = index_cjs;
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../webpack/buildin/global.js */ 3)))
+
+/***/ }),
+/* 181 */
 /*!**********************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/utils/wechath5.js ***!
   \**********************************************************************************************/
@@ -21685,7 +26771,7 @@ exports.default = _default;
 
 
 /***/ }),
-/* 168 */
+/* 182 */
 /*!********************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/config/color.js ***!
   \********************************************************************************************/
@@ -21721,7 +26807,7 @@ var _default = color;
 exports.default = _default;
 
 /***/ }),
-/* 169 */
+/* 183 */
 /*!**************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/router.js ***!
   \**************************************************************************************/
@@ -21743,12 +26829,12 @@ Object.defineProperty(exports, "RouterMount", {
 });
 exports.router = void 0;
 var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ 18));
-var _uniSimpleRouter = __webpack_require__(/*! ./js_sdk/uni-simple-router */ 170);
-var _cachekey = __webpack_require__(/*! ./config/cachekey */ 37);
+var _uniSimpleRouter = __webpack_require__(/*! ./js_sdk/uni-simple-router */ 184);
+var _cachekey = __webpack_require__(/*! ./config/cachekey */ 186);
 var _store = _interopRequireDefault(__webpack_require__(/*! ./store */ 33));
-var _cache = _interopRequireDefault(__webpack_require__(/*! ./utils/cache */ 38));
-var _wechath = _interopRequireDefault(__webpack_require__(/*! ./utils/wechath5 */ 167));
-var _tools = __webpack_require__(/*! ./utils/tools */ 40);
+var _cache = _interopRequireDefault(__webpack_require__(/*! ./utils/cache */ 56));
+var _wechath = _interopRequireDefault(__webpack_require__(/*! ./utils/wechath5 */ 181));
+var _tools = __webpack_require__(/*! ./utils/tools */ 55);
 var scrollInfo = {};
 var first = null;
 var whiteList = ['register', 'login', 'forget_pwd'];
@@ -21790,10 +26876,10 @@ router.beforeEach(function (to, from, next) {
   var index = whiteList.findIndex(function (item) {
     return from.path.includes(item);
   });
-  if (index == -1 && !_store.default.getters.token) {
+  if (index == -1) {
     _cache.default.set(_cachekey.BACK_URL, from.fullPath);
   }
-  if (to.meta.auth && !_store.default.getters.token) {
+  if (to.meta.auth) {
     next('/pages/login/login');
     return;
   } else {
@@ -21803,7 +26889,7 @@ router.beforeEach(function (to, from, next) {
 router.afterEach(function (to, from, next) {});
 
 /***/ }),
-/* 170 */
+/* 184 */
 /*!**************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/uni-simple-router/index.js ***!
   \**************************************************************************************************************/
@@ -23579,10 +28665,10 @@ router.afterEach(function (to, from, next) {});
   }(607);
   var e, t;
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"], __webpack_require__(/*! ./../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/module.js */ 171)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"], __webpack_require__(/*! ./../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/module.js */ 185)(module)))
 
 /***/ }),
-/* 171 */
+/* 185 */
 /*!***********************************!*\
   !*** (webpack)/buildin/module.js ***!
   \***********************************/
@@ -23614,7 +28700,24 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 172 */
+/* 186 */
+/*!***********************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/config/cachekey.js ***!
+  \***********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = {
+  USER_INFO: 'USER_INFO',
+  TOKEN: 'TOKEN',
+  BACK_URL: 'BACK_URL',
+  CONFIG: 'CONFIG',
+  INVITE_CODE: 'INVITE_CODE',
+  TEMP_TOKEN: 'TEMP_TOKEN'
+};
+
+/***/ }),
+/* 187 */
 /*!**********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/index.js ***!
   \**********************************************************************************************************************/
@@ -23629,12 +28732,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _Request = _interopRequireDefault(__webpack_require__(/*! ./core/Request */ 173));
+var _Request = _interopRequireDefault(__webpack_require__(/*! ./core/Request */ 188));
 var _default = _Request.default;
 exports.default = _default;
 
 /***/ }),
-/* 173 */
+/* 188 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/core/Request.js ***!
   \*****************************************************************************************************************************/
@@ -23652,12 +28755,12 @@ exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
-var _dispatchRequest = _interopRequireDefault(__webpack_require__(/*! ./dispatchRequest */ 174));
-var _InterceptorManager = _interopRequireDefault(__webpack_require__(/*! ./InterceptorManager */ 182));
-var _mergeConfig = _interopRequireDefault(__webpack_require__(/*! ./mergeConfig */ 183));
-var _defaults = _interopRequireDefault(__webpack_require__(/*! ./defaults */ 184));
-var _utils = __webpack_require__(/*! ../utils */ 177);
-var _clone = _interopRequireDefault(__webpack_require__(/*! ../utils/clone */ 185));
+var _dispatchRequest = _interopRequireDefault(__webpack_require__(/*! ./dispatchRequest */ 189));
+var _InterceptorManager = _interopRequireDefault(__webpack_require__(/*! ./InterceptorManager */ 197));
+var _mergeConfig = _interopRequireDefault(__webpack_require__(/*! ./mergeConfig */ 198));
+var _defaults = _interopRequireDefault(__webpack_require__(/*! ./defaults */ 199));
+var _utils = __webpack_require__(/*! ../utils */ 192);
+var _clone = _interopRequireDefault(__webpack_require__(/*! ../utils/clone */ 200));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var Request = /*#__PURE__*/function () {
@@ -23840,7 +28943,7 @@ var Request = /*#__PURE__*/function () {
 exports.default = Request;
 
 /***/ }),
-/* 174 */
+/* 189 */
 /*!*************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/core/dispatchRequest.js ***!
   \*************************************************************************************************************************************/
@@ -23855,14 +28958,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _index = _interopRequireDefault(__webpack_require__(/*! ../adapters/index */ 175));
+var _index = _interopRequireDefault(__webpack_require__(/*! ../adapters/index */ 190));
 var _default = function _default(config) {
   return (0, _index.default)(config);
 };
 exports.default = _default;
 
 /***/ }),
-/* 175 */
+/* 190 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/adapters/index.js ***!
   \*******************************************************************************************************************************/
@@ -23878,10 +28981,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _buildURL = _interopRequireDefault(__webpack_require__(/*! ../helpers/buildURL */ 176));
-var _buildFullPath = _interopRequireDefault(__webpack_require__(/*! ../core/buildFullPath */ 178));
-var _settle = _interopRequireDefault(__webpack_require__(/*! ../core/settle */ 181));
-var _utils = __webpack_require__(/*! ../utils */ 177);
+var _buildURL = _interopRequireDefault(__webpack_require__(/*! ../helpers/buildURL */ 191));
+var _buildFullPath = _interopRequireDefault(__webpack_require__(/*! ../core/buildFullPath */ 193));
+var _settle = _interopRequireDefault(__webpack_require__(/*! ../core/settle */ 196));
+var _utils = __webpack_require__(/*! ../utils */ 192);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 /**
@@ -23944,7 +29047,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 176 */
+/* 191 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/helpers/buildURL.js ***!
   \*********************************************************************************************************************************/
@@ -23959,7 +29062,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = buildURL;
-var utils = _interopRequireWildcard(__webpack_require__(/*! ./../utils */ 177));
+var utils = _interopRequireWildcard(__webpack_require__(/*! ./../utils */ 192));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function encode(val) {
@@ -24016,7 +29119,7 @@ function buildURL(url, params, paramsSerializer) {
 }
 
 /***/ }),
-/* 177 */
+/* 192 */
 /*!**********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/utils.js ***!
   \**********************************************************************************************************************/
@@ -24169,7 +29272,7 @@ function isUndefined(val) {
 }
 
 /***/ }),
-/* 178 */
+/* 193 */
 /*!***********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/core/buildFullPath.js ***!
   \***********************************************************************************************************************************/
@@ -24184,8 +29287,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = buildFullPath;
-var _isAbsoluteURL = _interopRequireDefault(__webpack_require__(/*! ../helpers/isAbsoluteURL */ 179));
-var _combineURLs = _interopRequireDefault(__webpack_require__(/*! ../helpers/combineURLs */ 180));
+var _isAbsoluteURL = _interopRequireDefault(__webpack_require__(/*! ../helpers/isAbsoluteURL */ 194));
+var _combineURLs = _interopRequireDefault(__webpack_require__(/*! ../helpers/combineURLs */ 195));
 /**
  * Creates a new URL by combining the baseURL with the requestedURL,
  * only when the requestedURL is not already an absolute URL.
@@ -24203,7 +29306,7 @@ function buildFullPath(baseURL, requestedURL) {
 }
 
 /***/ }),
-/* 179 */
+/* 194 */
 /*!**************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/helpers/isAbsoluteURL.js ***!
   \**************************************************************************************************************************************/
@@ -24231,7 +29334,7 @@ function isAbsoluteURL(url) {
 }
 
 /***/ }),
-/* 180 */
+/* 195 */
 /*!************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/helpers/combineURLs.js ***!
   \************************************************************************************************************************************/
@@ -24257,7 +29360,7 @@ function combineURLs(baseURL, relativeURL) {
 }
 
 /***/ }),
-/* 181 */
+/* 196 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/core/settle.js ***!
   \****************************************************************************************************************************/
@@ -24289,7 +29392,7 @@ function settle(resolve, reject, response) {
 }
 
 /***/ }),
-/* 182 */
+/* 197 */
 /*!****************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/core/InterceptorManager.js ***!
   \****************************************************************************************************************************************/
@@ -24353,7 +29456,7 @@ var _default = InterceptorManager;
 exports.default = _default;
 
 /***/ }),
-/* 183 */
+/* 198 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/core/mergeConfig.js ***!
   \*********************************************************************************************************************************/
@@ -24369,7 +29472,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _utils = __webpack_require__(/*! ../utils */ 177);
+var _utils = __webpack_require__(/*! ../utils */ 192);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 /**
@@ -24429,7 +29532,7 @@ var _default = function _default(globalsConfig) {
 exports.default = _default;
 
 /***/ }),
-/* 184 */
+/* 199 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/core/defaults.js ***!
   \******************************************************************************************************************************/
@@ -24462,7 +29565,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 185 */
+/* 200 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/js_sdk/luch-request/luch-request/utils/clone.js ***!
   \****************************************************************************************************************************/
@@ -24711,24 +29814,9 @@ var clone = function () {
 }();
 var _default = clone;
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/buffer/index.js */ 58).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/buffer/index.js */ 74).Buffer))
 
 /***/ }),
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */,
-/* 193 */,
-/* 194 */,
-/* 195 */,
-/* 196 */,
-/* 197 */,
-/* 198 */,
-/* 199 */,
-/* 200 */,
 /* 201 */,
 /* 202 */,
 /* 203 */,
@@ -24736,7 +29824,22 @@ exports.default = _default;
 /* 205 */,
 /* 206 */,
 /* 207 */,
-/* 208 */
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */
 /*!************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js ***!
   \************************************************************************************************************************************************/
@@ -24799,7 +29902,7 @@ var _default = MescrollMixin;
 exports.default = _default;
 
 /***/ }),
-/* 209 */
+/* 224 */
 /*!****************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/mock.js ***!
   \****************************************************************************************/
@@ -24821,9 +29924,9 @@ exports.apiNewList = apiNewList;
 exports.apiOrderData = apiOrderData;
 exports.apiOrders = apiOrders;
 exports.apiWeiboList = apiWeiboList;
-var _goods = _interopRequireDefault(__webpack_require__(/*! ./goods.js */ 210));
-var _orders = _interopRequireDefault(__webpack_require__(/*! ./orders.js */ 211));
-var _assess_form = _interopRequireDefault(__webpack_require__(/*! ./assess_form.js */ 212));
+var _goods = _interopRequireDefault(__webpack_require__(/*! ./goods.js */ 225));
+var _orders = _interopRequireDefault(__webpack_require__(/*! ./orders.js */ 226));
+var _assess_form = _interopRequireDefault(__webpack_require__(/*! ./assess_form.js */ 227));
 /*
 本地模拟接口请求, 仅demo演示用.
 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
@@ -25114,7 +30217,7 @@ function apiOrderData(params) {
 }
 
 /***/ }),
-/* 210 */
+/* 225 */
 /*!*****************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/goods.js ***!
   \*****************************************************************************************/
@@ -25301,7 +30404,7 @@ var _default = goods;
 exports.default = _default;
 
 /***/ }),
-/* 211 */
+/* 226 */
 /*!******************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/orders.js ***!
   \******************************************************************************************/
@@ -25899,7 +31002,7 @@ var _default = orders;
 exports.default = _default;
 
 /***/ }),
-/* 212 */
+/* 227 */
 /*!***********************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/api/assess_form.js ***!
   \***********************************************************************************************/
@@ -27156,21 +32259,6 @@ var _default = assessFormData;
 exports.default = _default;
 
 /***/ }),
-/* 213 */,
-/* 214 */,
-/* 215 */,
-/* 216 */,
-/* 217 */,
-/* 218 */,
-/* 219 */,
-/* 220 */,
-/* 221 */,
-/* 222 */,
-/* 223 */,
-/* 224 */,
-/* 225 */,
-/* 226 */,
-/* 227 */,
 /* 228 */,
 /* 229 */,
 /* 230 */,
@@ -27196,7 +32284,22 @@ exports.default = _default;
 /* 250 */,
 /* 251 */,
 /* 252 */,
-/* 253 */
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */
 /*!*********************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/common/qqmap-wx-jssdk.min.js ***!
   \*********************************************************************************************************/
@@ -28109,21 +33212,6 @@ module.exports = QQMapWX;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/wx.js */ 1)["default"]))
 
 /***/ }),
-/* 254 */,
-/* 255 */,
-/* 256 */,
-/* 257 */,
-/* 258 */,
-/* 259 */,
-/* 260 */,
-/* 261 */,
-/* 262 */,
-/* 263 */,
-/* 264 */,
-/* 265 */,
-/* 266 */,
-/* 267 */,
-/* 268 */,
 /* 269 */,
 /* 270 */,
 /* 271 */,
@@ -28307,7 +33395,22 @@ module.exports = QQMapWX;
 /* 449 */,
 /* 450 */,
 /* 451 */,
-/* 452 */
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */,
+/* 464 */,
+/* 465 */,
+/* 466 */,
+/* 467 */
 /*!********************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/pages.json?{"type":"origin-pages-json"} ***!
   \********************************************************************************************************************/
@@ -28531,21 +33634,21 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 453 */,
-/* 454 */,
-/* 455 */,
-/* 456 */,
-/* 457 */,
-/* 458 */,
-/* 459 */,
-/* 460 */,
-/* 461 */,
-/* 462 */,
-/* 463 */,
-/* 464 */,
-/* 465 */,
-/* 466 */,
-/* 467 */
+/* 468 */,
+/* 469 */,
+/* 470 */,
+/* 471 */,
+/* 472 */,
+/* 473 */,
+/* 474 */,
+/* 475 */,
+/* 476 */,
+/* 477 */,
+/* 478 */,
+/* 479 */,
+/* 480 */,
+/* 481 */,
+/* 482 */
 /*!*********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.js ***!
   \*********************************************************************************************************************************************/
@@ -29446,7 +34549,7 @@ MeScroll.prototype.preventDefault = function (e) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 468 */
+/* 483 */
 /*!****************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni-option.js ***!
   \****************************************************************************************************************************************************/
@@ -29544,7 +34647,7 @@ var _default = GlobalOption;
 exports.default = _default;
 
 /***/ }),
-/* 469 */
+/* 484 */
 /*!**********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-i18n.js ***!
   \**********************************************************************************************************************************************/
@@ -29576,7 +34679,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 470 */
+/* 485 */
 /*!*******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/wxs/mixins.js ***!
   \*******************************************************************************************************************************************/
@@ -29700,23 +34803,23 @@ var _default = WxsMixin;
 exports.default = _default;
 
 /***/ }),
-/* 471 */,
-/* 472 */,
-/* 473 */,
-/* 474 */,
-/* 475 */,
-/* 476 */,
-/* 477 */,
-/* 478 */,
-/* 479 */,
-/* 480 */,
-/* 481 */,
-/* 482 */,
-/* 483 */,
-/* 484 */,
-/* 485 */,
 /* 486 */,
-/* 487 */
+/* 487 */,
+/* 488 */,
+/* 489 */,
+/* 490 */,
+/* 491 */,
+/* 492 */,
+/* 493 */,
+/* 494 */,
+/* 495 */,
+/* 496 */,
+/* 497 */,
+/* 498 */,
+/* 499 */,
+/* 500 */,
+/* 501 */,
+/* 502 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/icons.js ***!
   \****************************************************************************************************************************/
@@ -29947,7 +35050,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 488 */
+/* 503 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-icon/props.js ***!
   \****************************************************************************************************************************/
@@ -30054,14 +35157,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 489 */,
-/* 490 */,
-/* 491 */,
-/* 492 */,
-/* 493 */,
-/* 494 */,
-/* 495 */,
-/* 496 */
+/* 504 */,
+/* 505 */,
+/* 506 */,
+/* 507 */,
+/* 508 */,
+/* 509 */,
+/* 510 */,
+/* 511 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-input/props.js ***!
   \*****************************************************************************************************************************/
@@ -30266,14 +35369,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 497 */,
-/* 498 */,
-/* 499 */,
-/* 500 */,
-/* 501 */,
-/* 502 */,
-/* 503 */,
-/* 504 */
+/* 512 */,
+/* 513 */,
+/* 514 */,
+/* 515 */,
+/* 516 */,
+/* 517 */,
+/* 518 */,
+/* 519 */
 /*!**************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox-group/props.js ***!
   \**************************************************************************************************************************************/
@@ -30370,14 +35473,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 505 */,
-/* 506 */,
-/* 507 */,
-/* 508 */,
-/* 509 */,
-/* 510 */,
-/* 511 */,
-/* 512 */
+/* 520 */,
+/* 521 */,
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */,
+/* 527 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-checkbox/props.js ***!
   \********************************************************************************************************************************/
@@ -30464,14 +35567,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 513 */,
-/* 514 */,
-/* 515 */,
-/* 516 */,
-/* 517 */,
-/* 518 */,
-/* 519 */,
-/* 520 */
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */,
+/* 532 */,
+/* 533 */,
+/* 534 */,
+/* 535 */
 /*!********************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/components/ljs-top/index.js ***!
   \********************************************************************************************************/
@@ -30494,7 +35597,7 @@ var _default2 = {
         // 是否显示返回按钮
         show: true,
         // 是否显示返回按钮
-        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 521)
+        imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 536)
       },
       // top样式
       topStyle: {}
@@ -30516,7 +35619,7 @@ var _default2 = {
           // 是否显示返回按钮，默认显示
           show: true,
           // 返回按钮的图片地址
-          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 521)
+          imgUrl: __webpack_require__(/*! ../../static/images/ico_back.png */ 536)
         };
       }
     },
@@ -30560,7 +35663,7 @@ exports.default = _default2;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 521 */
+/* 536 */
 /*!*******************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/static/images/ico_back.png ***!
   \*******************************************************************************************************/
@@ -30570,21 +35673,28 @@ exports.default = _default2;
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3NpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmZmZjZDFmMS04MzM2LWE5NDMtODY4MC01NTM5NmZhODQzMmUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjNDRUQ2RjJCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjNDRUQ2RjFCNDQ4MTFFREE5REU4MzAzOUM0NzJGOTciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZmZmY2QxZjEtODMzNi1hOTQzLTg2ODAtNTUzOTZmYTg0MzJlIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmZmZmNkMWYxLTgzMzYtYTk0My04NjgwLTU1Mzk2ZmE4NDMyZSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pq6FkCUAAAErSURBVHja7NpBDsIgEAXQjvEc3sC1W28GHsUruPEIXsLEjZ4DIWmiaWxty0iZ75+EkLCgvJSGASohhAY5Vg14EEgggQQSSOA/A9daHYlIdh8xq9rFahPLJZa7ysBSqqZRFMbhwytOauOqAdjBpbhpjWvxbzDhYuU6zUfNByz2Bj+8udCCG/NTdAhnHvgNZxo4BmcWOBZnEjgFZw44FWcK2INzxZavXwLn4kwAc3DVA3NxVQM1cNUCtXBVAucsBSWA8EcWJaaoh5iiOVkLyjLhYYAaSMupmocB5iARtksOBjgHiXRk4WCAU5CIx4YOBjgGCXH5MoSEuV3qWyfRr88eUPtBEUmZzeGt6azWt9bPeEpX2PtYbVvgtSog/7IgkEACCSSQQAKLx1OAAQC3zNidKkNOVAAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 522 */,
-/* 523 */,
-/* 524 */,
-/* 525 */,
-/* 526 */,
-/* 527 */,
-/* 528 */,
-/* 529 */,
-/* 530 */,
-/* 531 */,
-/* 532 */,
-/* 533 */,
-/* 534 */,
-/* 535 */,
-/* 536 */
+/* 537 */,
+/* 538 */,
+/* 539 */,
+/* 540 */,
+/* 541 */,
+/* 542 */,
+/* 543 */,
+/* 544 */,
+/* 545 */,
+/* 546 */,
+/* 547 */,
+/* 548 */,
+/* 549 */,
+/* 550 */,
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */,
+/* 556 */,
+/* 557 */,
+/* 558 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uni-icons/components/uni-icons/icons.js ***!
   \********************************************************************************************************************************/
@@ -31605,35 +36715,1161 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 537 */,
-/* 538 */,
-/* 539 */,
-/* 540 */,
-/* 541 */,
-/* 542 */,
-/* 543 */,
-/* 544 */,
-/* 545 */,
-/* 546 */,
-/* 547 */,
-/* 548 */,
-/* 549 */,
-/* 550 */,
-/* 551 */,
-/* 552 */,
-/* 553 */,
-/* 554 */,
-/* 555 */,
-/* 556 */,
-/* 557 */,
-/* 558 */,
 /* 559 */,
 /* 560 */,
 /* 561 */,
-/* 562 */
-/*!******************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-navbar/props.js ***!
-  \******************************************************************************************************************************/
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */,
+/* 567 */,
+/* 568 */,
+/* 569 */,
+/* 570 */,
+/* 571 */,
+/* 572 */,
+/* 573 */,
+/* 574 */,
+/* 575 */,
+/* 576 */,
+/* 577 */,
+/* 578 */,
+/* 579 */,
+/* 580 */,
+/* 581 */,
+/* 582 */,
+/* 583 */,
+/* 584 */
+/*!***********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uni-forms/components/uni-forms/validate.js ***!
+  \***********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ 585));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ 586));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ 588));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
+var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var pattern = {
+  email: /^\S+?@\S+?\.\S+?$/,
+  idcard: /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
+  url: new RegExp("^(?!mailto:)(?:(?:http|https|ftp)://|//)(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]+-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$", 'i')
+};
+var FORMAT_MAPPING = {
+  "int": 'integer',
+  "bool": 'boolean',
+  "double": 'number',
+  "long": 'number',
+  "password": 'string'
+  // "fileurls": 'array'
+};
+
+function formatMessage(args) {
+  var resources = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var defaultMessage = ['label'];
+  defaultMessage.forEach(function (item) {
+    if (args[item] === undefined) {
+      args[item] = '';
+    }
+  });
+  var str = resources;
+  for (var key in args) {
+    var reg = new RegExp('{' + key + '}');
+    str = str.replace(reg, args[key]);
+  }
+  return str;
+}
+function isEmptyValue(value, type) {
+  if (value === undefined || value === null) {
+    return true;
+  }
+  if (typeof value === 'string' && !value) {
+    return true;
+  }
+  if (Array.isArray(value) && !value.length) {
+    return true;
+  }
+  if (type === 'object' && !Object.keys(value).length) {
+    return true;
+  }
+  return false;
+}
+var types = {
+  integer: function integer(value) {
+    return types.number(value) && parseInt(value, 10) === value;
+  },
+  string: function string(value) {
+    return typeof value === 'string';
+  },
+  number: function number(value) {
+    if (isNaN(value)) {
+      return false;
+    }
+    return typeof value === 'number';
+  },
+  "boolean": function boolean(value) {
+    return typeof value === 'boolean';
+  },
+  "float": function float(value) {
+    return types.number(value) && !types.integer(value);
+  },
+  array: function array(value) {
+    return Array.isArray(value);
+  },
+  object: function object(value) {
+    return (0, _typeof2.default)(value) === 'object' && !types.array(value);
+  },
+  date: function date(value) {
+    return value instanceof Date;
+  },
+  timestamp: function timestamp(value) {
+    if (!this.integer(value) || Math.abs(value).toString().length > 16) {
+      return false;
+    }
+    return true;
+  },
+  file: function file(value) {
+    return typeof value.url === 'string';
+  },
+  email: function email(value) {
+    return typeof value === 'string' && !!value.match(pattern.email) && value.length < 255;
+  },
+  url: function url(value) {
+    return typeof value === 'string' && !!value.match(pattern.url);
+  },
+  pattern: function pattern(reg, value) {
+    try {
+      return new RegExp(reg).test(value);
+    } catch (e) {
+      return false;
+    }
+  },
+  method: function method(value) {
+    return typeof value === 'function';
+  },
+  idcard: function idcard(value) {
+    return typeof value === 'string' && !!value.match(pattern.idcard);
+  },
+  'url-https': function urlHttps(value) {
+    return this.url(value) && value.startsWith('https://');
+  },
+  'url-scheme': function urlScheme(value) {
+    return value.startsWith('://');
+  },
+  'url-web': function urlWeb(value) {
+    return false;
+  }
+};
+var RuleValidator = /*#__PURE__*/function () {
+  function RuleValidator(message) {
+    (0, _classCallCheck2.default)(this, RuleValidator);
+    this._message = message;
+  }
+  (0, _createClass2.default)(RuleValidator, [{
+    key: "validateRule",
+    value: function () {
+      var _validateRule = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(fieldKey, fieldValue, value, data, allData) {
+        var result, rules, hasRequired, message, i, rule, vt, now, resultExpr;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                result = null;
+                rules = fieldValue.rules;
+                hasRequired = rules.findIndex(function (item) {
+                  return item.required;
+                });
+                if (!(hasRequired < 0)) {
+                  _context.next = 8;
+                  break;
+                }
+                if (!(value === null || value === undefined)) {
+                  _context.next = 6;
+                  break;
+                }
+                return _context.abrupt("return", result);
+              case 6:
+                if (!(typeof value === 'string' && !value.length)) {
+                  _context.next = 8;
+                  break;
+                }
+                return _context.abrupt("return", result);
+              case 8:
+                message = this._message;
+                if (!(rules === undefined)) {
+                  _context.next = 11;
+                  break;
+                }
+                return _context.abrupt("return", message['default']);
+              case 11:
+                i = 0;
+              case 12:
+                if (!(i < rules.length)) {
+                  _context.next = 35;
+                  break;
+                }
+                rule = rules[i];
+                vt = this._getValidateType(rule);
+                Object.assign(rule, {
+                  label: fieldValue.label || "[\"".concat(fieldKey, "\"]")
+                });
+                if (!RuleValidatorHelper[vt]) {
+                  _context.next = 20;
+                  break;
+                }
+                result = RuleValidatorHelper[vt](rule, value, message);
+                if (!(result != null)) {
+                  _context.next = 20;
+                  break;
+                }
+                return _context.abrupt("break", 35);
+              case 20:
+                if (!rule.validateExpr) {
+                  _context.next = 26;
+                  break;
+                }
+                now = Date.now();
+                resultExpr = rule.validateExpr(value, allData, now);
+                if (!(resultExpr === false)) {
+                  _context.next = 26;
+                  break;
+                }
+                result = this._getMessage(rule, rule.errorMessage || this._message['default']);
+                return _context.abrupt("break", 35);
+              case 26:
+                if (!rule.validateFunction) {
+                  _context.next = 32;
+                  break;
+                }
+                _context.next = 29;
+                return this.validateFunction(rule, value, data, allData, vt);
+              case 29:
+                result = _context.sent;
+                if (!(result !== null)) {
+                  _context.next = 32;
+                  break;
+                }
+                return _context.abrupt("break", 35);
+              case 32:
+                i++;
+                _context.next = 12;
+                break;
+              case 35:
+                if (result !== null) {
+                  result = message.TAG + result;
+                }
+                return _context.abrupt("return", result);
+              case 37:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+      function validateRule(_x, _x2, _x3, _x4, _x5) {
+        return _validateRule.apply(this, arguments);
+      }
+      return validateRule;
+    }()
+  }, {
+    key: "validateFunction",
+    value: function () {
+      var _validateFunction = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2(rule, value, data, allData, vt) {
+        var result, callbackMessage, res;
+        return _regenerator.default.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                result = null;
+                _context2.prev = 1;
+                callbackMessage = null;
+                _context2.next = 5;
+                return rule.validateFunction(rule, value, allData || data, function (message) {
+                  callbackMessage = message;
+                });
+              case 5:
+                res = _context2.sent;
+                if (callbackMessage || typeof res === 'string' && res || res === false) {
+                  result = this._getMessage(rule, callbackMessage || res, vt);
+                }
+                _context2.next = 12;
+                break;
+              case 9:
+                _context2.prev = 9;
+                _context2.t0 = _context2["catch"](1);
+                result = this._getMessage(rule, _context2.t0.message, vt);
+              case 12:
+                return _context2.abrupt("return", result);
+              case 13:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[1, 9]]);
+      }));
+      function validateFunction(_x6, _x7, _x8, _x9, _x10) {
+        return _validateFunction.apply(this, arguments);
+      }
+      return validateFunction;
+    }()
+  }, {
+    key: "_getMessage",
+    value: function _getMessage(rule, message, vt) {
+      return formatMessage(rule, message || rule.errorMessage || this._message[vt] || message['default']);
+    }
+  }, {
+    key: "_getValidateType",
+    value: function _getValidateType(rule) {
+      var result = '';
+      if (rule.required) {
+        result = 'required';
+      } else if (rule.format) {
+        result = 'format';
+      } else if (rule.arrayType) {
+        result = 'arrayTypeFormat';
+      } else if (rule.range) {
+        result = 'range';
+      } else if (rule.maximum !== undefined || rule.minimum !== undefined) {
+        result = 'rangeNumber';
+      } else if (rule.maxLength !== undefined || rule.minLength !== undefined) {
+        result = 'rangeLength';
+      } else if (rule.pattern) {
+        result = 'pattern';
+      } else if (rule.validateFunction) {
+        result = 'validateFunction';
+      }
+      return result;
+    }
+  }]);
+  return RuleValidator;
+}();
+var RuleValidatorHelper = {
+  required: function required(rule, value, message) {
+    if (rule.required && isEmptyValue(value, rule.format || (0, _typeof2.default)(value))) {
+      return formatMessage(rule, rule.errorMessage || message.required);
+    }
+    return null;
+  },
+  range: function range(rule, value, message) {
+    var range = rule.range,
+      errorMessage = rule.errorMessage;
+    var list = new Array(range.length);
+    for (var i = 0; i < range.length; i++) {
+      var item = range[i];
+      if (types.object(item) && item.value !== undefined) {
+        list[i] = item.value;
+      } else {
+        list[i] = item;
+      }
+    }
+    var result = false;
+    if (Array.isArray(value)) {
+      result = new Set(value.concat(list)).size === list.length;
+    } else {
+      if (list.indexOf(value) > -1) {
+        result = true;
+      }
+    }
+    if (!result) {
+      return formatMessage(rule, errorMessage || message['enum']);
+    }
+    return null;
+  },
+  rangeNumber: function rangeNumber(rule, value, message) {
+    if (!types.number(value)) {
+      return formatMessage(rule, rule.errorMessage || message.pattern.mismatch);
+    }
+    var minimum = rule.minimum,
+      maximum = rule.maximum,
+      exclusiveMinimum = rule.exclusiveMinimum,
+      exclusiveMaximum = rule.exclusiveMaximum;
+    var min = exclusiveMinimum ? value <= minimum : value < minimum;
+    var max = exclusiveMaximum ? value >= maximum : value > maximum;
+    if (minimum !== undefined && min) {
+      return formatMessage(rule, rule.errorMessage || message['number'][exclusiveMinimum ? 'exclusiveMinimum' : 'minimum']);
+    } else if (maximum !== undefined && max) {
+      return formatMessage(rule, rule.errorMessage || message['number'][exclusiveMaximum ? 'exclusiveMaximum' : 'maximum']);
+    } else if (minimum !== undefined && maximum !== undefined && (min || max)) {
+      return formatMessage(rule, rule.errorMessage || message['number'].range);
+    }
+    return null;
+  },
+  rangeLength: function rangeLength(rule, value, message) {
+    if (!types.string(value) && !types.array(value)) {
+      return formatMessage(rule, rule.errorMessage || message.pattern.mismatch);
+    }
+    var min = rule.minLength;
+    var max = rule.maxLength;
+    var val = value.length;
+    if (min !== undefined && val < min) {
+      return formatMessage(rule, rule.errorMessage || message['length'].minLength);
+    } else if (max !== undefined && val > max) {
+      return formatMessage(rule, rule.errorMessage || message['length'].maxLength);
+    } else if (min !== undefined && max !== undefined && (val < min || val > max)) {
+      return formatMessage(rule, rule.errorMessage || message['length'].range);
+    }
+    return null;
+  },
+  pattern: function pattern(rule, value, message) {
+    if (!types['pattern'](rule.pattern, value)) {
+      return formatMessage(rule, rule.errorMessage || message.pattern.mismatch);
+    }
+    return null;
+  },
+  format: function format(rule, value, message) {
+    var customTypes = Object.keys(types);
+    var format = FORMAT_MAPPING[rule.format] ? FORMAT_MAPPING[rule.format] : rule.format || rule.arrayType;
+    if (customTypes.indexOf(format) > -1) {
+      if (!types[format](value)) {
+        return formatMessage(rule, rule.errorMessage || message.typeError);
+      }
+    }
+    return null;
+  },
+  arrayTypeFormat: function arrayTypeFormat(rule, value, message) {
+    if (!Array.isArray(value)) {
+      return formatMessage(rule, rule.errorMessage || message.typeError);
+    }
+    for (var i = 0; i < value.length; i++) {
+      var element = value[i];
+      var formatResult = this.format(rule, element, message);
+      if (formatResult !== null) {
+        return formatResult;
+      }
+    }
+    return null;
+  }
+};
+var SchemaValidator = /*#__PURE__*/function (_RuleValidator) {
+  (0, _inherits2.default)(SchemaValidator, _RuleValidator);
+  var _super = _createSuper(SchemaValidator);
+  function SchemaValidator(schema, options) {
+    var _this;
+    (0, _classCallCheck2.default)(this, SchemaValidator);
+    _this = _super.call(this, SchemaValidator.message);
+    _this._schema = schema;
+    _this._options = options || null;
+    return _this;
+  }
+  (0, _createClass2.default)(SchemaValidator, [{
+    key: "updateSchema",
+    value: function updateSchema(schema) {
+      this._schema = schema;
+    }
+  }, {
+    key: "validate",
+    value: function () {
+      var _validate = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee3(data, allData) {
+        var result;
+        return _regenerator.default.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                result = this._checkFieldInSchema(data);
+                if (result) {
+                  _context3.next = 5;
+                  break;
+                }
+                _context3.next = 4;
+                return this.invokeValidate(data, false, allData);
+              case 4:
+                result = _context3.sent;
+              case 5:
+                return _context3.abrupt("return", result.length ? result[0] : null);
+              case 6:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+      function validate(_x11, _x12) {
+        return _validate.apply(this, arguments);
+      }
+      return validate;
+    }()
+  }, {
+    key: "validateAll",
+    value: function () {
+      var _validateAll = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee4(data, allData) {
+        var result;
+        return _regenerator.default.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                result = this._checkFieldInSchema(data);
+                if (result) {
+                  _context4.next = 5;
+                  break;
+                }
+                _context4.next = 4;
+                return this.invokeValidate(data, true, allData);
+              case 4:
+                result = _context4.sent;
+              case 5:
+                return _context4.abrupt("return", result);
+              case 6:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+      function validateAll(_x13, _x14) {
+        return _validateAll.apply(this, arguments);
+      }
+      return validateAll;
+    }()
+  }, {
+    key: "validateUpdate",
+    value: function () {
+      var _validateUpdate = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee5(data, allData) {
+        var result;
+        return _regenerator.default.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                result = this._checkFieldInSchema(data);
+                if (result) {
+                  _context5.next = 5;
+                  break;
+                }
+                _context5.next = 4;
+                return this.invokeValidateUpdate(data, false, allData);
+              case 4:
+                result = _context5.sent;
+              case 5:
+                return _context5.abrupt("return", result.length ? result[0] : null);
+              case 6:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+      function validateUpdate(_x15, _x16) {
+        return _validateUpdate.apply(this, arguments);
+      }
+      return validateUpdate;
+    }()
+  }, {
+    key: "invokeValidate",
+    value: function () {
+      var _invokeValidate = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee6(data, all, allData) {
+        var result, schema, key, value, errorMessage;
+        return _regenerator.default.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                result = [];
+                schema = this._schema;
+                _context6.t0 = _regenerator.default.keys(schema);
+              case 3:
+                if ((_context6.t1 = _context6.t0()).done) {
+                  _context6.next = 15;
+                  break;
+                }
+                key = _context6.t1.value;
+                value = schema[key];
+                _context6.next = 8;
+                return this.validateRule(key, value, data[key], data, allData);
+              case 8:
+                errorMessage = _context6.sent;
+                if (!(errorMessage != null)) {
+                  _context6.next = 13;
+                  break;
+                }
+                result.push({
+                  key: key,
+                  errorMessage: errorMessage
+                });
+                if (all) {
+                  _context6.next = 13;
+                  break;
+                }
+                return _context6.abrupt("break", 15);
+              case 13:
+                _context6.next = 3;
+                break;
+              case 15:
+                return _context6.abrupt("return", result);
+              case 16:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+      function invokeValidate(_x17, _x18, _x19) {
+        return _invokeValidate.apply(this, arguments);
+      }
+      return invokeValidate;
+    }()
+  }, {
+    key: "invokeValidateUpdate",
+    value: function () {
+      var _invokeValidateUpdate = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee7(data, all, allData) {
+        var result, key, errorMessage;
+        return _regenerator.default.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                result = [];
+                _context7.t0 = _regenerator.default.keys(data);
+              case 2:
+                if ((_context7.t1 = _context7.t0()).done) {
+                  _context7.next = 13;
+                  break;
+                }
+                key = _context7.t1.value;
+                _context7.next = 6;
+                return this.validateRule(key, this._schema[key], data[key], data, allData);
+              case 6:
+                errorMessage = _context7.sent;
+                if (!(errorMessage != null)) {
+                  _context7.next = 11;
+                  break;
+                }
+                result.push({
+                  key: key,
+                  errorMessage: errorMessage
+                });
+                if (all) {
+                  _context7.next = 11;
+                  break;
+                }
+                return _context7.abrupt("break", 13);
+              case 11:
+                _context7.next = 2;
+                break;
+              case 13:
+                return _context7.abrupt("return", result);
+              case 14:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+      function invokeValidateUpdate(_x20, _x21, _x22) {
+        return _invokeValidateUpdate.apply(this, arguments);
+      }
+      return invokeValidateUpdate;
+    }()
+  }, {
+    key: "_checkFieldInSchema",
+    value: function _checkFieldInSchema(data) {
+      var keys = Object.keys(data);
+      var keys2 = Object.keys(this._schema);
+      if (new Set(keys.concat(keys2)).size === keys2.length) {
+        return '';
+      }
+      var noExistFields = keys.filter(function (key) {
+        return keys2.indexOf(key) < 0;
+      });
+      var errorMessage = formatMessage({
+        field: JSON.stringify(noExistFields)
+      }, SchemaValidator.message.TAG + SchemaValidator.message['defaultInvalid']);
+      return [{
+        key: 'invalid',
+        errorMessage: errorMessage
+      }];
+    }
+  }]);
+  return SchemaValidator;
+}(RuleValidator);
+function Message() {
+  return {
+    TAG: "",
+    default: '验证错误',
+    defaultInvalid: '提交的字段{field}在数据库中并不存在',
+    validateFunction: '验证无效',
+    required: '{label}必填',
+    'enum': '{label}超出范围',
+    timestamp: '{label}格式无效',
+    whitespace: '{label}不能为空',
+    typeError: '{label}类型无效',
+    date: {
+      format: '{label}日期{value}格式无效',
+      parse: '{label}日期无法解析,{value}无效',
+      invalid: '{label}日期{value}无效'
+    },
+    length: {
+      minLength: '{label}长度不能少于{minLength}',
+      maxLength: '{label}长度不能超过{maxLength}',
+      range: '{label}必须介于{minLength}和{maxLength}之间'
+    },
+    number: {
+      minimum: '{label}不能小于{minimum}',
+      maximum: '{label}不能大于{maximum}',
+      exclusiveMinimum: '{label}不能小于等于{minimum}',
+      exclusiveMaximum: '{label}不能大于等于{maximum}',
+      range: '{label}必须介于{minimum}and{maximum}之间'
+    },
+    pattern: {
+      mismatch: '{label}格式不匹配'
+    }
+  };
+}
+SchemaValidator.message = new Message();
+var _default = SchemaValidator;
+exports.default = _default;
+
+/***/ }),
+/* 585 */
+/*!*********************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/inherits.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var setPrototypeOf = __webpack_require__(/*! ./setPrototypeOf.js */ 16);
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  Object.defineProperty(subClass, "prototype", {
+    writable: false
+  });
+  if (superClass) setPrototypeOf(subClass, superClass);
+}
+module.exports = _inherits, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+/* 586 */
+/*!**************************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = __webpack_require__(/*! ./typeof.js */ 13)["default"];
+var assertThisInitialized = __webpack_require__(/*! ./assertThisInitialized.js */ 587);
+function _possibleConstructorReturn(self, call) {
+  if (call && (_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  } else if (call !== void 0) {
+    throw new TypeError("Derived constructors may only return object or undefined");
+  }
+  return assertThisInitialized(self);
+}
+module.exports = _possibleConstructorReturn, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+/* 587 */
+/*!**********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/assertThisInitialized.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+  return self;
+}
+module.exports = _assertThisInitialized, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+/* 588 */
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/getPrototypeOf.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _getPrototypeOf(o) {
+  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports;
+  return _getPrototypeOf(o);
+}
+module.exports = _getPrototypeOf, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+/* 589 */
+/*!********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uni-forms/components/uni-forms/utils.js ***!
+  \********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.typeFilter = exports.type = exports.setDataValue = exports.realName = exports.rawData = exports.objSet = exports.objGet = exports.name2arr = exports.isRequiredField = exports.isRealName = exports.isNumber = exports.isEqual = exports.isBoolean = exports.getValue = exports.getDataValueType = exports.getDataValue = exports.deepCopy = void 0;
+var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
+/**
+ * 简单处理对象拷贝
+ * @param {Obejct} 被拷贝对象
+ * @@return {Object} 拷贝对象
+ */
+var deepCopy = function deepCopy(val) {
+  return JSON.parse(JSON.stringify(val));
+};
+/**
+ * 过滤数字类型
+ * @param {String} format 数字类型
+ * @@return {Boolean} 返回是否为数字类型
+ */
+exports.deepCopy = deepCopy;
+var typeFilter = function typeFilter(format) {
+  return format === 'int' || format === 'double' || format === 'number' || format === 'timestamp';
+};
+
+/**
+ * 把 value 转换成指定的类型，用于处理初始值，原因是初始值需要入库不能为 undefined
+ * @param {String} key 字段名
+ * @param {any} value 字段值
+ * @param {Object} rules 表单校验规则
+ */
+exports.typeFilter = typeFilter;
+var getValue = function getValue(key, value, rules) {
+  var isRuleNumType = rules.find(function (val) {
+    return val.format && typeFilter(val.format);
+  });
+  var isRuleBoolType = rules.find(function (val) {
+    return val.format && val.format === 'boolean' || val.format === 'bool';
+  });
+  // 输入类型为 number
+  if (!!isRuleNumType) {
+    if (!value && value !== 0) {
+      value = null;
+    } else {
+      value = isNumber(Number(value)) ? Number(value) : value;
+    }
+  }
+
+  // 输入类型为 boolean
+  if (!!isRuleBoolType) {
+    value = isBoolean(value) ? value : false;
+  }
+  return value;
+};
+
+/**
+ * 获取表单数据
+ * @param {String|Array} name 真实名称，需要使用 realName 获取
+ * @param {Object} data 原始数据
+ * @param {any} value  需要设置的值
+ */
+exports.getValue = getValue;
+var setDataValue = function setDataValue(field, formdata, value) {
+  formdata[field] = value;
+  return value || '';
+};
+
+/**
+ * 获取表单数据
+ * @param {String|Array} field 真实名称，需要使用 realName 获取
+ * @param {Object} data 原始数据
+ */
+exports.setDataValue = setDataValue;
+var getDataValue = function getDataValue(field, data) {
+  return objGet(data, field);
+};
+
+/**
+ * 获取表单类型
+ * @param {String|Array} field 真实名称，需要使用 realName 获取
+ */
+exports.getDataValue = getDataValue;
+var getDataValueType = function getDataValueType(field, data) {
+  var value = getDataValue(field, data);
+  return {
+    type: type(value),
+    value: value
+  };
+};
+
+/**
+ * 获取表单可用的真实name
+ * @param {String|Array} name 表单name
+ * @@return {String} 表单可用的真实name
+ */
+exports.getDataValueType = getDataValueType;
+var realName = function realName(name) {
+  var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var base_name = _basePath(name);
+  if ((0, _typeof2.default)(base_name) === 'object' && Array.isArray(base_name) && base_name.length > 1) {
+    var realname = base_name.reduce(function (a, b) {
+      return a += "#".concat(b);
+    }, '_formdata_');
+    return realname;
+  }
+  return base_name[0] || name;
+};
+
+/**
+ * 判断是否表单可用的真实name
+ * @param {String|Array} name 表单name
+ * @@return {String} 表单可用的真实name
+ */
+exports.realName = realName;
+var isRealName = function isRealName(name) {
+  var reg = /^_formdata_#*/;
+  return reg.test(name);
+};
+
+/**
+ * 获取表单数据的原始格式
+ * @@return {Object|Array} object 需要解析的数据
+ */
+exports.isRealName = isRealName;
+var rawData = function rawData() {
+  var object = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var name = arguments.length > 1 ? arguments[1] : undefined;
+  var newData = JSON.parse(JSON.stringify(object));
+  var formData = {};
+  for (var i in newData) {
+    var path = name2arr(i);
+    objSet(formData, path, newData[i]);
+  }
+  return formData;
+};
+
+/**
+ * 真实name还原为 array
+ * @param {*} name 
+ */
+exports.rawData = rawData;
+var name2arr = function name2arr(name) {
+  var field = name.replace('_formdata_#', '');
+  field = field.split('#').map(function (v) {
+    return isNumber(v) ? Number(v) : v;
+  });
+  return field;
+};
+
+/**
+ * 对象中设置值
+ * @param {Object|Array} object 源数据
+ * @param {String| Array} path 'a.b.c' 或 ['a',0,'b','c']
+ * @param {String} value 需要设置的值
+ */
+exports.name2arr = name2arr;
+var objSet = function objSet(object, path, value) {
+  if ((0, _typeof2.default)(object) !== 'object') return object;
+  _basePath(path).reduce(function (o, k, i, _) {
+    if (i === _.length - 1) {
+      // 若遍历结束直接赋值
+      o[k] = value;
+      return null;
+    } else if (k in o) {
+      // 若存在对应路径，则返回找到的对象，进行下一次遍历
+      return o[k];
+    } else {
+      // 若不存在对应路径，则创建对应对象，若下一路径是数字，新对象赋值为空数组，否则赋值为空对象
+      o[k] = /^[0-9]{1,}$/.test(_[i + 1]) ? [] : {};
+      return o[k];
+    }
+  }, object);
+  // 返回object
+  return object;
+};
+
+// 处理 path， path有三种形式：'a[0].b.c'、'a.0.b.c' 和 ['a','0','b','c']，需要统一处理成数组，便于后续使用
+exports.objSet = objSet;
+function _basePath(path) {
+  // 若是数组，则直接返回
+  if (Array.isArray(path)) return path;
+  // 若有 '[',']'，则替换成将 '[' 替换成 '.',去掉 ']'
+  return path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
+}
+
+/**
+ * 从对象中获取值
+ * @param {Object|Array} object 源数据
+ * @param {String| Array} path 'a.b.c' 或 ['a',0,'b','c']
+ * @param {String} defaultVal 如果无法从调用链中获取值的默认值
+ */
+var objGet = function objGet(object, path) {
+  var defaultVal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'undefined';
+  // 先将path处理成统一格式
+  var newPath = _basePath(path);
+  // 递归处理，返回最后结果
+  var val = newPath.reduce(function (o, k) {
+    return (o || {})[k];
+  }, object);
+  return !val || val !== undefined ? val : defaultVal;
+};
+
+/**
+ * 是否为 number 类型 
+ * @param {any} num 需要判断的值
+ * @return {Boolean} 是否为 number
+ */
+exports.objGet = objGet;
+var isNumber = function isNumber(num) {
+  return !isNaN(Number(num));
+};
+
+/**
+ * 是否为 boolean 类型 
+ * @param {any} bool 需要判断的值
+ * @return {Boolean} 是否为 boolean
+ */
+exports.isNumber = isNumber;
+var isBoolean = function isBoolean(bool) {
+  return typeof bool === 'boolean';
+};
+/**
+ * 是否有必填字段
+ * @param {Object} rules 规则
+ * @return {Boolean} 是否有必填字段
+ */
+exports.isBoolean = isBoolean;
+var isRequiredField = function isRequiredField(rules) {
+  var isNoField = false;
+  for (var i = 0; i < rules.length; i++) {
+    var ruleData = rules[i];
+    if (ruleData.required) {
+      isNoField = true;
+      break;
+    }
+  }
+  return isNoField;
+};
+
+/**
+ * 获取数据类型
+ * @param {Any} obj 需要获取数据类型的值
+ */
+exports.isRequiredField = isRequiredField;
+var type = function type(obj) {
+  var class2type = {};
+
+  // 生成class2type映射
+  "Boolean Number String Function Array Date RegExp Object Error".split(" ").map(function (item, index) {
+    class2type["[object " + item + "]"] = item.toLowerCase();
+  });
+  if (obj == null) {
+    return obj + "";
+  }
+  return (0, _typeof2.default)(obj) === "object" || typeof obj === "function" ? class2type[Object.prototype.toString.call(obj)] || "object" : (0, _typeof2.default)(obj);
+};
+
+/**
+ * 判断两个值是否相等
+ * @param {any} a 值  
+ * @param {any} b 值  
+ * @return {Boolean} 是否相等
+ */
+exports.type = type;
+var isEqual = function isEqual(a, b) {
+  //如果a和b本来就全等
+  if (a === b) {
+    //判断是否为0和-0
+    return a !== 0 || 1 / a === 1 / b;
+  }
+  //判断是否为null和undefined
+  if (a == null || b == null) {
+    return a === b;
+  }
+  //接下来判断a和b的数据类型
+  var classNameA = toString.call(a),
+    classNameB = toString.call(b);
+  //如果数据类型不相等，则返回false
+  if (classNameA !== classNameB) {
+    return false;
+  }
+  //如果数据类型相等，再根据不同数据类型分别判断
+  switch (classNameA) {
+    case '[object RegExp]':
+    case '[object String]':
+      //进行字符串转换比较
+      return '' + a === '' + b;
+    case '[object Number]':
+      //进行数字转换比较,判断是否为NaN
+      if (+a !== +a) {
+        return +b !== +b;
+      }
+      //判断是否为0或-0
+      return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+    case '[object Date]':
+    case '[object Boolean]':
+      return +a === +b;
+  }
+  //如果是对象类型
+  if (classNameA == '[object Object]') {
+    //获取a和b的属性长度
+    var propsA = Object.getOwnPropertyNames(a),
+      propsB = Object.getOwnPropertyNames(b);
+    if (propsA.length != propsB.length) {
+      return false;
+    }
+    for (var i = 0; i < propsA.length; i++) {
+      var propName = propsA[i];
+      //如果对应属性对应值不相等，则返回false
+      if (a[propName] !== b[propName]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  //如果是数组类型
+  if (classNameA == '[object Array]') {
+    if (a.toString() == b.toString()) {
+      return true;
+    }
+    return false;
+  }
+};
+exports.isEqual = isEqual;
+
+/***/ }),
+/* 590 */,
+/* 591 */,
+/* 592 */,
+/* 593 */,
+/* 594 */,
+/* 595 */,
+/* 596 */,
+/* 597 */,
+/* 598 */,
+/* 599 */,
+/* 600 */,
+/* 601 */,
+/* 602 */,
+/* 603 */,
+/* 604 */,
+/* 605 */,
+/* 606 */,
+/* 607 */,
+/* 608 */,
+/* 609 */,
+/* 610 */,
+/* 611 */
+/*!***************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-tag/props.js ***!
+  \***************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31646,85 +37882,85 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _default = {
   props: {
-    // 是否开启顶部安全区适配
-    safeAreaInsetTop: {
-      type: Boolean,
-      default: uni.$u.props.navbar.safeAreaInsetTop
-    },
-    // 固定在顶部时，是否生成一个等高元素，以防止塌陷
-    placeholder: {
-      type: Boolean,
-      default: uni.$u.props.navbar.placeholder
-    },
-    // 是否固定在顶部
-    fixed: {
-      type: Boolean,
-      default: uni.$u.props.navbar.fixed
-    },
-    // 是否显示下边框
-    border: {
-      type: Boolean,
-      default: uni.$u.props.navbar.border
-    },
-    // 左边的图标
-    leftIcon: {
+    // 标签类型info、primary、success、warning、error
+    type: {
       type: String,
-      default: uni.$u.props.navbar.leftIcon
+      default: uni.$u.props.tag.type
     },
-    // 左边的提示文字
-    leftText: {
+    // 不可用
+    disabled: {
+      type: [Boolean, String],
+      default: uni.$u.props.tag.disabled
+    },
+    // 标签的大小，large，medium，mini
+    size: {
       type: String,
-      default: uni.$u.props.navbar.leftText
+      default: uni.$u.props.tag.size
     },
-    // 左右的提示文字
-    rightText: {
+    // tag的形状，circle（两边半圆形）, square（方形，带圆角）
+    shape: {
       type: String,
-      default: uni.$u.props.navbar.rightText
+      default: uni.$u.props.tag.shape
     },
-    // 右边的图标
-    rightIcon: {
-      type: String,
-      default: uni.$u.props.navbar.rightIcon
-    },
-    // 标题
-    title: {
+    // 标签文字
+    text: {
       type: [String, Number],
-      default: uni.$u.props.navbar.title
+      default: uni.$u.props.tag.text
     },
-    // 背景颜色
+    // 背景颜色，默认为空字符串，即不处理
     bgColor: {
       type: String,
-      default: uni.$u.props.navbar.bgColor
+      default: uni.$u.props.tag.bgColor
     },
-    // 标题的宽度
-    titleWidth: {
-      type: [String, Number],
-      default: uni.$u.props.navbar.titleWidth
-    },
-    // 导航栏高度
-    height: {
-      type: [String, Number],
-      default: uni.$u.props.navbar.height
-    },
-    // 左侧返回图标的大小
-    leftIconSize: {
-      type: [String, Number],
-      default: uni.$u.props.navbar.leftIconSize
-    },
-    // 左侧返回图标的颜色
-    leftIconColor: {
+    // 标签字体颜色，默认为空字符串，即不处理
+    color: {
       type: String,
-      default: uni.$u.props.navbar.leftIconColor
+      default: uni.$u.props.tag.color
     },
-    // 点击左侧区域(返回图标)，是否自动返回上一页
-    autoBack: {
+    // 标签的边框颜色
+    borderColor: {
+      type: String,
+      default: uni.$u.props.tag.borderColor
+    },
+    // 关闭按钮图标的颜色
+    closeColor: {
+      type: String,
+      default: uni.$u.props.tag.closeColor
+    },
+    // 点击时返回的索引值，用于区分例遍的数组哪个元素被点击了
+    name: {
+      type: [String, Number],
+      default: uni.$u.props.tag.name
+    },
+    // // 模式选择，dark|light|plain
+    // mode: {
+    // 	type: String,
+    // 	default: 'light'
+    // },
+    // 镂空时是否填充背景色
+    plainFill: {
       type: Boolean,
-      default: uni.$u.props.navbar.autoBack
+      default: uni.$u.props.tag.plainFill
     },
-    // 标题的样式，对象或字符串
-    titleStyle: {
-      type: [String, Object],
-      default: uni.$u.props.navbar.titleStyle
+    // 是否镂空
+    plain: {
+      type: Boolean,
+      default: uni.$u.props.tag.plain
+    },
+    // 是否可关闭
+    closable: {
+      type: Boolean,
+      default: uni.$u.props.tag.closable
+    },
+    // 是否显示
+    show: {
+      type: Boolean,
+      default: uni.$u.props.tag.show
+    },
+    // 内置图标，或绝对路径的图片
+    icon: {
+      type: String,
+      default: uni.$u.props.tag.icon
     }
   }
 };
@@ -31732,14 +37968,515 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 563 */,
-/* 564 */,
-/* 565 */,
-/* 566 */,
-/* 567 */,
-/* 568 */,
-/* 569 */,
-/* 570 */
+/* 612 */,
+/* 613 */,
+/* 614 */,
+/* 615 */,
+/* 616 */,
+/* 617 */,
+/* 618 */,
+/* 619 */
+/*!***********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio-group/props.js ***!
+  \***********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 绑定的值
+    value: {
+      type: [String, Number, Boolean],
+      default: uni.$u.props.radioGroup.value
+    },
+    // 是否禁用全部radio
+    disabled: {
+      type: Boolean,
+      default: uni.$u.props.radioGroup.disabled
+    },
+    // 形状，circle-圆形，square-方形
+    shape: {
+      type: String,
+      default: uni.$u.props.radioGroup.shape
+    },
+    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
+    activeColor: {
+      type: String,
+      default: uni.$u.props.radioGroup.activeColor
+    },
+    // 未选中的颜色
+    inactiveColor: {
+      type: String,
+      default: uni.$u.props.radioGroup.inactiveColor
+    },
+    // 标识符
+    name: {
+      type: String,
+      default: uni.$u.props.radioGroup.name
+    },
+    // 整个组件的尺寸，默认px
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.radioGroup.size
+    },
+    // 布局方式，row-横向，column-纵向
+    placement: {
+      type: String,
+      default: uni.$u.props.radioGroup.placement
+    },
+    // label的文本
+    label: {
+      type: [String],
+      default: uni.$u.props.radioGroup.label
+    },
+    // label的颜色 （默认 '#303133' ）
+    labelColor: {
+      type: [String],
+      default: uni.$u.props.radioGroup.labelColor
+    },
+    // label的字体大小，px单位
+    labelSize: {
+      type: [String, Number],
+      default: uni.$u.props.radioGroup.labelSize
+    },
+    // 是否禁止点击文本操作checkbox(默认 false )
+    labelDisabled: {
+      type: Boolean,
+      default: uni.$u.props.radioGroup.labelDisabled
+    },
+    // 图标颜色
+    iconColor: {
+      type: String,
+      default: uni.$u.props.radioGroup.iconColor
+    },
+    // 图标的大小，单位px
+    iconSize: {
+      type: [String, Number],
+      default: uni.$u.props.radioGroup.iconSize
+    },
+    // 竖向配列时，是否显示下划线
+    borderBottom: {
+      type: Boolean,
+      default: uni.$u.props.radioGroup.borderBottom
+    },
+    // 图标与文字的对齐方式
+    iconPlacement: {
+      type: String,
+      default: uni.$u.props.radio.iconPlacement
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 620 */,
+/* 621 */,
+/* 622 */,
+/* 623 */,
+/* 624 */,
+/* 625 */,
+/* 626 */,
+/* 627 */
+/*!*****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio/props.js ***!
+  \*****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // radio的名称
+    name: {
+      type: [String, Number, Boolean],
+      default: uni.$u.props.radio.name
+    },
+    // 形状，square为方形，circle为圆型
+    shape: {
+      type: String,
+      default: uni.$u.props.radio.shape
+    },
+    // 是否禁用
+    disabled: {
+      type: [String, Boolean],
+      default: uni.$u.props.radio.disabled
+    },
+    // 是否禁止点击提示语选中单选框
+    labelDisabled: {
+      type: [String, Boolean],
+      default: uni.$u.props.radio.labelDisabled
+    },
+    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
+    activeColor: {
+      type: String,
+      default: uni.$u.props.radio.activeColor
+    },
+    // 未选中的颜色
+    inactiveColor: {
+      type: String,
+      default: uni.$u.props.radio.inactiveColor
+    },
+    // 图标的大小，单位px
+    iconSize: {
+      type: [String, Number],
+      default: uni.$u.props.radio.iconSize
+    },
+    // label的字体大小，px单位
+    labelSize: {
+      type: [String, Number],
+      default: uni.$u.props.radio.labelSize
+    },
+    // label提示文字，因为nvue下，直接slot进来的文字，由于特殊的结构，无法修改样式
+    label: {
+      type: [String, Number],
+      default: uni.$u.props.radio.label
+    },
+    // 整体的大小
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.radio.size
+    },
+    // 图标颜色
+    color: {
+      type: String,
+      default: uni.$u.props.radio.color
+    },
+    // label的颜色
+    labelColor: {
+      type: String,
+      default: uni.$u.props.radio.labelColor
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 628 */,
+/* 629 */,
+/* 630 */,
+/* 631 */,
+/* 632 */,
+/* 633 */,
+/* 634 */,
+/* 635 */,
+/* 636 */,
+/* 637 */,
+/* 638 */,
+/* 639 */,
+/* 640 */,
+/* 641 */,
+/* 642 */,
+/* 643 */,
+/* 644 */,
+/* 645 */,
+/* 646 */,
+/* 647 */,
+/* 648 */,
+/* 649 */,
+/* 650 */,
+/* 651 */,
+/* 652 */,
+/* 653 */,
+/* 654 */,
+/* 655 */,
+/* 656 */
+/*!*******************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-divider/props.js ***!
+  \*******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 是否虚线
+    dashed: {
+      type: Boolean,
+      default: uni.$u.props.divider.dashed
+    },
+    // 是否细线
+    hairline: {
+      type: Boolean,
+      default: uni.$u.props.divider.hairline
+    },
+    // 是否以点替代文字，优先于text字段起作用
+    dot: {
+      type: Boolean,
+      default: uni.$u.props.divider.dot
+    },
+    // 内容文本的位置，left-左边，center-中间，right-右边
+    textPosition: {
+      type: String,
+      default: uni.$u.props.divider.textPosition
+    },
+    // 文本内容
+    text: {
+      type: [String, Number],
+      default: uni.$u.props.divider.text
+    },
+    // 文本大小
+    textSize: {
+      type: [String, Number],
+      default: uni.$u.props.divider.textSize
+    },
+    // 文本颜色
+    textColor: {
+      type: String,
+      default: uni.$u.props.divider.textColor
+    },
+    // 线条颜色
+    lineColor: {
+      type: String,
+      default: uni.$u.props.divider.lineColor
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 657 */,
+/* 658 */,
+/* 659 */,
+/* 660 */,
+/* 661 */,
+/* 662 */,
+/* 663 */,
+/* 664 */
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-rate/props.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 用于v-model双向绑定选中的星星数量
+    value: {
+      type: [String, Number],
+      default: uni.$u.props.rate.value
+    },
+    // 要显示的星星数量
+    count: {
+      type: [String, Number],
+      default: uni.$u.props.rate.count
+    },
+    // 是否不可选中
+    disabled: {
+      type: Boolean,
+      default: uni.$u.props.rate.disabled
+    },
+    // 是否只读
+    readonly: {
+      type: Boolean,
+      default: uni.$u.props.rate.readonly
+    },
+    // 星星的大小，单位px
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.rate.size
+    },
+    // 未选中时的颜色
+    inactiveColor: {
+      type: String,
+      default: uni.$u.props.rate.inactiveColor
+    },
+    // 选中的颜色
+    activeColor: {
+      type: String,
+      default: uni.$u.props.rate.activeColor
+    },
+    // 星星之间的间距，单位px
+    gutter: {
+      type: [String, Number],
+      default: uni.$u.props.rate.gutter
+    },
+    // 最少能选择的星星个数
+    minCount: {
+      type: [String, Number],
+      default: uni.$u.props.rate.minCount
+    },
+    // 是否允许半星
+    allowHalf: {
+      type: Boolean,
+      default: uni.$u.props.rate.allowHalf
+    },
+    // 选中时的图标(星星)
+    activeIcon: {
+      type: String,
+      default: uni.$u.props.rate.activeIcon
+    },
+    // 未选中时的图标(星星)
+    inactiveIcon: {
+      type: String,
+      default: uni.$u.props.rate.inactiveIcon
+    },
+    // 是否可以通过滑动手势选择评分
+    touchable: {
+      type: Boolean,
+      default: uni.$u.props.rate.touchable
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 665 */,
+/* 666 */,
+/* 667 */,
+/* 668 */,
+/* 669 */,
+/* 670 */,
+/* 671 */,
+/* 672 */
+/*!************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/hic-video-player/utils/index.js ***!
+  \************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.compareVersion = compareVersion;
+exports.debounce = debounce;
+exports.getExt = getExt;
+exports.getSystemInfo = getSystemInfo;
+exports.getSystemInfoSync = getSystemInfoSync;
+var systemInfo = null; // 系统信息
+
+/**
+ * @description 封装 uni.getSystemInfo 异步获取系统信息
+ */
+function getSystemInfo() {
+  return new Promise(function (resolve, reject) {
+    if (systemInfo) {
+      return resolve(systemInfo);
+    }
+    uni.getSystemInfo({
+      success: function success(res) {
+        systemInfo = res;
+        resolve(res);
+      },
+      fail: reject
+    });
+  });
+}
+
+/**
+ * @description 封装 uni.getSystemInfoSync 同步获取系统信息
+ */
+function getSystemInfoSync() {
+  var res = uni.getSystemInfoSync();
+  systemInfo = res;
+  return res;
+}
+
+/**
+ * @description 版本号比较
+ * @param {String} v1
+ * @param {String} v2
+ * @return {Boolean} v2 大于 v1 返回true, 否则返回false
+ * compareVersion('1.9.9', '1.11.0'); // true
+ */
+function compareVersion(v1, v2) {
+  v1 = v1.split('.');
+  v2 = v2.split('.');
+  var len = Math.max(v1.length, v2.length);
+  while (v1.length < len) {
+    v1.push('0');
+  }
+  while (v2.length < len) {
+    v2.push('0');
+  }
+  for (var i = 0; i < len; i++) {
+    var num1 = parseInt(v1[i]);
+    var num2 = parseInt(v2[i]);
+    if (num1 < num2) {
+      return true;
+    } else if (num1 > num2) {
+      return false;
+    }
+  }
+  return false;
+}
+
+/**
+ * 防抖 debounce
+ * 栗子：实时搜索，拖拽
+ */
+function debounce(fn) {
+  var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+  var timer;
+  return function () {
+    var _this = this;
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(_this, args);
+    }, delay);
+  };
+}
+
+/**
+ * 获取扩展名
+ * @param {String} url 视频播放地址
+ */
+function getExt(url) {
+  var index = url.indexOf('?');
+  if (index != -1) {
+    url = url.substring(0, index);
+  }
+  var ext = '';
+  var reg = /.+\./;
+  ext = url.replace(reg, '').toLowerCase();
+  return ext;
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 673 */,
+/* 674 */,
+/* 675 */,
+/* 676 */,
+/* 677 */,
+/* 678 */,
+/* 679 */,
+/* 680 */
 /*!****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-form/props.js ***!
   \****************************************************************************************************************************/
@@ -31802,7 +38539,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 571 */
+/* 681 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/async-validator.js ***!
   \******************************************************************************************************************************/
@@ -32983,10 +39720,10 @@ Schema.warning = warning;
 Schema.messages = messages;
 var _default = Schema; // # sourceMappingURL=index.js.map
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 572)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 682)))
 
 /***/ }),
-/* 572 */
+/* 682 */
 /*!********************************************************!*\
   !*** ./node_modules/node-libs-browser/mock/process.js ***!
   \********************************************************/
@@ -33017,7 +39754,7 @@ exports.binding = function (name) {
     var path;
     exports.cwd = function () { return cwd };
     exports.chdir = function (dir) {
-        if (!path) path = __webpack_require__(/*! path */ 573);
+        if (!path) path = __webpack_require__(/*! path */ 683);
         cwd = path.resolve(dir, cwd);
     };
 })();
@@ -33030,7 +39767,7 @@ exports.features = {};
 
 
 /***/ }),
-/* 573 */
+/* 683 */
 /*!***********************************************!*\
   !*** ./node_modules/path-browserify/index.js ***!
   \***********************************************/
@@ -33340,15 +40077,15 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 572)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 682)))
 
 /***/ }),
-/* 574 */,
-/* 575 */,
-/* 576 */,
-/* 577 */,
-/* 578 */,
-/* 579 */
+/* 684 */,
+/* 685 */,
+/* 686 */,
+/* 687 */,
+/* 688 */,
+/* 689 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-form-item/props.js ***!
   \*********************************************************************************************************************************/
@@ -33414,44 +40151,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 580 */,
-/* 581 */,
-/* 582 */,
-/* 583 */,
-/* 584 */,
-/* 585 */,
-/* 586 */,
-/* 587 */
-/*!**********************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/mixin/button.js ***!
-  \**********************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    lang: String,
-    sessionFrom: String,
-    sendMessageTitle: String,
-    sendMessagePath: String,
-    sendMessageImg: String,
-    showMessageCard: Boolean,
-    appParameter: String,
-    formType: String,
-    openType: String
-  }
-};
-exports.default = _default;
-
-/***/ }),
-/* 588 */
+/* 690 */,
+/* 691 */,
+/* 692 */,
+/* 693 */,
+/* 694 */,
+/* 695 */,
+/* 696 */,
+/* 697 */
 /*!************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/mixin/openType.js ***!
   \************************************************************************************************************************/
@@ -33493,7 +40200,116 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 589 */
+/* 698 */
+/*!**********************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/mixin/button.js ***!
+  \**********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    lang: String,
+    sessionFrom: String,
+    sendMessageTitle: String,
+    sendMessagePath: String,
+    sendMessageImg: String,
+    showMessageCard: Boolean,
+    appParameter: String,
+    formType: String,
+    openType: String
+  }
+};
+exports.default = _default;
+
+/***/ }),
+/* 699 */
+/*!************************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-action-sheet/props.js ***!
+  \************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 操作菜单是否展示 （默认false）
+    show: {
+      type: Boolean,
+      default: uni.$u.props.actionSheet.show
+    },
+    // 标题
+    title: {
+      type: String,
+      default: uni.$u.props.actionSheet.title
+    },
+    // 选项上方的描述信息
+    description: {
+      type: String,
+      default: uni.$u.props.actionSheet.description
+    },
+    // 数据
+    actions: {
+      type: Array,
+      default: uni.$u.props.actionSheet.actions
+    },
+    // 取消按钮的文字，不为空时显示按钮
+    cancelText: {
+      type: String,
+      default: uni.$u.props.actionSheet.cancelText
+    },
+    // 点击某个菜单项时是否关闭弹窗
+    closeOnClickAction: {
+      type: Boolean,
+      default: uni.$u.props.actionSheet.closeOnClickAction
+    },
+    // 处理底部安全区（默认true）
+    safeAreaInsetBottom: {
+      type: Boolean,
+      default: uni.$u.props.actionSheet.safeAreaInsetBottom
+    },
+    // 小程序的打开方式
+    openType: {
+      type: String,
+      default: uni.$u.props.actionSheet.openType
+    },
+    // 点击遮罩是否允许关闭 (默认true)
+    closeOnClickOverlay: {
+      type: Boolean,
+      default: uni.$u.props.actionSheet.closeOnClickOverlay
+    },
+    // 圆角值
+    round: {
+      type: [Boolean, String, Number],
+      default: uni.$u.props.actionSheet.round
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 700 */,
+/* 701 */,
+/* 702 */,
+/* 703 */,
+/* 704 */,
+/* 705 */,
+/* 706 */,
+/* 707 */
 /*!******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-button/props.js ***!
   \******************************************************************************************************************************/
@@ -33672,1871 +40488,28 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 590 */,
-/* 591 */,
-/* 592 */,
-/* 593 */,
-/* 594 */,
-/* 595 */,
-/* 596 */,
-/* 597 */
-/*!************************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-action-sheet/props.js ***!
-  \************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 操作菜单是否展示 （默认false）
-    show: {
-      type: Boolean,
-      default: uni.$u.props.actionSheet.show
-    },
-    // 标题
-    title: {
-      type: String,
-      default: uni.$u.props.actionSheet.title
-    },
-    // 选项上方的描述信息
-    description: {
-      type: String,
-      default: uni.$u.props.actionSheet.description
-    },
-    // 数据
-    actions: {
-      type: Array,
-      default: uni.$u.props.actionSheet.actions
-    },
-    // 取消按钮的文字，不为空时显示按钮
-    cancelText: {
-      type: String,
-      default: uni.$u.props.actionSheet.cancelText
-    },
-    // 点击某个菜单项时是否关闭弹窗
-    closeOnClickAction: {
-      type: Boolean,
-      default: uni.$u.props.actionSheet.closeOnClickAction
-    },
-    // 处理底部安全区（默认true）
-    safeAreaInsetBottom: {
-      type: Boolean,
-      default: uni.$u.props.actionSheet.safeAreaInsetBottom
-    },
-    // 小程序的打开方式
-    openType: {
-      type: String,
-      default: uni.$u.props.actionSheet.openType
-    },
-    // 点击遮罩是否允许关闭 (默认true)
-    closeOnClickOverlay: {
-      type: Boolean,
-      default: uni.$u.props.actionSheet.closeOnClickOverlay
-    },
-    // 圆角值
-    round: {
-      type: [Boolean, String, Number],
-      default: uni.$u.props.actionSheet.round
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 598 */,
-/* 599 */,
-/* 600 */,
-/* 601 */,
-/* 602 */,
-/* 603 */,
-/* 604 */,
-/* 605 */
-/*!********************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-calendar/props.js ***!
-  \********************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 日历顶部标题
-    title: {
-      type: String,
-      default: uni.$u.props.calendar.title
-    },
-    // 是否显示标题
-    showTitle: {
-      type: Boolean,
-      default: uni.$u.props.calendar.showTitle
-    },
-    // 是否显示副标题
-    showSubtitle: {
-      type: Boolean,
-      default: uni.$u.props.calendar.showSubtitle
-    },
-    // 日期类型选择，single-选择单个日期，multiple-可以选择多个日期，range-选择日期范围
-    mode: {
-      type: String,
-      default: uni.$u.props.calendar.mode
-    },
-    // mode=range时，第一个日期底部的提示文字
-    startText: {
-      type: String,
-      default: uni.$u.props.calendar.startText
-    },
-    // mode=range时，最后一个日期底部的提示文字
-    endText: {
-      type: String,
-      default: uni.$u.props.calendar.endText
-    },
-    // 自定义列表
-    customList: {
-      type: Array,
-      default: uni.$u.props.calendar.customList
-    },
-    // 主题色，对底部按钮和选中日期有效
-    color: {
-      type: String,
-      default: uni.$u.props.calendar.color
-    },
-    // 最小的可选日期
-    minDate: {
-      type: [String, Number],
-      default: uni.$u.props.calendar.minDate
-    },
-    // 最大可选日期
-    maxDate: {
-      type: [String, Number],
-      default: uni.$u.props.calendar.maxDate
-    },
-    // 默认选中的日期，mode为multiple或range是必须为数组格式
-    defaultDate: {
-      type: [Array, String, Date, null],
-      default: uni.$u.props.calendar.defaultDate
-    },
-    // mode=multiple时，最多可选多少个日期
-    maxCount: {
-      type: [String, Number],
-      default: uni.$u.props.calendar.maxCount
-    },
-    // 日期行高
-    rowHeight: {
-      type: [String, Number],
-      default: uni.$u.props.calendar.rowHeight
-    },
-    // 日期格式化函数
-    formatter: {
-      type: [Function, null],
-      default: uni.$u.props.calendar.formatter
-    },
-    // 是否显示农历
-    showLunar: {
-      type: Boolean,
-      default: uni.$u.props.calendar.showLunar
-    },
-    // 是否显示月份背景色
-    showMark: {
-      type: Boolean,
-      default: uni.$u.props.calendar.showMark
-    },
-    // 确定按钮的文字
-    confirmText: {
-      type: String,
-      default: uni.$u.props.calendar.confirmText
-    },
-    // 确认按钮处于禁用状态时的文字
-    confirmDisabledText: {
-      type: String,
-      default: uni.$u.props.calendar.confirmDisabledText
-    },
-    // 是否显示日历弹窗
-    show: {
-      type: Boolean,
-      default: uni.$u.props.calendar.show
-    },
-    // 是否允许点击遮罩关闭日历
-    closeOnClickOverlay: {
-      type: Boolean,
-      default: uni.$u.props.calendar.closeOnClickOverlay
-    },
-    // 是否为只读状态，只读状态下禁止选择日期
-    readonly: {
-      type: Boolean,
-      default: uni.$u.props.calendar.readonly
-    },
-    // 	是否展示确认按钮
-    showConfirm: {
-      type: Boolean,
-      default: uni.$u.props.calendar.showConfirm
-    },
-    // 日期区间最多可选天数，默认无限制，mode = range时有效
-    maxRange: {
-      type: [Number, String],
-      default: uni.$u.props.calendar.maxRange
-    },
-    // 范围选择超过最多可选天数时的提示文案，mode = range时有效
-    rangePrompt: {
-      type: String,
-      default: uni.$u.props.calendar.rangePrompt
-    },
-    // 范围选择超过最多可选天数时，是否展示提示文案，mode = range时有效
-    showRangePrompt: {
-      type: Boolean,
-      default: uni.$u.props.calendar.showRangePrompt
-    },
-    // 是否允许日期范围的起止时间为同一天，mode = range时有效
-    allowSameDay: {
-      type: Boolean,
-      default: uni.$u.props.calendar.allowSameDay
-    },
-    // 圆角值
-    round: {
-      type: [Boolean, String, Number],
-      default: uni.$u.props.calendar.round
-    },
-    // 最多展示月份数量
-    monthNum: {
-      type: [Number, String],
-      default: 3
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 606 */
-/*!*******************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-calendar/util.js ***!
-  \*******************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ 18));
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-var _default = {
-  methods: {
-    // 设置月份数据
-    setMonth: function setMonth() {
-      var _this = this;
-      // 月初是周几
-      var day = dayjs(this.date).date(1).day();
-      var start = day == 0 ? 6 : day - 1;
-
-      // 本月天数
-      var days = dayjs(this.date).endOf('month').format('D');
-
-      // 上个月天数
-      var prevDays = dayjs(this.date).endOf('month').subtract(1, 'month').format('D');
-
-      // 日期数据
-      var arr = [];
-      // 清空表格
-      this.month = [];
-
-      // 添加上月数据
-      arr.push.apply(arr, (0, _toConsumableArray2.default)(new Array(start).fill(1).map(function (e, i) {
-        var day = prevDays - start + i + 1;
-        return {
-          value: day,
-          disabled: true,
-          date: dayjs(_this.date).subtract(1, 'month').date(day).format('YYYY-MM-DD')
-        };
-      })));
-
-      // 添加本月数据
-      arr.push.apply(arr, (0, _toConsumableArray2.default)(new Array(days - 0).fill(1).map(function (e, i) {
-        var day = i + 1;
-        return {
-          value: day,
-          date: dayjs(_this.date).date(day).format('YYYY-MM-DD')
-        };
-      })));
-
-      // 添加下个月
-      arr.push.apply(arr, (0, _toConsumableArray2.default)(new Array(42 - days - start).fill(1).map(function (e, i) {
-        var day = i + 1;
-        return {
-          value: day,
-          disabled: true,
-          date: dayjs(_this.date).add(1, 'month').date(day).format('YYYY-MM-DD')
-        };
-      })));
-
-      // 分割数组
-      var _loop = function _loop(n) {
-        _this.month.push(arr.slice(n, n + 7).map(function (e, i) {
-          e.index = i + n;
-
-          // 自定义信息
-          var custom = _this.customList.find(function (c) {
-            return c.date == e.date;
-          });
-
-          // 农历
-          if (_this.lunar) {
-            var _this$getLunar = _this.getLunar(e.date),
-              IDayCn = _this$getLunar.IDayCn,
-              IMonthCn = _this$getLunar.IMonthCn;
-            e.lunar = IDayCn == '初一' ? IMonthCn : IDayCn;
-          }
-          return _objectSpread(_objectSpread({}, e), custom);
-        }));
-      };
-      for (var n = 0; n < arr.length; n += 7) {
-        _loop(n);
-      }
-    }
-  }
-};
-exports.default = _default;
-
-/***/ }),
-/* 607 */
-/*!********************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/dayjs.js ***!
-  \********************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ 13);
-!function (t, e) {
-  ( false ? undefined : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = e() :  true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = (e),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : undefined;
-}(this, function () {
-  'use strict';
-
-  var t = 'millisecond';
-  var e = 'second';
-  var n = 'minute';
-  var r = 'hour';
-  var i = 'day';
-  var s = 'week';
-  var u = 'month';
-  var a = 'quarter';
-  var o = 'year';
-  var f = 'date';
-  var h = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[^0-9]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?.?(\d+)?$/;
-  var c = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g;
-  var d = {
-    name: 'en',
-    weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
-    months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_')
-  };
-  var $ = function $(t, e, n) {
-    var r = String(t);
-    return !r || r.length >= e ? t : "".concat(Array(e + 1 - r.length).join(n)).concat(t);
-  };
-  var l = {
-    s: $,
-    z: function z(t) {
-      var e = -t.utcOffset();
-      var n = Math.abs(e);
-      var r = Math.floor(n / 60);
-      var i = n % 60;
-      return "".concat((e <= 0 ? '+' : '-') + $(r, 2, '0'), ":").concat($(i, 2, '0'));
-    },
-    m: function t(e, n) {
-      if (e.date() < n.date()) return -t(n, e);
-      var r = 12 * (n.year() - e.year()) + (n.month() - e.month());
-      var i = e.clone().add(r, u);
-      var s = n - i < 0;
-      var a = e.clone().add(r + (s ? -1 : 1), u);
-      return +(-(r + (n - i) / (s ? i - a : a - i)) || 0);
-    },
-    a: function a(t) {
-      return t < 0 ? Math.ceil(t) || 0 : Math.floor(t);
-    },
-    p: function p(h) {
-      return {
-        M: u,
-        y: o,
-        w: s,
-        d: i,
-        D: f,
-        h: r,
-        m: n,
-        s: e,
-        ms: t,
-        Q: a
-      }[h] || String(h || '').toLowerCase().replace(/s$/, '');
-    },
-    u: function u(t) {
-      return void 0 === t;
-    }
-  };
-  var y = 'en';
-  var M = {};
-  M[y] = d;
-  var m = function m(t) {
-    return t instanceof S;
-  };
-  var D = function D(t, e, n) {
-    var r;
-    if (!t) return y;
-    if (typeof t === 'string') M[t] && (r = t), e && (M[t] = e, r = t);else {
-      var _i = t.name;
-      M[_i] = t, r = _i;
-    }
-    return !n && r && (y = r), r || !n && y;
-  };
-  var v = function v(t, e) {
-    if (m(t)) return t.clone();
-    var n = _typeof(e) === 'object' ? e : {};
-    return n.date = t, n.args = arguments, new S(n);
-  };
-  var g = l;
-  g.l = D, g.i = m, g.w = function (t, e) {
-    return v(t, {
-      locale: e.$L,
-      utc: e.$u,
-      x: e.$x,
-      $offset: e.$offset
-    });
-  };
-  var S = function () {
-    function d(t) {
-      this.$L = D(t.locale, null, !0), this.parse(t);
-    }
-    var $ = d.prototype;
-    return $.parse = function (t) {
-      this.$d = function (t) {
-        var e = t.date;
-        var n = t.utc;
-        if (e === null) return new Date(NaN);
-        if (g.u(e)) return new Date();
-        if (e instanceof Date) return new Date(e);
-        if (typeof e === 'string' && !/Z$/i.test(e)) {
-          var _r = e.match(h);
-          if (_r) {
-            var _i2 = _r[2] - 1 || 0;
-            var _s = (_r[7] || '0').substring(0, 3);
-            return n ? new Date(Date.UTC(_r[1], _i2, _r[3] || 1, _r[4] || 0, _r[5] || 0, _r[6] || 0, _s)) : new Date(_r[1], _i2, _r[3] || 1, _r[4] || 0, _r[5] || 0, _r[6] || 0, _s);
-          }
-        }
-        return new Date(e);
-      }(t), this.$x = t.x || {}, this.init();
-    }, $.init = function () {
-      var t = this.$d;
-      this.$y = t.getFullYear(), this.$M = t.getMonth(), this.$D = t.getDate(), this.$W = t.getDay(), this.$H = t.getHours(), this.$m = t.getMinutes(), this.$s = t.getSeconds(), this.$ms = t.getMilliseconds();
-    }, $.$utils = function () {
-      return g;
-    }, $.isValid = function () {
-      return !(this.$d.toString() === 'Invalid Date');
-    }, $.isSame = function (t, e) {
-      var n = v(t);
-      return this.startOf(e) <= n && n <= this.endOf(e);
-    }, $.isAfter = function (t, e) {
-      return v(t) < this.startOf(e);
-    }, $.isBefore = function (t, e) {
-      return this.endOf(e) < v(t);
-    }, $.$g = function (t, e, n) {
-      return g.u(t) ? this[e] : this.set(n, t);
-    }, $.unix = function () {
-      return Math.floor(this.valueOf() / 1e3);
-    }, $.valueOf = function () {
-      return this.$d.getTime();
-    }, $.startOf = function (t, a) {
-      var h = this;
-      var c = !!g.u(a) || a;
-      var d = g.p(t);
-      var $ = function $(t, e) {
-        var n = g.w(h.$u ? Date.UTC(h.$y, e, t) : new Date(h.$y, e, t), h);
-        return c ? n : n.endOf(i);
-      };
-      var l = function l(t, e) {
-        return g.w(h.toDate()[t].apply(h.toDate('s'), (c ? [0, 0, 0, 0] : [23, 59, 59, 999]).slice(e)), h);
-      };
-      var y = this.$W;
-      var M = this.$M;
-      var m = this.$D;
-      var D = "set".concat(this.$u ? 'UTC' : '');
-      switch (d) {
-        case o:
-          return c ? $(1, 0) : $(31, 11);
-        case u:
-          return c ? $(1, M) : $(0, M + 1);
-        case s:
-          var v = this.$locale().weekStart || 0;
-          var S = (y < v ? y + 7 : y) - v;
-          return $(c ? m - S : m + (6 - S), M);
-        case i:
-        case f:
-          return l("".concat(D, "Hours"), 0);
-        case r:
-          return l("".concat(D, "Minutes"), 1);
-        case n:
-          return l("".concat(D, "Seconds"), 2);
-        case e:
-          return l("".concat(D, "Milliseconds"), 3);
-        default:
-          return this.clone();
-      }
-    }, $.endOf = function (t) {
-      return this.startOf(t, !1);
-    }, $.$set = function (s, a) {
-      var h;
-      var c = g.p(s);
-      var d = "set".concat(this.$u ? 'UTC' : '');
-      var $ = (h = {}, h[i] = "".concat(d, "Date"), h[f] = "".concat(d, "Date"), h[u] = "".concat(d, "Month"), h[o] = "".concat(d, "FullYear"), h[r] = "".concat(d, "Hours"), h[n] = "".concat(d, "Minutes"), h[e] = "".concat(d, "Seconds"), h[t] = "".concat(d, "Milliseconds"), h)[c];
-      var l = c === i ? this.$D + (a - this.$W) : a;
-      if (c === u || c === o) {
-        var _y = this.clone().set(f, 1);
-        _y.$d[$](l), _y.init(), this.$d = _y.set(f, Math.min(this.$D, _y.daysInMonth())).$d;
-      } else $ && this.$d[$](l);
-      return this.init(), this;
-    }, $.set = function (t, e) {
-      return this.clone().$set(t, e);
-    }, $.get = function (t) {
-      return this[g.p(t)]();
-    }, $.add = function (t, a) {
-      var f;
-      var h = this;
-      t = Number(t);
-      var c = g.p(a);
-      var d = function d(e) {
-        var n = v(h);
-        return g.w(n.date(n.date() + Math.round(e * t)), h);
-      };
-      if (c === u) return this.set(u, this.$M + t);
-      if (c === o) return this.set(o, this.$y + t);
-      if (c === i) return d(1);
-      if (c === s) return d(7);
-      var $ = (f = {}, f[n] = 6e4, f[r] = 36e5, f[e] = 1e3, f)[c] || 1;
-      var l = this.$d.getTime() + t * $;
-      return g.w(l, this);
-    }, $.subtract = function (t, e) {
-      return this.add(-1 * t, e);
-    }, $.format = function (t) {
-      var e = this;
-      if (!this.isValid()) return 'Invalid Date';
-      var n = t || 'YYYY-MM-DDTHH:mm:ssZ';
-      var r = g.z(this);
-      var i = this.$locale();
-      var s = this.$H;
-      var u = this.$m;
-      var a = this.$M;
-      var o = i.weekdays;
-      var f = i.months;
-      var h = function h(t, r, i, s) {
-        return t && (t[r] || t(e, n)) || i[r].substr(0, s);
-      };
-      var d = function d(t) {
-        return g.s(s % 12 || 12, t, '0');
-      };
-      var $ = i.meridiem || function (t, e, n) {
-        var r = t < 12 ? 'AM' : 'PM';
-        return n ? r.toLowerCase() : r;
-      };
-      var l = {
-        YY: String(this.$y).slice(-2),
-        YYYY: this.$y,
-        M: a + 1,
-        MM: g.s(a + 1, 2, '0'),
-        MMM: h(i.monthsShort, a, f, 3),
-        MMMM: h(f, a),
-        D: this.$D,
-        DD: g.s(this.$D, 2, '0'),
-        d: String(this.$W),
-        dd: h(i.weekdaysMin, this.$W, o, 2),
-        ddd: h(i.weekdaysShort, this.$W, o, 3),
-        dddd: o[this.$W],
-        H: String(s),
-        HH: g.s(s, 2, '0'),
-        h: d(1),
-        hh: d(2),
-        a: $(s, u, !0),
-        A: $(s, u, !1),
-        m: String(u),
-        mm: g.s(u, 2, '0'),
-        s: String(this.$s),
-        ss: g.s(this.$s, 2, '0'),
-        SSS: g.s(this.$ms, 3, '0'),
-        Z: r
-      };
-      return n.replace(c, function (t, e) {
-        return e || l[t] || r.replace(':', '');
-      });
-    }, $.utcOffset = function () {
-      return 15 * -Math.round(this.$d.getTimezoneOffset() / 15);
-    }, $.diff = function (t, f, h) {
-      var c;
-      var d = g.p(f);
-      var $ = v(t);
-      var l = 6e4 * ($.utcOffset() - this.utcOffset());
-      var y = this - $;
-      var M = g.m(this, $);
-      return M = (c = {}, c[o] = M / 12, c[u] = M, c[a] = M / 3, c[s] = (y - l) / 6048e5, c[i] = (y - l) / 864e5, c[r] = y / 36e5, c[n] = y / 6e4, c[e] = y / 1e3, c)[d] || y, h ? M : g.a(M);
-    }, $.daysInMonth = function () {
-      return this.endOf(u).$D;
-    }, $.$locale = function () {
-      return M[this.$L];
-    }, $.locale = function (t, e) {
-      if (!t) return this.$L;
-      var n = this.clone();
-      var r = D(t, e, !0);
-      return r && (n.$L = r), n;
-    }, $.clone = function () {
-      return g.w(this.$d, this);
-    }, $.toDate = function () {
-      return new Date(this.valueOf());
-    }, $.toJSON = function () {
-      return this.isValid() ? this.toISOString() : null;
-    }, $.toISOString = function () {
-      return this.$d.toISOString();
-    }, $.toString = function () {
-      return this.$d.toUTCString();
-    }, d;
-  }();
-  var p = S.prototype;
-  return v.prototype = p, [['$ms', t], ['$s', e], ['$m', n], ['$H', r], ['$W', i], ['$M', u], ['$y', o], ['$D', f]].forEach(function (t) {
-    p[t[1]] = function (e) {
-      return this.$g(e, t[0], t[1]);
-    };
-  }), v.extend = function (t, e) {
-    return t.$i || (t(e, S, v), t.$i = !0), v;
-  }, v.locale = D, v.isDayjs = m, v.unix = function (t) {
-    return v(1e3 * t);
-  }, v.en = M[y], v.Ls = M, v.p = {}, v;
-});
-
-/***/ }),
-/* 608 */
-/*!***********************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/libs/util/calendar.js ***!
-  \***********************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-/**
-* @1900-2100区间内的公历、农历互转
-* @charset UTF-8
-* @github  https://github.com/jjonline/calendar.js
-* @Author  Jea杨(JJonline@JJonline.Cn)
-* @Time    2014-7-21
-* @Time    2016-8-13 Fixed 2033hex、Attribution Annals
-* @Time    2016-9-25 Fixed lunar LeapMonth Param Bug
-* @Time    2017-7-24 Fixed use getTerm Func Param Error.use solar year,NOT lunar year
-* @Version 1.0.3
-* @公历转农历：calendar.solar2lunar(1987,11,01); //[you can ignore params of prefix 0]
-* @农历转公历：calendar.lunar2solar(1987,09,10); //[you can ignore params of prefix 0]
-*/
-/* eslint-disable */
-var calendar = {
-  /**
-      * 农历1900-2100的润大小信息表
-      * @Array Of Property
-      * @return Hex
-      */
-  lunarInfo: [0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
-  // 1900-1909
-  0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977,
-  // 1910-1919
-  0x04970, 0x0a4b0, 0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970,
-  // 1920-1929
-  0x06566, 0x0d4a0, 0x0ea50, 0x06e95, 0x05ad0, 0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950,
-  // 1930-1939
-  0x0d4a0, 0x1d8a6, 0x0b550, 0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557,
-  // 1940-1949
-  0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5b0, 0x14573, 0x052b0, 0x0a9a8, 0x0e950, 0x06aa0,
-  // 1950-1959
-  0x0aea6, 0x0ab50, 0x04b60, 0x0aae4, 0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0,
-  // 1960-1969
-  0x096d0, 0x04dd5, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540, 0x0b6a0, 0x195a6,
-  // 1970-1979
-  0x095b0, 0x049b0, 0x0a974, 0x0a4b0, 0x0b27a, 0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570,
-  // 1980-1989
-  0x04af5, 0x04970, 0x064b0, 0x074a3, 0x0ea50, 0x06b58, 0x05ac0, 0x0ab60, 0x096d5, 0x092e0,
-  // 1990-1999
-  0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0, 0x0abb7, 0x025d0, 0x092d0, 0x0cab5,
-  // 2000-2009
-  0x0a950, 0x0b4a0, 0x0baa4, 0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0, 0x0a930,
-  // 2010-2019
-  0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0, 0x0d260, 0x0ea65, 0x0d530,
-  // 2020-2029
-  0x05aa0, 0x076a3, 0x096d0, 0x04afb, 0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45,
-  // 2030-2039
-  0x0b5a0, 0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255, 0x06d20, 0x0ada0,
-  // 2040-2049
-  /** Add By JJonline@JJonline.Cn**/
-  0x14b63, 0x09370, 0x049f8, 0x04970, 0x064b0, 0x168a6, 0x0ea50, 0x06b20, 0x1a6c4, 0x0aae0,
-  // 2050-2059
-  0x0a2e0, 0x0d2e3, 0x0c960, 0x0d557, 0x0d4a0, 0x0da50, 0x05d55, 0x056a0, 0x0a6d0, 0x055d4,
-  // 2060-2069
-  0x052d0, 0x0a9b8, 0x0a950, 0x0b4a0, 0x0b6a6, 0x0ad50, 0x055a0, 0x0aba4, 0x0a5b0, 0x052b0,
-  // 2070-2079
-  0x0b273, 0x06930, 0x07337, 0x06aa0, 0x0ad50, 0x14b55, 0x04b60, 0x0a570, 0x054e4, 0x0d160,
-  // 2080-2089
-  0x0e968, 0x0d520, 0x0daa0, 0x16aa6, 0x056d0, 0x04ae0, 0x0a9d4, 0x0a2d0, 0x0d150, 0x0f252,
-  // 2090-2099
-  0x0d520],
-  // 2100
-
-  /**
-      * 公历每个月份的天数普通表
-      * @Array Of Property
-      * @return Number
-      */
-  solarMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-  /**
-      * 天干地支之天干速查表
-      * @Array Of Property trans["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"]
-      * @return Cn string
-      */
-  Gan: ["\u7532", "\u4E59", "\u4E19", "\u4E01", "\u620A", "\u5DF1", "\u5E9A", "\u8F9B", "\u58EC", "\u7678"],
-  /**
-      * 天干地支之地支速查表
-      * @Array Of Property
-      * @trans["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"]
-      * @return Cn string
-      */
-  Zhi: ["\u5B50", "\u4E11", "\u5BC5", "\u536F", "\u8FB0", "\u5DF3", "\u5348", "\u672A", "\u7533", "\u9149", "\u620C", "\u4EA5"],
-  /**
-      * 天干地支之地支速查表<=>生肖
-      * @Array Of Property
-      * @trans["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"]
-      * @return Cn string
-      */
-  Animals: ["\u9F20", "\u725B", "\u864E", "\u5154", "\u9F99", "\u86C7", "\u9A6C", "\u7F8A", "\u7334", "\u9E21", "\u72D7", "\u732A"],
-  /**
-      * 24节气速查表
-      * @Array Of Property
-      * @trans["小寒","大寒","立春","雨水","惊蛰","春分","清明","谷雨","立夏","小满","芒种","夏至","小暑","大暑","立秋","处暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至"]
-      * @return Cn string
-      */
-  solarTerm: ["\u5C0F\u5BD2", "\u5927\u5BD2", "\u7ACB\u6625", "\u96E8\u6C34", "\u60CA\u86F0", "\u6625\u5206", "\u6E05\u660E", "\u8C37\u96E8", "\u7ACB\u590F", "\u5C0F\u6EE1", "\u8292\u79CD", "\u590F\u81F3", "\u5C0F\u6691", "\u5927\u6691", "\u7ACB\u79CB", "\u5904\u6691", "\u767D\u9732", "\u79CB\u5206", "\u5BD2\u9732", "\u971C\u964D", "\u7ACB\u51AC", "\u5C0F\u96EA", "\u5927\u96EA", "\u51AC\u81F3"],
-  /**
-      * 1900-2100各年的24节气日期速查表
-      * @Array Of Property
-      * @return 0x string For splice
-      */
-  sTermInfo: ['9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c3598082c95f8c965cc920f', '97bd0b06bdb0722c965ce1cfcc920f', 'b027097bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd0b06bdb0722c965ce1cfcc920f', 'b027097bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd0b06bdb0722c965ce1cfcc920f', 'b027097bd097c36b0b6fc9274c91aa', '9778397bd19801ec9210c965cc920e', '97b6b97bd19801ec95f8c965cc920f', '97bd09801d98082c95f8e1cfcc920f', '97bd097bd097c36b0b6fc9210c8dc2', '9778397bd197c36c9210c9274c91aa', '97b6b97bd19801ec95f8c965cc920e', '97bd09801d98082c95f8e1cfcc920f', '97bd097bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c91aa', '97b6b97bd19801ec95f8c965cc920e', '97bcf97c3598082c95f8e1cfcc920f', '97bd097bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c3598082c95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c3598082c95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd097bd07f595b0b6fc920fb0722', '9778397bd097c36b0b6fc9210c8dc2', '9778397bd19801ec9210c9274c920e', '97b6b97bd19801ec95f8c965cc920f', '97bd07f5307f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c920e', '97b6b97bd19801ec95f8c965cc920f', '97bd07f5307f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bd07f1487f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c9274c920e', '97bcf7f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c91aa', '97b6b97bd197c36c9210c9274c920e', '97bcf7f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c920e', '97b6b7f0e47f531b0723b0b6fb0722', '7f0e37f5307f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36b0b70c9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e37f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc9210c8dc2', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0787b0721', '7f0e27f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c91aa', '97b6b7f0e47f149b0723b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c8dc2', '977837f0e37f149b0723b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e37f5307f595b0b0bc920fb0722', '7f0e397bd097c35b0b6fc9210c8dc2', '977837f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e37f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc9210c8dc2', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f149b0723b0787b0721', '7f0e27f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14998082b0723b06bd', '7f07e7f0e37f149b0723b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e37f1487f595b0b0bb0b6fb0722', '7f0e37f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e37f1487f531b0b0bb0b6fb0722', '7f0e37f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e37f1487f531b0b0bb0b6fb0722', '7f0e37f0e37f14898082b072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e37f0e37f14898082b072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f149b0723b0787b0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14998082b0723b06bd', '7f07e7f0e47f149b0723b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14998082b0723b06bd', '7f07e7f0e37f14998083b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14898082b0723b02d5', '7f07e7f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e36665b66aa89801e9808297c35', '665f67f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e36665b66a449801e9808297c35', '665f67f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e36665b66a449801e9808297c35', '665f67f0e37f14898082b072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e26665b66a449801e9808297c35', '665f67f0e37f1489801eb072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722'],
-  /**
-      * 数字转中文速查表
-      * @Array Of Property
-      * @trans ['日','一','二','三','四','五','六','七','八','九','十']
-      * @return Cn string
-      */
-  nStr1: ["\u65E5", "\u4E00", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u4E03", "\u516B", "\u4E5D", "\u5341"],
-  /**
-      * 日期转农历称呼速查表
-      * @Array Of Property
-      * @trans ['初','十','廿','卅']
-      * @return Cn string
-      */
-  nStr2: ["\u521D", "\u5341", "\u5EFF", "\u5345"],
-  /**
-      * 月份转农历称呼速查表
-      * @Array Of Property
-      * @trans ['正','一','二','三','四','五','六','七','八','九','十','冬','腊']
-      * @return Cn string
-      */
-  nStr3: ["\u6B63", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u4E03", "\u516B", "\u4E5D", "\u5341", "\u51AC", "\u814A"],
-  /**
-      * 返回农历y年一整年的总天数
-      * @param lunar Year
-      * @return Number
-      * @eg:var count = calendar.lYearDays(1987) ;//count=387
-      */
-  lYearDays: function lYearDays(y) {
-    var i;
-    var sum = 348;
-    for (i = 0x8000; i > 0x8; i >>= 1) {
-      sum += this.lunarInfo[y - 1900] & i ? 1 : 0;
-    }
-    return sum + this.leapDays(y);
-  },
-  /**
-      * 返回农历y年闰月是哪个月；若y年没有闰月 则返回0
-      * @param lunar Year
-      * @return Number (0-12)
-      * @eg:var leapMonth = calendar.leapMonth(1987) ;//leapMonth=6
-      */
-  leapMonth: function leapMonth(y) {
-    // 闰字编码 \u95f0
-    return this.lunarInfo[y - 1900] & 0xf;
-  },
-  /**
-      * 返回农历y年闰月的天数 若该年没有闰月则返回0
-      * @param lunar Year
-      * @return Number (0、29、30)
-      * @eg:var leapMonthDay = calendar.leapDays(1987) ;//leapMonthDay=29
-      */
-  leapDays: function leapDays(y) {
-    if (this.leapMonth(y)) {
-      return this.lunarInfo[y - 1900] & 0x10000 ? 30 : 29;
-    }
-    return 0;
-  },
-  /**
-      * 返回农历y年m月（非闰月）的总天数，计算m为闰月时的天数请使用leapDays方法
-      * @param lunar Year
-      * @return Number (-1、29、30)
-      * @eg:var MonthDay = calendar.monthDays(1987,9) ;//MonthDay=29
-      */
-  monthDays: function monthDays(y, m) {
-    if (m > 12 || m < 1) {
-      return -1;
-    } // 月份参数从1至12，参数错误返回-1
-    return this.lunarInfo[y - 1900] & 0x10000 >> m ? 30 : 29;
-  },
-  /**
-      * 返回公历(!)y年m月的天数
-      * @param solar Year
-      * @return Number (-1、28、29、30、31)
-      * @eg:var solarMonthDay = calendar.leapDays(1987) ;//solarMonthDay=30
-      */
-  solarDays: function solarDays(y, m) {
-    if (m > 12 || m < 1) {
-      return -1;
-    } // 若参数错误 返回-1
-    var ms = m - 1;
-    if (ms == 1) {
-      // 2月份的闰平规律测算后确认返回28或29
-      return y % 4 == 0 && y % 100 != 0 || y % 400 == 0 ? 29 : 28;
-    } else {
-      return this.solarMonth[ms];
-    }
-  },
-  /**
-     * 农历年份转换为干支纪年
-     * @param  lYear 农历年的年份数
-     * @return Cn string
-     */
-  toGanZhiYear: function toGanZhiYear(lYear) {
-    var ganKey = (lYear - 3) % 10;
-    var zhiKey = (lYear - 3) % 12;
-    if (ganKey == 0) ganKey = 10; // 如果余数为0则为最后一个天干
-    if (zhiKey == 0) zhiKey = 12; // 如果余数为0则为最后一个地支
-    return this.Gan[ganKey - 1] + this.Zhi[zhiKey - 1];
-  },
-  /**
-     * 公历月、日判断所属星座
-     * @param  cMonth [description]
-     * @param  cDay [description]
-     * @return Cn string
-     */
-  toAstro: function toAstro(cMonth, cDay) {
-    var s = "\u9B54\u7FAF\u6C34\u74F6\u53CC\u9C7C\u767D\u7F8A\u91D1\u725B\u53CC\u5B50\u5DE8\u87F9\u72EE\u5B50\u5904\u5973\u5929\u79E4\u5929\u874E\u5C04\u624B\u9B54\u7FAF";
-    var arr = [20, 19, 21, 21, 21, 22, 23, 23, 23, 23, 22, 22];
-    return s.substr(cMonth * 2 - (cDay < arr[cMonth - 1] ? 2 : 0), 2) + "\u5EA7"; // 座
-  },
-
-  /**
-      * 传入offset偏移量返回干支
-      * @param offset 相对甲子的偏移量
-      * @return Cn string
-      */
-  toGanZhi: function toGanZhi(offset) {
-    return this.Gan[offset % 10] + this.Zhi[offset % 12];
-  },
-  /**
-      * 传入公历(!)y年获得该年第n个节气的公历日期
-      * @param y公历年(1900-2100)；n二十四节气中的第几个节气(1~24)；从n=1(小寒)算起
-      * @return day Number
-      * @eg:var _24 = calendar.getTerm(1987,3) ;//_24=4;意即1987年2月4日立春
-      */
-  getTerm: function getTerm(y, n) {
-    if (y < 1900 || y > 2100) {
-      return -1;
-    }
-    if (n < 1 || n > 24) {
-      return -1;
-    }
-    var _table = this.sTermInfo[y - 1900];
-    var _info = [parseInt('0x' + _table.substr(0, 5)).toString(), parseInt('0x' + _table.substr(5, 5)).toString(), parseInt('0x' + _table.substr(10, 5)).toString(), parseInt('0x' + _table.substr(15, 5)).toString(), parseInt('0x' + _table.substr(20, 5)).toString(), parseInt('0x' + _table.substr(25, 5)).toString()];
-    var _calday = [_info[0].substr(0, 1), _info[0].substr(1, 2), _info[0].substr(3, 1), _info[0].substr(4, 2), _info[1].substr(0, 1), _info[1].substr(1, 2), _info[1].substr(3, 1), _info[1].substr(4, 2), _info[2].substr(0, 1), _info[2].substr(1, 2), _info[2].substr(3, 1), _info[2].substr(4, 2), _info[3].substr(0, 1), _info[3].substr(1, 2), _info[3].substr(3, 1), _info[3].substr(4, 2), _info[4].substr(0, 1), _info[4].substr(1, 2), _info[4].substr(3, 1), _info[4].substr(4, 2), _info[5].substr(0, 1), _info[5].substr(1, 2), _info[5].substr(3, 1), _info[5].substr(4, 2)];
-    return parseInt(_calday[n - 1]);
-  },
-  /**
-      * 传入农历数字月份返回汉语通俗表示法
-      * @param lunar month
-      * @return Cn string
-      * @eg:var cnMonth = calendar.toChinaMonth(12) ;//cnMonth='腊月'
-      */
-  toChinaMonth: function toChinaMonth(m) {
-    // 月 => \u6708
-    if (m > 12 || m < 1) {
-      return -1;
-    } // 若参数错误 返回-1
-    var s = this.nStr3[m - 1];
-    s += "\u6708"; // 加上月字
-    return s;
-  },
-  /**
-      * 传入农历日期数字返回汉字表示法
-      * @param lunar day
-      * @return Cn string
-      * @eg:var cnDay = calendar.toChinaDay(21) ;//cnMonth='廿一'
-      */
-  toChinaDay: function toChinaDay(d) {
-    // 日 => \u65e5
-    var s;
-    switch (d) {
-      case 10:
-        s = "\u521D\u5341";
-        break;
-      case 20:
-        s = "\u4E8C\u5341";
-        break;
-        break;
-      case 30:
-        s = "\u4E09\u5341";
-        break;
-        break;
-      default:
-        s = this.nStr2[Math.floor(d / 10)];
-        s += this.nStr1[d % 10];
-    }
-    return s;
-  },
-  /**
-      * 年份转生肖[!仅能大致转换] => 精确划分生肖分界线是“立春”
-      * @param y year
-      * @return Cn string
-      * @eg:var animal = calendar.getAnimal(1987) ;//animal='兔'
-      */
-  getAnimal: function getAnimal(y) {
-    return this.Animals[(y - 4) % 12];
-  },
-  /**
-      * 传入阳历年月日获得详细的公历、农历object信息 <=>JSON
-      * @param y  solar year
-      * @param m  solar month
-      * @param d  solar day
-      * @return JSON object
-      * @eg:console.log(calendar.solar2lunar(1987,11,01));
-      */
-  solar2lunar: function solar2lunar(y, m, d) {
-    // 参数区间1900.1.31~2100.12.31
-    // 年份限定、上限
-    if (y < 1900 || y > 2100) {
-      return -1; // undefined转换为数字变为NaN
-    }
-    // 公历传参最下限
-    if (y == 1900 && m == 1 && d < 31) {
-      return -1;
-    }
-    // 未传参  获得当天
-    if (!y) {
-      var objDate = new Date();
-    } else {
-      var objDate = new Date(y, parseInt(m) - 1, d);
-    }
-    var i;
-    var leap = 0;
-    var temp = 0;
-    // 修正ymd参数
-    var y = objDate.getFullYear();
-    var m = objDate.getMonth() + 1;
-    var d = objDate.getDate();
-    var offset = (Date.UTC(objDate.getFullYear(), objDate.getMonth(), objDate.getDate()) - Date.UTC(1900, 0, 31)) / 86400000;
-    for (i = 1900; i < 2101 && offset > 0; i++) {
-      temp = this.lYearDays(i);
-      offset -= temp;
-    }
-    if (offset < 0) {
-      offset += temp;
-      i--;
-    }
-
-    // 是否今天
-    var isTodayObj = new Date();
-    var isToday = false;
-    if (isTodayObj.getFullYear() == y && isTodayObj.getMonth() + 1 == m && isTodayObj.getDate() == d) {
-      isToday = true;
-    }
-    // 星期几
-    var nWeek = objDate.getDay();
-    var cWeek = this.nStr1[nWeek];
-    // 数字表示周几顺应天朝周一开始的惯例
-    if (nWeek == 0) {
-      nWeek = 7;
-    }
-    // 农历年
-    var year = i;
-    var leap = this.leapMonth(i); // 闰哪个月
-    var isLeap = false;
-
-    // 效验闰月
-    for (i = 1; i < 13 && offset > 0; i++) {
-      // 闰月
-      if (leap > 0 && i == leap + 1 && isLeap == false) {
-        --i;
-        isLeap = true;
-        temp = this.leapDays(year); // 计算农历闰月天数
-      } else {
-        temp = this.monthDays(year, i); // 计算农历普通月天数
-      }
-      // 解除闰月
-      if (isLeap == true && i == leap + 1) {
-        isLeap = false;
-      }
-      offset -= temp;
-    }
-    // 闰月导致数组下标重叠取反
-    if (offset == 0 && leap > 0 && i == leap + 1) {
-      if (isLeap) {
-        isLeap = false;
-      } else {
-        isLeap = true;
-        --i;
-      }
-    }
-    if (offset < 0) {
-      offset += temp;
-      --i;
-    }
-    // 农历月
-    var month = i;
-    // 农历日
-    var day = offset + 1;
-    // 天干地支处理
-    var sm = m - 1;
-    var gzY = this.toGanZhiYear(year);
-
-    // 当月的两个节气
-    // bugfix-2017-7-24 11:03:38 use lunar Year Param `y` Not `year`
-    var firstNode = this.getTerm(y, m * 2 - 1); // 返回当月「节」为几日开始
-    var secondNode = this.getTerm(y, m * 2); // 返回当月「节」为几日开始
-
-    // 依据12节气修正干支月
-    var gzM = this.toGanZhi((y - 1900) * 12 + m + 11);
-    if (d >= firstNode) {
-      gzM = this.toGanZhi((y - 1900) * 12 + m + 12);
-    }
-
-    // 传入的日期的节气与否
-    var isTerm = false;
-    var Term = null;
-    if (firstNode == d) {
-      isTerm = true;
-      Term = this.solarTerm[m * 2 - 2];
-    }
-    if (secondNode == d) {
-      isTerm = true;
-      Term = this.solarTerm[m * 2 - 1];
-    }
-    // 日柱 当月一日与 1900/1/1 相差天数
-    var dayCyclical = Date.UTC(y, sm, 1, 0, 0, 0, 0) / 86400000 + 25567 + 10;
-    var gzD = this.toGanZhi(dayCyclical + d - 1);
-    // 该日期所属的星座
-    var astro = this.toAstro(m, d);
-    return {
-      'lYear': year,
-      'lMonth': month,
-      'lDay': day,
-      'Animal': this.getAnimal(year),
-      'IMonthCn': (isLeap ? "\u95F0" : '') + this.toChinaMonth(month),
-      'IDayCn': this.toChinaDay(day),
-      'cYear': y,
-      'cMonth': m,
-      'cDay': d,
-      'gzYear': gzY,
-      'gzMonth': gzM,
-      'gzDay': gzD,
-      'isToday': isToday,
-      'isLeap': isLeap,
-      'nWeek': nWeek,
-      'ncWeek': "\u661F\u671F" + cWeek,
-      'isTerm': isTerm,
-      'Term': Term,
-      'astro': astro
-    };
-  },
-  /**
-      * 传入农历年月日以及传入的月份是否闰月获得详细的公历、农历object信息 <=>JSON
-      * @param y  lunar year
-      * @param m  lunar month
-      * @param d  lunar day
-      * @param isLeapMonth  lunar month is leap or not.[如果是农历闰月第四个参数赋值true即可]
-      * @return JSON object
-      * @eg:console.log(calendar.lunar2solar(1987,9,10));
-      */
-  lunar2solar: function lunar2solar(y, m, d, isLeapMonth) {
-    // 参数区间1900.1.31~2100.12.1
-    var isLeapMonth = !!isLeapMonth;
-    var leapOffset = 0;
-    var leapMonth = this.leapMonth(y);
-    var leapDay = this.leapDays(y);
-    if (isLeapMonth && leapMonth != m) {
-      return -1;
-    } // 传参要求计算该闰月公历 但该年得出的闰月与传参的月份并不同
-    if (y == 2100 && m == 12 && d > 1 || y == 1900 && m == 1 && d < 31) {
-      return -1;
-    } // 超出了最大极限值
-    var day = this.monthDays(y, m);
-    var _day = day;
-    // bugFix 2016-9-25
-    // if month is leap, _day use leapDays method
-    if (isLeapMonth) {
-      _day = this.leapDays(y, m);
-    }
-    if (y < 1900 || y > 2100 || d > _day) {
-      return -1;
-    } // 参数合法性效验
-
-    // 计算农历的时间差
-    var offset = 0;
-    for (var i = 1900; i < y; i++) {
-      offset += this.lYearDays(i);
-    }
-    var leap = 0;
-    var isAdd = false;
-    for (var i = 1; i < m; i++) {
-      leap = this.leapMonth(y);
-      if (!isAdd) {
-        // 处理闰月
-        if (leap <= i && leap > 0) {
-          offset += this.leapDays(y);
-          isAdd = true;
-        }
-      }
-      offset += this.monthDays(y, i);
-    }
-    // 转换闰月农历 需补充该年闰月的前一个月的时差
-    if (isLeapMonth) {
-      offset += day;
-    }
-    // 1900年农历正月一日的公历时间为1900年1月30日0时0分0秒(该时间也是本农历的最开始起始点)
-    var stmap = Date.UTC(1900, 1, 30, 0, 0, 0);
-    var calObj = new Date((offset + d - 31) * 86400000 + stmap);
-    var cY = calObj.getUTCFullYear();
-    var cM = calObj.getUTCMonth() + 1;
-    var cD = calObj.getUTCDate();
-    return this.solar2lunar(cY, cM, cD);
-  }
-};
-var _default = calendar;
-exports.default = _default;
-
-/***/ }),
-/* 609 */,
-/* 610 */,
-/* 611 */,
-/* 612 */,
-/* 613 */,
-/* 614 */,
-/* 615 */,
-/* 616 */
-/*!****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-code/props.js ***!
-  \****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 倒计时总秒数
-    seconds: {
-      type: [String, Number],
-      default: uni.$u.props.code.seconds
-    },
-    // 尚未开始时提示
-    startText: {
-      type: String,
-      default: uni.$u.props.code.startText
-    },
-    // 正在倒计时中的提示
-    changeText: {
-      type: String,
-      default: uni.$u.props.code.changeText
-    },
-    // 倒计时结束时的提示
-    endText: {
-      type: String,
-      default: uni.$u.props.code.endText
-    },
-    // 是否在H5刷新或各端返回再进入时继续倒计时
-    keepRunning: {
-      type: Boolean,
-      default: uni.$u.props.code.keepRunning
-    },
-    // 为了区分多个页面，或者一个页面多个倒计时组件本地存储的继续倒计时变了
-    uniqueKey: {
-      type: String,
-      default: uni.$u.props.code.uniqueKey
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 617 */,
-/* 618 */,
-/* 619 */,
-/* 620 */,
-/* 621 */,
-/* 622 */,
-/* 623 */,
-/* 624 */
-/*!***************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-tag/props.js ***!
-  \***************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 标签类型info、primary、success、warning、error
-    type: {
-      type: String,
-      default: uni.$u.props.tag.type
-    },
-    // 不可用
-    disabled: {
-      type: [Boolean, String],
-      default: uni.$u.props.tag.disabled
-    },
-    // 标签的大小，large，medium，mini
-    size: {
-      type: String,
-      default: uni.$u.props.tag.size
-    },
-    // tag的形状，circle（两边半圆形）, square（方形，带圆角）
-    shape: {
-      type: String,
-      default: uni.$u.props.tag.shape
-    },
-    // 标签文字
-    text: {
-      type: [String, Number],
-      default: uni.$u.props.tag.text
-    },
-    // 背景颜色，默认为空字符串，即不处理
-    bgColor: {
-      type: String,
-      default: uni.$u.props.tag.bgColor
-    },
-    // 标签字体颜色，默认为空字符串，即不处理
-    color: {
-      type: String,
-      default: uni.$u.props.tag.color
-    },
-    // 标签的边框颜色
-    borderColor: {
-      type: String,
-      default: uni.$u.props.tag.borderColor
-    },
-    // 关闭按钮图标的颜色
-    closeColor: {
-      type: String,
-      default: uni.$u.props.tag.closeColor
-    },
-    // 点击时返回的索引值，用于区分例遍的数组哪个元素被点击了
-    name: {
-      type: [String, Number],
-      default: uni.$u.props.tag.name
-    },
-    // // 模式选择，dark|light|plain
-    // mode: {
-    // 	type: String,
-    // 	default: 'light'
-    // },
-    // 镂空时是否填充背景色
-    plainFill: {
-      type: Boolean,
-      default: uni.$u.props.tag.plainFill
-    },
-    // 是否镂空
-    plain: {
-      type: Boolean,
-      default: uni.$u.props.tag.plain
-    },
-    // 是否可关闭
-    closable: {
-      type: Boolean,
-      default: uni.$u.props.tag.closable
-    },
-    // 是否显示
-    show: {
-      type: Boolean,
-      default: uni.$u.props.tag.show
-    },
-    // 内置图标，或绝对路径的图片
-    icon: {
-      type: String,
-      default: uni.$u.props.tag.icon
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 625 */,
-/* 626 */,
-/* 627 */,
-/* 628 */,
-/* 629 */,
-/* 630 */,
-/* 631 */,
-/* 632 */
-/*!***********************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio-group/props.js ***!
-  \***********************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 绑定的值
-    value: {
-      type: [String, Number, Boolean],
-      default: uni.$u.props.radioGroup.value
-    },
-    // 是否禁用全部radio
-    disabled: {
-      type: Boolean,
-      default: uni.$u.props.radioGroup.disabled
-    },
-    // 形状，circle-圆形，square-方形
-    shape: {
-      type: String,
-      default: uni.$u.props.radioGroup.shape
-    },
-    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
-    activeColor: {
-      type: String,
-      default: uni.$u.props.radioGroup.activeColor
-    },
-    // 未选中的颜色
-    inactiveColor: {
-      type: String,
-      default: uni.$u.props.radioGroup.inactiveColor
-    },
-    // 标识符
-    name: {
-      type: String,
-      default: uni.$u.props.radioGroup.name
-    },
-    // 整个组件的尺寸，默认px
-    size: {
-      type: [String, Number],
-      default: uni.$u.props.radioGroup.size
-    },
-    // 布局方式，row-横向，column-纵向
-    placement: {
-      type: String,
-      default: uni.$u.props.radioGroup.placement
-    },
-    // label的文本
-    label: {
-      type: [String],
-      default: uni.$u.props.radioGroup.label
-    },
-    // label的颜色 （默认 '#303133' ）
-    labelColor: {
-      type: [String],
-      default: uni.$u.props.radioGroup.labelColor
-    },
-    // label的字体大小，px单位
-    labelSize: {
-      type: [String, Number],
-      default: uni.$u.props.radioGroup.labelSize
-    },
-    // 是否禁止点击文本操作checkbox(默认 false )
-    labelDisabled: {
-      type: Boolean,
-      default: uni.$u.props.radioGroup.labelDisabled
-    },
-    // 图标颜色
-    iconColor: {
-      type: String,
-      default: uni.$u.props.radioGroup.iconColor
-    },
-    // 图标的大小，单位px
-    iconSize: {
-      type: [String, Number],
-      default: uni.$u.props.radioGroup.iconSize
-    },
-    // 竖向配列时，是否显示下划线
-    borderBottom: {
-      type: Boolean,
-      default: uni.$u.props.radioGroup.borderBottom
-    },
-    // 图标与文字的对齐方式
-    iconPlacement: {
-      type: String,
-      default: uni.$u.props.radio.iconPlacement
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 633 */,
-/* 634 */,
-/* 635 */,
-/* 636 */,
-/* 637 */,
-/* 638 */,
-/* 639 */,
-/* 640 */
-/*!*****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-radio/props.js ***!
-  \*****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // radio的名称
-    name: {
-      type: [String, Number, Boolean],
-      default: uni.$u.props.radio.name
-    },
-    // 形状，square为方形，circle为圆型
-    shape: {
-      type: String,
-      default: uni.$u.props.radio.shape
-    },
-    // 是否禁用
-    disabled: {
-      type: [String, Boolean],
-      default: uni.$u.props.radio.disabled
-    },
-    // 是否禁止点击提示语选中单选框
-    labelDisabled: {
-      type: [String, Boolean],
-      default: uni.$u.props.radio.labelDisabled
-    },
-    // 选中状态下的颜色，如设置此值，将会覆盖parent的activeColor值
-    activeColor: {
-      type: String,
-      default: uni.$u.props.radio.activeColor
-    },
-    // 未选中的颜色
-    inactiveColor: {
-      type: String,
-      default: uni.$u.props.radio.inactiveColor
-    },
-    // 图标的大小，单位px
-    iconSize: {
-      type: [String, Number],
-      default: uni.$u.props.radio.iconSize
-    },
-    // label的字体大小，px单位
-    labelSize: {
-      type: [String, Number],
-      default: uni.$u.props.radio.labelSize
-    },
-    // label提示文字，因为nvue下，直接slot进来的文字，由于特殊的结构，无法修改样式
-    label: {
-      type: [String, Number],
-      default: uni.$u.props.radio.label
-    },
-    // 整体的大小
-    size: {
-      type: [String, Number],
-      default: uni.$u.props.radio.size
-    },
-    // 图标颜色
-    color: {
-      type: String,
-      default: uni.$u.props.radio.color
-    },
-    // label的颜色
-    labelColor: {
-      type: String,
-      default: uni.$u.props.radio.labelColor
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 641 */,
-/* 642 */,
-/* 643 */,
-/* 644 */,
-/* 645 */,
-/* 646 */,
-/* 647 */,
-/* 648 */,
-/* 649 */,
-/* 650 */,
-/* 651 */,
-/* 652 */,
-/* 653 */,
-/* 654 */,
-/* 655 */,
-/* 656 */,
-/* 657 */,
-/* 658 */,
-/* 659 */,
-/* 660 */,
-/* 661 */,
-/* 662 */,
-/* 663 */,
-/* 664 */,
-/* 665 */,
-/* 666 */,
-/* 667 */,
-/* 668 */,
-/* 669 */
-/*!*******************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-divider/props.js ***!
-  \*******************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 是否虚线
-    dashed: {
-      type: Boolean,
-      default: uni.$u.props.divider.dashed
-    },
-    // 是否细线
-    hairline: {
-      type: Boolean,
-      default: uni.$u.props.divider.hairline
-    },
-    // 是否以点替代文字，优先于text字段起作用
-    dot: {
-      type: Boolean,
-      default: uni.$u.props.divider.dot
-    },
-    // 内容文本的位置，left-左边，center-中间，right-右边
-    textPosition: {
-      type: String,
-      default: uni.$u.props.divider.textPosition
-    },
-    // 文本内容
-    text: {
-      type: [String, Number],
-      default: uni.$u.props.divider.text
-    },
-    // 文本大小
-    textSize: {
-      type: [String, Number],
-      default: uni.$u.props.divider.textSize
-    },
-    // 文本颜色
-    textColor: {
-      type: String,
-      default: uni.$u.props.divider.textColor
-    },
-    // 线条颜色
-    lineColor: {
-      type: String,
-      default: uni.$u.props.divider.lineColor
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 670 */,
-/* 671 */,
-/* 672 */,
-/* 673 */,
-/* 674 */,
-/* 675 */,
-/* 676 */,
-/* 677 */
-/*!****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-rate/props.js ***!
-  \****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 用于v-model双向绑定选中的星星数量
-    value: {
-      type: [String, Number],
-      default: uni.$u.props.rate.value
-    },
-    // 要显示的星星数量
-    count: {
-      type: [String, Number],
-      default: uni.$u.props.rate.count
-    },
-    // 是否不可选中
-    disabled: {
-      type: Boolean,
-      default: uni.$u.props.rate.disabled
-    },
-    // 是否只读
-    readonly: {
-      type: Boolean,
-      default: uni.$u.props.rate.readonly
-    },
-    // 星星的大小，单位px
-    size: {
-      type: [String, Number],
-      default: uni.$u.props.rate.size
-    },
-    // 未选中时的颜色
-    inactiveColor: {
-      type: String,
-      default: uni.$u.props.rate.inactiveColor
-    },
-    // 选中的颜色
-    activeColor: {
-      type: String,
-      default: uni.$u.props.rate.activeColor
-    },
-    // 星星之间的间距，单位px
-    gutter: {
-      type: [String, Number],
-      default: uni.$u.props.rate.gutter
-    },
-    // 最少能选择的星星个数
-    minCount: {
-      type: [String, Number],
-      default: uni.$u.props.rate.minCount
-    },
-    // 是否允许半星
-    allowHalf: {
-      type: Boolean,
-      default: uni.$u.props.rate.allowHalf
-    },
-    // 选中时的图标(星星)
-    activeIcon: {
-      type: String,
-      default: uni.$u.props.rate.activeIcon
-    },
-    // 未选中时的图标(星星)
-    inactiveIcon: {
-      type: String,
-      default: uni.$u.props.rate.inactiveIcon
-    },
-    // 是否可以通过滑动手势选择评分
-    touchable: {
-      type: Boolean,
-      default: uni.$u.props.rate.touchable
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 678 */,
-/* 679 */,
-/* 680 */,
-/* 681 */,
-/* 682 */,
-/* 683 */,
-/* 684 */,
-/* 685 */
-/*!************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/hic-video-player/utils/index.js ***!
-  \************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.compareVersion = compareVersion;
-exports.debounce = debounce;
-exports.getExt = getExt;
-exports.getSystemInfo = getSystemInfo;
-exports.getSystemInfoSync = getSystemInfoSync;
-var systemInfo = null; // 系统信息
-
-/**
- * @description 封装 uni.getSystemInfo 异步获取系统信息
- */
-function getSystemInfo() {
-  return new Promise(function (resolve, reject) {
-    if (systemInfo) {
-      return resolve(systemInfo);
-    }
-    uni.getSystemInfo({
-      success: function success(res) {
-        systemInfo = res;
-        resolve(res);
-      },
-      fail: reject
-    });
-  });
-}
-
-/**
- * @description 封装 uni.getSystemInfoSync 同步获取系统信息
- */
-function getSystemInfoSync() {
-  var res = uni.getSystemInfoSync();
-  systemInfo = res;
-  return res;
-}
-
-/**
- * @description 版本号比较
- * @param {String} v1
- * @param {String} v2
- * @return {Boolean} v2 大于 v1 返回true, 否则返回false
- * compareVersion('1.9.9', '1.11.0'); // true
- */
-function compareVersion(v1, v2) {
-  v1 = v1.split('.');
-  v2 = v2.split('.');
-  var len = Math.max(v1.length, v2.length);
-  while (v1.length < len) {
-    v1.push('0');
-  }
-  while (v2.length < len) {
-    v2.push('0');
-  }
-  for (var i = 0; i < len; i++) {
-    var num1 = parseInt(v1[i]);
-    var num2 = parseInt(v2[i]);
-    if (num1 < num2) {
-      return true;
-    } else if (num1 > num2) {
-      return false;
-    }
-  }
-  return false;
-}
-
-/**
- * 防抖 debounce
- * 栗子：实时搜索，拖拽
- */
-function debounce(fn) {
-  var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
-  var timer;
-  return function () {
-    var _this = this;
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-      fn.apply(_this, args);
-    }, delay);
-  };
-}
-
-/**
- * 获取扩展名
- * @param {String} url 视频播放地址
- */
-function getExt(url) {
-  var index = url.indexOf('?');
-  if (index != -1) {
-    url = url.substring(0, index);
-  }
-  var ext = '';
-  var reg = /.+\./;
-  ext = url.replace(reg, '').toLowerCase();
-  return ext;
-}
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 686 */,
-/* 687 */,
-/* 688 */,
-/* 689 */,
-/* 690 */,
-/* 691 */,
-/* 692 */,
-/* 693 */,
-/* 694 */,
-/* 695 */,
-/* 696 */,
-/* 697 */,
-/* 698 */,
-/* 699 */,
-/* 700 */,
-/* 701 */,
-/* 702 */,
-/* 703 */,
-/* 704 */,
-/* 705 */,
-/* 706 */,
-/* 707 */
+/* 708 */,
+/* 709 */,
+/* 710 */,
+/* 711 */,
+/* 712 */,
+/* 713 */,
+/* 714 */,
+/* 715 */,
+/* 716 */,
+/* 717 */,
+/* 718 */,
+/* 719 */,
+/* 720 */,
+/* 721 */,
+/* 722 */,
+/* 723 */,
+/* 724 */,
+/* 725 */,
+/* 726 */,
+/* 727 */,
+/* 728 */,
+/* 729 */
 /*!*****************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-image/props.js ***!
   \*****************************************************************************************************************************/
@@ -35638,14 +40611,14 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 708 */,
-/* 709 */,
-/* 710 */,
-/* 711 */,
-/* 712 */,
-/* 713 */,
-/* 714 */,
-/* 715 */
+/* 730 */,
+/* 731 */,
+/* 732 */,
+/* 733 */,
+/* 734 */,
+/* 735 */,
+/* 736 */,
+/* 737 */
 /*!*****************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/components/SignaturePad/signature.js ***!
   \*****************************************************************************************************************/
@@ -36116,12 +41089,12 @@ var _default = Handwriting;
 exports.default = _default;
 
 /***/ }),
-/* 716 */,
-/* 717 */,
-/* 718 */,
-/* 719 */,
-/* 720 */,
-/* 721 */
+/* 738 */,
+/* 739 */,
+/* 740 */,
+/* 741 */,
+/* 742 */,
+/* 743 */
 /*!******************************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/z-paging-main.js?vue&type=script&lang=js& ***!
   \******************************************************************************************************************************************************************/
@@ -36130,13 +41103,13 @@ exports.default = _default;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_13_1_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_z_paging_main_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/babel-loader/lib!../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--13-1!../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./z-paging-main.js?vue&type=script&lang=js& */ 722);
+/* harmony import */ var _Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_13_1_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_z_paging_main_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/babel-loader/lib!../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--13-1!../../../../../../../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./z-paging-main.js?vue&type=script&lang=js& */ 744);
 /* harmony import */ var _Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_13_1_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_z_paging_main_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_13_1_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_z_paging_main_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_13_1_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_z_paging_main_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_13_1_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_z_paging_main_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
  /* harmony default export */ __webpack_exports__["default"] = (_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_13_1_Applications_HBuilderX_app_Contents_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_z_paging_main_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
-/* 722 */
+/* 744 */
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--13-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!/Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/z-paging-main.js?vue&type=script&lang=js& ***!
   \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -36151,23 +41124,23 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
-var _zPagingStatic = _interopRequireDefault(__webpack_require__(/*! ./z-paging-static */ 723));
-var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! ./z-paging-constant */ 724));
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! ./z-paging-utils */ 725));
-var _commonLayout = _interopRequireDefault(__webpack_require__(/*! ./modules/common-layout */ 730));
-var _dataHandle = _interopRequireDefault(__webpack_require__(/*! ./modules/data-handle */ 731));
-var _i18n = _interopRequireDefault(__webpack_require__(/*! ./modules/i18n */ 734));
-var _nvue = _interopRequireDefault(__webpack_require__(/*! ./modules/nvue */ 739));
-var _empty = _interopRequireDefault(__webpack_require__(/*! ./modules/empty */ 740));
-var _refresher = _interopRequireDefault(__webpack_require__(/*! ./modules/refresher */ 741));
-var _loadMore = _interopRequireDefault(__webpack_require__(/*! ./modules/load-more */ 742));
-var _loading = _interopRequireDefault(__webpack_require__(/*! ./modules/loading */ 743));
-var _scroller = _interopRequireDefault(__webpack_require__(/*! ./modules/scroller */ 744));
-var _backToTop = _interopRequireDefault(__webpack_require__(/*! ./modules/back-to-top */ 745));
-var _virtualList = _interopRequireDefault(__webpack_require__(/*! ./modules/virtual-list */ 746));
-var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! ./z-paging-enum */ 732));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
+var _zPagingStatic = _interopRequireDefault(__webpack_require__(/*! ./z-paging-static */ 745));
+var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! ./z-paging-constant */ 746));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! ./z-paging-utils */ 747));
+var _commonLayout = _interopRequireDefault(__webpack_require__(/*! ./modules/common-layout */ 752));
+var _dataHandle = _interopRequireDefault(__webpack_require__(/*! ./modules/data-handle */ 753));
+var _i18n = _interopRequireDefault(__webpack_require__(/*! ./modules/i18n */ 756));
+var _nvue = _interopRequireDefault(__webpack_require__(/*! ./modules/nvue */ 761));
+var _empty = _interopRequireDefault(__webpack_require__(/*! ./modules/empty */ 762));
+var _refresher = _interopRequireDefault(__webpack_require__(/*! ./modules/refresher */ 763));
+var _loadMore = _interopRequireDefault(__webpack_require__(/*! ./modules/load-more */ 764));
+var _loading = _interopRequireDefault(__webpack_require__(/*! ./modules/loading */ 765));
+var _scroller = _interopRequireDefault(__webpack_require__(/*! ./modules/scroller */ 766));
+var _backToTop = _interopRequireDefault(__webpack_require__(/*! ./modules/back-to-top */ 767));
+var _virtualList = _interopRequireDefault(__webpack_require__(/*! ./modules/virtual-list */ 768));
+var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! ./z-paging-enum */ 754));
 // [z-paging]核心js
 var zPagingRefresh = function zPagingRefresh() {
   __webpack_require__.e(/*! require.ensure | uni_modules/z-paging/components/z-paging/components/z-paging-refresh */ "uni_modules/z-paging/components/z-paging/components/z-paging-refresh").then((function () {
@@ -36580,7 +41553,7 @@ exports.default = _default2;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 723 */
+/* 745 */
 /*!*******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/z-paging-static.js ***!
   \*******************************************************************************************************************************************/
@@ -36609,7 +41582,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 724 */
+/* 746 */
 /*!*********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/z-paging-constant.js ***!
   \*********************************************************************************************************************************************/
@@ -36636,7 +41609,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 725 */
+/* 747 */
 /*!******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/z-paging-utils.js ***!
   \******************************************************************************************************************************************/
@@ -36651,9 +41624,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _zPagingConfig = _interopRequireDefault(__webpack_require__(/*! ./z-paging-config */ 726));
-var _index = _interopRequireDefault(__webpack_require__(/*! ../config/index */ 727));
-var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! ./z-paging-constant */ 724));
+var _zPagingConfig = _interopRequireDefault(__webpack_require__(/*! ./z-paging-config */ 748));
+var _index = _interopRequireDefault(__webpack_require__(/*! ../config/index */ 749));
+var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! ./z-paging-constant */ 746));
 // [z-paging]工具类
 
 var storageKey = 'Z-PAGING-REFRESHER-TIME-STORAGE-KEY';
@@ -36666,10 +41639,10 @@ var timeoutMap = {};
 */
 
 try {
-  var contextKeys = __webpack_require__(728).keys();
+  var contextKeys = __webpack_require__(750).keys();
   if (contextKeys.length) {
     var suffix = '.js';
-    config = __webpack_require__(729)("./z-paging-config" + suffix);
+    config = __webpack_require__(751)("./z-paging-config" + suffix);
   }
 } catch (e) {}
 
@@ -36877,7 +41850,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 726 */
+/* 748 */
 /*!*******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/z-paging-config.js ***!
   \*******************************************************************************************************************************************/
@@ -36913,7 +41886,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 727 */
+/* 749 */
 /*!*************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/config/index.js ***!
   \*************************************************************************************************************************************/
@@ -36932,7 +41905,7 @@ var _default = {};
 exports.default = _default;
 
 /***/ }),
-/* 728 */
+/* 750 */
 /*!*************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging sync nonrecursive \z-paging-config$ ***!
   \*************************************************************************************************************************************/
@@ -36947,10 +41920,10 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 728;
+webpackEmptyContext.id = 750;
 
 /***/ }),
-/* 729 */
+/* 751 */
 /*!********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging sync ^\.\/z\-paging\-config.*$ ***!
   \********************************************************************************************************************************/
@@ -36965,10 +41938,10 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 729;
+webpackEmptyContext.id = 751;
 
 /***/ }),
-/* 730 */
+/* 752 */
 /*!*************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/common-layout.js ***!
   \*************************************************************************************************************************************************/
@@ -37063,7 +42036,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 731 */
+/* 753 */
 /*!***********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/data-handle.js ***!
   \***********************************************************************************************************************************************/
@@ -37080,10 +42053,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ 5));
 var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ 18));
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
-var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 724));
-var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 732));
-var _zPagingInterceptor = _interopRequireDefault(__webpack_require__(/*! ../z-paging-interceptor */ 733));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
+var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 746));
+var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 754));
+var _zPagingInterceptor = _interopRequireDefault(__webpack_require__(/*! ../z-paging-interceptor */ 755));
 // [z-paging]数据处理模块
 var _default2 = {
   props: {
@@ -37759,7 +42732,7 @@ exports.default = _default2;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 732 */
+/* 754 */
 /*!*****************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/z-paging-enum.js ***!
   \*****************************************************************************************************************************************/
@@ -37819,7 +42792,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 733 */
+/* 755 */
 /*!************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/z-paging-interceptor.js ***!
   \************************************************************************************************************************************************/
@@ -37878,7 +42851,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 734 */
+/* 756 */
 /*!****************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/i18n.js ***!
   \****************************************************************************************************************************************/
@@ -37894,10 +42867,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _uniI18n = __webpack_require__(/*! @dcloudio/uni-i18n */ 22);
-var _index = _interopRequireDefault(__webpack_require__(/*! ../../i18n/index.js */ 735));
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
-var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 724));
-var _zPagingInterceptor = _interopRequireDefault(__webpack_require__(/*! ../z-paging-interceptor */ 733));
+var _index = _interopRequireDefault(__webpack_require__(/*! ../../i18n/index.js */ 757));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
+var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 746));
+var _zPagingInterceptor = _interopRequireDefault(__webpack_require__(/*! ../z-paging-interceptor */ 755));
 // [z-paging]i18n模块
 
 var _initVueI18n = (0, _uniI18n.initVueI18n)(_index.default),
@@ -37997,7 +42970,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 735 */
+/* 757 */
 /*!***********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/i18n/index.js ***!
   \***********************************************************************************************************************************/
@@ -38012,9 +42985,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _en = _interopRequireDefault(__webpack_require__(/*! ./en.json */ 736));
-var _zhHans = _interopRequireDefault(__webpack_require__(/*! ./zh-Hans.json */ 737));
-var _zhHant = _interopRequireDefault(__webpack_require__(/*! ./zh-Hant.json */ 738));
+var _en = _interopRequireDefault(__webpack_require__(/*! ./en.json */ 758));
+var _zhHans = _interopRequireDefault(__webpack_require__(/*! ./zh-Hans.json */ 759));
+var _zhHant = _interopRequireDefault(__webpack_require__(/*! ./zh-Hant.json */ 760));
 var _default = {
   en: _en.default,
   'zh-Hans': _zhHans.default,
@@ -38023,7 +42996,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 736 */
+/* 758 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/i18n/en.json ***!
   \**********************************************************************************************************************************/
@@ -38033,7 +43006,7 @@ exports.default = _default;
 module.exports = JSON.parse("{\"zp.refresher.default\":\"Pull down to refresh\",\"zp.refresher.pulling\":\"Release to refresh\",\"zp.refresher.refreshing\":\"Refreshing...\",\"zp.refresher.complete\":\"Refresh succeeded\",\"zp.loadingMore.default\":\"Click to load more\",\"zp.loadingMore.loading\":\"Loading...\",\"zp.loadingMore.noMore\":\"No more data\",\"zp.loadingMore.fail\":\"Load failed,click to reload\",\"zp.emptyView.title\":\"No data\",\"zp.emptyView.reload\":\"Reload\",\"zp.emptyView.error\":\"Sorry,load failed\",\"zp.refresherUpdateTime.title\":\"Last update: \",\"zp.refresherUpdateTime.none\":\"None\",\"zp.refresherUpdateTime.today\":\"Today\",\"zp.refresherUpdateTime.yesterday\":\"Yesterday\",\"zp.systemLoading.title\":\"Loading...\"}");
 
 /***/ }),
-/* 737 */
+/* 759 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/i18n/zh-Hans.json ***!
   \***************************************************************************************************************************************/
@@ -38043,7 +43016,7 @@ module.exports = JSON.parse("{\"zp.refresher.default\":\"Pull down to refresh\",
 module.exports = JSON.parse("{\"zp.refresher.default\":\"继续下拉刷新\",\"zp.refresher.pulling\":\"松开立即刷新\",\"zp.refresher.refreshing\":\"正在刷新...\",\"zp.refresher.complete\":\"刷新成功\",\"zp.loadingMore.default\":\"点击加载更多\",\"zp.loadingMore.loading\":\"正在加载...\",\"zp.loadingMore.noMore\":\"没有更多了\",\"zp.loadingMore.fail\":\"加载失败，点击重新加载\",\"zp.emptyView.title\":\"没有数据哦~\",\"zp.emptyView.reload\":\"重新加载\",\"zp.emptyView.error\":\"很抱歉，加载失败\",\"zp.refresherUpdateTime.title\":\"最后更新：\",\"zp.refresherUpdateTime.none\":\"无\",\"zp.refresherUpdateTime.today\":\"今天\",\"zp.refresherUpdateTime.yesterday\":\"昨天\",\"zp.systemLoading.title\":\"加载中...\"}");
 
 /***/ }),
-/* 738 */
+/* 760 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/i18n/zh-Hant.json ***!
   \***************************************************************************************************************************************/
@@ -38053,7 +43026,7 @@ module.exports = JSON.parse("{\"zp.refresher.default\":\"继续下拉刷新\",\"
 module.exports = JSON.parse("{\"zp.refresher.default\":\"繼續下拉重繪\",\"zp.refresher.pulling\":\"鬆開立即重繪\",\"zp.refresher.refreshing\":\"正在重繪...\",\"zp.refresher.complete\":\"重繪成功\",\"zp.loadingMore.default\":\"點擊加載更多\",\"zp.loadingMore.loading\":\"正在加載...\",\"zp.loadingMore.noMore\":\"沒有更多了\",\"zp.loadingMore.fail\":\"加載失敗，點擊重新加載\",\"zp.emptyView.title\":\"沒有數據哦~\",\"zp.emptyView.reload\":\"重新加載\",\"zp.emptyView.error\":\"很抱歉，加載失敗\",\"zp.refresherUpdateTime.title\":\"最後更新：\",\"zp.refresherUpdateTime.none\":\"無\",\"zp.refresherUpdateTime.today\":\"今天\",\"zp.refresherUpdateTime.yesterday\":\"昨天\",\"zp.systemLoading.title\":\"加載中...\"}");
 
 /***/ }),
-/* 739 */
+/* 761 */
 /*!****************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/nvue.js ***!
   \****************************************************************************************************************************************/
@@ -38068,9 +43041,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
-var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 724));
-var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 732));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
+var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 746));
+var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 754));
 // [z-paging]nvue独有部分模块
 var _default = {
   props: {},
@@ -38098,7 +43071,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 740 */
+/* 762 */
 /*!*****************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/empty.js ***!
   \*****************************************************************************************************************************************/
@@ -38113,7 +43086,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
 // [z-paging]空数据图view模块
 var _default2 = {
   props: {
@@ -38263,7 +43236,7 @@ var _default2 = {
 exports.default = _default2;
 
 /***/ }),
-/* 741 */
+/* 763 */
 /*!*********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/refresher.js ***!
   \*********************************************************************************************************************************************/
@@ -38278,9 +43251,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
-var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 724));
-var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 732));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
+var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 746));
+var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 754));
 // [z-paging]下拉刷新view模块
 var _default2 = {
   props: {
@@ -38838,7 +43811,7 @@ exports.default = _default2;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 742 */
+/* 764 */
 /*!*********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/load-more.js ***!
   \*********************************************************************************************************************************************/
@@ -38853,10 +43826,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
-var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 732));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
+var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 754));
 // [z-paging]滚动到底部加载更多模块
 var _default2 = {
   props: {
@@ -39211,7 +44184,7 @@ var _default2 = {
 exports.default = _default2;
 
 /***/ }),
-/* 743 */
+/* 765 */
 /*!*******************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/loading.js ***!
   \*******************************************************************************************************************************************/
@@ -39226,8 +44199,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
-var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 732));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
+var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 754));
 // [z-paging]loading相关模块
 var _default = {
   props: {
@@ -39312,7 +44285,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 744 */
+/* 766 */
 /*!********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/scroller.js ***!
   \********************************************************************************************************************************************/
@@ -39327,10 +44300,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
-var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 732));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
+var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 754));
 // [z-paging]scroll相关模块
 var _default = {
   props: {
@@ -39757,7 +44730,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 745 */
+/* 767 */
 /*!***********************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/back-to-top.js ***!
   \***********************************************************************************************************************************************/
@@ -39772,7 +44745,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
 // [z-paging]点击返回顶部view模块
 var _default2 = {
   props: {
@@ -39874,7 +44847,7 @@ var _default2 = {
 exports.default = _default2;
 
 /***/ }),
-/* 746 */
+/* 768 */
 /*!************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-paging/components/z-paging/js/modules/virtual-list.js ***!
   \************************************************************************************************************************************************/
@@ -39889,11 +44862,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
-var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 725));
-var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 724));
-var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 732));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
+var _zPagingUtils = _interopRequireDefault(__webpack_require__(/*! .././z-paging-utils */ 747));
+var _zPagingConstant = _interopRequireDefault(__webpack_require__(/*! .././z-paging-constant */ 746));
+var _zPagingEnum = _interopRequireDefault(__webpack_require__(/*! .././z-paging-enum */ 754));
 // [z-paging]虚拟列表模块
 var _default2 = {
   props: {
@@ -40314,16 +45287,16 @@ var _default2 = {
 exports.default = _default2;
 
 /***/ }),
-/* 747 */,
-/* 748 */,
-/* 749 */,
-/* 750 */,
-/* 751 */,
-/* 752 */,
-/* 753 */,
-/* 754 */,
-/* 755 */,
-/* 756 */
+/* 769 */,
+/* 770 */,
+/* 771 */,
+/* 772 */,
+/* 773 */,
+/* 774 */,
+/* 775 */,
+/* 776 */,
+/* 777 */,
+/* 778 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/z-tabs/components/z-tabs/config/index.js ***!
   \*********************************************************************************************************************************/
@@ -40342,28 +45315,6 @@ var _default = {};
 exports.default = _default;
 
 /***/ }),
-/* 757 */,
-/* 758 */,
-/* 759 */,
-/* 760 */,
-/* 761 */,
-/* 762 */,
-/* 763 */,
-/* 764 */,
-/* 765 */,
-/* 766 */,
-/* 767 */,
-/* 768 */,
-/* 769 */,
-/* 770 */,
-/* 771 */,
-/* 772 */,
-/* 773 */,
-/* 774 */,
-/* 775 */,
-/* 776 */,
-/* 777 */,
-/* 778 */,
 /* 779 */,
 /* 780 */,
 /* 781 */,
@@ -40379,32 +45330,7 @@ exports.default = _default;
 /* 791 */,
 /* 792 */,
 /* 793 */,
-/* 794 */
-/*!**********************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-status-bar/props.js ***!
-  \**********************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    bgColor: {
-      type: String,
-      default: uni.$u.props.statusBar.bgColor
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
+/* 794 */,
 /* 795 */,
 /* 796 */,
 /* 797 */,
@@ -40412,57 +45338,7 @@ exports.default = _default;
 /* 799 */,
 /* 800 */,
 /* 801 */,
-/* 802 */
-/*!****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-line/props.js ***!
-  \****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    color: {
-      type: String,
-      default: uni.$u.props.line.color
-    },
-    // 长度，竖向时表现为高度，横向时表现为长度，可以为百分比，带px单位的值等
-    length: {
-      type: [String, Number],
-      default: uni.$u.props.line.length
-    },
-    // 线条方向，col-竖向，row-横向
-    direction: {
-      type: String,
-      default: uni.$u.props.line.direction
-    },
-    // 是否显示细边框
-    hairline: {
-      type: Boolean,
-      default: uni.$u.props.line.hairline
-    },
-    // 线条与上下左右元素的间距，字符串形式，如"30px"、"20px 30px"
-    margin: {
-      type: [String, Number],
-      default: uni.$u.props.line.margin
-    },
-    // 是否虚线，true-虚线，false-实线
-    dashed: {
-      type: Boolean,
-      default: uni.$u.props.line.dashed
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
+/* 802 */,
 /* 803 */,
 /* 804 */,
 /* 805 */,
@@ -40470,258 +45346,13 @@ exports.default = _default;
 /* 807 */,
 /* 808 */,
 /* 809 */,
-/* 810 */
-/*!************************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-loading-icon/props.js ***!
-  \************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 是否显示组件
-    show: {
-      type: Boolean,
-      default: uni.$u.props.loadingIcon.show
-    },
-    // 颜色
-    color: {
-      type: String,
-      default: uni.$u.props.loadingIcon.color
-    },
-    // 提示文字颜色
-    textColor: {
-      type: String,
-      default: uni.$u.props.loadingIcon.textColor
-    },
-    // 文字和图标是否垂直排列
-    vertical: {
-      type: Boolean,
-      default: uni.$u.props.loadingIcon.vertical
-    },
-    // 模式选择，circle-圆形，spinner-花朵形，semicircle-半圆形
-    mode: {
-      type: String,
-      default: uni.$u.props.loadingIcon.mode
-    },
-    // 图标大小，单位默认px
-    size: {
-      type: [String, Number],
-      default: uni.$u.props.loadingIcon.size
-    },
-    // 文字大小
-    textSize: {
-      type: [String, Number],
-      default: uni.$u.props.loadingIcon.textSize
-    },
-    // 文字内容
-    text: {
-      type: [String, Number],
-      default: uni.$u.props.loadingIcon.text
-    },
-    // 动画模式
-    timingFunction: {
-      type: String,
-      default: uni.$u.props.loadingIcon.timingFunction
-    },
-    // 动画执行周期时间
-    duration: {
-      type: [String, Number],
-      default: uni.$u.props.loadingIcon.duration
-    },
-    // mode=circle时的暗边颜色
-    inactiveColor: {
-      type: String,
-      default: uni.$u.props.loadingIcon.inactiveColor
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
+/* 810 */,
 /* 811 */,
 /* 812 */,
 /* 813 */,
 /* 814 */,
 /* 815 */,
-/* 816 */,
-/* 817 */,
-/* 818 */
-/*!*****************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-popup/props.js ***!
-  \*****************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 是否展示弹窗
-    show: {
-      type: Boolean,
-      default: uni.$u.props.popup.show
-    },
-    // 是否显示遮罩
-    overlay: {
-      type: Boolean,
-      default: uni.$u.props.popup.overlay
-    },
-    // 弹出的方向，可选值为 top bottom right left center
-    mode: {
-      type: String,
-      default: uni.$u.props.popup.mode
-    },
-    // 动画时长，单位ms
-    duration: {
-      type: [String, Number],
-      default: uni.$u.props.popup.duration
-    },
-    // 是否显示关闭图标
-    closeable: {
-      type: Boolean,
-      default: uni.$u.props.popup.closeable
-    },
-    // 自定义遮罩的样式
-    overlayStyle: {
-      type: [Object, String],
-      default: uni.$u.props.popup.overlayStyle
-    },
-    // 点击遮罩是否关闭弹窗
-    closeOnClickOverlay: {
-      type: Boolean,
-      default: uni.$u.props.popup.closeOnClickOverlay
-    },
-    // 层级
-    zIndex: {
-      type: [String, Number],
-      default: uni.$u.props.popup.zIndex
-    },
-    // 是否为iPhoneX留出底部安全距离
-    safeAreaInsetBottom: {
-      type: Boolean,
-      default: uni.$u.props.popup.safeAreaInsetBottom
-    },
-    // 是否留出顶部安全距离（状态栏高度）
-    safeAreaInsetTop: {
-      type: Boolean,
-      default: uni.$u.props.popup.safeAreaInsetTop
-    },
-    // 自定义关闭图标位置，top-left为左上角，top-right为右上角，bottom-left为左下角，bottom-right为右下角
-    closeIconPos: {
-      type: String,
-      default: uni.$u.props.popup.closeIconPos
-    },
-    // 是否显示圆角
-    round: {
-      type: [Boolean, String, Number],
-      default: uni.$u.props.popup.round
-    },
-    // mode=center，也即中部弹出时，是否使用缩放模式
-    zoom: {
-      type: Boolean,
-      default: uni.$u.props.popup.zoom
-    },
-    // 弹窗背景色，设置为transparent可去除白色背景
-    bgColor: {
-      type: String,
-      default: uni.$u.props.popup.bgColor
-    },
-    // 遮罩的透明度，0-1之间
-    overlayOpacity: {
-      type: [Number, String],
-      default: uni.$u.props.popup.overlayOpacity
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 819 */,
-/* 820 */,
-/* 821 */,
-/* 822 */,
-/* 823 */,
-/* 824 */,
-/* 825 */,
-/* 826 */
-/*!***************************************************************************************************************************!*\
-  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-gap/props.js ***!
-  \***************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  props: {
-    // 背景颜色（默认transparent）
-    bgColor: {
-      type: String,
-      default: uni.$u.props.gap.bgColor
-    },
-    // 分割槽高度，单位px（默认30）
-    height: {
-      type: [String, Number],
-      default: uni.$u.props.gap.height
-    },
-    // 与上一个组件的距离
-    marginTop: {
-      type: [String, Number],
-      default: uni.$u.props.gap.marginTop
-    },
-    // 与下一个组件的距离
-    marginBottom: {
-      type: [String, Number],
-      default: uni.$u.props.gap.marginBottom
-    }
-  }
-};
-exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
-/* 827 */,
-/* 828 */,
-/* 829 */,
-/* 830 */,
-/* 831 */,
-/* 832 */,
-/* 833 */,
-/* 834 */,
-/* 835 */,
-/* 836 */,
-/* 837 */,
-/* 838 */,
-/* 839 */,
-/* 840 */,
-/* 841 */,
-/* 842 */,
-/* 843 */,
-/* 844 */,
-/* 845 */,
-/* 846 */,
-/* 847 */,
-/* 848 */
+/* 816 */
 /*!**********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-transition/props.js ***!
   \**********************************************************************************************************************************/
@@ -40763,7 +45394,7 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 849 */
+/* 817 */
 /*!***************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-transition/transition.js ***!
   \***************************************************************************************************************************************/
@@ -40778,9 +45409,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 63));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 65));
-var _nvueAniMap = _interopRequireDefault(__webpack_require__(/*! ./nvue.ani-map.js */ 850));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 35));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 37));
+var _nvueAniMap = _interopRequireDefault(__webpack_require__(/*! ./nvue.ani-map.js */ 818));
 // 定义一个一定时间后自动成功的promise，让调用nextTick方法处，进入下一个then方法
 var nextTick = function nextTick() {
   return new Promise(function (resolve) {
@@ -40872,7 +45503,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 850 */
+/* 818 */
 /*!*****************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-transition/nvue.ani-map.js ***!
   \*****************************************************************************************************************************************/
@@ -41065,14 +45696,72 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 851 */,
-/* 852 */,
-/* 853 */,
-/* 854 */,
-/* 855 */,
-/* 856 */,
-/* 857 */,
-/* 858 */
+/* 819 */,
+/* 820 */,
+/* 821 */,
+/* 822 */,
+/* 823 */,
+/* 824 */,
+/* 825 */,
+/* 826 */
+/*!****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-line/props.js ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    color: {
+      type: String,
+      default: uni.$u.props.line.color
+    },
+    // 长度，竖向时表现为高度，横向时表现为长度，可以为百分比，带px单位的值等
+    length: {
+      type: [String, Number],
+      default: uni.$u.props.line.length
+    },
+    // 线条方向，col-竖向，row-横向
+    direction: {
+      type: String,
+      default: uni.$u.props.line.direction
+    },
+    // 是否显示细边框
+    hairline: {
+      type: Boolean,
+      default: uni.$u.props.line.hairline
+    },
+    // 线条与上下左右元素的间距，字符串形式，如"30px"、"20px 30px"
+    margin: {
+      type: [String, Number],
+      default: uni.$u.props.line.margin
+    },
+    // 是否虚线，true-虚线，false-实线
+    dashed: {
+      type: Boolean,
+      default: uni.$u.props.line.dashed
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 827 */,
+/* 828 */,
+/* 829 */,
+/* 830 */,
+/* 831 */,
+/* 832 */,
+/* 833 */,
+/* 834 */
 /*!*********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/hic-video-player/utils/autoFullScreen.js ***!
   \*********************************************************************************************************************************/
@@ -41231,13 +45920,250 @@ function stopAccelerometer() {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
+/* 835 */,
+/* 836 */,
+/* 837 */,
+/* 838 */,
+/* 839 */,
+/* 840 */,
+/* 841 */,
+/* 842 */,
+/* 843 */,
+/* 844 */,
+/* 845 */,
+/* 846 */,
+/* 847 */,
+/* 848 */,
+/* 849 */
+/*!*****************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-popup/props.js ***!
+  \*****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 是否展示弹窗
+    show: {
+      type: Boolean,
+      default: uni.$u.props.popup.show
+    },
+    // 是否显示遮罩
+    overlay: {
+      type: Boolean,
+      default: uni.$u.props.popup.overlay
+    },
+    // 弹出的方向，可选值为 top bottom right left center
+    mode: {
+      type: String,
+      default: uni.$u.props.popup.mode
+    },
+    // 动画时长，单位ms
+    duration: {
+      type: [String, Number],
+      default: uni.$u.props.popup.duration
+    },
+    // 是否显示关闭图标
+    closeable: {
+      type: Boolean,
+      default: uni.$u.props.popup.closeable
+    },
+    // 自定义遮罩的样式
+    overlayStyle: {
+      type: [Object, String],
+      default: uni.$u.props.popup.overlayStyle
+    },
+    // 点击遮罩是否关闭弹窗
+    closeOnClickOverlay: {
+      type: Boolean,
+      default: uni.$u.props.popup.closeOnClickOverlay
+    },
+    // 层级
+    zIndex: {
+      type: [String, Number],
+      default: uni.$u.props.popup.zIndex
+    },
+    // 是否为iPhoneX留出底部安全距离
+    safeAreaInsetBottom: {
+      type: Boolean,
+      default: uni.$u.props.popup.safeAreaInsetBottom
+    },
+    // 是否留出顶部安全距离（状态栏高度）
+    safeAreaInsetTop: {
+      type: Boolean,
+      default: uni.$u.props.popup.safeAreaInsetTop
+    },
+    // 自定义关闭图标位置，top-left为左上角，top-right为右上角，bottom-left为左下角，bottom-right为右下角
+    closeIconPos: {
+      type: String,
+      default: uni.$u.props.popup.closeIconPos
+    },
+    // 是否显示圆角
+    round: {
+      type: [Boolean, String, Number],
+      default: uni.$u.props.popup.round
+    },
+    // mode=center，也即中部弹出时，是否使用缩放模式
+    zoom: {
+      type: Boolean,
+      default: uni.$u.props.popup.zoom
+    },
+    // 弹窗背景色，设置为transparent可去除白色背景
+    bgColor: {
+      type: String,
+      default: uni.$u.props.popup.bgColor
+    },
+    // 遮罩的透明度，0-1之间
+    overlayOpacity: {
+      type: [Number, String],
+      default: uni.$u.props.popup.overlayOpacity
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 850 */,
+/* 851 */,
+/* 852 */,
+/* 853 */,
+/* 854 */,
+/* 855 */,
+/* 856 */,
+/* 857 */
+/*!************************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-loading-icon/props.js ***!
+  \************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 是否显示组件
+    show: {
+      type: Boolean,
+      default: uni.$u.props.loadingIcon.show
+    },
+    // 颜色
+    color: {
+      type: String,
+      default: uni.$u.props.loadingIcon.color
+    },
+    // 提示文字颜色
+    textColor: {
+      type: String,
+      default: uni.$u.props.loadingIcon.textColor
+    },
+    // 文字和图标是否垂直排列
+    vertical: {
+      type: Boolean,
+      default: uni.$u.props.loadingIcon.vertical
+    },
+    // 模式选择，circle-圆形，spinner-花朵形，semicircle-半圆形
+    mode: {
+      type: String,
+      default: uni.$u.props.loadingIcon.mode
+    },
+    // 图标大小，单位默认px
+    size: {
+      type: [String, Number],
+      default: uni.$u.props.loadingIcon.size
+    },
+    // 文字大小
+    textSize: {
+      type: [String, Number],
+      default: uni.$u.props.loadingIcon.textSize
+    },
+    // 文字内容
+    text: {
+      type: [String, Number],
+      default: uni.$u.props.loadingIcon.text
+    },
+    // 动画模式
+    timingFunction: {
+      type: String,
+      default: uni.$u.props.loadingIcon.timingFunction
+    },
+    // 动画执行周期时间
+    duration: {
+      type: [String, Number],
+      default: uni.$u.props.loadingIcon.duration
+    },
+    // mode=circle时的暗边颜色
+    inactiveColor: {
+      type: String,
+      default: uni.$u.props.loadingIcon.inactiveColor
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 858 */,
 /* 859 */,
 /* 860 */,
 /* 861 */,
 /* 862 */,
 /* 863 */,
 /* 864 */,
-/* 865 */,
+/* 865 */
+/*!***************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-gap/props.js ***!
+  \***************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    // 背景颜色（默认transparent）
+    bgColor: {
+      type: String,
+      default: uni.$u.props.gap.bgColor
+    },
+    // 分割槽高度，单位px（默认30）
+    height: {
+      type: [String, Number],
+      default: uni.$u.props.gap.height
+    },
+    // 与上一个组件的距离
+    marginTop: {
+      type: [String, Number],
+      default: uni.$u.props.gap.marginTop
+    },
+    // 与下一个组件的距离
+    marginBottom: {
+      type: [String, Number],
+      default: uni.$u.props.gap.marginBottom
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
 /* 866 */,
 /* 867 */,
 /* 868 */,
@@ -41405,7 +46331,14 @@ function createAnimation(option, _this) {
 /* 897 */,
 /* 898 */,
 /* 899 */,
-/* 900 */
+/* 900 */,
+/* 901 */,
+/* 902 */,
+/* 903 */,
+/* 904 */,
+/* 905 */,
+/* 906 */,
+/* 907 */
 /*!*******************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-overlay/props.js ***!
   \*******************************************************************************************************************************/
@@ -41447,14 +46380,47 @@ exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 901 */,
-/* 902 */,
-/* 903 */,
-/* 904 */,
-/* 905 */,
-/* 906 */,
-/* 907 */,
-/* 908 */
+/* 908 */,
+/* 909 */,
+/* 910 */,
+/* 911 */,
+/* 912 */,
+/* 913 */,
+/* 914 */,
+/* 915 */
+/*!**********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-status-bar/props.js ***!
+  \**********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  props: {
+    bgColor: {
+      type: String,
+      default: uni.$u.props.statusBar.bgColor
+    }
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 916 */,
+/* 917 */,
+/* 918 */,
+/* 919 */,
+/* 920 */,
+/* 921 */,
+/* 922 */,
+/* 923 */
 /*!***********************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp/uniapp_demo/uniapp_demo/uni_modules/uview-ui/components/u-safe-bottom/props.js ***!
   \***********************************************************************************************************************************/

@@ -39,7 +39,7 @@
 		<!-- 社交账号登录 -->
 		<view class="wechatLogin center" >
 			<text>————社交账号登录————</text>
-			<button class="wechatLoginBtn" open-type="getUserInfo"  @getuserinfo="wechatLogin" >
+			<button class="wechatLoginBtn" open-type="getUserInfo"  @getuserinfo="wechatLoginFun" >
 				<image class="logo-login" :src="'../../static/images/icon_wechat.png'"
 				    @error="imageError"></image>
 			</button>
@@ -117,7 +117,7 @@
 			
 			
 			/* 微信登录 */
-			wechatLogin(){		
+			wechatLoginFun(){		
 				let _that = this;
 				uni.getSetting({
 				 success(res) {

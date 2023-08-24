@@ -1,389 +1,291 @@
 <template>
-	<view class="form-page">
-		<u-navbar
-			title="表单"
-			@leftClick="navigateBack"
-			safeAreaInsetTop
-			fixed
-			placeholder></u-navbar>
-		<view class="u-demo-block">
-			<text class="u-demo-block__title">基础使用</text>
-			<view class="u-demo-block__content">
-				<!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
-				<u-form
-					labelPosition="left"
-					:model="model1"
-					ref="form1">
-					<u-form-item
-						label="姓名"
-						prop="userInfo.name"
-						ref="item1">
-						<u-input
-							v-model="model1.userInfo.name"
-							border="none"
-							placeholder="姓名,只能为中文"
-						></u-input>
-					</u-form-item>
-					
-					<u-form-item
-						label="性别"
-						prop="userInfo.sex"
-						@click="showSex = true; hideKeyboard()"
-						ref="item1">
-						<u-input
-							v-model="model1.userInfo.sex"
-							disabled
-							disabledColor="#ffffff"
-							placeholder="请选择性别"
-							border="bottom">
-						</u-input>
-						<u-icon slot="right" name="arrow-right" ></u-icon>
-					</u-form-item>
-					
-					<u-form-item
-						label="住店时间"
-						prop="hotel"
-						labelWidth="80"
-						borderBottom
-						@click="showCalendar = true; hideKeyboard()">
-						<u-input
-							v-model="model1.hotel"
-							disabled
-							disabledColor="#ffffff"
-							placeholder="请选择住店和离店时间"
-							border="none">
-						</u-input>
-						<u-icon
-							slot="right"
-							name="arrow-right">
-						</u-icon>
-					</u-form-item>
-					<u-form-item
-						label="验证码"
-						prop="code"
-						labelWidth="80"
-						borderBottom>
-						<u-input
-							v-model="model1.code"
-							border="none"
-							placeholder="请填写验证码"
-						></u-input>
-						<u-button
-							slot="right"
-							@tap="getCode"
-							:text="tips"
-							type="success"
-							size="mini"
-							:disabled="disabled1"
-						></u-button>
-					</u-form-item>
-					<u-form-item
-						label="生日"
-						prop="userInfo.birthday"
-						borderBottom
-						@click="showBirthday = true; hideKeyboard()"
-						ref="item1">
-						<u-input
-							v-model="model1.userInfo.birthday"
-							disabled
-							disabledColor="#ffffff"
-							placeholder="请选择生日"
-							border="none"
-						></u-input>
-						<u-icon
-							slot="right"
-							name="arrow-right"
-						></u-icon>
-					</u-form-item>
-				</u-form>
-				
-				<u-button
-					type="primary"
-					text="提交"
-					customStyle="margin-top: 50px"
-					@click="submit"
-				></u-button>
-				<u-button
-					type="error"
-					text="重置"
-					customStyle="margin-top: 10px"
-					@click="reset"
-				></u-button>
-				<!-- 性别选择 弹框 -->
-				<u-action-sheet
-					:show="showSex"
-					:actions="actions"
-					title="请选择性别"
-					description="如果选择保密会报错"
-					@close="showSex = false"
-					@select="sexSelect"
-				>
-				</u-action-sheet>
-				<u-calendar
-					:show="showCalendar"
-					mode="range"
-					@confirm="calendarConfirm"
-					@close="calendarClose"
-					startText="住店"
-					endText="离店"
-					confirmDisabledText="请选择离店日期"
-					:formatter="formatter"
-				></u-calendar>
-				<u-code
-					ref="uCode"
-					@change="codeChange"
-					seconds="20"
-					@start="disabled1 = true"
-					@end="disabled1 = false"
-				></u-code>
-				
-				
+	<view class="container">
+		<uni-card :is-shadow="false" is-full>
+			<text class="uni-h6">uni-forms 组件一般由输入框、选择器、单选框、多选框等控件组成，用以收集、校验、提交数据。</text>
+		</uni-card>
+		
+		<uni-section title="表单校验" type="line">
+			<view class="example">
+				<!-- 基础表单校验 -->
+				<uni-forms ref="valiForm" :rules="rules" :modelValue="valiFormData">
+					<uni-forms-item label="姓名" required name="name">
+						<uni-easyinput v-model="valiFormData.name" placeholder="请输入姓名" />
+					</uni-forms-item>
+					<uni-forms-item label="年龄" required name="age">
+						<uni-easyinput v-model="valiFormData.age" placeholder="请输入年龄" />
+					</uni-forms-item>
+					<uni-forms-item label="自我介绍" name="introduction">
+						<uni-easyinput type="textarea" v-model="valiFormData.introduction" placeholder="请输入自我介绍" />
+					</uni-forms-item>
+				</uni-forms>
+				<button type="primary" @click="submit('valiForm')">提交</button>
 			</view>
-		</view>
+		</uni-section>
+
+		<uni-section title="自定义校验规则" type="line">
+			<view class="example">
+				<!-- 自定义表单校验 -->
+				<uni-forms ref="customForm" :rules="customRules" :modelValue="customFormData">
+					<uni-forms-item label="姓名" required name="name">
+						<uni-easyinput v-model="customFormData.name" placeholder="请输入姓名" />
+					</uni-forms-item>
+					<uni-forms-item label="年龄" required name="age">
+						<uni-easyinput v-model="customFormData.age" placeholder="请输入年龄" />
+					</uni-forms-item>
+					<uni-forms-item label="兴趣爱好" required name="hobby">
+						<uni-data-checkbox v-model="customFormData.hobby" multiple :localdata="hobbys" />
+					</uni-forms-item>
+				</uni-forms>
+				<button type="primary" @click="submit('customForm')">提交</button>
+			</view>
+		</uni-section>
+
+
+		<uni-section title="动态表单" type="line">
+			<view class="example">
+				<!-- 动态表单校验 -->
+				<uni-forms ref="dynamicForm" :rules="dynamicRules" :modelValue="dynamicFormData">
+					<uni-forms-item label="邮箱" required name="email">
+						<uni-easyinput v-model="dynamicFormData.email" placeholder="请输入姓名" />
+					</uni-forms-item>
+					<uni-forms-item v-for="(item,index) in dynamicLists" :key="item.id" :label="item.label+' '+index"
+						required :rules="item.rules" :name="'domains[' + item.id + ']'">
+						<view class="form-item">
+							<uni-easyinput v-model="dynamicFormData.domains[item.id]" placeholder="请输入域名" />
+							<button class="button" size="mini" type="default" @click="del(item.id)">删除</button>
+						</view>
+					</uni-forms-item>
+				</uni-forms>
+				<view class="button-group">
+					<button type="primary" size="mini" @click="add">新增域名</button>
+					<button type="primary" size="mini" @click="submit('dynamicForm')">提交</button>
+				</view>
+			</view>
+		</uni-section>
 	</view>
 </template>
-
 <script>
 	export default {
 		data() {
 			return {
-				fileList1: [],
-				disabled1: false,
-				tips: '',
-				value: '',
-				showCalendar: false,
-				showBirthday: false,
-				model1: {
-					userInfo: {
-						name: '楼兰',
-						sex: '',
-						birthday: ''
-					},
-					radiovalue1: '苹果',
-					checkboxValue1: [],
-					intro: '',
-					code: ''
+				// 基础表单数据
+				baseFormData: {
+					name: '',
+					age: '',
+					introduction: '',
+					sex: 2,
+					hobby: [5],
+					datetimesingle: 1627529992399
 				},
-				showSex: false,
-				birthday: Number(new Date()),
-				actions: [
-					{
-						name: '男',
-						value: 1
-					},
-					{
-						name: '女',
-						value: 0
-					},
-					{
-						name: '保密',
-						value: 2
-					},
-				],
-				studentes:[
-					{name: '张三'},{name: '李四'},{name: '王二'},{name: '马五'},{name: '王雪'},{name: '赵丹'},
-					{name: '月度'},{name: '蓝颜'},{name: '水波'},{name: '曹丽'},{name: '张顺'},{name: '例戚风'},
-				],
+				// 表单数据
+				alignmentFormData: {
+					name: '',
+					age: '',
+				},
+				// 单选数据源
+				sexs: [{
+					text: '男',
+					value: 0
+				}, {
+					text: '女',
+					value: 1
+				}, {
+					text: '保密',
+					value: 2
+				}],
+				// 多选数据源
+				hobbys: [{
+					text: '跑步',
+					value: 0
+				}, {
+					text: '游泳',
+					value: 1
+				}, {
+					text: '绘画',
+					value: 2
+				}, {
+					text: '足球',
+					value: 3
+				}, {
+					text: '篮球',
+					value: 4
+				}, {
+					text: '其他',
+					value: 5
+				}],
+				// 分段器数据
+				current: 0,
+				items: ['左对齐', '顶部对齐'],
+				// 校验表单数据
+				valiFormData: {
+					name: '',
+					age: '',
+					introduction: '',
+				},
+				// 校验规则
 				rules: {
-					'userInfo.name': [{
-						type: 'string',
-						required: true,
-						message: '请填写姓名',
-						trigger: ['blur', 'change']
-					}, {
-						// 此为同步验证，可以直接返回true或者false，如果是异步验证，稍微不同，见下方说明
-						validator: (rule, value, callback) => {
-							// 调用uView自带的js验证规则，详见：https://www.uviewui.com/js/test.html
-							return uni.$u.test.chinese(value);
-						},
-						message: "姓名必须为中文",
-						// 触发器可以同时用blur和change，二者之间用英文逗号隔开
-						trigger: ["change", "blur"],
-					}],
-					code: {
-						type: 'string',
-						required: true,
-						len: 4,
-						message: '请填写4位验证码',
-						trigger: ['blur']
+					name: {
+						rules: [{
+							required: true,
+							errorMessage: '姓名不能为空'
+						}]
 					},
-					'userInfo.sex': {
-						type: 'string',
-						max: 1,
-						required: true,
-						message: '请选择男或女',
-						trigger: ['blur', 'change']
-					},
-					radiovalue1: {
-						type: 'string',
-						min: 1,
-						max: 2,
-						message: '橙子有毒',
-						trigger: ['change']
-					},
-					checkboxValue1: {
-						type: 'array',
-						min: 2,
-						required: true,
-						message: '不能太宅，至少选两项',
-						trigger: ['change']
-					},
-					intro: {
-						type: 'string',
-						min: 3,
-						required: true,
-						message: '不低于3个字',
-						trigger: ['change']
-					},
-					hotel: {
-						type: 'string',
-						min: 2,
-						required: true,
-						message: '请选择住店时间',
-						trigger: ['change']
-					},
-					'userInfo.birthday': {
-						type: 'string',
-						required: true,
-						message: '请选择生日',
-						trigger: ['change']
-					},
+					age: {
+						rules: [{
+							required: true,
+							errorMessage: '年龄不能为空'
+						}, {
+							format: 'number',
+							errorMessage: '年龄只能输入数字'
+						}]
+					}
 				},
-				radiolist1: [{
-						name: '苹果',
-						disabled: false
+				// 自定义表单数据
+				customFormData: {
+					name: '',
+					age: '',
+					hobby: []
+				},
+				// 自定义表单校验规则
+				customRules: {
+					name: {
+						rules: [
+							{
+								required: true,
+								errorMessage: '姓名不能为空'
+							},
+							{
+								validateFunction: function (rule, value, data, callback) {
+								  if (value.length < 5) {
+									callback('用户名长度不能小于5位');
+								  }
+								  return true;
+								}
+							},
+						]
 					},
-					{
-						name: '香蕉',
-						disabled: false
+					age: {
+						rules: [
+							{
+								required: true,
+								errorMessage: '年龄不能为空'
+							},
+							{
+								validateFunction: function (rule, value, data, callback) {
+								  if (value.length < 1) {
+									callback('年龄长度不能小于1位');
+								  }
+								  return true;
+								}
+							}
+						]
 					},
-					{
-						name: '毒橙子',
-						disabled: false
+					hobby: {
+						rules: [{
+								format: 'array'
+							},
+							{
+								validateFunction: function(rule, value, data, callback) {
+									if (value.length < 2) {
+										callback('请至少勾选两个兴趣爱好')
+									}
+									return true
+								}
+							}
+						]
 					}
-				],
-				checkboxList1: [{
-						name: '羽毛球',
-						disabled: false
-					},
-					{
-						name: '跑步',
-						disabled: false
-					},
-					{
-						name: '爬山',
-						disabled: false
+
+				},
+				dynamicFormData: {
+					email: '',
+					domains: {}
+				},
+				dynamicLists: [],
+				dynamicRules: {
+					email: {
+						rules: [{
+							required: true,
+							errorMessage: '域名不能为空'
+						}, {
+							format: 'email',
+							errorMessage: '域名格式错误'
+						}]
 					}
-				]
+				}
 			}
 		},
-		onBackPress(event) {
-			console.log('导航栏返回 拦截event',event)
+		computed: {
+			// 处理表单排列切换
+			alignment() {
+				if (this.current === 0) return 'left'
+				if (this.current === 1) return 'top'
+				return 'left'
+			}
 		},
+		onLoad() {},
 		onReady() {
-			// 如果需要兼容微信小程序，并且校验规则中含有方法等，只能通过setRules方法设置规则
-			this.$refs.form1.setRules(this.rules)
+			// 设置自定义表单校验规则，必须在节点渲染完毕后执行
+			this.$refs.customForm.setRules(this.customRules)
 		},
 		methods: {
-			afterRead(event) {
-				this.fileList1.push({
-					url: event.file,
-					status: 'uploading',
-					message: '上传中'
+			onClickItem(e) {
+				console.log(e);
+				this.current = e.currentIndex
+			},
+			add() {
+				this.dynamicLists.push({
+					label: '域名',
+					rules: [{
+						'required': true,
+						errorMessage: '域名项必填'
+					}],
+					id: Date.now()
 				})
 			},
-			groupChange(n) {
-				// console.log('groupChange', n);
+			del(id) {
+				let index = this.dynamicLists.findIndex(v => v.id === id)
+				this.dynamicLists.splice(index, 1)
 			},
-			radioChange(n) {
-				// console.log('radioChange', n);
-			},
-			navigateBack() {
-				uni.navigateBack()
-			},
-			sexSelect(e) {
-				this.model1.userInfo.sex = e.name
-				this.$refs.form1.validateField('userInfo.sex')
-				console.log('sexSelect ',e)
-			},
-			change(e) {
-				// console.log(e);
-			},
-			formatter(day) {
-				const d = new Date()
-				let month = d.getMonth() + 1
-				const date = d.getDate()
-				if (day.month == month && day.day == date + 3) {
-					day.bottomInfo = '有优惠'
-					day.dot = true
-				}
-				return day
-			},
-			calendarConfirm(e) {
-				this.showCalendar = false
-				this.model1.hotel = `${e[0]} / ${e[e.length - 1]}`
-				this.$refs.form1.validateField('hotel')
-			},
-			codeChange(text) {
-				this.tips = text;
-			},
-			getCode() {
-				if (this.$refs.uCode.canGetCode) {
-					// 模拟向后端请求验证码
-					uni.showLoading({
-						title: '正在获取验证码'
+			submit(ref) {
+				this.$refs[ref].validate().then(res => {
+					console.log('success', res);
+					uni.showToast({
+						title: `校验通过`
 					})
-					setTimeout(() => {
-						uni.hideLoading();
-						// 这里此提示会被this.start()方法中的提示覆盖
-						uni.$u.toast('验证码已发送');
-						// 通知验证码组件内部开始倒计时
-						this.$refs.uCode.start();
-					}, 2000);
-				} else {
-					uni.$u.toast('倒计时结束后再发送');
-				}
-			},
-			calendarClose() {
-				this.showCalendar = false
-				this.$refs.form1.validateField('hotel')
-			},
-			birthdayClose() {
-				this.showBirthday = false
-				this.$refs.form1.validateField('userInfo.birthday')
-			},
-			birthdayConfirm(e) {
-				this.showBirthday = false
-				this.model1.userInfo.birthday = uni.$u.timeFormat(e.value, 'yyyy-mm-dd')
-				this.$refs.form1.validateField('userInfo.birthday')
-			},
-			submit() {
-				// 如果有错误，会在catch中返回报错信息数组，校验通过则在then中返回true
-				this.$refs.form1.validate().then(res => {
-					uni.$u.toast('校验通过')
-				}).catch(errors => {
-					uni.$u.toast('校验失败')
+				}).catch(err => {
+					console.log('err', err);
 				})
 			},
-			reset() {
-				const validateList = ['userInfo.name', 'userInfo.sex', 'radiovalue1', 'checkboxValue1', 'intro',
-				'hotel', 'code', 'userInfo.birthday']
-				this.$refs.form1.resetFields()
-				this.$refs.form1.clearValidate()
-				setTimeout(()=>{
-					this.$refs.form1.clearValidate(validateList)
-					// 或者使用 this.$refs.form1.clearValidate()
-				},10)
-			},
-			hideKeyboard() {
-				uni.hideKeyboard()
-			}
-		},
+		}
 	}
 </script>
-
 <style lang="scss">
-	.form-page {
-		padding: 10rpx;
+
+	.example {
+		padding: 15px;
+		background-color: #fff;
+	}
+
+	.segmented-control {
+		margin-bottom: 15px;
+	}
+
+	.button-group {
+		margin-top: 15px;
+		display: flex;
+		justify-content: space-around;
+	}
+
+	.form-item {
+		display: flex;
+		align-items: center;
+	}
+
+	.button {
+		display: flex;
+		align-items: center;
+		height: 35px;
+		margin-left: 10px;
 	}
 </style>
+

@@ -20,10 +20,7 @@ export default {
 	methods: {
 		
 	},
-	computed: {
-		...mapGetters(['isLogin',])
-	},
-    
+	
     // 全局配置分享
     onShareAppMessage() {
     	const { h5_share_image, share_intro, share_title, mnp_share_title, mnp_share_image } = this.appConfig.share
