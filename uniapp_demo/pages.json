@@ -201,6 +201,19 @@
 					"style": {
 						"navigationStyle": "custom"
 					}
+				},
+				{
+					"path": "pages/wallet/wallet",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "pages/drop_down/drop_down",
+					"style": {
+						"navigationBarTitleText": "筛选"
+						// "navigationStyle": "custom"
+					}
 				}
 			]
 		}
@@ -235,13 +248,7 @@
 				"selectedIconPath": "/static/images/tab_user_s.png",
 				"text": "我的"
 			}
-		],
-		"midButton": {
-		    "iconPath": "static/images/icon_wechat.png",
-		    "text": "维修上报",
-		    "height": "70px",
-		    "iconWidth": "44px"
-		}
+		]
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

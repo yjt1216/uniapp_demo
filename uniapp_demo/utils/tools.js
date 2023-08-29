@@ -1,3 +1,4 @@
+import test from '@/utils/test.js'
 
 // 提示message
 /*
@@ -868,4 +869,51 @@ export function chooseImages(imageMax){
 			}
 		})
 	});
+}
+
+/**
+ * 判断是否为空
+ */
+export function empty(value) {
+  switch (typeof value) {
+    case 'undefined':
+      return true;
+    case 'string':
+      if (value.replace(/(^[ \t\n\r]*)|([ \t\n\r]*$)/g, '').length == 0) return true;
+      break;
+    case 'boolean':
+      if (!value) return true;
+      break;
+    case 'number':
+      if (value === 0 || isNaN(value)) return true;
+      break;
+    case 'object':
+      if (value === null || value.length === 0) return true;
+      for (const i in value) {
+        return false;
+      }
+      return true;
+  }
+  return false;
+}
+
+/**
+ * @description 深度克隆
+ * @param {object} obj 需要深度克隆的对象
+ * @returns {*} 克隆后的对象或者原值（不是对象）
+ */
+export function deepClone(obj) {
+  // 对常见的“非”值，直接返回原来值
+  if ([null, undefined, NaN, false].includes(obj)) return obj;
+  if (typeof obj !== 'object' && typeof obj !== 'function') {
+    // 原始类型直接返回
+    return obj;
+  }
+  const o = test.array(obj) ? [] : {};
+  for (const i in obj) {
+    if (obj.hasOwnProperty(i)) {
+      o[i] = typeof obj[i] === 'object' ? deepClone(obj[i]) : obj[i];
+    }
+  }
+  return o;
 }

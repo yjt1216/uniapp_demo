@@ -81,15 +81,19 @@
 			<view class="demo-li"> user-intro<text class="demo-tip"> user-intro </text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/video_live/video_live">
+		<!-- <navigator url="/bundle/pages/video_live/video_live">
 			<view class="demo-li"> video live <text class="demo-tip"> 直播 测试 </text></view>
-		</navigator>
+		</navigator> -->
 		
-		<navigator url="/bundle/pages/nurse_auth/nurse_auth">
-			<view class="demo-li"> nurse auth <text class="demo-tip"> 资质热症 </text></view>
+		<navigator url="/bundle/pages/drop_down/drop_down">
+			<view class="demo-li"> drop_down <text class="demo-tip"> 筛选 </text></view>
 		</navigator>
 		<navigator url="/bundle/pages/form_page/form_page">
 			<view class="demo-li"> form_page <text class="demo-tip"> form 校验 </text></view>
+		</navigator>
+		
+		<navigator url="/bundle/pages/wallet/wallet">
+			<view class="demo-li"> wallet <text class="demo-tip"> 我的钱包 </text></view>
 		</navigator>
 		
 		<y-tabbar ref="tabbar" native></y-tabbar>

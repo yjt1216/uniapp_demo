@@ -346,6 +346,19 @@ button[size="lg"]{
     color: transparent;
 }
 
+.row-center {
+	justify-content: center;
+}
+.col-center {
+	align-items: center;
+}
+
+.flex-col {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	flex-direction: column;
+}
 
 
 

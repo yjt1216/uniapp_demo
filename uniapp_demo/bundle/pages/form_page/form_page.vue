@@ -7,7 +7,7 @@
 		<uni-section title="表单校验" type="line">
 			<view class="example">
 				<!-- 基础表单校验 -->
-				<uni-forms ref="valiForm" :rules="rules" :modelValue="valiFormData">
+				<uni-forms ref="valiForm" :rules="rules" :modelValue="valiFormData" validateTrigger="bind">
 					<uni-forms-item label="姓名" required name="name">
 						<uni-easyinput v-model="valiFormData.name" placeholder="请输入姓名" />
 					</uni-forms-item>
@@ -131,13 +131,16 @@
 						}]
 					},
 					age: {
-						rules: [{
-							required: true,
-							errorMessage: '年龄不能为空'
-						}, {
-							format: 'number',
-							errorMessage: '年龄只能输入数字'
-						}]
+						rules: [
+							{
+								required: true,
+								errorMessage: '年龄不能为空'
+							}, 
+							{
+								format: 'number',
+								errorMessage: '年龄只能输入数字'
+							},
+						]
 					}
 				},
 				// 自定义表单数据

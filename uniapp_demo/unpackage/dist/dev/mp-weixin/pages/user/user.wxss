@@ -390,6 +390,25 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked.data-v-80842834 {
 checkbox .wx-checkbox-input.wx-checkbox-input-checked.data-v-80842834::before {
   font-size: 35rpx;
 }
+/* start--去除button的所有默认样式--start */
+.u-reset-button.data-v-80842834 {
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+  background-color: transparent;
+  color: inherit;
+  -webkit-transform: translate(0rpx, 0rpx);
+          transform: translate(0rpx, 0rpx);
+}
+.u-reset-button.button-hover.data-v-80842834 {
+  -webkit-transform: translate(1rpx, 1rpx);
+          transform: translate(1rpx, 1rpx);
+}
+.u-reset-button.data-v-80842834::after {
+  border: none;
+}
+/* end--去除button的所有默认样式--end */
 .user.data-v-80842834 {
   background-size: 100% auto;
   background-repeat: no-repeat;
