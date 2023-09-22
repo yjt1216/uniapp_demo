@@ -37,8 +37,8 @@
 			<view class="demo-li">横屏签名<text class="demo-tip"> 签名界面</text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/upload_img/upload_img">
-			<view class="demo-li">上传照片<text class="demo-tip"> 证件照</text></view>
+		<navigator url="/bundle/pages/upload_img/upload_photo">
+			<view class="demo-li">上传照片<text class="demo-tip"> 选择图片</text></view>
 		</navigator>
 		
 		<navigator url="/bundle/pages/list_input/list_input">

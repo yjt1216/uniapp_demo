@@ -6,11 +6,9 @@
 				"navigationStyle": "custom" 
 			}
 		},
-		
 		{
-			"path": "pages/text_auto/text_auto",
+			"path": "pages/order/order",
 			"style": {
-				// "navigationBarTitleText": "文本"
 				"navigationStyle": "custom" 
 			}
 		},
@@ -26,12 +24,7 @@
 				"navigationStyle": "custom" 
 			}
 		},
-		{
-			"path": "pages/server_explan/server_explan",
-			"style": {
-				"navigationBarTitleText": "服务协议"
-			}
-		},
+		
 		{
 			"path": "pages/login/login",
 			"style": {
@@ -87,7 +80,7 @@
 					}
 				},
 				{
-					"path": "pages/upload_img/upload_img",
+					"path": "pages/upload_img/upload_photo",
 					"style": {
 						"navigationBarTitleText": "上传证件"
 					}
@@ -214,6 +207,19 @@
 						"navigationBarTitleText": "筛选"
 						// "navigationStyle": "custom"
 					}
+				},
+				{
+					"path": "pages/text_auto/text_auto",
+					"style": {
+						// "navigationBarTitleText": "文本"
+						"navigationStyle": "custom" 
+					}
+				},
+				{
+					"path": "pages/server_explan/server_explan",
+					"style": {
+						"navigationBarTitleText": "服务协议"
+					}
 				}
 			]
 		}
@@ -231,10 +237,10 @@
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/text_auto/text_auto",
+				"pagePath": "pages/order/order",
 				"iconPath": "/static/images/tab_home.png",
 				"selectedIconPath": "/static/images/tab_home_s.png",
-				"text": "文本"
+				"text": "订单"
 			},
 			{
 				"pagePath": "pages/message/message",

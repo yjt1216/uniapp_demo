@@ -36,18 +36,19 @@
 					当前选择
 				</view>
 				<view class="uni-list-cell-db">
-					<picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
+					<picker mode="date" fields="month" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
 						<view class="uni-input">{{date}}</view>
 					</picker>
 				</view>
 			</view>
 		</view>
+		
 	</view>
 </template>
 <script>
 export default {
     data() {
-        const currentDate = this.getDate({
+        const currentDate = this.getDateTest({
             format: true
         })
         return {
@@ -74,10 +75,10 @@ export default {
     },
     computed: {
         startDate() {
-            return this.getDate('start');
+            return this.getDateTest('start');
         },
         endDate() {
-            return this.getDate('end');
+            return this.getDateTest('end');
         }
     },
     methods: {
@@ -87,25 +88,26 @@ export default {
         },
         bindDateChange: function(e) {
             this.date = e.detail.value
+			console.log('选择日期date',this.date)
         },
         bindTimeChange: function(e) {
             this.time = e.detail.value
         },
-        getDate(type) {
-            const date = new Date();
-            let year = date.getFullYear();
-            let month = date.getMonth() + 1;
-            let day = date.getDate();
-
-            if (type === 'start') {
-                year = year - 60;
-            } else if (type === 'end') {
-                year = year + 2;
-            }
-            month = month > 9 ? month : '0' + month;
-            day = day > 9 ? day : '0' + day;
-            return `${year}-${month}-${day}`;
-        }
+        
+		getDateTest(type) {
+		    const date = new Date();
+		    let year = date.getFullYear();
+		    let month = date.getMonth() + 1;
+		    
+		    if (type === 'start') {
+		        year = year - 60;
+		    } else if (type === 'end') {
+		        year = year + 2;
+		    }
+		    month = month > 9 ? month : '0' + month;
+		    //day = day > 9 ? day : '0' + day;
+		    return `${year}-${month}`;
+		}
     }
 }
 </script>

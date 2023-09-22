@@ -28,7 +28,7 @@ var _self;
 export default {
 	data() {
 		return {
-			bankCard : '/static/user/mine_renxiang.png',
+			bankCard : '/static/images/user/mine_renxiang.png',
 			bankCardBase64:null
 		};
 	},
@@ -59,7 +59,7 @@ export default {
 		},
 		// 上传银行卡
 		uploadCards : function(){
-			if(this.bankCard == '../../static/user/mine_renxiang.png'){
+			if(this.bankCard == '../../static/images/user/mine_renxiang.png'){
 				uni.showToast({title:"请选择银行卡照片", icon:"none"});
 				return;
 			}

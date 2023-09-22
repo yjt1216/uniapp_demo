@@ -5,7 +5,7 @@
 			
 			<!-- 登录状态 头部信息 -->
 			<view v-if="isLogin" class="login-info" :style="{'padding-top':topH+'px'}">
-				<image class="header-image" src="../../static/user/default_header.png"></image>
+				<image class="header-image" src="../../static/images/user/default_header.png"></image>
 				<view class="login-name" >陈宜飞</view>
 				<view class="login-id" >ID:20635</view>
 				<!-- 星级 资历 佣金 -->
@@ -31,7 +31,7 @@
 			<!-- 未登录 头部信息 -->
 			<view v-if="!isLogin" class="un-login-info" :style="{'padding-top':topH+'px'}">
 				
-				<image class="header-image" src="../../static/user/default_header.png"></image>
+				<image class="header-image" src="../../static/images/user/default_header.png"></image>
 				<view class="login-status" >未登录</view>
 				<!-- 登录 注册 -->
 				<view class="login-register">
@@ -53,62 +53,62 @@
 		<view class="menu-list">
 			<view class="menu-item" @click="serviceObject">
 				<view class="u-r">
-					<image src="../../static/user/fuwuduixiang.png" class="type-img"></image>
+					<image src="../../static/images/user/fuwuduixiang.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">服务对象</view>
 				</view>
 				<!-- <u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon> -->
-				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
 			</view>
 			<view class="divider"></view>
 			<view class="menu-item" @click="serviceObject">
 				<view class="u-r">
-					<image src="../../static/user/peixunkecheng.png" class="type-img"></image>
+					<image src="../../static/images/user/peixunkecheng.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">培训课程</view>
 				</view>
-				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
 			</view>
 			<view class="divider"></view>
 			<router-link to="/bundle/pages/user_intro/user_intro">
 				<view class="menu-item" @click="serviceObject">
 					<view class="u-r">
-						<image src="../../static/user/shezhi.png" class="type-img"></image>
+						<image src="../../static/images/user/shezhi.png" class="type-img"></image>
 						<view class="menu-text u-m-l-20">个人介绍</view>
 					</view>
-					<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+					<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
 				</view>
 			</router-link>
 			<view class="divider"></view>
 			<view class="menu-item" @click="serviceObject">
 				<view class="u-r">
-					<image src="../../static/user/lianxikefu.png" class="type-img"></image>
+					<image src="../../static/images/user/lianxikefu.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">联系客服</view>
 				</view>
-				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
 			</view>
 			<view class="divider"></view>
 			<view class="menu-item" >
 				<view class="u-r">
-					<image src="../../static/user/yonghubangzhu.png" class="type-img"></image>
+					<image src="../../static/images/user/yonghubangzhu.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">用户帮助</view>
 				</view>
-				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
 			</view>
 			<view class="divider"></view>
 			<view class="menu-item" >
 				<view class="u-r">
-					<image src="../../static/user/yinsizhengce.png" class="type-img"></image>
+					<image src="../../static/images/user/yinsizhengce.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">隐私政策</view>
 				</view>
-				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
 			</view>
 			
 			<view class="divider"></view>
 			<view class="menu-item" >
 				<view class="u-r">
-					<image src="../../static/user/yonghuxieyi.png" class="type-img"></image>
+					<image src="../../static/images/user/yonghuxieyi.png" class="type-img"></image>
 					<view class="menu-text u-m-l-20">用户协议</view>
 				</view>
-				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
 			</view>
 			<view class="divider"></view>
 			<view class="menu-item" >
@@ -116,7 +116,7 @@
 					<u-icon name="scan" color="#39C9BC" size="20"></u-icon>
 					<view class="menu-text u-m-l-20">收款码</view>
 				</view>
-				<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
 			</view>
 			
 			<view class="divider"></view>
@@ -128,7 +128,7 @@
 				
 				<view class="storage-right">
 					<view class="storage-size">{{storageSize}}</view>
-					<image class="arrow-img" :src="'/static/user/arrow_right.png'"></image>
+					<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
 				</view>
 			</view>
 			<view class="divider"></view>

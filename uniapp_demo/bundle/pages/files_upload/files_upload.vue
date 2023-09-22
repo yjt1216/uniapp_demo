@@ -286,28 +286,39 @@
 					uni.chooseImage({
 						count:4,
 						success:function(res){
-							
-							
+							let tempFiles = tes.tempFiles;
 							var photoList = [];
-							for(var i=0;i<that.recordPhotoes.length;i++){
-								photoList.push(that.recordPhotoes[i])
-							}
-							if(that.maxSelect > 0){
-								for(var i=0;i<Math.min(that.maxSelect - that.recordPhotoes.length, res.tempFilePaths.length);i++){
-									photoList.push(res.tempFilePaths[i])
-								}
-							}
-							else{
-								for(var i=0;i<res.tempFilePaths.length;i++){
-									photoList.push(res.tempFilePaths[i])
-								}
-							}
-							that.$set(that,'recordPhotoes',photoList);
-							that.$emit('changeRecordPhotoes',that.recordPhotoes);
+							tempFiles.forEach(function(item,index){
+								/* 判断图片大小是否超标 直接压缩 */
+								uni.compressImage({
+									src: item.path,
+									quality: 60,
+									success:function(res){
+										console.log('压缩图片res',res)
+										for(var i=0;i<that.recordPhotoes.length;i++){
+											photoList.push(that.recordPhotoes[i])
+										}
+										if(that.maxSelect > 0){
+											for(var i=0;i<Math.min(that.maxSelect - that.recordPhotoes.length, res.tempFilePaths.length);i++){
+												photoList.push(res.tempFilePaths[i])
+											}
+										}
+										else{
+											for(var i=0;i<res.tempFilePaths.length;i++){
+												photoList.push(res.tempFilePaths[i])
+											}
+										}
+									}
+								})
+							})
+							
+							
+							
+							
 						},
 						fail:function(err){
 							console.log('选取图片err',err)
-							that.$emit('changeRecordPhotoes',that.recordPhotoes);
+							
 						}
 					})
 				}
