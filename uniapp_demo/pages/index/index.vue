@@ -11,7 +11,7 @@
 		<view class="group-title">功能示例</view>
 		
 		
-		<navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
+		<!-- <navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
 			<view class="demo-li">轮播图+商品列表 吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>
 		<navigator url="/bundle/pages/nurse_order/nurse_order">
@@ -28,14 +28,14 @@
 		
 		<navigator url="/bundle/pages/action_sheet/action_sheet">
 			<view class="demo-li">action sheet<text class="demo-tip"> 选择 </text></view>
-		</navigator>
+		</navigator> -->
 		
-		<navigator url="/bundle/pages/sign_page/vertical_sign">
+		<!-- <navigator url="/bundle/pages/sign_page/vertical_sign">
 			<view class="demo-li">竖屏签名<text class="demo-tip"> 签名界面</text></view>
 		</navigator>
 		<navigator url="/bundle/pages/sign_page/landscape_sign">
 			<view class="demo-li">横屏签名<text class="demo-tip"> 签名界面</text></view>
-		</navigator>
+		</navigator> -->
 		
 		<navigator url="/bundle/pages/upload_img/upload_photo">
 			<view class="demo-li">上传照片<text class="demo-tip"> 选择图片</text></view>
@@ -62,11 +62,14 @@
 		<navigator url="/bundle/pages/tag_page/tag-page">
 			<view class="demo-li">tag_page<text class="demo-tip"> tag </text></view>
 		</navigator>
-		
-		<navigator url="/bundle/pages/files_upload/files_upload">
-			<view class="demo-li">files upload<text class="demo-tip"> files upload </text></view>
+		<navigator url="/pages/web_view/web_view">
+			<view class="demo-li"> web_view <text class="demo-tip"> web view 按钮 </text></view>
 		</navigator>
-		<navigator url="/bundle/pages/pop_box/pop_box">
+		
+		<!-- <navigator url="/bundle/pages/files_upload/files_upload">
+			<view class="demo-li">files upload<text class="demo-tip"> files upload </text></view>
+		</navigator> -->
+		<!-- <navigator url="/bundle/pages/pop_box/pop_box">
 			<view class="demo-li"> pop_box<text class="demo-tip"> pop view </text></view>
 		</navigator>
 		<navigator url="/bundle/pages/card_list/card_list">
@@ -79,13 +82,13 @@
 		
 		<navigator url="/bundle/pages/user-intro/user-intro">
 			<view class="demo-li"> user-intro<text class="demo-tip"> user-intro </text></view>
-		</navigator>
+		</navigator> -->
 		
 		<!-- <navigator url="/bundle/pages/video_live/video_live">
 			<view class="demo-li"> video live <text class="demo-tip"> 直播 测试 </text></view>
 		</navigator> -->
 		
-		<navigator url="/bundle/pages/drop_down/drop_down">
+		<!-- <navigator url="/bundle/pages/drop_down/drop_down">
 			<view class="demo-li"> drop_down <text class="demo-tip"> 筛选 </text></view>
 		</navigator>
 		<navigator url="/bundle/pages/form_page/form_page">
@@ -94,7 +97,7 @@
 		
 		<navigator url="/bundle/pages/wallet/wallet">
 			<view class="demo-li"> wallet <text class="demo-tip"> 我的钱包 </text></view>
-		</navigator>
+		</navigator> -->
 		
 		<y-tabbar ref="tabbar" native></y-tabbar>
 		

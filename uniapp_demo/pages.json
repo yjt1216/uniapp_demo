@@ -42,6 +42,12 @@
 			"style": {
 				"navigationBarTitleText": "QQ地图定位"
 			}
+		},
+		{
+			"path": "pages/web_view/web_view",
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"subPackages": [

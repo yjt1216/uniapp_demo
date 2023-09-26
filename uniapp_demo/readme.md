@@ -24,16 +24,16 @@ Guideline 2.1 - Information Needed
 
 
 出于以下原因，已拒绝此项目：
-2.3.3 Performance: Accurate Metadata
+Guideline 2.3.3 - Performance - Accurate Metadata
 
 
-3.2.0 Business: Other Business Model Issues
-我们的app主要发布于中国范围，应用于业内从业人员工作使用。
+Guideline 3.2 - Business
+关于此问题，我们的app主要发布于中国范围，应用于业内从业人员工作使用。
 我们开发的app主要目的是为了让所有业内人员都能使用我们的app来进行工作，提高他们的工作效率。
 如果现在定性我们的app为一个内部应用程序的话，不便我们迭代新的版本。也许目前部分功能还未能完善，但以后我们会将做得更好。
 
 
-5.1.1 Legal: Privacy - Data Collection and Storage
+-Guideline 5.1.1 - Legal - Privacy - Data Collection and Storage
 
 <key>NSCameraUsageDescription</key>
 <string>线下签到需要扫码，是否允许此APP获取相机权限</string>
@@ -41,5 +41,8 @@ Guideline 2.1 - Information Needed
 <string>需要获取个人照片进行更换头像，是否允许此APP获取相册权限</string>
 
 
+关于此问题，我们根据您的提示，对项目进行了彻底的检查并做出修正。
+发现确实会询问用户是否同意相机授权。询问用户的原因是为了实现更换头像功能。
+除此之外，我们并无做出其他不尊重用户的行为。
 
 

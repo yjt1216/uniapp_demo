@@ -1,11 +1,13 @@
-import { createPinia } from 'pinia';
-import piniaPersist from 'pinia-plugin-persist-uni';
+import Vue from "vue";
+import Vuex from "vuex";
+import modules from "./modules";
+import getters from './getters.js';
 
-export const setupPinia = (app) => {
-  const pinia = createPinia();
-  pinia.use(piniaPersist);
+Vue.use(Vuex);
+const debug = process.env.NODE_ENV !== "production";
 
-  app.use(pinia);
-};
-
-
+export default new Vuex.Store({
+	modules,
+	getters,
+	strict: debug
+})
