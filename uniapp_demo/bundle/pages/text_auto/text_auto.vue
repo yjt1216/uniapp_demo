@@ -24,7 +24,7 @@
 			<text @tap="showinfo"  class="hidebtn">{{autoShowText}}</text>
 		</view>
 		
-		<y-tabbar ref="tabbar" native></y-tabbar>
+		
 	</view>
 </template>
 

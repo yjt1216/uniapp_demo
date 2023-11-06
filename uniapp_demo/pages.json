@@ -55,6 +55,18 @@
 			"root": "bundle",
 			"pages": [
 				{
+					"path": "pages/list_h/list_h",
+					"style": {
+						"navigationStyle": "custom" 
+					}
+				},
+				{
+					"path": "pages/list_h/list_water",
+					"style": {
+						"navigationStyle": "custom" 
+					}
+				},
+				{
 					"path": "pages/user_intro/user_intro",
 					"style": {
 						"navigationStyle": "custom" 
@@ -116,6 +128,12 @@
 					"path": "pages/take_photo/take_photo",
 					"style": {
 						"navigationBarTitleText": "拍照"
+					}
+				},
+				{
+					"path": "pages/choose_photo/choose_photo",
+					"style": {
+						"navigationBarTitleText": "选择照片"
 					}
 				},
 				{
@@ -225,6 +243,12 @@
 					"path": "pages/server_explan/server_explan",
 					"style": {
 						"navigationBarTitleText": "服务协议"
+					}
+				},
+				{
+					"path": "pages/choose_date/choose_date",
+					"style": {
+						"navigationBarTitleText": "日期选择"
 					}
 				}
 			]

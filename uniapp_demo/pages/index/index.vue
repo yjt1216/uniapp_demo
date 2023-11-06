@@ -53,12 +53,12 @@
 			<view class="demo-li">头部底部<text class="demo-tip"> 头部 数据列表list 底部 </text></view>
 		</navigator>
 		
-		<navigator url="/pages/location/location">
+		<!-- <navigator url="/pages/location/location">
 			<view class="demo-li">地图定位<text class="demo-tip"> QQ 地图定位功能 </text></view>
 		</navigator>
 		<navigator url="/bundle/pages/take_photo/take_photo">
 			<view class="demo-li">take_photo<text class="demo-tip"> take photo </text></view>
-		</navigator>
+		</navigator> -->
 		<navigator url="/bundle/pages/tag_page/tag-page">
 			<view class="demo-li">tag_page<text class="demo-tip"> tag </text></view>
 		</navigator>
@@ -66,12 +66,31 @@
 			<view class="demo-li"> web_view <text class="demo-tip"> web view 按钮 </text></view>
 		</navigator>
 		
-		<!-- <navigator url="/bundle/pages/files_upload/files_upload">
-			<view class="demo-li">files upload<text class="demo-tip"> files upload </text></view>
-		</navigator> -->
-		<!-- <navigator url="/bundle/pages/pop_box/pop_box">
-			<view class="demo-li"> pop_box<text class="demo-tip"> pop view </text></view>
+		<navigator url="/bundle/pages/pop_box/pop_box">
+			<view class="demo-li"> pop_box<text class="demo-tip"> 弹窗 </text></view>
 		</navigator>
+		
+		<!-- <navigator url="/bundle/pages/choose_photo/choose_photo">
+			<view class="demo-li"> choose photo<text class="demo-tip"> 选择图片 </text></view>
+		</navigator> -->
+		
+		<!-- <navigator url="/bundle/pages/choose_date/choose_date">
+			<view class="demo-li"> choose date<text class="demo-tip"> 日期picker </text></view>
+		</navigator> -->
+		
+		<navigator url="/bundle/pages/upload_img/upload_photo">
+			<view class="demo-li">upload photo<text class="demo-tip"> 压缩并保存图片 </text></view>
+		</navigator>
+		
+		
+		<navigator url="/bundle/pages/list_h/list_h">
+			<view class="demo-li"> list h<text class="demo-tip"> 水平滚动 </text></view>
+		</navigator>
+		<navigator url="/bundle/pages/list_h/list_water">
+			<view class="demo-li"> list water<text class="demo-tip"> 瀑布流 </text></view>
+		</navigator>
+		<!-- 
+		
 		<navigator url="/bundle/pages/card_list/card_list">
 			<view class="demo-li"> 卡片list<text class="demo-tip"> 卡片 </text></view>
 		</navigator>
@@ -99,7 +118,7 @@
 			<view class="demo-li"> wallet <text class="demo-tip"> 我的钱包 </text></view>
 		</navigator> -->
 		
-		<y-tabbar ref="tabbar" native></y-tabbar>
+		<!-- <y-tabbar ref="tabbar" native></y-tabbar> -->
 		
 	</view>
 </template>

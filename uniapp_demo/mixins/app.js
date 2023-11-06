@@ -6,7 +6,7 @@ import {
 import wechath5 from '@/utils/wechath5'
 
 import {isWeixinClient, currentPage, paramsToStr} from '@/utils/tools'
-import Cache from "@/utils/cache"
+
 import color from '@/config/color'
 export default {
 	data() {

@@ -69,10 +69,9 @@
 	import zyTag from '@/bundle/components/zy-tag/zy-tag.vue'
 	import catSignature from '@/bundle/components/sign-canvas/sign-canvas.vue'
 	import {TOKEN} from '@/config/cachekey.js'
-	import Cache from '@/utils/cache.js'
+	import Cache from '@/config/cache.js'
 	import {pathToBase64} from '@/js_sdk/mmmm-image-tools/index.js'
 	
-	import http from '@/utils/dp_request.js'
 	
 	const QQMapWX = require('@/common/qqmap-wx-jssdk.min.js');
 	export default {
@@ -286,7 +285,7 @@
 					uni.chooseImage({
 						count:4,
 						success:function(res){
-							let tempFiles = tes.tempFiles;
+							let tempFiles = res.tempFiles;
 							var photoList = [];
 							tempFiles.forEach(function(item,index){
 								/* 判断图片大小是否超标 直接压缩 */
@@ -311,9 +310,6 @@
 									}
 								})
 							})
-							
-							
-							
 							
 						},
 						fail:function(err){

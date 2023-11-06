@@ -2,9 +2,7 @@ import axios from 'axios';
 import mpAdapter from 'axios-miniprogram-adapter';
 
 import Cache from '@/config/cache.js';
-
 import store from '@/store/index.js';
-
 
 import {
 	TOKEN

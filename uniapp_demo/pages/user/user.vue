@@ -135,7 +135,7 @@
 			
 			
 		</view>
-		<y-tabbar ref="tabbar" native></y-tabbar>
+		<!-- <y-tabbar ref="tabbar" native></y-tabbar> -->
 	</view>
 </template>
 

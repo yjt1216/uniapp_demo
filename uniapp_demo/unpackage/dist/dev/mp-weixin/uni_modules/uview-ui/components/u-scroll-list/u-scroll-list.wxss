@@ -25,26 +25,41 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.order-nav {
-  background: #fff;
-  height: 80rpx;
+view.data-v-0e75e492, scroll-view.data-v-0e75e492, swiper-item.data-v-0e75e492 {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
 }
-.order-nav .nav-item {
+.u-scroll-list.data-v-0e75e492 {
+  padding-bottom: 10px;
+}
+.u-scroll-list__scroll-view.data-v-0e75e492 {
   display: flex;
   flex-direction: row;
 }
-.order-nav .nav-item .item-title {
-  font-size: 30rpx;
-  font-weight: 400;
-  color: #333333;
-  line-height: 76rpx;
+.u-scroll-list__scroll-view__content.data-v-0e75e492 {
+  display: flex;
+  flex-direction: row;
 }
-.order-nav .nav-item .nav-line {
-  width: 100rpx;
-  height: 4rpx;
-  background: #fff;
+.u-scroll-list__indicator.data-v-0e75e492 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 15px;
 }
-.order-nav .nav-item .line-active {
-  background: #e6b873;
+.u-scroll-list__indicator__line.data-v-0e75e492 {
+  width: 60px;
+  height: 4px;
+  border-radius: 100px;
+  overflow: hidden;
+}
+.u-scroll-list__indicator__line__bar.data-v-0e75e492 {
+  width: 20px;
+  height: 4px;
+  border-radius: 100px;
 }
 

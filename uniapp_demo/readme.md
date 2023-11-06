@@ -1,48 +1,52 @@
-Guideline 2.1 - Information Needed
-
-尊敬的苹果审核员，你好
-1.此app的目的是为了是公司员工学习提高自身，在线进行考试学习。
-2.此app面向群体是公司员工
-3.此app需要相机权限。相机权限是为了扫描二维码来进行线下培训签到。
-4.这些权限是可选的
-5.这些权限除了上面所说功能外暂无其他用处
-6.应用需要用户手机号（个人身份验证）
-7.手机号不是可选的（身份唯一性认证）
-8.我组织里只要管理员才有权限访问收集的信息
-9.此数据不与任何第三方共享
-10.除了已披露的，暂无其他披露
-11.此应用适用于中国
-12.此应用获得授权使用
-13.不是唯一授权
-14.预期使用辖区不会扩大
-15.不是强制使用此应用程序的任何功能
-16.此应用只是员工学习.培训.&nbsp;线上练习的软件。暂不涉及COVID-19流感
-17.不计划删除软件。因为与COVID-19流感无关
-18.此应用不适用于企业分发
-以上是对你提出的问题做出的回答，非常谢谢你。安卓端应用已经上线，现在急需ios端的应用上线，真心非常感谢您。
 
 
 
-出于以下原因，已拒绝此项目：
-Guideline 2.3.3 - Performance - Accurate Metadata
+微护护士端：iOS端
+
+bundleID : com.szdepin.dpweiyihu
+公钥：b3c82ef1a5616fa2ad575fea46502417296a4f42aa68cab39a98fe2eb75372323e17aecc5d2abc7f09a8a006b5b10387b02a185cb9955dbedcc9e3107f084b2ce15d75bd03f5aca6b5cc3c4e0718c8b89acaa46c2ddf4b68fce4d9dae7aba2e837b13b87ec2c67b3208bca9de6695403092504edba38c58716d580ebd1b34c571e9a3afa400585cfe879a6b3ccc03dba6edf2365e2708f2c2cf17fc0135fd40f1ecb2f50b3ad24457d6dbfb5a7f89add60a60694b0a4244fde5c736e655076e9142951e0eedf0e326e7909245d7848aeb2eeb4e1b22aeea53a8e3c6dd90e4f7251182f16f5d8f06980e2d68da4a803a15a679e71308c3f09b5022850be3dda3b
+SHA-1：943CBA833B4157F5DA66295806FCC53E12DFA7F6
+iOS服务域名：https://didi.wellnurse.cn
 
 
-Guideline 3.2 - Business
-关于此问题，我们的app主要发布于中国范围，应用于业内从业人员工作使用。
-我们开发的app主要目的是为了让所有业内人员都能使用我们的app来进行工作，提高他们的工作效率。
-如果现在定性我们的app为一个内部应用程序的话，不便我们迭代新的版本。也许目前部分功能还未能完善，但以后我们会将做得更好。
+
+培训护理：iOS端
+
+bundleID : com.depin.www.cultivate
+
+公钥：b3c82ef1a5616fa2ad575fea46502417296a4f42aa68cab39a98fe2eb75372323e17aecc5d2abc7f09a8a006b5b10387b02a185cb9955dbedcc9e3107f084b2ce15d75bd03f5aca6b5cc3c4e0718c8b89acaa46c2ddf4b68fce4d9dae7aba2e837b13b87ec2c67b3208bca9de6695403092504edba38c58716d580ebd1b34c571e9a3afa400585cfe879a6b3ccc03dba6edf2365e2708f2c2cf17fc0135fd40f1ecb2f50b3ad24457d6dbfb5a7f89add60a60694b0a4244fde5c736e655076e9142951e0eedf0e326e7909245d7848aeb2eeb4e1b22aeea53a8e3c6dd90e4f7251182f16f5d8f06980e2d68da4a803a15a679e71308c3f09b5022850be3dda3b
+SHA-1：943CBA833B4157F5DA66295806FCC53E12DFA7F6
+iOS服务域名：http://36.152.50.211:8088
 
 
--Guideline 5.1.1 - Legal - Privacy - Data Collection and Storage
+培训护理 安卓端：
 
-<key>NSCameraUsageDescription</key>
-<string>线下签到需要扫码，是否允许此APP获取相机权限</string>
-<key>NSPhotoLibraryUsageDescription</key>
-<string>需要获取个人照片进行更换头像，是否允许此APP获取相册权限</string>
-
-
-关于此问题，我们根据您的提示，对项目进行了彻底的检查并做出修正。
-发现确实会询问用户是否同意相机授权。询问用户的原因是为了实现更换头像功能。
-除此之外，我们并无做出其他不尊重用户的行为。
+包名：
+模数(公钥): 
+MD5签名：
 
 
+德知 iOS端
+
+
+bundleID : com.dePin.www.staffTraining
+
+公钥：b3c82ef1a5616fa2ad575fea46502417296a4f42aa68cab39a98fe2eb75372323e17aecc5d2abc7f09a8a006b5b10387b02a185cb9955dbedcc9e3107f084b2ce15d75bd03f5aca6b5cc3c4e0718c8b89acaa46c2ddf4b68fce4d9dae7aba2e837b13b87ec2c67b3208bca9de6695403092504edba38c58716d580ebd1b34c571e9a3afa400585cfe879a6b3ccc03dba6edf2365e2708f2c2cf17fc0135fd40f1ecb2f50b3ad24457d6dbfb5a7f89add60a60694b0a4244fde5c736e655076e9142951e0eedf0e326e7909245d7848aeb2eeb4e1b22aeea53a8e3c6dd90e4f7251182f16f5d8f06980e2d68da4a803a15a679e71308c3f09b5022850be3dda3b
+SHA-1：943CBA833B4157F5DA66295806FCC53E12DFA7F6
+iOS服务域名：http://121.229.160.27:8690
+
+
+德品微护 iOS端：
+
+bundleID : com.szdepin.dpweihu
+
+公钥：b3c82ef1a5616fa2ad575fea46502417296a4f42aa68cab39a98fe2eb75372323e17aecc5d2abc7f09a8a006b5b10387b02a185cb9955dbedcc9e3107f084b2ce15d75bd03f5aca6b5cc3c4e0718c8b89acaa46c2ddf4b68fce4d9dae7aba2e837b13b87ec2c67b3208bca9de6695403092504edba38c58716d580ebd1b34c571e9a3afa400585cfe879a6b3ccc03dba6edf2365e2708f2c2cf17fc0135fd40f1ecb2f50b3ad24457d6dbfb5a7f89add60a60694b0a4244fde5c736e655076e9142951e0eedf0e326e7909245d7848aeb2eeb4e1b22aeea53a8e3c6dd90e4f7251182f16f5d8f06980e2d68da4a803a15a679e71308c3f09b5022850be3dda3b
+SHA-1：943CBA833B4157F5DA66295806FCC53E12DFA7F6
+iOS服务域名：http://121.229.160.27:8690
+
+
+德品微护 安卓端：
+
+包名：com.depin.www.yuanwaiUserFlutter.yuanwaiUserFlutter
+模数(公钥): 
+MD5签名：

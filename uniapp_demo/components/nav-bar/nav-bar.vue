@@ -171,7 +171,7 @@
 					z-index: 1;
 					/* #endif */
 					color: #FFF;
-					font-size: 38upx;
+					font-size: 30upx;
 				}
 			}
 		}

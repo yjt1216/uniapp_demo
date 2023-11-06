@@ -1,6 +1,6 @@
 <template>
 	<view class="message">
-		<nav-bar title="消息" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
+		<nav-bar title="消息" :back="false" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		<view class="top-warp">
 			<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 		</view>
@@ -9,7 +9,7 @@
 			<good-list :list="goods"></good-list>
 		</mescroll-body>
 		
-		<y-tabbar ref="tabbar" native></y-tabbar>
+		<!-- <y-tabbar ref="tabbar" native></y-tabbar> -->
 	</view>
 </template>
 

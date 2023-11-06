@@ -8,7 +8,7 @@ import {
 } from './config/cachekey'
 import store from './store'
 
-import Cache from './utils/cache'
+import Cache from './config/cache.js'
 import wechath5 from './utils/wechath5'
 import {isWeixinClient} from './utils/tools'
 
