@@ -89,6 +89,14 @@
 		<navigator url="/bundle/pages/list_h/list_water">
 			<view class="demo-li"> list water<text class="demo-tip"> 瀑布流 </text></view>
 		</navigator>
+		<navigator url="/bundle/pages/list_h/list_left">
+			<view class="demo-li"> list left<text class="demo-tip"> 左侧tabs </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_b/pages/swiper_action/swiper_action">
+			<view class="demo-li"> swiper action<text class="demo-tip"> 左滑按钮 </text></view>
+		</navigator>
+		
 		<!-- 
 		
 		<navigator url="/bundle/pages/card_list/card_list">

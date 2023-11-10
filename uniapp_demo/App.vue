@@ -41,5 +41,6 @@
 	@import 'styles/base.scss';
 	@import 'styles/builder.scss';
 	@import 'styles/common.scss';
+	@import 'styles/login_exam.scss'
 	// @import url('static/font/iconfont.css');
 </style>
