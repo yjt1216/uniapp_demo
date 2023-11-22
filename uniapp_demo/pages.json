@@ -274,6 +274,15 @@
 					"style": {
 						"navigationStyle": "custom" 
 					}
+				},
+				{
+					"path": "pages/lesson_play/lesson_play",
+					"style": {
+						"navigationStyle": "custom" 
+					}
+				},
+				{
+					"path": "pages/pay/pay_page"
 				}
 			]
 		}
@@ -311,6 +320,7 @@
 		]
 	},
 	"globalStyle": {
+		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",

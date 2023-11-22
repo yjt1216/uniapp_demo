@@ -11,7 +11,7 @@ import {
 	wechatLogin
 } from '@/api/app'
 import store from '../store'
-import Cache from './cache'
+import Cache from '@/config/cache.js'
 
 class Wechath5 {
 

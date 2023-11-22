@@ -167,6 +167,7 @@
 				text-align: center;
 				background-color: #ff6990;
 			}
+			
 		}
 		
 	}

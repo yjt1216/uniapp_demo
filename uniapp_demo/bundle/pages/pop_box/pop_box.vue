@@ -3,9 +3,9 @@
 		
 		<view class="list-cont">
 			<scroll-view class="scrool-more" style="height: 100%" scroll-y="true" scroll-with-animation="true">
-				<view class="input-pop" @click="clickPop">
-					点击弹框input
-				</view>
+				<!-- <view class="input-pop" @click="clickPop">
+					点击弹框content
+				</view> -->
 				<view class="input-pop" @click="clickPopBoxRate">
 					评价弹窗
 				</view>
@@ -25,6 +25,12 @@
 			</scroll-view>
 		</view>
 		
+		<view class="" style="margin-top: 20rpx;" @click="popSignBoxClick">
+		    <text class="text">保存后的签名图片</text>
+		    <view class="preview">
+		         <image :src="imgUrl" mode="" style="width: 100%;"></image>
+		    </view>
+		</view>
 		
 		
 		<view class="footer">
@@ -40,6 +46,12 @@
 			<view class="sub-title">本次服务中患者是否愿意配合</view>
 			<u-rate :count="5" v-model="rateValue" activeColor="#f0ad4e" inactiveColor="#666666"></u-rate>
 		</modal> -->
+		
+		
+		<!-- <uni-popup ref="contentPop" type="center" :is-mask-click="false">
+			<jushi-signature :settings="settings" @change="signatureChange"></jushi-signature>
+			
+		</uni-popup> -->
 		
 		<modal class="box-pop" v-if="isShowBox" confirm-text="提交评价" cancel-text="取消评价" @cancel="cancelEvaluateFun" @confirm="submitEvaluateFun">
 			<view class="box-title">评价患者</view>
@@ -96,9 +108,24 @@
 				loginPopBG:'/bundle/static/login_pop.png',
 				boxRate: 0,
 				sureAppraisePass: false,
+				content: '您已成功预约请准备好服务相关材料及环境，家有宠物者要把宠物关起，不得在服务区域出现，以免在服务时影响医务人员，您的订单可在个人中心进行查看，谢谢您的谅解！',
+				settings:{ //签名设置
+				    width: '750',//签名区域的宽
+				    height: '500',//签名区域的高
+				    lineWidth:3,//签名时线宽
+				    textColor:'#007AFF' //签名文字颜色
+				},
+				imgUrl: ''
 	        }
 	    },
 	    methods: {
+			popSignBoxClick(){
+				this.$refs.contentPop.open();
+			},
+			signatureChange(e) {
+			    this.imgUrl = e
+				this.$refs.contentPop.close();
+			},
 			cancelAdd(){
 				this.areaShow = false
 				this.isShowRate = false
@@ -109,7 +136,10 @@
 				this.isShowRate = false
 			},
 			clickPop(){
-				this.areaShow = true
+				this.$refs.contentPop.open();
+			},
+			contentBoxClose(){
+				this.$refs.contentPop.close();
 			},
 			clickPopRate(){
 				this.isShowRate = true
@@ -163,8 +193,9 @@
 			},
 			appraiseCancelFun(){
 				this.$refs.sureAppraiseBox.close();
-			}
-				
+			},
+			
+			
 		}
 	}
 </script>
@@ -173,6 +204,15 @@
 	page {
 		width: 100%;
 		height: 100%;
+	}
+	.preview{
+	    margin: 10rpx;
+	    border: 1rpx solid #aaaaaa;
+	    border-radius: 10rpx;
+	}
+	.text {
+	    margin: 20rpx;
+	    color: #aaaaaa;
 	}
 	.pop-box{
 		display: flex;
@@ -350,6 +390,40 @@
 			
 	}
 	
-	
+	.content-box{
+		text-align: center;
+		width: 600rpx;
+		height: 480rpx;
+		background-color: #fff;
+		box-sizing: border-box; 
+		border-radius: 40rpx; 
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		
+		.content-title{
+			margin-top: 30rpx;
+			text-align: center;
+			color: #333333;
+			font-size: 32rpx;
+			font-weight: 500;
+		}
+		.content-subtitle{
+			margin: 30rpx;
+			text-align: center;
+			color: #333333;
+			font-size: 26rpx;
+			font-weight: 400;
+		}
+		.content-btn{
+			align-self: center;
+			margin:60rpx 0;
+			width: 350rpx;
+			height: 60rpx;
+			background: linear-gradient(180deg, #FAD961 0%, #F76B1C 100%);
+			border-radius: 30rpx;
+			color: #fff;
+		}
+	}
 	
 </style>

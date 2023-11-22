@@ -59,12 +59,12 @@
 		<navigator url="/bundle/pages/take_photo/take_photo">
 			<view class="demo-li">take_photo<text class="demo-tip"> take photo </text></view>
 		</navigator> -->
-		<navigator url="/bundle/pages/tag_page/tag-page">
+		<!-- <navigator url="/bundle/pages/tag_page/tag-page">
 			<view class="demo-li">tag_page<text class="demo-tip"> tag </text></view>
 		</navigator>
 		<navigator url="/pages/web_view/web_view">
 			<view class="demo-li"> web_view <text class="demo-tip"> web view 按钮 </text></view>
-		</navigator>
+		</navigator> -->
 		
 		<navigator url="/bundle/pages/pop_box/pop_box">
 			<view class="demo-li"> pop_box<text class="demo-tip"> 弹窗 </text></view>
@@ -93,8 +93,20 @@
 			<view class="demo-li"> list left<text class="demo-tip"> 左侧tabs </text></view>
 		</navigator>
 		
-		<navigator url="/bundle_b/pages/swiper_action/swiper_action">
+		<!-- <navigator url="/bundle_b/pages/swiper_action/swiper_action">
 			<view class="demo-li"> swiper action<text class="demo-tip"> 左滑按钮 </text></view>
+		</navigator> -->
+		<navigator url="/bundle_b/pages/lesson_play/lesson_play">
+			<view class="demo-li"> lesson action<text class="demo-tip"> 视频播放 </text></view>
+		</navigator>
+		<navigator url="/bundle/pages/video_player/video_player">
+			<view class="demo-li"> video player<text class="demo-tip"> video_player </text></view>
+		</navigator>
+		
+		
+		
+		<navigator url="/bundle_b/pages/pay/pay_page">
+			<view class="demo-li"> 支付UI <text class="demo-tip"> pay </text></view>
 		</navigator>
 		
 		<!-- 
@@ -103,9 +115,7 @@
 			<view class="demo-li"> 卡片list<text class="demo-tip"> 卡片 </text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/video_player/video_player">
-			<view class="demo-li"> video player<text class="demo-tip"> video_player </text></view>
-		</navigator>
+		
 		
 		<navigator url="/bundle/pages/user-intro/user-intro">
 			<view class="demo-li"> user-intro<text class="demo-tip"> user-intro </text></view>
@@ -144,13 +154,20 @@
 						image: "https://didi.depin.tech/storage/file/2019/09/29/5d90512bccb32.jpg"
 					}
 				],
-				bannerImages:[]
+				bannerImages:[],
+				code:'',
+				state:'',
 			}
 		},
 		onLoad() {
 			uni.setNavigationBarTitle({
 				title: 'mescroll ('+ uni.getSystemInfoSync().platform + ')'
 			})
+		},
+		methods:{
+			
+			
+			
 		}
 		
 	}

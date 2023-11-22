@@ -1,6 +1,7 @@
 <template>
 	<view class="Index">
 		<nav-bar title="瀑布流"  backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
+		<u-search placeholder="日照香炉生紫烟" v-model="keyword"></u-search>
 		<!-- 瀑布流布局列表 -->
 		<view class="waster-box">
 			<view class="waster-box-item">
@@ -49,6 +50,7 @@
 						commdityPrice: 105
 					}
 				], //商品列表
+				keyword:'',
 			};
 		},
 		onShow() {},

@@ -103,7 +103,13 @@
 					</view>
 					
 				</view>
-				<!-- 签名 -->
+				
+				
+				
+			</scroll-view>
+		</view>
+
+<!-- 签名 -->
 				
 				<view class="question-sign" >
 					<view class="logo_text">
@@ -111,14 +117,17 @@
 						<text class="u-block__title"> 护理人员签名确认 </text>
 					</view>
 					<view style="border: 1rpx dashed #555555;">
-						<Signature ref="sign" v-model="signValue"></Signature>
+						 <jushi-signature :settings="settings" @change="signatureChange"></jushi-signature>
 					</view>
 					
 				</view>
 				
-				
-			</scroll-view>
-		</view>
+				<view class="" style="margin-top: 20rpx;">
+				    <text class="text">保存后的签名图片</text>
+				    <view class="preview">
+				         <image :src="imgUrl" mode="" style="width: 100%;"></image>
+				    </view>
+				</view>
 
 		<view class="footer">
 			<button class="submit-btn"  @click="submitAppraiseFun">提交评估</button>
@@ -127,15 +136,8 @@
 	</view>
 </template>
 <script>
-	import {
-		apiAssessFromData
-	} from '@/api/mock.js'
-	import Signature from '@/bundle/components/sign-signature/sign-signature.vue'
 	
 	export default {
-		components:{
-			Signature
-		},
 		data() {
 			return {
 				formData: {},
@@ -143,14 +145,21 @@
 				questionList: [],
 				/* 签名 base64 数据类型 */
 				signValue: '',
-				
+				settings:{ //签名设置
+				    width: '750',//签名区域的宽
+				    height: '500',//签名区域的高
+				    lineWidth:3,//签名时线宽
+				    textColor:'#007AFF' //签名文字颜色
+				},
+				imgUrl: ''
 			};
 		},
 		onBackPress(event) {
 			console.log('导航栏返回 拦截event',event)
 		},
+		
 		onLoad() {
-			this.getFormData()
+			//this.getFormData()
 		},
 		methods: {
 			naviLeftClick(){
@@ -158,6 +167,9 @@
 				var pages = getCurrentPages();
 				console.log('导航栏pages',pages)
 				uni.navigateBack()
+			},
+			signatureChange(e) {
+			    this.imgUrl = e
 			},
 			/* radio-group */
 			radioChangeFun(e){
@@ -373,6 +385,16 @@
 		
 		
 	}
+	.preview{
+	    margin: 10rpx;
+	    border: 1rpx solid #aaaaaa;
+	    border-radius: 10rpx;
+	}
+	.text {
+	    margin: 20rpx;
+	    color: #aaaaaa;
+	}
+	
 </style>
 
 

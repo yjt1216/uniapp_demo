@@ -6,6 +6,10 @@
 		},
 		onLaunch: function() {
 			console.log('App Launch')
+			
+			const deviceInfo = uni.getWindowInfo();
+			console.log('App Launch window',deviceInfo);
+			
 			uni.getSystemInfo({
 				success: (info) => {
 					let statusBar = info.statusBarHeight
@@ -20,8 +24,8 @@
 					this.globalData.statusBarH = statusBar
 					this.globalData.customBarH = customBar
 					
-					console.log('当前statusBar',statusBar);
-					console.log('当前customBar',customBar);
+					// console.log('当前statusBar',statusBar);
+					// console.log('当前customBar',customBar);
 				}
 			});
 		},

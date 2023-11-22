@@ -102,4 +102,13 @@ page {
   width: 50%;
   word-break: break-all;
 }
+.preview {
+  margin: 10rpx;
+  border: 1rpx solid #aaaaaa;
+  border-radius: 10rpx;
+}
+.text {
+  margin: 20rpx;
+  color: #aaaaaa;
+}
 

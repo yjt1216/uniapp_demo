@@ -22,8 +22,8 @@
 		
 		<view class="space-fill"></view>
 		
-		<uni-swipe-action>
-			<!-- 基础用法 -->
+		<!-- 基础用法 -->
+		<!-- <uni-swipe-action>
 			<uni-swipe-action-item :right-options="options4" :left-options="options4" @click="onClick" 
 				@change="swipeChange($event, index)">
 				<view class="swipe-action u-border-top u-border-bottom">
@@ -32,8 +32,24 @@
 					</view>
 				</view>
 			</uni-swipe-action-item>
+		</uni-swipe-action> -->
+		<!-- 基础用法 组合list-->
+		<uni-swipe-action>
+			<uni-swipe-action-item :right-options="options5"  @click="onClick" @change="swipeChange">
+				<view>SwipeAction 基础使用场景</view>
+			</uni-swipe-action-item>
+			<uni-swipe-action-item v-for="(item,index) in actionList" 
+				:right-options="options4" 
+				@change="swipeListChange($event, index)" :key="index">
+				<view class="swipe-action u-border-top u-border-bottom">
+					<view class="swipe-action__content" @click="onListClick(item)" >
+						<text class="swipe-action__content__text">{{item}}</text>
+					</view>
+				</view>
+			</uni-swipe-action-item>
 			
 		</uni-swipe-action>
+		
 		
 	</view>
 </template>
@@ -92,18 +108,20 @@
 					}
 				}],
 				options4:[
-				        {
-				            text: '取消',
-				            style: {
-				                backgroundColor: '#007aff'
-				            }
-				        }, {
-				            text: '确认',
-				            style: {
-				                backgroundColor: '#dd524d'
-				            }
+				    {
+				        text: '取消',
+				        style: {
+				            backgroundColor: '#007aff'
 				        }
-				      ]
+				    }, 
+					{
+				        text: '确认',
+				        style: {
+				            backgroundColor: '#dd524d'
+				        }
+				    }
+				],
+				actionList:['组合1','组合2','组合3'],
 			}
 		},
 		methods: {
@@ -127,6 +145,12 @@
 			},
 			swipeChange(e,index){
 			    console.log('当前状态：'+ e +'，下标：' + index)
+			},
+			onListClick(e){
+				console.log(e);
+			},
+			swipeListChange(e,index){
+			    console.log('组合 当前状态：'+ e +'，下标：' + index)
 			}
 		}
 	}

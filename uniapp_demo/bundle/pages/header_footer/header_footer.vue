@@ -1,13 +1,13 @@
 <template>
   <view class="scrool-page">
 	<view class="header-cont">头部</view>
-        <view class="list-cont">
-			<scroll-view class="scrool-more" style="height: 100%" scroll-y="true" scroll-with-animation="true">
-				<view class="list" v-for="(item,index) in list" :key="index">
-					{{item.cont}}
-				</view>
-			</scroll-view>
-		</view>
+    <view class="list-cont">
+		<scroll-view class="scrool-more" style="height: 100%" scroll-y="true" scroll-with-animation="true">
+			<view class="list" v-for="(item,index) in list" :key="index">
+				{{item.cont}}
+			</view>
+		</scroll-view>
+	</view>
 
 	  <view class="footer">
 		<button type="primary">提交</button>

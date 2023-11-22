@@ -1,5 +1,34 @@
 import test from '@/utils/test.js'
 
+
+
+//所在环境
+let client = null
+// #ifdef MP-WEIXIN
+client = 1
+// #endif
+
+// #ifdef H5
+client = isWeixinClient() ? 2 : 6
+// #endif
+
+// #ifdef APP-PLUS
+client = 3;
+uni.getSystemInfo({
+	success: res => {
+		client = res.platform == 'ios' ? 3 : 4;
+	},
+	fail: res => {
+		client = 3
+	}
+})
+// #endif
+export {
+	client
+}
+
+
+
 // 提示message
 /*
 
