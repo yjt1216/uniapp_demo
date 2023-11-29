@@ -21,13 +21,13 @@
 			
 		</view>
 		
-		<button @click="payClick">确定支付</button>
+		<button @click="skipLink">确定支付</button>
 		
 	</view>
 </template>
 
 <script>
-	
+	import indexApi from '../../../api/index.js'
 	export default {
 		
 		data() {
@@ -41,7 +41,44 @@
 		created() {
 			
 		},
+		onLoad() {
+			
+		},
 		methods: {
+			/* H5端时静默授权 获取open id 用于微信支付*/
+			wechatLoginJM(){
+				const params = {
+					hospital_id: 10000,
+					back_url :'pages/index/index'
+				}
+				
+				indexApi.wechatAuthLogin(params).then(res=>{
+					// console.log('H5端时静默授权登录res',res);
+					
+					console.log('H5端时静默授权登录resData',res.data.url);
+					if(res.success == 1){
+						// console.log('H5端时静默授权登录res',res.data.url);
+						this.skipLink(res.data.url);
+						
+					}
+				}).catch(err=>{
+					console.log('H5端时静默授权登录err',err);
+				})
+			},
+			skipLink(url) {
+			 
+			  const params = {
+			  	app_id: 2,
+				app_name:'depin_public_mp',
+			  	back_url :'pages/index/index'
+			  }
+			  indexApi.getOpenId(params).then(res=>{
+				  console.log('H5端时静默授权登录res',res.data);
+			  }).catch(err=>{
+				  console.log('H5端时静默授权登录err',err);
+			  });
+			  
+			},
 			selectPayClick(){
 				if(this.payWay == 0){
 					this.payWay = 1;
@@ -56,7 +93,43 @@
 				})
 			}
 			
-		}
+		},
+		computed:{
+			h5Env(){
+				// #ifdef H5
+				let ua = window.navigator.userAgent.toLowerCase();
+				if (ua.match(/MicroMessenger/i) == 'micromessenger' && (ua.match(/miniprogram/i) == 'miniprogram')) {
+					// 微信小程序
+					return "mp-weixin";
+				}
+				if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+					// 微信公众号
+					return "h5-weixin";
+				}
+				if (ua.match(/alipay/i) == 'alipay' && ua.match(/miniprogram/i) == 'miniprogram') {
+					return "mp-alipay";
+				}
+				if (ua.match(/alipay/i) == 'alipay') {
+					return "h5-alipay";
+				}
+				// 外部 H5
+				return "h5";
+				// #endif
+			},
+			// 计算当前是否是ios app
+			isIosAppCom(){
+				let info = uni.getSystemInfoSync();
+				return info.uniPlatform === 'app' && info.osName === 'ios' ? true : false;
+			},
+			// 计算当前是否是PC环境
+			isPcCom(){
+				// #ifdef H5
+				let info = uni.getSystemInfoSync();
+				return info.deviceType === 'pc' ? true : false;
+				// #endif
+				return false;
+			}
+		},
 	}
 </script>
 

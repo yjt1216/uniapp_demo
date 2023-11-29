@@ -1,4 +1,5 @@
 <script>
+	import indexApi from 'api/index.js';
 	export default {
 		globalData:{
 			statusBarB:0,
@@ -28,13 +29,57 @@
 					// console.log('当前customBar',customBar);
 				}
 			});
+			
+			
+			
+			
+			
 		},
 		onShow: function() {
-			console.log('App Show')
+			console.log('App Show 微信静默授权')
+			/* 微信静默授权 */
+			// this.getWeiXinJsOpenId();
 		},
 		onHide: function() {
 			console.log('App Hide')
-		}
+		},
+		methods:{
+			/* H5端时静默授权 获取open id 用于微信支付*/
+			getWeiXinJsOpenId(){
+				const params = {
+					hospital_id: 10000,
+					back_url :'pages/index/index'
+				}
+				indexApi.wechatAuthLogin(params).then(res=>{
+					// console.log('H5端时静默授权登录res',res);
+					
+					console.log('H5端时静默授权登录resData',res.data.url);
+					if(res.success == 1){
+						// console.log('H5端时静默授权登录res',res.data.url);
+						this.skipLink(res.data.url);
+					}
+				}).catch(err=>{
+					console.log('H5端时静默授权登录err',err);
+				})
+			},
+			skipLink(link) {
+			   // 你的公众号链接
+			   /* 
+			   http://data.szdepin.com/pages/index/index
+			   ?open_id=oAkxz1ipsHgBGpARRXv-Zz8NzVSw
+			   &uid=24285
+			   &token=2d71cef079ca26a1f99e0673b0106d43
+			   */
+			   uni.navigateTo({
+				 url: '/pages/webview/webview?link=' + link
+			   })
+			  
+			 
+			  
+			  
+			   
+			},
+		},
 	}
 </script>
 

@@ -1,0 +1,1 @@
+<view class="spread-code"><nav-bar vue-id="beb8a5ec-1" title="推广码" backgroundColor="#fff" blackArrow="{{true}}" bind:__l="__l"></nav-bar><canvas style="width:100px;height:100px;" canvas-id="qrcode"></canvas></view>

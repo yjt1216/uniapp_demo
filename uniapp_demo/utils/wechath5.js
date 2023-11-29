@@ -5,11 +5,7 @@ import weixin from "@/js_sdk/jweixin-module";
 import {
 	isAndroid
 } from "./tools"
-import {
-	getJsconfig,
-	getCodeUrl,
-	wechatLogin
-} from '@/api/app'
+
 import store from '../store'
 import Cache from '@/config/cache.js'
 

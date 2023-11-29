@@ -283,6 +283,18 @@
 				},
 				{
 					"path": "pages/pay/pay_page"
+				},
+				{
+					"path": "pages/pay/web_view"
+				},
+				{
+					"path": "pages/weixin_openid/weixin_openid"
+				},
+				{
+					"path": "pages/spread_code/spread_code"
+				},
+				{
+					"path": "pages/chart_demo/chart_demo"
 				}
 			]
 		}

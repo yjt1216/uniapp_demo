@@ -105,9 +105,24 @@
 		
 		
 		
-		<navigator url="/bundle_b/pages/pay/pay_page">
+		<!-- <navigator url="/bundle_b/pages/pay/pay_page">
 			<view class="demo-li"> 支付UI <text class="demo-tip"> pay </text></view>
 		</navigator>
+		<navigator url="/bundle_b/pages/weixin_openid/weixin_openid">
+			<view class="demo-li"> 微信公众号 <text class="demo-tip"> open id </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_b/pages/spread_code/spread_code">
+			<view class="demo-li"> 二维码生成 <text class="demo-tip"> QR code </text></view>
+		</navigator> 
+		
+		-->
+		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
+			<view class="demo-li"> chart统计 <text class="demo-tip"> 统计图 </text></view>
+		</navigator> 
+		
+		
+		
 		
 		<!-- 
 		
@@ -159,10 +174,16 @@
 				state:'',
 			}
 		},
-		onLoad() {
+		mounted(option) {
+			console.log('index on mounted ',option);
+		},
+		onLoad(option) {
 			uni.setNavigationBarTitle({
 				title: 'mescroll ('+ uni.getSystemInfoSync().platform + ')'
 			})
+			
+			console.log('index on load ',option);
+			
 		},
 		methods:{
 			
