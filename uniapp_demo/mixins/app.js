@@ -3,11 +3,11 @@ import {
 	mapGetters,
 	mapMutations
 } from 'vuex'
-import wechath5 from '@/utils/wechath5'
+import wechath5 from '@/sheep/utils/wechath5'
 
-import {isWeixinClient, currentPage, paramsToStr} from '@/utils/tools'
+import {isWeixinClient, currentPage, paramsToStr} from '@/sheep/utils/tools'
 
-import color from '@/config/color'
+import color from '@/sheep/config/color'
 export default {
 	data() {
 		return {

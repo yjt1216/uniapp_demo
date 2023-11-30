@@ -1,18 +1,18 @@
 import axios from 'axios';
 import mpAdapter from 'axios-miniprogram-adapter';
 
-import Cache from '@/config/cache.js';
-import store from '@/store/index.js';
+import Cache from '@/sheep/config/cache.js';
+import store from '@/sheep/store/index.js';
 
 import {
 	TOKEN
-} from '@/config/cachekey.js'
+} from '@/sheep/config/cachekey.js'
 
 import {
 	paramsToStr
-} from '@/utils/tools.js'
+} from '@/sheep/utils/tools.js'
 
-import {baseURL, dataURL} from '@/config/app.js'
+import {baseURL, dataURL} from '@/sheep/config/app.js'
 
 
 function checkParams(params) {

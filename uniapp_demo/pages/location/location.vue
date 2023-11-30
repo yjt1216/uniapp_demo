@@ -29,7 +29,7 @@
 </template>
 
 <script>
-	import { getLocationAuth } from '@/utils/tools.js';
+	import { getLocationAuth } from '@/sheep/utils/tools.js';
 	// import qqMap from '@/common/qqmap-wx-jssdk.min.js'
 	const QQMapWX = require('@/common/qqmap-wx-jssdk.min.js');
 

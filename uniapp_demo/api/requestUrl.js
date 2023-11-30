@@ -1,4 +1,4 @@
-import { baseURL, dataUrl } from "@/config/app.js";
+import { baseURL, dataUrl } from "@/sheep/config/app.js";
 
 
 

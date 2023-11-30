@@ -8,7 +8,7 @@
 </template>
 
 <script>
-	import uQrcode from '../../../utils/qrcode.js';
+	import uQrcode from '@/sheep/utils/qrcode.js';
 	
 	export default {
 		data(){

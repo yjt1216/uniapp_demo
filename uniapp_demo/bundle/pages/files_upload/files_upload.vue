@@ -68,8 +68,8 @@
 <script>
 	import zyTag from '@/bundle/components/zy-tag/zy-tag.vue'
 	import catSignature from '@/bundle/components/sign-canvas/sign-canvas.vue'
-	import {TOKEN} from '@/config/cachekey.js'
-	import Cache from '@/config/cache.js'
+	import {TOKEN} from '@/sheep/config/cachekey.js'
+	import Cache from '@/sheep/config/cache.js'
 	import {pathToBase64} from '@/js_sdk/mmmm-image-tools/index.js'
 	
 	

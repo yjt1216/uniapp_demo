@@ -6,8 +6,8 @@ import {
 	isAndroid
 } from "./tools"
 
-import store from '../store'
-import Cache from '@/config/cache.js'
+import store from '@/sheep/store'
+import Cache from '@/sheep/config/cache.js'
 
 class Wechath5 {
 

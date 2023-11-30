@@ -230,165 +230,165 @@ function debounce(fn, wait) {
 }
 
 export default {
-  name: 'qiun-data-charts',
-  mixins: [uniCloud.mixinDatacom],
-  props: {
-    type: {
-      type: String,
-      default: null
-    },
-    canvasId: {
-      type: String,
-      default: 'uchartsid'
-    },
-    canvas2d: {
-      type: Boolean,
-      default: false
-    },
-    background: {
-      type: String,
-      default: 'rgba(0,0,0,0)'
-    },
-    animation: {
-      type: Boolean,
-      default: true
-    },
-    chartData: {
-      type: Object,
-      default() {
-        return {
-          categories: [],
-          series: []
-        };
-      }
-    },
-    opts: {
-      type: Object,
-      default() {
-        return {};
-      }
-    },
-    eopts: {
-      type: Object,
-      default() {
-        return {};
-      }
-    },
-    loadingType: {
-      type: Number,
-      default: 2
-    },
-    errorShow: {
-      type: Boolean,
-      default: true
-    },
-    errorReload: {
-      type: Boolean,
-      default: true
-    },
-    errorMessage: {
-      type: String,
-      default: null
-    },
-    inScrollView: {
-      type: Boolean,
-      default: false
-    },
-    reshow: {
-      type: Boolean,
-      default: false
-    },
-    reload: {
-      type: Boolean,
-      default: false
-    },
-    disableScroll: {
-      type: Boolean,
-      default: false
-    },
-    optsWatch: {
-      type: Boolean,
-      default: true
-    },
-    onzoom: {
-      type: Boolean,
-      default: false
-    },
-    ontap: {
-      type: Boolean,
-      default: true
-    },
-    ontouch: {
-      type: Boolean,
-      default: false
-    },
-    onmouse: {
-      type: Boolean,
-      default: true
-    },
-    onmovetip: {
-      type: Boolean,
-      default: false
-    },
-    echartsH5: {
-      type: Boolean,
-      default: false
-    },
-    echartsApp: {
-      type: Boolean,
-      default: false
-    },
-    tooltipShow: {
-      type: Boolean,
-      default: true
-    },
-    tooltipFormat: {
-      type: String,
-      default: undefined
-    },
-    tooltipCustom: {
-      type: Object,
-      default: undefined
-    },
-    startDate: {
-      type: String,
-      default: undefined
-    },
-    endDate: {
-      type: String,
-      default: undefined
-    },
-    textEnum: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    groupEnum: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    pageScrollTop: {
-      type: Number,
-      default: 0
-    },
-    directory: {
-      type: String,
-      default: '/'
-    },
-    tapLegend: {
-      type: Boolean,
-      default: true
-    },
-    menus: {
-      type: Array,
-      default () {
-        return []
-      }
-    }
-  },
+	name: 'qiun-data-charts',
+	mixins: [uniCloud.mixinDatacom],
+	props: {
+		type: {
+		  type: String,
+		  default: null
+		},
+		canvasId: {
+		  type: String,
+		  default: 'uchartsid'
+		},
+		canvas2d: {
+		  type: Boolean,
+		  default: false
+		},
+		background: {
+		  type: String,
+		  default: 'rgba(0,0,0,0)'
+		},
+		animation: {
+		  type: Boolean,
+		  default: true
+		},
+		chartData: {
+		  type: Object,
+		  default() {
+			return {
+			  categories: [],
+			  series: []
+			};
+		  }
+		},
+		opts: {
+		  type: Object,
+		  default() {
+			return {};
+		  }
+		},
+		eopts: {
+		  type: Object,
+		  default() {
+			return {};
+		  }
+		},
+		loadingType: {
+		  type: Number,
+		  default: 2
+		},
+		errorShow: {
+		  type: Boolean,
+		  default: true
+		},
+		errorReload: {
+		  type: Boolean,
+		  default: true
+		},
+		errorMessage: {
+		  type: String,
+		  default: null
+		},
+		inScrollView: {
+		  type: Boolean,
+		  default: false
+		},
+		reshow: {
+		  type: Boolean,
+		  default: false
+		},
+		reload: {
+		  type: Boolean,
+		  default: false
+		},
+		disableScroll: {
+		  type: Boolean,
+		  default: false
+		},
+		optsWatch: {
+		  type: Boolean,
+		  default: true
+		},
+		onzoom: {
+		  type: Boolean,
+		  default: false
+		},
+		ontap: {
+		  type: Boolean,
+		  default: true
+		},
+		ontouch: {
+		  type: Boolean,
+		  default: false
+		},
+		onmouse: {
+		  type: Boolean,
+		  default: true
+		},
+		onmovetip: {
+		  type: Boolean,
+		  default: false
+		},
+		echartsH5: {
+		  type: Boolean,
+		  default: false
+		},
+		echartsApp: {
+		  type: Boolean,
+		  default: false
+		},
+		tooltipShow: {
+		  type: Boolean,
+		  default: true
+		},
+		tooltipFormat: {
+		  type: String,
+		  default: undefined
+		},
+		tooltipCustom: {
+		  type: Object,
+		  default: undefined
+		},
+		startDate: {
+		  type: String,
+		  default: undefined
+		},
+		endDate: {
+		  type: String,
+		  default: undefined
+		},
+		textEnum: {
+		  type: Array,
+		  default () {
+			return []
+		  }
+		},
+		groupEnum: {
+		  type: Array,
+		  default () {
+			return []
+		  }
+		},
+		pageScrollTop: {
+		  type: Number,
+		  default: 0
+		},
+		directory: {
+		  type: String,
+		  default: '/'
+		},
+		tapLegend: {
+		  type: Boolean,
+		  default: true
+		},
+		menus: {
+		  type: Array,
+		  default () {
+			return []
+		  }
+		}
+	},
   data() {
     return {
       cid: 'uchartsid',

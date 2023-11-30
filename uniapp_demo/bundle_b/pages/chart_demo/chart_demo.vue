@@ -70,55 +70,55 @@
 import demodata from '@/sheep/mock/chart.json';
 
 export default {
-  data() {
-    return {
-      chartsDataColumn1:{},
-      chartsDataColumn2: {},
-      chartsDataColumn3:{},
-      chartsDataColumn4:{},
-      chartsDataColumn5:{},
-      chartsDataPie1: {},
-      chartsDataPie2: {},
-      chartsDataPie3: {},
-      chartsDataPie4: {},
-      chartsDataLine1: {},
-      chartsDataLine2: {},
-      chartsDataLine3: {},
-      ringOpts:{},
-      //横向柱状图的配置，您也可以把默认配置写在config-echarts.js中
-      columneopts:{
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: 30,
-          top:10,
-          containLabel: true
-        },
-        xAxis: {
-          type: 'value',
-          boundaryGap: [0, 0.01],
-          axisLine: {
-            show: false
-          },
-          axisTick: {
-            show: false
-          }
-        },
-        yAxis: {
-          type: 'category',
-          data: []
-        },
-        //series模板，会覆盖至chartData中的series中的每一个数组内
-        seriesTemplate:{
-          "label": {
-          	"show": true,
-            "color": "#666666",
-          	"position": 'right',
-          },
-        }
-      }
-    };
-  },
+	data() {
+		return {
+			chartsDataColumn1:{},
+			chartsDataColumn2: {},
+			chartsDataColumn3:{},
+			chartsDataColumn4:{},
+			chartsDataColumn5:{},
+			chartsDataPie1: {},
+			chartsDataPie2: {},
+			chartsDataPie3: {},
+			chartsDataPie4: {},
+			chartsDataLine1: {},
+			chartsDataLine2: {},
+			chartsDataLine3: {},
+			ringOpts:{},
+			//横向柱状图的配置，您也可以把默认配置写在config-echarts.js中
+			columneopts:{
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: 30,
+					top:10,
+					containLabel: true
+				},
+				xAxis: {
+					type: 'value',
+					boundaryGap: [0, 0.01],
+					axisLine: {
+						show: false
+					},
+					axisTick: {
+						show: false
+					}
+				},
+				yAxis: {
+					type: 'category',
+					data: []
+				},
+				//series模板，会覆盖至chartData中的series中的每一个数组内
+				seriesTemplate:{
+					"label": {
+						"show": true,
+						"color": "#666666",
+						"position": 'right',
+					},
+				}
+			}
+		};
+	},
   onReady() {
     setTimeout(() => {
       this.getServerData();

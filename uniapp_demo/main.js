@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './App'
-import store from './store'
-import {toast} from './utils/tools';
-import Cache from './config/cache.js';
+import store from '@/sheep/store'
+import {toast} from '@/sheep/utils/tools';
+import Cache from '@/sheep/config/cache.js';
 import uView from "@/uni_modules/uview-ui";
 import minxinsApp from '@/mixins/app';
 // import MescrollBody from "@/components/mescroll-uni/mescroll-body.vue"

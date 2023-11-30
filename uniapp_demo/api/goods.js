@@ -1,10 +1,11 @@
-const goods = [{
+const goods = [
+	{
 	"id": "1",
 	"goodImg": "https://www.mescroll.com/demo/res/img/pd1.jpg",
 	"goodName": "【1】  六罐装荷兰美素佳儿金装2段900g",
 	"goodPrice": 1149.00,
 	"goodSold": 648
-}, {
+	}, {
 	"id": "2",
 	"goodImg": "https://www.mescroll.com/demo/res/img/pd2.jpg",
 	"goodName": "【2】  韩国Amore爱茉莉红吕洗发水套装修复受损发质",

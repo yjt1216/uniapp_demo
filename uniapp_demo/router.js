@@ -5,12 +5,12 @@ import {
 } from './js_sdk/uni-simple-router';
 import {
 	BACK_URL
-} from './config/cachekey'
-import store from './store'
+} from '@/sheep/config/cachekey.js'
+import store from '@/sheep/store'
 
-import Cache from './config/cache.js'
-import wechath5 from './utils/wechath5'
-import {isWeixinClient} from './utils/tools'
+import Cache from '@/sheep/config/cache.js'
+import wechath5 from '@/sheep/utils/wechath5'
+import {isWeixinClient} from '@/sheep/utils/tools'
 
 const scrollInfo = {};
 let first = null;
