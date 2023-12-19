@@ -27,6 +27,8 @@
 /* 文章场景相关 */
 .container {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 .bg {
   position: relative;
@@ -57,46 +59,40 @@
   width: 150rpx;
   height: 15rpx;
 }
-.login, .register {
+.phone-login, .code-login {
   margin-top: 60rpx;
   padding: 0 60rpx;
 }
-.input {
+.input-box {
   width: 630rpx;
-  height: 90rpx;
+  height: 120rpx;
   padding: 0 30rpx;
   background-color: rgba(80, 100, 235, 0.1);
-  border-radius: 50%;
+  border-radius: 20rpx;
   margin-bottom: 30rpx;
+  display: flex;
   flex-direction: row;
   align-items: center;
 }
 .input-icon {
+  margin-right: 20rpx;
   width: 30rpx;
   height: 38rpx;
 }
-.input-placeholder {
-  color: #5064eb;
+.input-item {
+  flex: 1;
+  min-height: 96rpx;
+  line-height: 96rpx;
+  text-indent: 20rpx;
 }
-.button {
+.button-box {
   width: 630rpx;
   height: 90rpx;
+  line-height: 90rpx;
   margin: 60rpx;
-  border-radius: 50%;
+  border-radius: 30rpx;
   text-align: center;
   justify-content: center;
   flex-direction: row;
-}
-.separator {
-  height: 2rpx;
-  margin: 0 30rpx;
-  background-color: #f5f5f5;
-}
-.other-items {
-  padding: 0 200rpx;
-}
-.other-icon {
-  width: 50rpx;
-  height: 50rpx;
 }
 

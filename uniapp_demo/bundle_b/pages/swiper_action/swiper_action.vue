@@ -1,24 +1,7 @@
 <template>
 	<view class="u-page">
 		<nav-bar title="左滑按钮"></nav-bar>
-		<view class="u-demo-block">
-			<text class="u-demo-block__title">演示案例</text>
-			<view class="u-page__swipe-action-item">
-				<u-swipe-action :autoClose="false">
-					<u-swipe-action-item
-						:show="show1"
-						:options="options1"
-						@click="click"
-					>
-						<view class="swipe-action u-border-top u-border-bottom">
-							<view class="swipe-action__content">
-								<text class="swipe-action__content__text">基础使用</text>
-							</view>
-						</view>
-					</u-swipe-action-item>
-				</u-swipe-action>
-			</view>
-		</view>
+		
 		
 		<view class="space-fill"></view>
 		
@@ -38,11 +21,12 @@
 			<uni-swipe-action-item :right-options="options5"  @click="onClick" @change="swipeChange">
 				<view>SwipeAction 基础使用场景</view>
 			</uni-swipe-action-item>
+			
 			<uni-swipe-action-item v-for="(item,index) in actionList" 
 				:right-options="options4" 
-				@change="swipeListChange($event, index)" :key="index">
+				@click="swipeListChange($event, index)" :key="index">
 				<view class="swipe-action u-border-top u-border-bottom">
-					<view class="swipe-action__content" @click="onListClick(item)" >
+					<view class="swipe-action__content"  >
 						<text class="swipe-action__content__text">{{item}}</text>
 					</view>
 				</view>
@@ -55,6 +39,7 @@
 </template>
 
 <script>
+	let that = null;
 	export default {
 		data() {
 			return {
@@ -66,25 +51,6 @@
 					text: '删除',
 					style: {
 						backgroundColor: '#f56c6c'
-					}
-				}],
-				options2: [{
-					text: '收藏',
-					style: {
-						backgroundColor: '#3c9cff'
-					}
-				}, {
-					text: '删除',
-					style: {
-						backgroundColor: '#f56c6c'
-					}
-				}],
-				options3: [{
-					text: '收藏',
-					icon: 'star-fill',
-					iconSize: '20',
-					style: {
-						backgroundColor: '#f9ae3d'
 					}
 				}],
 				
@@ -109,20 +75,24 @@
 				}],
 				options4:[
 				    {
-				        text: '取消',
+				        text: '编辑',
 				        style: {
 				            backgroundColor: '#007aff'
 				        }
 				    }, 
 					{
-				        text: '确认',
+				        text: '删除',
 				        style: {
 				            backgroundColor: '#dd524d'
 				        }
 				    }
 				],
-				actionList:['组合1','组合2','组合3'],
+				actionList:[],
 			}
+		},
+		onLoad(){
+			that = this;
+			this.actionList = ['组合1','组合2','组合3','足额4'];
 		},
 		methods: {
 			click(index) {
@@ -151,6 +121,29 @@
 			},
 			swipeListChange(e,index){
 			    console.log('组合 当前状态：'+ e +'，下标：' + index)
+				let {content} = e;
+				if(content.text === '删除'){
+					uni.showModal({
+						title:'提示',
+						content:'是否删除当前对象',
+						success(res) {
+							if(res.confirm){
+								that.actionList.splice(index, 1);
+								
+							}else{
+								console.log('用户取消删除',index);
+							}
+						}
+					})
+				}else if(content.text === '编辑'){
+					console.log('用户点击编辑',index);
+				}else{
+					uni.showToast({
+						title: `点击了${e.content.text}按钮`,
+						icon: 'none'
+					});
+
+				}
 			}
 		}
 	}

@@ -89,6 +89,31 @@
 		</uni-popup>
 		
 		
+		<!-- 选择项目弹框 -->
+		<uni-popup ref="popup" type="center" :maskClick="false">
+		    <view class="popup-project">
+				<view class="title"><text>选择项目</text></view>
+				<view class="checkboxgroupBox">
+					<scroll-view class="scroll-view_H" scroll-y="true">
+						<checkbox-group name="checkbox" @change="checkboxChange">
+							
+							<view  v-for="(item,index) in deptProjectList" :key="index">
+								<view class="proList uni-flex uni-row" @click="checkProject(item)">
+									<checkbox :value="item.projectId" :checked="item.checked" /><text class="tite">{{item.projectName}}</text>
+								</view>
+							</view>
+						
+						</checkbox-group>
+					</scroll-view>
+				</view>
+				<view class="uni-flex uni-row buttonBox">
+					<button type="default" plain="true" size="mini" @tap="cancelPopup">取消</button>
+					<button type="primary" plain="true" size="mini" @tap="okPopup">确认</button>
+				</view>
+			</view>
+		</uni-popup>
+
+		
 		
 	</view>
 </template>
@@ -119,6 +144,11 @@
 	        }
 	    },
 	    methods: {
+			/*  */
+			checkboxChange(){},
+			checkProject(item){
+				
+			},
 			popSignBoxClick(){
 				this.$refs.contentPop.open();
 			},
@@ -205,6 +235,60 @@
 		width: 100%;
 		height: 100%;
 	}
+	
+	.popup-project{
+		background: #fff;
+		width: 600upx;
+		height: 800upx;
+		position: relative;
+		border-radius: 16upx;
+		box-shadow: 0 0 20upx #5d5d5d;
+		overflow-y: auto;
+		.title{
+			border-bottom: 2upx solid #f5f5f5;
+			width: 100%;
+			position: absolute;
+			height: 80upx;
+			line-height: 80upx;
+			background-color: #fff;
+			z-index: 10;
+			text{
+				font-size: 32upx;
+				color: #363636;
+				padding-left: 40upx;
+			}
+		}
+		.checkboxgroupBox{
+			padding-top: 80upx;
+			height: 600upx;
+			overflow-y: auto;
+			.scroll-view_H{
+				width: 100%;
+				height: 100%;
+			}
+		}
+		.proList{
+			padding: 20upx 30upx;
+			align-items: center;
+			.tit{
+				font-size: 32upx;
+				color: #363636;
+			}
+		}
+		.buttonBox{
+			position: absolute;
+			background-color: #fff;
+			z-index: 10;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			padding-bottom: 20upx;
+		}
+	}
+
+	
+	
+	
 	.preview{
 	    margin: 10rpx;
 	    border: 1rpx solid #aaaaaa;

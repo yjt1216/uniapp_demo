@@ -1,0 +1,14 @@
+
+.footKf{
+	position:fixed;
+	bottom: 100rpx;
+	align-self: center;
+	width: 480rpx;
+	height: 24rpx;
+	font-size: 24rpx;
+	font-family: PingFang-SC-Regular, PingFang-SC;
+	font-weight: 400;
+	color: #707070;
+	line-height: 24rpx;
+}
+

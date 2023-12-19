@@ -4,41 +4,38 @@
 		
 		<view class="tab-box">
 			<view class="tab-login" @click="cur = 0">
-				<text class="font-40 margin-b20" :class="[cur ? 'color-black-9': 'color-black-3']">快速登录</text>
+				<text class="font-40 margin-b20" :class="[cur ? 'color-black-9 font-34': 'color-black-3 font-40']">快速登录</text>
 				<image v-if="!cur" class="line" src="/static/images/login/line.png" mode=""></image>
 			</view>
 			<view class="tab-register" @click="cur = 1">
-				<text class="font-34 margin-b20" :class="[cur ? 'color-black-3': 'color-black-9']">密码登录</text>
+				<text class="font-34 margin-b20" :class="[cur ? 'color-black-3 font-40': 'color-black-9 font-34']">密码登录</text>
 				<image v-if="cur" class="line" src="/static/images/login/line.png" mode=""></image>
 			</view>
 		</view>
-		
-		<view class="login" v-if="!cur">
-			<view class="input">
-				<image class="input-icon margin-r20" src="/static/images/login/account.png" mode=""></image>
-				<input class="vs-flex-item color-base font-30" type="text" value="" :maxlength="11" placeholder="请输入您的手机号/邮箱" placeholder-class="input-placeholder"/>
+		<!-- 验证码登陆 -->
+		<view class="phone-login" v-if="!cur">
+			<view class="input-box">
+				<image class="input-icon" src="/static/images/login/account.png" mode=""></image>
+				<input class="input-item" type="text" v-model="accountValue"  placeholder="请输入您的手机号/邮箱" />
 			</view>
-			<view class="input">
-				<image class="input-icon margin-r20" src="/static/images/login/password.png" mode=""></image>
-				<input class="vs-flex-item color-base font-30" type="text" password value="" 
-					placeholder="请输入您的登录密码" placeholder-class="input-placeholder"/>
+			<view class="input-box">
+				<image class="input-icon" src="/static/images/login/password.png" mode=""></image>
+				<input class="input-item" type="number" password value="" placeholder="请输入验证码" v-model="codeValue" />
+			</view>
+		</view>
+		<!-- 账号登陆 -->
+		<view class="code-login" v-if="cur">
+			<view class="input-box">
+				<image class="input-icon" src="/static/images/login/account.png" mode=""></image>
+				<input class="input-item" type="text" :maxlength="11" placeholder="请输入您的手机号/邮箱" v-model="accountValue" />
+			</view>
+			<view class="input-box">
+				<image class="input-icon" src="/static/images/login/password.png" mode=""></image>
+				<input class="input-item" type="text" password value="" placeholder="请输入登陆密码" v-model="passwordValue" />
 			</view>
 		</view>
 		
-		<view class="register margin-b80" v-if="cur">
-			<view class="input vs-row vs-align-center margin-b40">
-				<image class="input-icon margin-r20" src="/static/images/login/account.png" mode=""></image>
-				<input class="vs-flex-item color-base font-30" type="text" :maxlength="11" 
-					placeholder="请输入您的手机号/邮箱" placeholder-class="input-placeholder"/>
-			</view>
-			<view class="input vs-row vs-align-center margin-b40">
-				<image class="input-icon margin-r20" src="/static/images/login/password.png" mode=""></image>
-				<input class="vs-flex-item color-base font-30" type="text" password value="" 
-					placeholder="请输入您的登录密码" placeholder-class="input-placeholder"/>
-			</view>
-		</view>
-		
-		<view class="button bg-color-base vs-row vs-align-center">
+		<view class="button-box">
 			<text class="color-white font-34">立即{{ cur ? '注册': '登录' }}</text>
 		</view>
 		
@@ -54,18 +51,27 @@
 	export default {
 		data() {
 			return {
-				/* 判断当前登录类型 */
+				/* 判断当前登录类型 账号登陆1/验证码登陆0 */
 				cur: 0,
-				phoneValue:'',
+				accountValue:'',
+				codeValue:'',
+				passwordValue:''
 				
 			}
+		},
+		methods:{
+			
 		}
+		
 	}
 </script>
 
 <style lang="scss">
 	.container {
 		position: relative;
+		display: flex;
+		flex-direction: column;
+		
 	}
 	
 	.bg {
@@ -103,55 +109,48 @@
 		height: 15rpx;
 	}
 	
-	.login, .register {
+	.phone-login, .code-login {
 		margin-top: 60rpx;
 		padding: 0 60rpx;
 	}
 	
-	.input {
+	.input-box {
 		width: 630rpx;
-		height: 90rpx;
+		height: 120rpx;
 		padding: 0 30rpx;
 		background-color: rgba(80, 100, 235, 0.1);
-		border-radius: 50%;
+		border-radius: 20rpx;
 		margin-bottom: 30rpx;
+		display: flex;
 		flex-direction: row;
 		align-items: center;
-		&-icon {
-			width: 30rpx;
-			height: 38rpx;
-		}
-		
-		&-placeholder {
-			color: #5064eb;
-		}
+	}
+	.input-icon{
+		margin-right: 20rpx;
+		width: 30rpx;
+		height: 38rpx;
+	}
+	.input-item{
+		flex: 1;
+		min-height: 96rpx;
+		line-height: 96rpx;
+		// background-color: aquamarine;
+		text-indent: 20rpx;
 	}
 	
-	.button {
+	.button-box {
 		width: 630rpx;
 		height: 90rpx;
+		line-height: 90rpx;
 		margin: 60rpx;
-		border-radius: 50%;
+		border-radius: 30rpx;
 		text-align: center;
 		justify-content: center;
 		flex-direction: row;
 	}
 	
-	.separator {
-		height: 2rpx;
-		margin: 0 30rpx;
-		background-color: #f5f5f5;
-	}
 	
-	.other {
-		&-items {
-			padding: 0 200rpx;
-		}
-		
-		&-icon {
-			width: 50rpx;
-			height: 50rpx;
-		}
-	}
+	
+	
 	
 </style>

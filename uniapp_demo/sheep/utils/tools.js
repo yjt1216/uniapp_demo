@@ -102,6 +102,8 @@ export function toast(info = {}, navigateOpt) {
 	}
 }
 
+// normal.js
+ 
 /**
  * 检查网络
  * @param {Boolean} silence - 静默检查

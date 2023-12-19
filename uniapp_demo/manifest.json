@@ -10,6 +10,8 @@
         "usingComponents" : true,
         "nvueStyleCompiler" : "uni-app",
         "compilerVersion" : 3,
+		/* 手机键盘 问题 */
+		"softinputMode": "adjustResize",
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
             "waiting" : true,
@@ -88,5 +90,13 @@
             "mode" : "history"
         },
         "title" : "加载中"
-    }
+    },
+	"uni_modules":{
+		"share":{
+			"name": "uni-share-module",
+			"main": "platforms/H5/share-module.js",
+			"version": "1.0.0",
+			"provider":"weixin"
+		}
+	}
 }

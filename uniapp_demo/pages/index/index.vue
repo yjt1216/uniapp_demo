@@ -10,6 +10,19 @@
 		
 		<view class="group-title">功能示例</view>
 		
+		<navigator url="/pages/login/login">
+			<view class="demo-li"> 登陆 <text class="demo-tip"> login </text></view>
+		</navigator>
+		<navigator url="/pages/login/login_example">
+			<view class="demo-li"> 登陆 <text class="demo-tip"> login example </text></view>
+		</navigator>
+		<view @click="shareClick">
+			<view class="demo-li"> 分享 <text class="demo-tip"> 点击share </text></view>
+		</view>
+		
+		<navigator url="/bundle_b/pages/input_demo/input_demo">
+			<view class="demo-li"> 输入框<text class="demo-tip"> input </text></view>
+		</navigator>
 		
 		<!-- <navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
 			<view class="demo-li">轮播图+商品列表 吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
@@ -28,20 +41,41 @@
 		
 		<navigator url="/bundle/pages/action_sheet/action_sheet">
 			<view class="demo-li">action sheet<text class="demo-tip"> 选择 </text></view>
-		</navigator> -->
+		</navigator> 
 		
-		<!-- <navigator url="/bundle/pages/sign_page/vertical_sign">
+		<navigator url="/bundle/pages/sign_page/vertical_sign">
 			<view class="demo-li">竖屏签名<text class="demo-tip"> 签名界面</text></view>
 		</navigator>
 		<navigator url="/bundle/pages/sign_page/landscape_sign">
 			<view class="demo-li">横屏签名<text class="demo-tip"> 签名界面</text></view>
-		</navigator> -->
+		</navigator>
+		-->
+		
+		<navigator url="/bundle_b/pages/swiper_action/swiper_action">
+			<view class="demo-li"> swiper action<text class="demo-tip"> 左滑按钮 </text></view>
+		</navigator>
+		<navigator url="/bundle_b/pages/swiper_action/swipe_action">
+			<view class="demo-li"> swipe action<text class="demo-tip"> 左滑按钮 </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_b/pages/huabi/autograph_test">
+			<view class="demo-li">签名<text class="demo-tip"> test</text></view>
+		</navigator>
 		
 		<navigator url="/bundle/pages/upload_img/upload_photo">
 			<view class="demo-li">上传照片<text class="demo-tip"> 选择图片</text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/list_input/list_input">
+		<navigator url="/pages/html_test/html_test">
+			<view class="demo-li">测试本地html<text class="demo-tip"> html_test</text></view>
+		</navigator>
+		<navigator url="/pages/web_view/informed_consent">
+			<view class="demo-li"> 知情同意书 <text class="demo-tip"> web view 底部按钮 </text></view>
+		</navigator>
+		<navigator url="/pages/web_view/webview_test">
+			<view class="demo-li"> 底部按钮 <text class="demo-tip"> web view  </text></view>
+		</navigator>
+		<!-- <navigator url="/bundle/pages/list_input/list_input">
 			<view class="demo-li">input<text class="demo-tip"> 循环创建input 底部签名 返回文件路径</text></view>
 		</navigator>
 		
@@ -51,7 +85,7 @@
 		
 		<navigator url="/bundle/pages/header_footer/header_footer">
 			<view class="demo-li">头部底部<text class="demo-tip"> 头部 数据列表list 底部 </text></view>
-		</navigator>
+		</navigator> -->
 		
 		<!-- <navigator url="/pages/location/location">
 			<view class="demo-li">地图定位<text class="demo-tip"> QQ 地图定位功能 </text></view>
@@ -62,12 +96,17 @@
 		<!-- <navigator url="/bundle/pages/tag_page/tag-page">
 			<view class="demo-li">tag_page<text class="demo-tip"> tag </text></view>
 		</navigator>
-		<navigator url="/pages/web_view/web_view">
-			<view class="demo-li"> web_view <text class="demo-tip"> web view 按钮 </text></view>
-		</navigator> -->
+		
+		-->
+		
+		 
 		
 		<navigator url="/bundle/pages/pop_box/pop_box">
 			<view class="demo-li"> pop_box<text class="demo-tip"> 弹窗 </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_b/pages/keyboard_pop/keyboard_pop">
+			<view class="demo-li"> 键盘弹框顶起底部空间<text class="demo-tip"> keyboard </text></view>
 		</navigator>
 		
 		<!-- <navigator url="/bundle/pages/choose_photo/choose_photo">
@@ -93,9 +132,7 @@
 			<view class="demo-li"> list left<text class="demo-tip"> 左侧tabs </text></view>
 		</navigator>
 		
-		<!-- <navigator url="/bundle_b/pages/swiper_action/swiper_action">
-			<view class="demo-li"> swiper action<text class="demo-tip"> 左滑按钮 </text></view>
-		</navigator> -->
+		
 		<navigator url="/bundle_b/pages/lesson_play/lesson_play">
 			<view class="demo-li"> lesson action<text class="demo-tip"> 视频播放 </text></view>
 		</navigator>
@@ -186,7 +223,21 @@
 			
 		},
 		methods:{
-			
+			shareClick(){
+				this.$share.share({
+				  title: '分享标题',
+				  content: '分享内容',
+				  imageUrl: '分享图片链接',
+				  url: '分享链接',
+				  success: () => {
+				    console.log('分享成功')
+				  },
+				  fail: (err) => {
+				    console.log('分享失败', err)
+				  }
+				})
+
+			}
 			
 			
 		}

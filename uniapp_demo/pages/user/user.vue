@@ -1,374 +1,253 @@
 <template>
-	<view class="user">
-		<view class="top-view" :style="[headBackground]">
-			
-			
-			<!-- 登录状态 头部信息 -->
-			<view v-if="isLogin" class="login-info" :style="{'padding-top':topH+'px'}">
-				<image class="header-image" src="../../static/images/user/default_header.png"></image>
-				<view class="login-name" >陈宜飞</view>
-				<view class="login-id" >ID:20635</view>
-				<!-- 星级 资历 佣金 -->
-				<view class="work-info">
-					<view size="md" 
-						class="white  flex row-center info" >
-						<text>1</text>
-						<text>星级</text>
-					</view>
-					<view size="md"
-						class="white  flex row-center info" >
-						<text>护士长</text>
-						<text>资历</text>
-					</view>
-					<view size="md"
-						class="white  flex row-center info">
-						<text>100000</text>
-						<text>佣金</text>
-					</view>
-					
-				</view>
+	<view class="u-page">
+		<view class="u-demo-block">
+			<text class="u-demo-block__title">演示案例</text>
+			<view class="u-page__swipe-action-item">
+				<u-swipe-action>
+					<u-swipe-action-item
+						v-if="show1"
+						:options="options1"
+						:longpress="clickAction"
+						@change="swipeChange($event, index)"
+					>
+						<view class="swipe-action u-border-top u-border-bottom" @click="testChildClick">
+							<view class="swipe-action__content">
+								<text class="swipe-action__content__text">基础使用</text>
+							</view>
+						</view>
+					</u-swipe-action-item>
+				</u-swipe-action>
 			</view>
-			<!-- 未登录 头部信息 -->
-			<view v-if="!isLogin" class="un-login-info" :style="{'padding-top':topH+'px'}">
-				
-				<image class="header-image" src="../../static/images/user/default_header.png"></image>
-				<view class="login-status" >未登录</view>
-				<!-- 登录 注册 -->
-				<view class="login-register">
-					<button size="md" 
-						class="white br60 flex row-center btn" @tap="goLogin">
-						<text>登录</text>
-					</button>
-					<button size="md"
-						class="white br60 flex row-center btn" @tap="goRegister">
-						<text>注册</text>
-					</button>
-					<!-- <button size="sm" class="plain br60" hover-class="none" @tap="goLogin">登录</button> -->
-					
-				</view>
-			</view>
-			
 		</view>
-		<!-- list view -->
-		<view class="menu-list">
-			<view class="menu-item" @click="serviceObject">
-				<view class="u-r">
-					<image src="../../static/images/user/fuwuduixiang.png" class="type-img"></image>
-					<view class="menu-text u-m-l-20">服务对象</view>
-				</view>
-				<!-- <u-icon name="arrow-right" size="20" color="#39C9BC"></u-icon> -->
-				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
+		<view class="u-demo-block">
+			<text class="u-demo-block__title">按钮组</text>
+			<view class="u-page__swipe-action-item">
+				<u-swipe-action>
+					<u-swipe-action-item :options="options2">
+						<view class="swipe-action u-border-top u-border-bottom">
+							<view class="swipe-action__content">
+								<text class="swipe-action__content__text">两个按钮并列</text>
+							</view>
+						</view>
+					</u-swipe-action-item>
+				</u-swipe-action>
 			</view>
-			<view class="divider"></view>
-			<view class="menu-item" @click="serviceObject">
-				<view class="u-r">
-					<image src="../../static/images/user/peixunkecheng.png" class="type-img"></image>
-					<view class="menu-text u-m-l-20">培训课程</view>
-				</view>
-				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
-			</view>
-			<view class="divider"></view>
-			<router-link to="/bundle/pages/user_intro/user_intro">
-				<view class="menu-item" @click="serviceObject">
-					<view class="u-r">
-						<image src="../../static/images/user/shezhi.png" class="type-img"></image>
-						<view class="menu-text u-m-l-20">个人介绍</view>
-					</view>
-					<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
-				</view>
-			</router-link>
-			<view class="divider"></view>
-			<view class="menu-item" @click="serviceObject">
-				<view class="u-r">
-					<image src="../../static/images/user/lianxikefu.png" class="type-img"></image>
-					<view class="menu-text u-m-l-20">联系客服</view>
-				</view>
-				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
-			</view>
-			<view class="divider"></view>
-			<view class="menu-item" >
-				<view class="u-r">
-					<image src="../../static/images/user/yonghubangzhu.png" class="type-img"></image>
-					<view class="menu-text u-m-l-20">用户帮助</view>
-				</view>
-				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
-			</view>
-			<view class="divider"></view>
-			<view class="menu-item" >
-				<view class="u-r">
-					<image src="../../static/images/user/yinsizhengce.png" class="type-img"></image>
-					<view class="menu-text u-m-l-20">隐私政策</view>
-				</view>
-				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
-			</view>
-			
-			<view class="divider"></view>
-			<view class="menu-item" >
-				<view class="u-r">
-					<image src="../../static/images/user/yonghuxieyi.png" class="type-img"></image>
-					<view class="menu-text u-m-l-20">用户协议</view>
-				</view>
-				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
-			</view>
-			<view class="divider"></view>
-			<view class="menu-item" >
-				<view class="u-r">
-					<u-icon name="scan" color="#39C9BC" size="20"></u-icon>
-					<view class="menu-text u-m-l-20">收款码</view>
-				</view>
-				<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
-			</view>
-			
-			<view class="divider"></view>
-			<view class="menu-item" @click="clearStorage">
-				<view class="u-r">
-					<u-icon name="scan" color="#39C9BC" size="20"></u-icon>
-					<view class="menu-text u-m-l-20">清除缓存</view>
-				</view>
-				
-				<view class="storage-right">
-					<view class="storage-size">{{storageSize}}</view>
-					<image class="arrow-img" :src="'/static/images/user/arrow_right.png'"></image>
-				</view>
-			</view>
-			<view class="divider"></view>
-			
-			
 		</view>
-		<!-- <y-tabbar ref="tabbar" native></y-tabbar> -->
+		<view class="u-demo-block">
+			<text class="u-demo-block__title">带图标</text>
+			<view class="u-page__swipe-action-item">
+				<u-swipe-action>
+					<u-swipe-action-item :options="options3">
+						<view class="swipe-action u-border-top u-border-bottom">
+							<view class="swipe-action__content">
+								<text class="swipe-action__content__text">自定义图标</text>
+							</view>
+						</view>
+					</u-swipe-action-item>
+				</u-swipe-action>
+			</view>
+		</view>
+		<view class="u-demo-block">
+			<text class="u-demo-block__title">组合使用</text>
+			<view class="u-page__swipe-action-item">
+				<u-swipe-action>
+					<u-swipe-action-item
+						:options="item.options"
+						v-for="(item, index) in options4"
+						:disabled="item.disabled"
+						:key="index">
+						<view
+							class="swipe-action u-border-top"
+							:class="[index === options4.length - 1 && 'u-border-bottom']"
+						>
+							<view class="swipe-action__content">
+								<text class="swipe-action__content__text">{{ item.text }}</text>
+							</view>
+						</view>
+					</u-swipe-action-item>
+				</u-swipe-action>
+			</view>
+		</view>
+		<view class="u-demo-block">
+			<text class="u-demo-block__title">自定义按钮形状</text>
+			<view class="u-page__swipe-action-item">
+				<u-swipe-action>
+					<u-swipe-action-item :options="options5">
+						<view class="swipe-action u-border-top u-border-bottom">
+							<view class="swipe-action__content">
+								<text class="swipe-action__content__text">圆形按钮</text>
+							</view>
+						</view>
+					</u-swipe-action-item>
+				</u-swipe-action>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
-	
 	export default {
 		data() {
 			return {
-				topH: uni.getSystemInfoSync().statusBarHeight,
-				/* 小程序缓存 */
-				storageSize:'0M',
+				show1: true,
+				moveX: 0,
+				showText: '当前状态：关',
+				showStatus: false,
+				options1: [{
+					text: '删除',
+					style: {
+						backgroundColor: '#f56c6c'
+					}
+				}],
+				options2: [{
+					text: '收藏',
+					style: {
+						backgroundColor: '#3c9cff'
+					}
+				}, {
+					text: '删除',
+					style: {
+						backgroundColor: '#f56c6c'
+					}
+				}],
+				options3: [{
+					text: '收藏',
+					icon: 'star-fill',
+					iconSize: '20',
+					style: {
+						backgroundColor: '#f9ae3d'
+					}
+				}],
+				options4: [
+					{
+						text: '禁用状态',
+						disabled: true,
+						options: [{
+								text: '置顶',
+								style: {
+									backgroundColor: '#3c9cff',
+								}
+							},
+							{
+								text: '取消',
+								style: {
+									backgroundColor: '#f9ae3d',
+								}
+							},
+						],
+					}, 
+					{
+						text: '正常状态',
+						disabled: false,
+						options: [{
+								text: '置顶',
+								style: {
+									backgroundColor: '#3c9cff',
+								}
+							},
+							{
+								text: '取消',
+								style: {
+									backgroundColor: '#f9ae3d',
+								}
+							},
+						],
+					}, 
+					{
+						text: '自动关闭',
+						disabled: false,
+						options: [{
+								text: '置顶',
+								style: {
+									backgroundColor: '#3c9cff',
+								}
+							},
+							{
+								text: '取消',
+								style: {
+									backgroundColor: '#f9ae3d',
+								}
+							},
+						],
+					},
+				],
+				options5: [{
+					icon: 'trash-fill',
+					style: {
+						backgroundColor: '#f56c6c',
+						width: '40px',
+						height: '40px',
+						borderRadius: '100px',
+						margin: '0 6px'
+					}
+				}, {
+					icon: 'heart-fill',
+					style: {
+						backgroundColor: '#5ac725',
+						width: '40px',
+						height: '40px',
+						borderRadius: '100px',
+						margin: '0 6px'
+					}
+				}]
 			}
-		},
-		onLoad() {
-			console.log('on load')
-			console.log('user isLogin',this.isLogin)
-			this.getStorageSize()//获取缓存
 		},
 		methods: {
-			goLogin() {
-				this.$Router.push({
-					path: '/pages/login/login',
-				})
-			},
-			goRegister(){
-				this.$Router.push({
-					path: '/pages/register/register',
-				})
-			},
-			// 服务对象
-			serviceObject(){
-				
-			},
-			//获取app的缓存
-			getStorageSize:function(){
-				let that = this;
-				uni.getStorageInfo({
-					success(res) {
-						//console.log(res.keys);
-						//console.log(res.limitSize);
-						let size = res.currentSize;
-						if (size < 1024) {
-							that.storageSize = size + ' B';
-						} else if (size/1024>=1 && size/1024/1024<1) {
-							that.storageSize = Math.floor(size/1024*100)/100 + ' KB';
-						} else if (size/1024/1024>=1) {
-							that.storageSize = Math.floor(size/1024/1024*100)/100 + ' M';
+			clickAction(index) {
+				console.log('click', index);
+				uni.showModal({
+					title: '温馨提示',
+					content: '确定要删除吗？',
+					success: res => {
+						if (res.confirm) {
+							this.show1 = false
 						}
 					}
 				})
 			},
-			//删除 缓存
-			clearStorage:function (){
-					let that = this;
-					uni.showModal({
-						title:'提示',
-						content:'确定清除缓存吗?',
-						confirmText:'立即清除',
-						success(res) {
-							if(res.confirm){
-								uni.clearStorageSync();
-								//重新获取并显示清除后的缓存大小
-								that.getStorageSize();
-								uni.showToast({
-									title:'清除成功',
-									icon:'none'
-								})
-								//清除完后跳到登录页面
-								setTimeout(()=>{
-									uni.redirectTo({
-										url:'/pages/login/login',
-										animationType: 'pop-in',
-										animationDuration: 200
-									})
-								},1300)
-							}
-						}
-					})
-			 },
-		},
-		computed: {
-			// 头部背景色
-			headBackground() {
-				return {
-					'background-image':`linear-gradient(to right, #39C9BC,#6DE8CC)`
-				}
-			}
+			testChildClick(){
+				console.log('testChildClick');
+			},
+			swipeChange(e,index){
+			    console.log('当前状态：'+ e +'，下标：' + index)
+			},
 		}
-		
-	};
+	}
 </script>
 
-<style lang="scss" scoped>
-	@import '@/styles/base.scss';
-	.user {
-		background-size: 100% auto;
-		background-repeat: no-repeat;
+<style lang="scss">
+	.u-page {
+		padding: 0;
+	}
+	.u-demo-block {
+		flex: 1;
+		margin-bottom: 23px;
 		
-		.top-view {
-			
-			height: 420rpx;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			
-			
-			.qr-code{
-				width: 60rpx;
-				height: 60rpx;
-				background-color: red
-			}
-			
-			.un-login-info{
-				.login-status {
-					color: white;
-					text-align: center;
-				}
-				.header-image {
-					
-					display: block;
-					width: 100rpx;
-					height: 100rpx;
-					margin: 10rpx auto ;
-				}
-				.login-register {
-					margin-top: 20rpx;
-					width: 100%;
-					display: flex;
-					flex-direction: row;
-					justify-content: space-around;
-					align-items: center;
-					
-					.btn {
-						background-color: #39C9BC;
-						width: 180rpx;
-						margin: 10rpx 20rpx 0; /* 上边 | 左边右边 | 下边 */
-					}
-				}
-			}
-			.login-info{
-				.login-name {
-					color: white;
-					text-align: center;
-				}
-				.login-id {
-					color: white;
-					text-align: center;
-				}
-				
-				.header-image {
-					display: block;
-					width: 100rpx;
-					height: 100rpx;
-					margin: 10rpx auto ;
-				}
-				.work-info {
-					margin-top: 20rpx;
-					width: 100%;
-					display: flex;
-					flex-direction: row;
-					justify-content: space-around;
-					align-items: center;
-					
-					.info {
-						width: 180rpx;
-						margin: 10rpx 20rpx 0; /* 上边 | 左边右边 | 下边 */
-						display: flex;
-						flex-direction: column;
-						justify-content: center;
-						align-items: center;
-					}
-				}
-			}
-			
+		&__content {
+			@include flex(column);
 		}
-		.menu-list {
-			display: flex;
-			flex-direction: column;
-			padding-left: 15rpx;
-			padding-right: 15rpx;
-			margin-top: 30rpx;
-			
-			.menu-item {
-				display: flex;
-				flex-direction: row;
-				background-color: #fff;
-				// border-radius: 15rpx;
-				align-items: center;
-				justify-content: space-between;
-				padding-left: 10rpx;
-				padding-right: 10rpx;
-				height: 45rpx;
-				.u-r{
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-				}
-				
-				.menu-text {
-					color: black;
-					margin-left: 10rpx;
-					font-size: 32rpx;
-					font-weight: 400;
-				}
-				.type-img{
-					height: 40rpx;
-					width: 40rpx;
-				}
-				.arrow-img{
-					height: 32rpx;
-					width: 26rpx;
-				}
-			}
-			.divider {
-				margin-top: 20rpx;
-				margin-bottom: 15rpx;
-				margin-left: 15rpx;
-				margin-right: 15rpx;
-				background-color: #666666;
-				width: 95%;
-				height: 1rpx;
-			}
+		
+		&__title {
+			font-size: 14px;
+			color: rgb(143, 156, 162);
+			margin-bottom: 8px;
+			@include flex;
 		}
-		.storage-right{
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: space-around;
-		}
-		.storage-size{
-			margin-right: 10rpx;
+	}
+	.u-demo-block__title {
+		padding: 10px 0 2px 15px;
+	}
+
+	.swipe-action {
+		height: 200rpx;
+		&__content {
+			padding: 25rpx 0;
+
+			&__text {
+				font-size: 15px;
+				color: $u-main-color;
+				padding-left: 30rpx;
+			}
 		}
 	}
 </style>

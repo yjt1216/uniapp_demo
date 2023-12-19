@@ -1,6 +1,11 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		
+		{
+			"path": "pages/login/login_example",
+			"style": {
+				"navigationStyle": "custom" 
+			}
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -51,10 +56,36 @@
 			}
 		},
 		{
-			"path": "pages/login/login_example",
+			"path": "pages/web_view/informed_consent",
+			// "style": {
+			// 	"subNVues":[{
+			// 		"id": "tanchu", // 唯一标识 
+			// 		 "path": "pages/index/index", // 页面路径  
+			// 		"style": {
+			// 			"position": "absolute",
+			// 			"right":"0%",
+			// 			"bottom": "20%",
+			// 			"width": "20%",
+			// 			"height": "5%",
+			// 			"zindex": 999999999999,
+			// 			"background": "#000"
+			// 		}
+			// 	}]
+			// }
+			"style": {
+				"navigationStyle": "custom"
+			}
+			
+		},
+		
+		{
+			"path": "pages/html_test/html_test",
 			"style": {
 				"navigationStyle": "custom" 
 			}
+		},
+		{
+			"path": "pages/web_view/webview_test"
 		}
 	],
 	"subPackages": [
@@ -270,9 +301,21 @@
 			"root": "bundle_b",
 			"pages": [
 				{
+					"path": "pages/input_demo/input_demo",
+					"style": {
+						"navigationStyle": "custom" 
+					}
+				},
+				{
 					"path": "pages/swiper_action/swiper_action",
 					"style": {
 						"navigationStyle": "custom" 
+					}
+				},
+				{
+					"path": "pages/swiper_action/swipe_action",
+					"style": {
+						"navigationBarTitleText": "滑动单元格"
 					}
 				},
 				{
@@ -295,6 +338,12 @@
 				},
 				{
 					"path": "pages/chart_demo/chart_demo"
+				},
+				{
+					"path":"pages/keyboard_pop/keyboard_pop"
+				},
+				{
+					"path": "pages/huabi/autograph_test"
 				}
 			]
 		}

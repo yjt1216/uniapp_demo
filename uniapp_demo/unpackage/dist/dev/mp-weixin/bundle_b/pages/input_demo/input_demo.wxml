@@ -1,0 +1,1 @@
+<view class="input-demo"><u-navbar vue-id="2e172984-1" title="输入框" fixed="{{true}}" placeholder="{{true}}" bind:__l="__l"></u-navbar><view class="input-box"><input class="input-item" focus="{{true}}" placeholder="请输入登录账号" type="number" data-event-opts="{{[['input',[['__set_model',['','accountValue','$event',[]]]]]]}}" value="{{accountValue}}" bindinput="__e"/></view></view>

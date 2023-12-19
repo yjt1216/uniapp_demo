@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>预约服务-1分钱测试项目</title>
+    <link rel="stylesheet" href="http://222.92.38.178:8091/static/lte/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://222.92.38.178:8091/static/mobile/hospital/mobile.css">
+    <link rel="stylesheet" href="http://222.92.38.178:8091/static/lte/bower_components/font-awesome/css/font-awesome.min.css">
+    <link href="http://222.92.38.178:8091/static/css/vds.css" rel="stylesheet" media="screen" type="text/css" />
+    <link href="http://222.92.38.178:8091/static/js/plugins/webupload/webuploader.css" rel="stylesheet" media="screen" type="text/css" />
+    <link rel="stylesheet" href="http://222.92.38.178:8091/static/js/plugins/mobiscroll/mobiscroll.custom.min.css">
+    <link rel="stylesheet" href="http://222.92.38.178:8091/static/mobile/confirm.css">
+    <link href="http://222.92.38.178:8091/static/question/lib/bootstrap-3.3.2-dist/css/bootstrap-select.min.css" rel="stylesheet"/>
+    <script src="http://222.92.38.178:8091/static/mobile/confirm.js"></script>
+    <script src="http://222.92.38.178:8091/static/lte/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script src="http://222.92.38.178:8091/static/lte/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://222.92.38.178:8091/static/question/lib/bootstrap-3.3.2-dist/js/bootstrap-select.min.js"></script>
+    <script src="http://222.92.38.178:8091/static/question/lib/bootstrap-3.3.2-dist/js/i18n/defaults-zh_CN.min.js"></script>
+    <style>
+        .webuploader-pick {
+            background-color: #fff;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid" id="divRecordInfo">
+    <div class="row index-nav-tabs">
+        <div class="col-md-2 col-xs-2" style="text-align: left;padding: 10px;">
+            <a href="http://222.92.38.178:8091/mobile/hospital/serviceDetail?item_id=10051" class="back-icon"><span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="margin-left: 5px;"></span></a>
+        </div>
+        <div class="col-md-8 col-xs-8" style="text-align: center;">
+            <h3 style="margin-top: 10px;">预约服务</h3>
+        </div>
+        <div class="col-md-2 col-xs-2"></div>
+    </div>
+
+    <div class="row" style="background-color: #fff;padding: 16px 16px;border-bottom: solid 5px #ddd;">
+        <a href="http://222.92.38.178:8091/mobile/hospital/insuranceTerms?short_title=意外险&sn=c00c0414208076c13db3302e68661d6c" style="line-height:2em;width:7em;border-radius:5px;-moz-border-radius:5px;text-align:center;display:inline-block;background-color: #9463e6;color: white;">意外险</a>
+        &nbsp;
+        <a href="http://222.92.38.178:8091/mobile/hospital/insuranceTerms?short_title=第三者责任险&sn=d09cb5580e74dcd4bc3dba52592e89ed" style="line-height:2em;width:10em;border-radius:5px;-moz-border-radius:5px;text-align:center;display:inline-block;background-color: #b77b50;color: white;">第三者责任险</a>
+    </div>
+    <div class="row" style="background-color: #fff;text-align: center;padding: 10px 10px;color: #999;border-bottom: solid 1px #ddd;">
+        <span>1分钱测试项目</span>
+    </div>
+    <div class="row" style="background-color: #fff;border-top: solid 1px #ddd;color: #333;">
+        <div style="width: 100%;padding: 0px 20px;">
+            <form role="form" action="http://222.92.38.178:8091/mobile/hospital/submitRecord" id="recordForm">
+                <input type="hidden" id="hidCsrfToken" name="_token" value="4VazHth3UuoUweF8WShRCo1Y70BnAd87oDCmxzFJ">
+                <input type="hidden" name="item_id" value="10051">
+            <div class="row" data-url="http://222.92.38.178:8091/mobile/hospital/personList?item_id=10051" style="padding: 20px 0px;border-bottom: solid 1px #ddd;">
+                <div class="col-md-3 col-xs-3">就诊人</div>
+                <div class="col-md-7 col-xs-7" onclick="rightClickUrl(this)">
+                    <input type="text" style="display: none;" value="1000097" name="person_id" placeholder="请选择就诊人" required="required">
+                                            张琴啊&nbsp;&nbsp;18013569550&nbsp;&nbsp;<br>
+                        41282519911216205X<br>
+                        江苏省苏州市工业园区&nbsp;东平街288
+                                    </div>
+                <div class="col-md-2 col-xs-2" style="text-align: right;" onclick="rightClickUrl(this)">
+                    <a href="javascript:void(0)"  style="color:#333;text-decoration:none;font-size: 20px;"><span class="glyphicon glyphicon-menu-right" aria-hidden="true" style="margin-left: 5px;"></span></a>
+                </div>
+            </div>
+            <div class="row"  style="padding: 20px 0px;border-bottom: solid 1px #ddd;">
+                <div class="col-md-3 col-xs-3">主照料人</div>
+                <div class="col-md-9 col-xs-9" >
+                    <input type="text" class="form-control" id="caregiverName"  name="caregiver_name" placeholder="请输入照料人姓名" style="border: none;-webkit-box-shadow:none;background-color: #fff;">
+                    <input type="text" class="form-control" id="caregiverMobile"  name="caregiver_mobile" placeholder="请输入照料人手机号" style="border: none;-webkit-box-shadow:none;background-color: #fff;">
+                </div>
+            </div>
+            <div class="row"  style="padding: 20px 0px;border-bottom: solid 1px #ddd;">
+                <div class="col-md-3 col-xs-3"><label class="required">*</label> 服务时间</div>
+                <div class="col-md-9 col-xs-9" >
+                    <input type="text" class="form-control" id="inputPlanAt"  name="plan_at" placeholder="请输入服务时间" required="required" style="border: none;-webkit-box-shadow:none;background-color: #fff;">
+                    <span class="glyphicon glyphicon-menu-right form-control-feedback" aria-hidden="true" style="font-size: 20px;margin-right: 10px;"></span>
+                </div>
+                <div class="col-md-9 col-xs-9"> <span style="font-size: 12px;color: #999;">注：选择当天需支付加急费</span></div>
+            </div>
+
+            <!-- 自评内容开始 -->
+                                                            <div class="row"  style="padding: 20px 0px;border-bottom: solid 1px #ddd;">
+                        <div class="col-md-3 col-xs-12">
+                                                            <label class="required">*</label>
+                                                            产后护理</div>
+                        <div class="col-md-9 col-xs-12" >
+                            <select key="产后护理"  is_require="1"  class="form-control selectpicker self_audit">
+                                                                    <option value="选项1" >选项1</option>
+                                                                    <option value="选项2" selected>选项2</option>
+                                                            </select>
+                        </div>
+                    </div>
+                                                    <input type="hidden" name="self_audit" id="self_audit"/>
+            <!-- 自评内容结束 -->
+            <div class="row"  style="padding: 20px 0px;border-bottom: solid 1px #ddd; display: none;">
+                <div class="col-md-3 col-xs-3">有医嘱</div>
+                <div class="col-md-9 col-xs-9" >
+                    <label style="font-weight: normal;"><input type="radio" name="has_advice" value="1" class="form-group" checked="checked" style="margin-right: 5px;">是</label>
+                    <label style="margin-left: 30px;font-weight: normal;"><input type="radio" name="has_advice" value="0" class="form-group" style="margin-right: 5px;">否</label>
+                </div>
+            </div>
+            <div class="row"  style="padding: 20px 0px;border-bottom: solid 1px #ddd; display: none;">
+                <div class="col-md-3 col-xs-3">有药品</div>
+                <div class="col-md-9 col-xs-9" >
+                    <label style="font-weight: normal;"><input type="radio" name="has_drug" value="1" class="form-group"  style="margin-right: 5px;">是</label>
+                    <label style="margin-left: 30px;font-weight: normal;"><input type="radio" name="has_drug" value="0" checked="checked" class="form-group" style="margin-right: 5px;">否</label>
+                </div>
+            </div>
+            <div class="row"  style="padding: 20px 0px;border-bottom: solid 1px #ddd; display: none;">
+                <div class="col-md-3 col-xs-3">有辅助器械</div>
+                <div class="col-md-9 col-xs-9" >
+                    <label style="font-weight: normal;"><input type="radio" name="has_device" value="1" class="form-group"  style="margin-right: 5px;">是</label>
+                    <label style="margin-left: 30px;font-weight: normal;"><input type="radio" name="has_device" value="0" checked="checked" class="form-group" style="margin-right: 5px;">否</label>
+                </div>
+            </div>
+                        <div class="row"  style="padding: 20px 0px;border-bottom: solid 1px #ddd;">
+                <div class="col-md-3 col-xs-3">购买医疗包</div>
+                <div class="col-md-9 col-xs-9" >
+                    <label style="font-weight: normal;"><input type="radio" name="buy_material" value="1" checked="checked" class="form-group"  style="margin-right: 5px;">是</label>
+                    <label style="margin-left: 30px;font-weight: normal;"><input type="radio" name="buy_material" value="0" class="form-group" style="margin-right: 5px;">否</label>
+                </div>
+            </div>
+                        <div class="row"  style="padding: 20px 0px;border-bottom: solid 1px #ddd;">
+                <div class="col-md-3 col-xs-3">病情描述</div>
+                <div class="col-md-9 col-xs-9" >
+                    <textarea class="form-control" rows="3" name="desc" id="inputDesc" placeholder="请简要描述您的病情" required="required" style="border: none;-webkit-box-shadow:none;"></textarea>
+                </div>
+            </div>
+            <div class="row"  style="padding: 20px 0px 10px 0px;">
+                <div class="col-md-3 col-xs-3">资料图片上传</div>
+                <div class="col-md-5 col-xs-5" style="padding: 0px 15px;">
+                    <div id="pickerAttach0" name="attach">
+                        <div style="padding: 15px;text-align: center;color: #999;display: inline-block;border: 1px dashed #c2c2c2;">
+                            <span style="font-size: 22px;">+</span><br>
+                            <span>医嘱图片</span>
+                        </div>
+                    </div>
+                    <div id="attachFile0"></div>
+                </div>
+                <div class="col-md-4 col-xs-4" style="padding: 0px;">
+                    <div id="pickerAttach1" name="attach">
+                        <div style="padding: 15px;text-align: center;color: #999;display: inline-block;border: 1px dashed #c2c2c2;">
+                            <span style="font-size: 22px;">+</span><br>
+                            <span>病情图片</span>
+                        </div>
+                    </div>
+                    <div id="attachFile1"></div>
+                </div>
+            </div>
+            <div class="row" style="padding: 0px 0px 10px 0px;">
+                <div class="col-md-3 col-xs-3"></div>
+                <div class="col-md-5 col-xs-5" style="padding: 0px 15px;">
+                    <div id="pickerAttach2" name="attach">
+                        <div style="padding: 15px;text-align: center;color: #999;display: inline-block;border: 1px dashed #c2c2c2;">
+                            <span style="font-size: 22px;">+</span><br>
+                            <span>药品图片</span>
+                        </div>
+                    </div>
+                    <div id="attachFile2"></div>
+                </div>
+                <div class="col-md-4 col-xs-4" style="padding: 0px;">
+                    <div id="pickerAttach3" name="attach">
+                        <div style="padding: 15px;text-align: center;color: #999;display: inline-block;border: 1px dashed #c2c2c2;">
+                            <span style="font-size: 22px;">+</span><br>
+                            <span>检验图片</span>
+                        </div>
+                    </div>
+                    <div id="attachFile3"></div>
+                </div>
+            </div>
+            <div class="row" style="padding: 0px 0px 10px 0px;">
+                <div class="col-md-3 col-xs-3"></div>
+                <div class="col-md-5 col-xs-5" style="padding: 0px 15px;">
+                    <div id="pickerAttach4" name="attach">
+                        <div style="padding: 15px;text-align: center;color: #999;display: inline-block;border: 1px dashed #c2c2c2;">
+                            <span style="font-size: 22px;">+</span><br>
+                            <span>病史图片</span>
+                        </div>
+                    </div>
+                    <div id="attachFile4"></div>
+                </div>
+                <div class="col-md-4 col-xs-4" style="padding: 0px;">
+                    <div id="pickerAttach5" name="attach">
+                        <div style="padding: 15px;text-align: center;color: #999;display: inline-block;border: 1px dashed #c2c2c2;">
+                            <span style="font-size: 22px;">+</span><br>
+                            <span>缴费凭证</span>
+                        </div>
+                    </div>
+                    <div id="attachFile5"></div>
+                </div>
+            </div>
+            <div class="row" style="padding: 0px 0px 20px 0px;border-bottom: solid 1px #ddd;">
+                <div class="col-md-3 col-xs-3" ></div>
+                <div class="col-md-9 col-xs-9" style="padding: 0px;">
+                    <span style="color: #aaa;">上传近期出院小结、医嘱、检验单等资料照片</span>
+                </div>
+            </div>
+                                    <div class="row" style="padding: 20px 0px;border-bottom: solid 1px #ddd;">
+                        <div class="col-md-12 col-xs-12" >
+                            <a href="javascript:void(0)" class="login-link" onclick="showConsent()">
+                                知情同意书
+                            </a>
+                            <a href="javascript:void(0)" class="login-link" onclick="showConsent()" style="margin-left: 10px;">
+                                <span class="glyphicon glyphicon-eye-open"></span><span>阅览</span>
+                            </a>
+                            <span style="margin-left: 10px;color: #aaa;">（请点击“阅览”查看知情同意书）</span>
+                            <input type="hidden" name="consent" value="1">
+                            <input type="hidden" name="sign" id="hidSignImg">
+                        </div>
+                        <div class="col-md-12 col-xs-12" style="margin-top: 5px;">
+                            <div style="padding-bottom: 20px;position: relative;">
+                                <div style="float: left;"><span>手写签名：</span></div>
+                                <div style="float: right;">
+                                    <a href="javascript:clearSignature()" style="text-decoration: none;color: #333;">
+                                        <span class="glyphicon glyphicon-erase"></span><span style="margin-left: 5px;">清除</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="personSignature" style="border: solid 1px #ddd;background-color: #eee;"></div>
+                        </div>
+                    </div>
+                            </form>
+        </div>
+    </div>
+
+    <div class="row" style="height: 70px;background-color: #fff;"></div>
+    <div style="position: fixed;bottom: 0px;width: 100%;z-index: 100;">
+        <div class="row" style="border-top: solid 1px #ccc;background-color: #f7f7f9;padding: 15px 50px 15px 20px;">
+            <button type="button" onclick="submitRecord(this);" class="btn btn-lg btn-block btn-mobile" style="color: #fff;">预约</button>
+        </div>
+    </div>
+</div>
+    <div id="divConsent" style="width: 100%;background-color: #fff;padding: 20px;display: none;">
+        <div style="width: 100%;text-align: center;">
+            <h4 style="font-weight: bold;margin-top: 10px;">知情同意书</h4>
+            <div style="position: absolute;top: 10px;right:16px;display: block;font-size: 14px;line-height: 21px;color: #28354c;">
+                <a href="javascript:void(0)" onclick="hideConsent()" style="color: #000;cursor: pointer;"><span class="glyphicon glyphicon-remove" style="font-size: 18px;"></span></a>
+            </div>
+        </div>
+        <div style="margin-top: 30px;">
+            <div class="content">
+	<div>
+		<p style="text-indent:32px;text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">为确保护理安全及双方权益，请认真阅读此知情同意书并签字，若因违反此协议而造成的后果，由双方各自承担相应的责任。</span> 
+		</p>
+		<p>
+			<span style="font-size:14px;font-family:微软雅黑;font-weight:700;">护理人员、患者/家属责任义务</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">1.&nbsp;详细查看了解并接受平台的服务介绍和规定。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">2.&nbsp;医务人员将告知您在家中进行治疗的风险；并向您交代该项治疗护理的注意事项。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">3.</span><span style="font-family:微软雅黑;font-size:14px;color:#000000;">&nbsp;</span><span style="font-family:微软雅黑;font-size:14px;color:#FF0000;">上门服务及咨询时间：工作日8:00-12:00&nbsp; 14:00-17:30；晚间或节假日可到医院就诊。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#FF0000;">详情咨询电话：</span><a href="tel:0512-66568029" target="_blank"><span style="font-family:微软雅黑;font-size:14px;color:#00B0F0;">0512-66568029</span></a><span style="color:#FF0000;font-family:微软雅黑;font-size:14px;">。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">4.&nbsp;护士上门服务期间胸前佩戴工作记录仪和报警装置，敬请谅解。 </span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">5.&nbsp;护士严格遵守操作规程及查对制度；操作完毕密切观察，无异常后方离去。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">6.&nbsp;非医院开出的药品或一次性材料及各种耗材一律不出诊。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">7.&nbsp;家属按预约治疗时间提前做好各项准备工作。如擦拭桌面、地面、保护患者不受凉的情况下开窗通风、备好护士操作用台面等。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">8.&nbsp;家属需全程看护患者，听从医护人员安排。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">9.&nbsp;治疗潜在风险</span> 
+		</p>
+		<p style="text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">&nbsp; &nbsp; &nbsp; 因环境限制、患者个体差异和病情变化，治疗期间有可能发生以下意外及并发症，患者/家属需理解任何护理操作及治疗服务都存在风险，包括但不限于以下情况：</span> 
+		</p>
+		<p style="text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">&nbsp; &nbsp; &nbsp;（1）上门护理因检查设备限制，容易出现漏诊、误诊等风险。</span> 
+		</p>
+		<p style="text-align:justify;">
+			<span style="color:#83889A;font-family:微软雅黑;font-size:14px;">&nbsp; &nbsp; &nbsp;（</span><span style="color:#83889A;font-family:微软雅黑;font-size:14px;">2）治疗期间可能发生原发疾病复发，如休克、高血压、心脑血管意外、心律失常、循环衰竭、心搏骤停等。</span> 
+		</p>
+		<p style="text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">&nbsp; &nbsp; &nbsp;（3）伤口换药后容易出现感染、迁延性愈合等不可预知的风险。</span> 
+		</p>
+		<p style="text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">&nbsp; &nbsp; &nbsp;（4）因不可抗拒因素出现的其他医疗意外风险。</span> 
+		</p>
+		<p style="margin-left:24px;text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">10．经评估后不宜居家护理的，护士有权拒绝服务，对本次上门产生的专家劳务费和交通费将不予退还。</span> 
+		</p>
+		<p style="margin-left:24px;text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">11．服务结束患者/家属对本次护理服务进行评价，如有任何不满可拨打投诉电话: <span style="font-family:微软雅黑;font-size:14px;color:#83889A;">0512-66568029</span>。</span> 
+		</p>
+		<p style="margin-left:24px;text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;"></span> 
+		</p>
+		<p style="text-align:justify;">
+			<span style="font-size:14px;font-family:微软雅黑;font-weight:700;">平台责任义务</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">1.&nbsp;平台负责审核患</span><span style="font-family:微软雅黑;font-size:14px;color:#83889A;">者身份信息，为护士上门服务提供安全保障。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">2.&nbsp;审核护士及医务社工资质符合省市相关文件要求。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">3.&nbsp;安排、协调并确认护士及医务社工上门服务（医务社工仅为第一次下单的患者/家属提供上门服务）。</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">4.&nbsp;协助收取专家劳务费、交通费、咨询服务费。接受患者/家属的咨询和投诉，并对投诉作出调查和处理；平台咨询投诉热线：0512-66568029</span> 
+		</p>
+		<p style="margin-left:28px;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">5.&nbsp;处理患者/家属提出的意见和建议，完善平台制度。</span> 
+		</p>
+		<p style="text-align:justify;">
+			<span style="font-size:14px;font-family:微软雅黑;font-weight:700;">患者知情选择：</span> 
+		</p>
+		<p style="margin-left:24px;text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">*本人已了解将要进行的护理操作及可能发生的并发症和风险</span> 
+		</p>
+		<p style="margin-left:24px;text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">*本人接受平台的有关规定</span> 
+		</p>
+		<p style="margin-left:24px;text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">*本人并未得到任何百分百操作成功的许诺</span> 
+		</p>
+		<p style="margin-left:24px;text-align:justify;">
+			<span style="font-family:微软雅黑;font-size:14px;color:#83889A;">*以上情况本人已了解，本人坚持要求护士为本人进行护理服务操作，出现相关问题或者风险由本人自己负责，与护士、医务社工及平台无关。</span> 
+		</p>
+	</div>
+</div>
+        </div>
+        <div style="padding: 20px;">
+            <button type="button" onclick="sureReadConsent();" class="btn btn-lg btn-block btn-default">已阅</button>
+        </div>
+        <div style="display: none;">
+            <form role="form" action="http://222.92.38.178:8091/web/file/upload" id="consentForm">
+                <input type="hidden" name="upload_type" value="sign">
+                <input type="hidden" name="data_type" value="base64">
+                <input type="hidden"  name="_token" value="4VazHth3UuoUweF8WShRCo1Y70BnAd87oDCmxzFJ">
+                <input type="hidden" name="uid" value="24285">
+                <input type="hidden" name="sign_data" id="hidSignData">
+            </form>
+        </div>
+    </div>
+    <div id="globalAlertModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body" id="alert_content">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-default" url="" id="btn_contact_customer">联系客服</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="http://222.92.38.178:8091/static/js/plugins/webupload/webuploader.min.js"></script>
+<script type="text/javascript" src="http://222.92.38.178:8091/static/js/upload_mobile.js?v=10"></script>
+<script type="text/javascript" src="http://222.92.38.178:8091/static/js/plugins/mobiscroll/mobiscroll.custom.min.js"></script>
+<script type="text/javascript" src="http://222.92.38.178:8091/static/js/plugins/jSignature/jSignature.min.js"></script>
+<script src="http://222.92.38.178:8091/static/mobile/hospital/record.js?v=20230922"></script>
+<script>
+    siteAppBaseUrl = 'http://222.92.38.178:8091/';
+    curItemId = '10051';
+
+            isNeedSignature = true;
+    
+    var personId = '1000097';
+    var personAddress = '江苏省苏州市工业园区&nbsp;东平街288';
+    function goEditPerson(personId) {
+        let url = "http://222.92.38.178:8091/mobile/hospital/personEdit?item_id=10051&back=record";
+        url += '&person_id=' + personId;
+        window.location.href = url;
+    }
+
+    $(function(){
+        initRecord(1);
+        $('#btn_contact_customer').click(function (){
+            window.location.href = $('#btn_contact_customer').attr('url');
+        });
+
+    });
+</script>
+</body>
+</html>
