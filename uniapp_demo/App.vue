@@ -9,7 +9,7 @@
 			console.log('App Launch')
 			
 			const deviceInfo = uni.getWindowInfo();
-			console.log('App Launch window',deviceInfo);
+			// console.log('App Launch window',deviceInfo);
 			
 			uni.getSystemInfo({
 				success: (info) => {

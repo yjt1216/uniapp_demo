@@ -301,10 +301,13 @@
 			"root": "bundle_b",
 			"pages": [
 				{
-					"path": "pages/filte_date/filte-date",
+					"path": "pages/filter_date/filter_date",
 					"style": {
 						"navigationStyle": "custom" 
 					}
+				},
+				{
+					"path": "pages/table_demo/table_demo"
 				},
 				{
 					"path": "pages/input_demo/input_demo",

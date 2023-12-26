@@ -1,0 +1,46 @@
+
+.oragn-box{
+	width: 100%;
+}
+.table-box{
+	width: 300rpx;
+	margin: 15rpx 20rpx;
+}
+.table-head{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 300rpx;
+}
+.table-content{
+	display: flex;
+	flex-direction: column;
+	
+	width: 300rpx;
+}
+.head-name{
+	font-size: 16rpx;
+	width: 160rpx;
+}
+.head-rate{
+	font-size: 16rpx;
+	width: 70rpx;
+}
+.head-amount{
+	font-size: 16rpx;
+	width: 70rpx;
+}
+.content-item{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.uni-group {
+	display: flex;
+	align-items: center;
+}
+.uni-container{
+	font-size: 15rpx;
+	width: 300rpx;
+}
+

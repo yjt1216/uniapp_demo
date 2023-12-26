@@ -1,0 +1,331 @@
+
+{
+    "add_order_amount": {
+        "amount": "63135.99",
+        "common_ratio": 100
+    },
+    "add_order_num": {
+        "num": 124,
+        "common_ratio": 100
+    },
+    "user": {
+        "all_num": 10597,
+        "add_num": 525,
+        "old_num": 10072,
+        "add_ratio": 4.95,
+        "old_ratio": 95.05,
+        "common_ratio": 100
+    },
+    "add_hospital": {
+        "num": 16,
+        "common_ratio": 100
+    },
+    "nurse": {
+        "all_num": 13,
+        "add_num": 11,
+        "old_num": 2,
+        "add_ratio": 84.62,
+        "old_ratio": 15.38,
+        "common_ratio": 100
+    },
+    "person": {
+        "add_num": 44,
+        "age": [
+            {
+                "name": "30岁以下",
+                "add_num": 1,
+                "ratio": 2.27
+            },
+            {
+                "name": "30~39岁",
+                "add_num": 5,
+                "ratio": 11.36
+            },
+            {
+                "name": "40~49岁",
+                "add_num": 0,
+                "ratio": 0
+            },
+            {
+                "name": "50~59岁",
+                "add_num": 1,
+                "ratio": 2.27
+            },
+            {
+                    "name": "60~69岁",
+                    "add_num": 9,
+                    "ratio": 20.45
+            },
+            {
+                "name": "70岁以上",
+                "add_num": 28,
+                "ratio": 63.64
+            }
+        ]
+    },
+    "hospital_order_num_list": [
+        {
+            "hospital_id": 10000,
+            "hospital_name": "苏州大学第一附属医院",
+            "num": 56,
+            "ratio": 45.16
+        },
+        {
+            "hospital_id": 10013,
+            "hospital_name": "南京福寿康鼓楼护理站",
+            "num": 39,
+            "ratio": 31.45
+        },
+        {
+            "hospital_id": 10002,
+            "hospital_name": "苏州市立医院",
+            "num": 8,
+            "ratio": 6.45
+        },
+        {
+            "hospital_id": 10012,
+            "hospital_name": "南京市栖霞区医院",
+            "num": 7,
+            "ratio": 5.65
+        },
+        {
+            "hospital_id": 10007,
+            "hospital_name": "江苏省人民医院",
+            "num": 6,
+            "ratio": 4.84
+        },
+        {
+            "hospital_id": 0,
+            "hospital_name": "",
+            "num": 4,
+            "ratio": 3.23
+        },
+        {
+            "hospital_id": 10024,
+            "hospital_name": "八卦洲社区卫生服务中心",
+            "num": 2,
+            "ratio": 1.61
+        },
+        {
+            "hospital_id": 10001,
+            "hospital_name": "苏州大学第二附属医院",
+            "num": 2,
+            "ratio": 1.61
+        }
+    ],
+    "hospital_order_amount_list": [
+        {
+            "hospital_id": 10000,
+            "hospital_name": "苏州大学第一附属医院",
+            "amount": "44465.75",
+            "ratio": 70.43
+        },
+        {
+            "hospital_id": 10007,
+            "hospital_name": "江苏省人民医院",
+            "amount": "10333.00",
+            "ratio": 16.37
+        },
+        {
+            "hospital_id": 10013,
+            "hospital_name": "南京福寿康鼓楼护理站",
+            "amount": "4970.00",
+            "ratio": 7.87
+        },
+        {
+            "hospital_id": 10002,
+            "hospital_name": "苏州市立医院",
+            "amount": "2073.00",
+            "ratio": 3.28
+        },
+        {
+            "hospital_id": 10012,
+            "hospital_name": "南京市栖霞区医院",
+            "amount": "765.24",
+            "ratio": 1.21
+        },
+        {
+            "hospital_id": 10001,
+            "hospital_name": "苏州大学第二附属医院",
+            "amount": "275.00",
+            "ratio": 0.44
+        },
+        {
+            "hospital_id": 10024,
+            "hospital_name": "八卦洲社区卫生服务中心",
+            "amount": "250.00",
+            "ratio": 0.4
+        },
+        {
+            "hospital_id": 0,
+            "hospital_name": "",
+            "amount": "4.00",
+            "ratio": 0.01
+        }
+    ],
+    "hospital_nurse_list": [
+        {
+            "hospital_id": 10000,
+            "hospital_name": "苏州大学第一附属医院",
+            "num": 7,
+            "ratio": 53.85
+        },
+        {
+            "hospital_id": 10003,
+            "hospital_name": "南京鼓楼医院",
+            "num": 3,
+            "ratio": 23.08
+        },
+        {
+            "hospital_id": 10007,
+            "hospital_name": "江苏省人民医院",
+            "num": 1,
+            "ratio": 7.69
+        }
+    ],
+    "service_item_cate_order_num_list": [
+        {
+            "cate_id": 325,
+            "cate_name": "基础",
+            "num": 37,
+            "ratio": 29.84
+        },
+        {
+            "cate_id": 330,
+            "cate_name": "标本采集",
+            "num": 26,
+            "ratio": 20.97
+        },
+        {
+            "cate_id": 0,
+            "cate_name": "",
+            "num": 14,
+            "ratio": 11.29
+        },
+        {
+            "cate_id": 72,
+            "cate_name": "慢病管理",
+            "num": 12,
+            "ratio": 9.68
+        },
+        {
+            "cate_id": 71,
+            "cate_name": "安宁疗护",
+            "num": 10,
+            "ratio": 8.06
+        },
+        {
+            "cate_id": 333,
+            "cate_name": "康复护理",
+            "num": 7,
+            "ratio": 5.65
+        },
+        {
+            "cate_id": 331,
+            "cate_name": "基础护理",
+            "num": 6,
+            "ratio": 4.84
+        },
+        {
+                "cate_id": 328,
+                "cate_name": "导管维护",
+                "num": 5,
+                "ratio": 4.03
+        },
+        {
+                "cate_id": 70,
+                "cate_name": "",
+                "num": 3,
+                "ratio": 2.42
+        },
+        {
+                "cate_id": 69,
+                "cate_name": "",
+                "num": 3,
+                "ratio": 2.42
+        }
+    ],
+    "city_order_list": [
+        {
+            "city_id": 3205,
+            "city_name": "苏州市",
+            "num": 66,
+            "ratio": 53.23
+        },
+        {
+                "city_id": 3201,
+                "city_name": "南京市",
+                "num": 54,
+                "ratio": 43.55
+        }
+    ],
+    "evaluate": {
+        "all_evaluate_times": 19,
+        "evaluate_rate": 33,
+        "average_star": 4.2,
+        "hospital_list": [
+            {
+                "hospital_id": 10000,
+                "name": "苏州大学第一附属医院",
+                "star": "42.2500",
+                "attitude": "3.9375",
+                "skill": "3.9375",
+                "effect": "4.5000",
+                "num": 16
+            },
+            {
+                "hospital_id": 10007,
+                "name": "江苏省人民医院",
+                "star": "38.0000",
+                "attitude": "4.0000",
+                "skill": "4.0000",
+                "effect": "4.3333",
+                "num": 3
+            }
+        ],
+        "nurse_list": [
+            {
+                "nurse_id": null,
+                "nurse_name": null,
+                "hospital_name": null,
+                "star": "42.3636",
+                "attitude": "4.1818",
+                "skill": "4.1818",
+                "effect": "4.3636",
+                "num": 11
+            },
+            {
+                "nurse_id": 10016,
+                "nurse_name": "王小五",
+                "hospital_name": "苏州大学第一附属医院",
+                "star": "42.3333",
+                "attitude": "3.3333",
+                "skill": "3.3333",
+                "effect": "5.0000",
+                "num": 3
+            },
+            {
+                "nurse_id": 10011,
+                "nurse_name": "王小妹",
+                "hospital_name": "苏州大学第一附属医院",
+                "star": "41.5000",
+                "attitude": "3.5000",
+                "skill": "3.5000",
+                "effect": "4.5000",
+                "num": 2
+            },
+            {
+                "nurse_id": 10030,
+                "nurse_name": "测试",
+                "hospital_name": "江苏省人民医院",
+                "star": "38.0000",
+                "attitude": "4.0000",
+                "skill": "4.0000",
+                "effect": "4.3333",
+                "num": 3
+            }
+        ]
+    }
+}
+
+

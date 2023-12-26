@@ -24,9 +24,14 @@
 			<view class="demo-li"> 输入框<text class="demo-tip"> input </text></view>
 		</navigator>
 		
-		<navigator url="/bundle_b/pages/filte_date/filte-date">
+		<navigator url="/bundle_b/pages/filter_date/filter_date">
 			<view class="demo-li"> 筛选日期 <text class="demo-tip"> filter </text></view>
 		</navigator>
+		
+		<navigator url="/bundle_b/pages/table_demo/table_demo">
+			<view class="demo-li"> 表格 <text class="demo-tip"> table </text></view>
+		</navigator>
+		
 		
 		<!-- <navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
 			<view class="demo-li">轮播图+商品列表 吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
@@ -53,7 +58,6 @@
 		<navigator url="/bundle/pages/sign_page/landscape_sign">
 			<view class="demo-li">横屏签名<text class="demo-tip"> 签名界面</text></view>
 		</navigator>
-		-->
 		
 		<navigator url="/bundle_b/pages/swiper_action/swiper_action">
 			<view class="demo-li"> swiper action<text class="demo-tip"> 左滑按钮 </text></view>
@@ -79,6 +83,10 @@
 		<navigator url="/pages/web_view/webview_test">
 			<view class="demo-li"> 底部按钮 <text class="demo-tip"> web view  </text></view>
 		</navigator>
+		
+		-->
+		
+		
 		<!-- <navigator url="/bundle/pages/list_input/list_input">
 			<view class="demo-li">input<text class="demo-tip"> 循环创建input 底部签名 返回文件路径</text></view>
 		</navigator>
