@@ -70,6 +70,7 @@
             }
         },
         "requiredPrivateInfos" : [ "getLocation", "chooseLocation" ]
+		
     },
     "mp-alipay" : {
         "usingComponents" : true

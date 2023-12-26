@@ -1,6 +1,6 @@
 <template>
 	<view class="pop-box">
-		
+		<u-navbar title="弹窗" :placeholder="true" :fixed="true"></u-navbar>
 		<view class="list-cont">
 			<scroll-view class="scrool-more" style="height: 100%" scroll-y="true" scroll-with-animation="true">
 				<!-- <view class="input-pop" @click="clickPop">
@@ -15,6 +15,11 @@
 				<view class="input-pop" @click="clickPopAppraiseBox">
 					评估
 				</view>
+				<view class="input-pop" @click="openSmsPop">
+					权限验证
+				</view>
+				
+				
 				
 				<uni-card>
 					<view>这是一个基础卡片示例，内容较少，此示例展示了一个没有任何属性不带阴影的卡片。</view>
@@ -42,16 +47,6 @@
 		<modal v-if="areaShow" title="新增空间" confirm-text="保存" cancel-text="取消" @cancel="cancelAdd" @confirm="confirmAdd">
 			<input type="text" v-model="areaTxt" placeholder="限填5个字" class="intxt" maxlength="5" />
 		</modal>
-		<!-- <modal v-if="isShowRate" title="评价患者" confirm-text="保存" cancel-text="取消" @cancel="cancelAdd" @confirm="confirmAdd">
-			<view class="sub-title">本次服务中患者是否愿意配合</view>
-			<u-rate :count="5" v-model="rateValue" activeColor="#f0ad4e" inactiveColor="#666666"></u-rate>
-		</modal> -->
-		
-		
-		<!-- <uni-popup ref="contentPop" type="center" :is-mask-click="false">
-			<jushi-signature :settings="settings" @change="signatureChange"></jushi-signature>
-			
-		</uni-popup> -->
 		
 		<modal class="box-pop" v-if="isShowBox" confirm-text="提交评价" cancel-text="取消评价" @cancel="cancelEvaluateFun" @confirm="submitEvaluateFun">
 			<view class="box-title">评价患者</view>
@@ -113,6 +108,28 @@
 			</view>
 		</uni-popup>
 
+
+		
+
+		<!-- 权限验证 - 弹框 -->
+		<uni-popup ref="smsPop" type="center" :maskClick="false">
+		    <view class="sms-box">
+				<view class="sms-title">获取验证码</view>
+				<view class="input-box__phone">
+					<input class="input-item" type="text"  v-model="searchValue" placeholder="请输入手机号">
+					<view class="btn-code" @tap="getSmsCode">获取验证码</view>
+				</view>
+				<view class="input-box__code">
+					<input class="input-item" type="text"  v-model="searchValue" placeholder="请输入验证码">
+				</view>
+				<view class="sms-line"></view>
+				<view class="sms-bottom">
+					<view class="sms-bottom__cancel"  @tap="cancelSmsPopup">取消</view>
+					<view class="sms-bottom__ok" @tap="okSmsPopup">确认</view>
+				</view>
+			</view>
+		</uni-popup>
+
 		
 		
 	</view>
@@ -144,6 +161,18 @@
 	        }
 	    },
 	    methods: {
+			openSmsPop(){
+				this.$refs.smsPop.open();
+			},
+			cancelSmsPopup(){
+				this.$refs.smsPop.close();
+			},
+			okSmsPopup(){
+				this.$refs.smsPop.close();
+			},
+			getSmsCode(){
+				console.log('获取验证码');
+			},
 			/*  */
 			checkboxChange(){},
 			checkProject(item){
@@ -286,6 +315,125 @@
 		}
 	}
 
+	.sms-box{
+		background: #fff;
+		width: 540rpx;
+		height: 480rpx;
+		padding: 0 30rpx;
+		border-radius: 8rpx;
+		display: flex;
+		flex-direction: column;
+		
+		.sms-title{
+			margin-top: 50rpx;
+			align-self: center;
+			text-align: center;
+			width: 476rpx;
+			height: 38rpx;
+			font-size: 36rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 500;
+			color: #333333;
+			line-height: 38rpx;
+		}
+		
+		.input-box {
+			width: 500rpx;
+			height: 90rpx;
+			// padding: 0 30rpx;
+			background-color: rgba(80, 100, 235, 0.1);
+			border-radius: 20rpx;
+			align-items: center;
+			
+			&__phone {
+			    margin-top: 50rpx;
+				display: flex;
+				flex-direction: row;
+			}
+			&__code {
+				margin-top: 30rpx;
+			}
+		}
+		
+		.input-item{
+			flex: 1;
+			min-height: 80rpx;
+			line-height: 80rpx;
+			padding-left: 10rpx;
+		}
+		
+		.sms-phone{
+			height: 80rpx;
+			display: flex;
+			flex-direction: row;
+			font-size: 24rpx;
+			color: #707070;
+		}
+		.btn-code{
+			width: 160rpx;
+			height: 80rpx;
+			line-height: 80rpx;
+			background: linear-gradient(180deg, #FAD961 0%, #F76B1C 100%);
+			border-radius: 10rpx;
+			text-align: center;
+			font-size: 24rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 500;
+			color: #FFFFFF;
+			
+		}
+		.sms-code{
+			margin-top: 30rpx 40rpx 0;
+			width: 540rpx;
+			height: 80rpx;
+			font-size: 24rpx;
+			color: #707070;
+
+		}
+		.sms-line{
+			margin-top: 50rpx;
+			width: 540rpx;
+			height: 1rpx;
+			background: #DDDDDD;
+		}
+		.sms-bottom{
+			width: 540rpx;
+			align-self: center;
+			display: flex;
+			flex-direction: row;
+			padding: 0 15rpx;
+			
+		}
+		.sms-bottom__cancel{
+			margin-top: 25rpx;
+			width: 240rpx;
+			height: 50rpx;
+			
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 400;
+			line-height: 50rpx;
+			
+			color: #999999;
+			text-align: center;
+			font-size: 36rpx;
+			
+		}
+		.sms-bottom__ok{
+			margin-left: 30rpx;
+			margin-top: 25rpx;
+			width: 240rpx;
+			height: 50rpx;
+			
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 400;
+			line-height: 50rpx;
+			
+			color: #FA6400;
+			text-align: center;
+			font-size: 36rpx;
+		}
+		
+	}
 	
 	
 	

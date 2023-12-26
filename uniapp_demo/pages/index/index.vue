@@ -24,6 +24,10 @@
 			<view class="demo-li"> 输入框<text class="demo-tip"> input </text></view>
 		</navigator>
 		
+		<navigator url="/bundle_b/pages/filte_date/filte-date">
+			<view class="demo-li"> 筛选日期 <text class="demo-tip"> filter </text></view>
+		</navigator>
+		
 		<!-- <navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
 			<view class="demo-li">轮播图+商品列表 吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>
@@ -194,6 +198,7 @@
 </template>
 
 <script>
+import localStore from '../../sheep/config/local_store';
 	
 	export default {
 		data(){
@@ -220,9 +225,17 @@
 			})
 			
 			console.log('index on load ',option);
+			//    await Cache.set('user_info', { name: 'John Doe', age: 30 }, 60);
+			
+			this.getUserInfo();
+			
 			
 		},
 		methods:{
+			async getUserInfo(){
+				const userInfo = await localStore.get('user_info');
+				console.log('首页getUserInfo--userInfo',userInfo);
+			},
 			shareClick(){
 				this.$share.share({
 				  title: '分享标题',

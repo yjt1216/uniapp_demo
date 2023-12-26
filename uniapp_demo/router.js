@@ -70,7 +70,7 @@ router.beforeEach((to, from, next) => {
 	// #endif
 
 
-	console.log(to,from, 'beforeEach---开始跳转')
+	// console.log(to,from, 'beforeEach---开始跳转')
 	let index = whiteList.findIndex((item) => from.path.includes(item))
 	if (index == -1  ) {
 		Cache.set(BACK_URL, from.fullPath)

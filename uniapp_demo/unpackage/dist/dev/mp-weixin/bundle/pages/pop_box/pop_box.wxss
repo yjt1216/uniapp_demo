@@ -78,6 +78,110 @@ page {
   width: 100%;
   padding-bottom: 20rpx;
 }
+.sms-box {
+  background: #fff;
+  width: 540rpx;
+  height: 480rpx;
+  padding: 0 30rpx;
+  border-radius: 8rpx;
+  display: flex;
+  flex-direction: column;
+}
+.sms-box .sms-title {
+  margin-top: 50rpx;
+  align-self: center;
+  text-align: center;
+  width: 476rpx;
+  height: 38rpx;
+  font-size: 36rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 500;
+  color: #333333;
+  line-height: 38rpx;
+}
+.sms-box .input-box {
+  width: 500rpx;
+  height: 90rpx;
+  background-color: rgba(80, 100, 235, 0.1);
+  border-radius: 20rpx;
+  align-items: center;
+}
+.sms-box .input-box__phone {
+  margin-top: 50rpx;
+  display: flex;
+  flex-direction: row;
+}
+.sms-box .input-box__code {
+  margin-top: 30rpx;
+}
+.sms-box .input-item {
+  flex: 1;
+  min-height: 80rpx;
+  line-height: 80rpx;
+  padding-left: 10rpx;
+}
+.sms-box .sms-phone {
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  font-size: 24rpx;
+  color: #707070;
+}
+.sms-box .btn-code {
+  width: 160rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background: linear-gradient(180deg, #FAD961 0%, #F76B1C 100%);
+  border-radius: 10rpx;
+  text-align: center;
+  font-size: 24rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+.sms-box .sms-code {
+  margin-top: 30rpx 40rpx 0;
+  width: 540rpx;
+  height: 80rpx;
+  font-size: 24rpx;
+  color: #707070;
+}
+.sms-box .sms-line {
+  margin-top: 50rpx;
+  width: 540rpx;
+  height: 1rpx;
+  background: #DDDDDD;
+}
+.sms-box .sms-bottom {
+  width: 540rpx;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  padding: 0 15rpx;
+}
+.sms-box .sms-bottom__cancel {
+  margin-top: 25rpx;
+  width: 240rpx;
+  height: 50rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  line-height: 50rpx;
+  color: #999999;
+  text-align: center;
+  font-size: 36rpx;
+}
+.sms-box .sms-bottom__ok {
+  margin-left: 30rpx;
+  margin-top: 25rpx;
+  width: 240rpx;
+  height: 50rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  line-height: 50rpx;
+  color: #FA6400;
+  text-align: center;
+  font-size: 36rpx;
+}
 .preview {
   margin: 10rpx;
   border: 1rpx solid #aaaaaa;

@@ -20,7 +20,13 @@
 			</view>
 			<view class="input-box">
 				<image class="input-icon" src="/static/images/login/password.png" mode=""></image>
-				<input class="input-item" type="number" password value="" placeholder="请输入验证码" v-model="codeValue" />
+				<!-- <input class="input-item" type="number" password value="" placeholder="请输入验证码" v-model="codeValue" /> -->
+				<input class="input-item" type="number" password value="" placeholder="请输入验证码" v-model="codeValue"> 
+					<template slot="suffix">
+						<label class="regFrom_tom_yzlabel" :style="{ color : QzyzmStare?'#cccccc':'#EB6623'}" 
+						@click="QzyzmFun">{{QzyzmStare?Qztime:Qztext}}</label>
+					</template>
+				</input>
 			</view>
 		</view>
 		<!-- 账号登陆 -->
@@ -35,8 +41,8 @@
 			</view>
 		</view>
 		
-		<view class="button-box">
-			<text class="color-white font-34">立即{{ cur ? '注册': '登录' }}</text>
+		<view class="button-box" @click="loginFun">
+			<text class="font-34">立即{{ cur ? '注册': '登录' }}</text>
 		</view>
 		
 		<view class="vs-row vs-align-center vs-space-center">
@@ -48,6 +54,7 @@
 </template>
 
 <script>
+	import localStore from '@/sheep/config/local_store';
 	export default {
 		data() {
 			return {
@@ -55,12 +62,24 @@
 				cur: 0,
 				accountValue:'',
 				codeValue:'',
-				passwordValue:''
-				
+				passwordValue:'',
+				/* 验证码倒计时 */
+				Qztime:'',
+				/* 倒计时是否开始 默认未开始false*/
+				QzyzmStare:false,
+				Qztext:'获取验证码',
 			}
 		},
 		methods:{
-			
+			QzyzmFun(){
+				console.log('获取验证码');
+			},
+			async loginFun(){
+				await localStore.set('user_info', { name: 'John Doe', age: 30 });
+				uni.navigateTo({
+					url:'/pages/index/index'
+				})
+			}
 		}
 		
 	}
@@ -71,7 +90,6 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		
 	}
 	
 	.bg {
@@ -113,7 +131,11 @@
 		margin-top: 60rpx;
 		padding: 0 60rpx;
 	}
-	
+	.regFrom_tom_yzlabel{
+		width: 150rpx; 
+		text-align: right; 
+		font-size: 28rpx;
+	}
 	.input-box {
 		width: 630rpx;
 		height: 120rpx;
