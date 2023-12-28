@@ -31,8 +31,12 @@
 		<navigator url="/bundle_b/pages/table_demo/table_demo">
 			<view class="demo-li"> 表格 <text class="demo-tip"> table </text></view>
 		</navigator>
-		
-		
+		<navigator url="/bundle_b/pages/chart_demo/echart_demo">
+			<view class="demo-li"> 圆环图 <text class="demo-tip"> echart </text></view>
+		</navigator>
+		<navigator url="/bundle_b/pages/chart_demo/chart_map">
+			<view class="demo-li"> 地图 <text class="demo-tip"> map </text></view>
+		</navigator>
 		<!-- <navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
 			<view class="demo-li">轮播图+商品列表 吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>

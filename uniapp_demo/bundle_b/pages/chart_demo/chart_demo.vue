@@ -50,12 +50,11 @@
     </view>
 		<qiun-title-bar title="环形图+动态更新option"/>
 		<view class="charts-box">
-      <!-- 演示动态改变eopts -->
 		  <qiun-data-charts type="ring" :opts="{legend:{position:'bottom'}}" :eopts="ringOpts" :chartData="chartsDataPie2" :echartsH5="true" :echartsApp="true"/>
 		</view>
 		<qiun-title-bar title="面积玫瑰图"/>
 		<view class="charts-box">
-       <!-- 注意：这里的opts是uCharts的配置，eopts是ECharts的配置，不要搞混，如果不需要用在各种小程序端，是不需要传uCharts的opts的，只需要传eopts即可！！！这里加opts是为了覆盖uCharts的rose图的默认图例配置的位置 -->
+		<!-- 注意：这里的opts是uCharts的配置，eopts是ECharts的配置，不要搞混，如果不需要用在各种小程序端，是不需要传uCharts的opts的，只需要传eopts即可！！！这里加opts是为了覆盖uCharts的rose图的默认图例配置的位置 -->
 		  <qiun-data-charts type="rose" :opts="{legend:{position:'bottom'}}" :chartData="chartsDataPie3" :echartsH5="true" :echartsApp="true"/>
 		</view>
 		<qiun-title-bar title="漏斗图"/>

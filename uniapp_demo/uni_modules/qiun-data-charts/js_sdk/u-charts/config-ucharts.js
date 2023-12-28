@@ -113,14 +113,14 @@ const cfu = {
 	},
 	"ring":{
 		"type": "ring",
-    "color": color,
+		"color": color,
 		"padding": [5,5,5,5],
 		"rotate": false,
 		"dataLabel": true,
 		"legend": {
 			"show": true,
 			"position": "right",
-      "lineHeight": 25,
+			"lineHeight": 25,
 		},
 		"title": {
 			"name": "收益率",
@@ -147,12 +147,12 @@ const cfu = {
 	},
 	"rose":{
 		"type": "rose",
-    "color": color,
+		"color": color,
 		"padding": [5,5,5,5],
 		"legend": {
 			"show": true,
 			"position": "left",
-      "lineHeight": 25,
+			"lineHeight": 25,
 		},
 		"extra": {
 			"rose": {
@@ -170,7 +170,7 @@ const cfu = {
 	},
 	"word":{
 		"type": "word",
-    "color": color,
+		"color": color,
 		"extra": {
 			"word": {
 				"type": "normal",
@@ -180,7 +180,7 @@ const cfu = {
 	},
 	"funnel":{
 		"type": "funnel",
-    "color": color,
+		"color": color,
 		"padding": [15,15,0,15],
 		"extra": {
 			"funnel": {
@@ -196,9 +196,9 @@ const cfu = {
 	},
 	"map":{
 		"type": "map",
-    "color": color,
+		"color": color,
 		"padding": [0,0,0,0],
-    "dataLabel": true,
+		"dataLabel": true,
 		"extra": {
 			"map": {
 				"border": true,
@@ -213,7 +213,7 @@ const cfu = {
 	},
 	"arcbar":{
 		"type": "arcbar",
-    "color": color,
+		"color": color,
 		"title": {
 			"name": "百分比",
 			"fontSize": 25,
@@ -240,7 +240,7 @@ const cfu = {
     "color": color,
 		"padding": [15,10,0,15],
 		"xAxis": {
-      "disableGrid": true,
+			"disableGrid": true,
 		},
 		"yAxis": {
       "gridType": "dash",
@@ -311,19 +311,19 @@ const cfu = {
   			"addLine": true,
   			"width": 2,
   			"gradient": true,
-        "activeType": "hollow"
+			"activeType": "hollow"
   		},
   	}
   },
 	"column":{
 		"type": "column",
-    "color": color,
+		"color": color,
 		"padding": [15,15,0,5],
 		"xAxis": {
-      "disableGrid": true,
+			"disableGrid": true,
 		},
 		"yAxis": {
-      "data":[{"min":0}]
+			"data":[{"min":0}]
 		},
 		"legend": {
 		},
@@ -388,8 +388,8 @@ const cfu = {
       "disableGrid": true,
 		},
 		"yAxis": {
-      "gridType": "dash",
-      "dashLength": 2,
+			"gridType": "dash",
+			"dashLength": 2,
 		},
 		"legend": {
 		},
@@ -400,7 +400,7 @@ const cfu = {
 				"addLine": true,
 				"width": 2,
 				"gradient": false,
-        "activeType": "hollow"
+				"activeType": "hollow"
 			},
 		}
 	},
@@ -408,11 +408,11 @@ const cfu = {
 		"type": "radar",
 		"color": color,
 		"padding": [5,5,5,5],
-    "dataLabel": false,
+		"dataLabel": false,
 		"legend": {
 			"show": true,
 			"position": "right",
-      "lineHeight": 25,
+			"lineHeight": 25,
 		},
 		"extra": {
 			"radar": {

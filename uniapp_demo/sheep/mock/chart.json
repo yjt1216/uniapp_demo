@@ -181,6 +181,58 @@
       ]
   	}]
   },
+  "PieB": {
+	
+  	"series": [{
+		"labelLine": {
+            "show": false
+        },
+  		"data": [
+        {
+        	"name": "一班",
+        	"value": 45,
+			"labelShow":false
+        }, {
+        	"name": "二班",
+        	"value": 12,
+			"labelShow":false
+        }, {
+        	"name": "三班",
+        	"value": 20,
+			"labelShow":false
+        }, {
+        	"name": "四班",
+        	"value": 18,
+			"labelShow":false
+        }, {
+        	"name": "五班",
+        	"value": 5,
+			"labelShow":false
+        },
+		{
+			"name": "六班",
+			"value": 45,
+			"labelShow":false
+		}, {
+			"name": "七班",
+			"value": 12,
+			"labelShow":false
+		}, {
+			"name": "八班",
+			"value": 20,
+			"labelShow":false
+		}, {
+			"name": "九班",
+			"value": 18,
+			"labelShow":false
+		}, {
+			"name": "十班",
+			"value": 5,
+			"labelShow":false
+		}
+      ]
+  	}]
+  },
   "Mount": {
   	"series": [{
   		"data": [
@@ -199,7 +251,11 @@
         }, {
         	"name": "五班",
         	"value": 79
-        }
+        },
+		{
+			"name": "六班",
+			"value": 80
+		}
       ]
   	}]
   },

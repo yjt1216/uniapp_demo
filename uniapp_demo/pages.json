@@ -349,6 +349,12 @@
 					"path": "pages/chart_demo/chart_demo"
 				},
 				{
+					"path": "pages/chart_demo/echart_demo"
+				},
+				{
+					"path": "pages/chart_demo/chart_map"
+				},
+				{
 					"path":"pages/keyboard_pop/keyboard_pop"
 				},
 				{
