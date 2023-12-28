@@ -101,7 +101,7 @@ var components
 try {
   components = {
     uNavbar: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-navbar/u-navbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-navbar/u-navbar")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-navbar/u-navbar.vue */ 1033))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-navbar/u-navbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-navbar/u-navbar")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-navbar/u-navbar.vue */ 1051))
     },
   }
 } catch (e) {
@@ -167,6 +167,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _moment = _interopRequireDefault(__webpack_require__(/*! moment */ 538));
 var _operate_chart = _interopRequireDefault(__webpack_require__(/*! @/sheep/mock/operate_chart.json */ 675));
+var _tools = __webpack_require__(/*! ../../../sheep/utils/tools */ 60);
 //
 //
 //
@@ -289,15 +290,22 @@ var _operate_chart = _interopRequireDefault(__webpack_require__(/*! @/sheep/mock
 //
 //
 //
-var uniTable = function uniTable() {
-  __webpack_require__.e(/*! require.ensure | bundle_b/components/uni-table/components/uni-table/uni-table */ "bundle_b/components/uni-table/components/uni-table/uni-table").then((function () {
-    return resolve(__webpack_require__(/*! @/bundle_b/components/uni-table/components/uni-table/uni-table.vue */ 1212));
-  }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
-  components: {
-    uniTable: uniTable
-  },
   data: function data() {
     return {
       filterObject: {
@@ -320,28 +328,35 @@ var _default = {
         date_type: '4'
       }],
       /* 周数据 */
+      /* 周数据 */
       weekFilter: [{
         name: '上周',
-        date_value: '1'
+        date_value: '1',
+        date_type: '1'
       }, {
         name: '本周',
-        date_value: '2'
+        date_value: '2',
+        date_type: '1'
       }],
       /* 月数据 */
       monthFilter: [],
       /* 季度数据 */
       quarterFilter: [{
         name: '第一季度',
-        date_value: '1'
+        date_value: '1',
+        date_type: '3'
       }, {
         name: '第二季度',
-        date_value: '2'
+        date_value: '2',
+        date_type: '3'
       }, {
         name: '第三季度',
-        date_value: '3'
+        date_value: '3',
+        date_type: '3'
       }, {
         name: '第四季度',
-        date_value: '4'
+        date_value: '4',
+        date_type: '3'
       }],
       yearFilter: [],
       maxDate: [],
@@ -354,24 +369,41 @@ var _default = {
     this.initDate();
   },
   methods: {
+    swiperChange: function swiperChange(e) {
+      console.log(e);
+    },
     clickTagFun: function clickTagFun(item) {
-      console.log('用户点击item', item);
+      this.currentDate = [];
+      // console.log('用户点击item',item)
       if (this.filterObject.date_type !== item.date_type) {
         this.filterObject.date_type = item.date_type;
       }
-      if (this.filterObject.date_type === '4') {
-        this.filterObject.date_value = this.yearFilter[0];
-      } else {
-        this.filterObject.date_value = '1';
+      this.filterObject.date_value = '1';
+      if (this.filterObject.date_type == '1') {
+        this.currentDate = this.weekFilter;
       }
-      console.log('用户切换类型filterObject', this.filterObject);
+      if (this.filterObject.date_type == '2') {
+        this.currentDate = this.monthFilter;
+      }
+      if (this.filterObject.date_type == '3') {
+        this.currentDate = this.quarterFilter;
+      }
+      if (this.filterObject.date_type == '4') {
+        this.currentDate = this.yearFilter;
+        this.filterObject.date_value = this.yearFilter[0];
+      }
+      console.log('用户切换类型weekFilter', this.weekFilter);
+      console.log('用户切换类型currentDate', this.currentDate);
     },
     itemClick: function itemClick(item) {
-      if (this.filterObject.date_type == '1' || this.filterObject.date_type == '3') {
-        this.filterObject.date_value = item.date_value;
-      } else if (this.filterObject.date_type == '2' || this.filterObject.date_type == '4') {
-        this.filterObject.date_value = item;
-      }
+      console.log('用户点击itemClick', item);
+      this.filterObject.date_value = item.date_value;
+      // if(this.filterObject.date_type == '1' || this.filterObject.date_type == '3'){
+      // 	this.filterObject.date_value = item.date_value;
+      // }else{
+      // 	/*  if(this.filterObject.date_type == '2' || this.filterObject.date_type == '4') */
+      // 	this.filterObject.date_value = item;
+      // }
       console.log('用户点击filterObject', this.filterObject);
     },
     /**
@@ -385,6 +417,7 @@ var _default = {
       });
     },
     initDate: function initDate() {
+      this.currentDate = this.weekFilter;
       var arr = this.dateToArr();
       this.minDate = [arr[0] - 5, 1];
       this.maxDate = [arr[0], 12]; // 年月
@@ -402,7 +435,18 @@ var _default = {
         list.push(i);
         i++;
       } while (i <= this.maxDate[0]);
-      this.yearFilter = list;
+      // this.yearFilter = list;
+
+      var formList = [];
+      list.forEach(function (value) {
+        var object = {};
+        object.date_type = '4';
+        object.name = value + '年';
+        object.date_value = value;
+        formList.push(object);
+      });
+      this.yearFilter = formList;
+      console.log('获取年份 list = ', this.yearFilter);
     },
     /**
      * 获取月份列表
@@ -418,8 +462,19 @@ var _default = {
       var nowDate = new Date();
       var min = 1; // 最小的月份
       var max = nowDate.getMonth() + 1; // 最大的月份 当前月份
+      var monthList = list.slice(min - 1, max - min + 1);
+      // this.monthFilter = list.slice(min - 1, max - min + 1);
 
-      this.monthFilter = list.slice(min - 1, max - min + 1);
+      var formList = [];
+      monthList.forEach(function (value) {
+        var object = {};
+        object.date_type = '2';
+        object.name = value + '月';
+        object.date_value = value;
+        formList.push(object);
+      });
+      this.monthFilter = formList;
+      console.log('获取月份 list = ', this.monthFilter);
     },
     /* 虚拟数据 */getMockData: function getMockData() {}
   }

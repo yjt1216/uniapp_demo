@@ -99,7 +99,7 @@ var components
 try {
   components = {
     hicVideoPlayer: function () {
-      return Promise.all(/*! import() | uni_modules/hic-video-player/components/hic-video-player/hic-video-player */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/hic-video-player/components/hic-video-player/hic-video-player")]).then(__webpack_require__.bind(null, /*! @/uni_modules/hic-video-player/components/hic-video-player/hic-video-player.vue */ 1049))
+      return Promise.all(/*! import() | uni_modules/hic-video-player/components/hic-video-player/hic-video-player */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/hic-video-player/components/hic-video-player/hic-video-player")]).then(__webpack_require__.bind(null, /*! @/uni_modules/hic-video-player/components/hic-video-player/hic-video-player.vue */ 1067))
     },
   }
 } catch (e) {

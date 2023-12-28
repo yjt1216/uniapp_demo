@@ -1,0 +1,493 @@
+<template>
+	<view class="filte-date">
+		<view class="filter-warp">
+			<view class="grade-title">
+				<image
+				    class="icon_1"
+				    referrerpolicy="no-referrer"
+				    src="/bundle_b/static/chart/icon.png"
+				/>
+				<text class="text-group_1">经营数据</text>
+			</view>
+			<view class="grade-ul">
+				<view 
+				:class="['grade-li',filterObject.date_type == item.date_type ? 'grade-li-active' : '']"
+					v-for="(item,index) in gradeList" 
+					:key="index" @click="clickTagFun(item)">
+					{{item.label}}
+				</view>
+			</view>
+			<view class="filter-date-box"  >
+				<scroll-view scroll-x style="white-space: nowrap;">
+					<view
+						v-if="filterObject.date_type == '1'"
+						class="grade-week"
+						:class="{active:filterObject.date_value==item.date_value}" 
+						v-for="(item, index) in weekFilter" :key="index" @tap="itemClick(item)">
+					    {{item.name}}
+					</view>
+					<view
+						v-if="filterObject.date_type == '2'"
+						class="grade-week"
+						:class="{active:filterObject.date_value==item.date_value}" 
+						v-for="(item, index) in monthFilter" :key="index" @tap="itemClick(item)">
+					    {{item.name}}
+					</view>
+					<view 
+						v-if="filterObject.date_type == '3'"
+						class="grade-quarter" :class="{active:filterObject.date_value==item.date_value}"
+						v-for="(item, index) in quarterFilter" :key="index" @tap="itemClick(item)">
+					   {{item.name}}
+					</view>
+					<view
+						v-if="filterObject.date_type == '4'"
+						class="grade-week"
+						:class="{active:filterObject.date_value==item.date_value}" 
+						v-for="(item, index) in yearFilter" :key="index" @tap="itemClick(item)">
+					    {{item.name}}
+					</view>
+				</scroll-view>
+			</view>
+			
+			<view class="chart-first">
+				<view class="amount-order-box">
+					<view class="amount-box">
+						<view style="margin-left: 10rpx;">金额</view>
+						<view style="align-self: center;">202356.65万元</view>
+						<view style="align-self: center;">同比：+200%</view>
+					</view>
+					<!-- 设置间隔 -->
+					<view class="spacer" style="width: 30rpx;"></view>
+					<view class="order-box">
+						<view style="margin-left: 10rpx;">订单数</view>
+						<view style="align-self: center;">65849单</view>
+						<view style="align-self: center;">同比：-12.6%</view>
+					</view>
+				</view>
+				<view class="organ-nurse-box">
+					<view class="organ-box">
+						<view>新增护士</view>
+						<view class="uni-row">
+							<span class="text-font1">20</span>
+							<span class="text-font2">人</span>
+						</view>
+						<view class="uni-row">
+							<span class="text-color1">同比：</span>
+							<span class="text-color2">+50%</span>
+						</view>
+					</view>
+					<view class="spacer" style="width: 25rpx;"></view>
+					<view class="organ-box">
+						<view>新增机构</view>
+						<view class="uni-row">
+							<span class="text-font1">2</span>
+							<span class="text-font2">个</span>
+						</view>
+						<view class="uni-row">
+							<span class="text-color1">同比：</span>
+							<span class="text-color2">+20.2%</span>
+						</view>
+					</view>
+					<view class="spacer" style="width: 25rpx;"></view>
+					<view class="organ-box">
+						<view>新增用户</view>
+						<view class="uni-row">
+							<span class="text-font1">66956</span>
+							<span class="text-font2">人</span>
+						</view>
+						<view class="uni-row">
+							<span class="text-color1">同比：</span>
+							<span class="text-color3">-19.32%</span>
+						</view>
+					</view>
+				</view>
+				
+			</view>
+			
+		</view>
+		
+	</view>
+</template>
+
+<script>
+	import moment from 'moment';
+	import operateData from '@/sheep/mock/operate_chart.json';
+	
+	export default {
+		name: "filter-date",
+		data(){
+			return {
+				filterObject: {
+					/* 统计时间类型； 1：周；2：月；3：季度；4：年 */
+					date_type:'1',
+					/* 统计时间值； 周：{1：本周；2：上周}；月：{1-12月}； 季度：{1-4季}；年：年份； */
+					date_value:'1'
+				},
+				gradeList: [
+					{
+						label: '周数据',
+						date_type: '1'
+					},
+					{
+						label: '月数据',
+						date_type: '2'
+					},
+					{
+						label: '季度数据',
+						date_type: '3'
+					},
+					{
+						label: '年数据',
+						date_type: '4'
+					}
+				],
+				/* 周数据 */
+				weekFilter:[
+					{name:'上周',date_value:'1',date_type: '1'},
+					{name:'本周',date_value:'2',date_type: '1'},
+				],
+				/* 月数据 */
+				monthFilter:[],
+				/* 季度数据 */
+				quarterFilter:[
+					{name:'第一季度',date_value:'1',date_type: '3'},
+					{name:'第二季度',date_value:'2',date_type: '3'},
+					{name:'第三季度',date_value:'3',date_type: '3'},
+					{name:'第四季度',date_value:'4',date_type: '3'}
+				],
+				
+				yearFilter: [],
+				
+				maxDate: [],
+				minDate: [],
+				
+				/* 当前展示数据 */
+				currentDate:[],
+				
+				
+			}
+		},
+		created:function(option){
+			console.log('fliter-date Created');
+			// this.initDate();
+		},
+		mounted:function(){
+			console.log('fliter-date mounted');
+			this.initDate();
+		},
+		
+		methods:{
+			
+			clickTagFun(item) {
+				console.log('用户点击item',item)
+				if(this.filterObject.date_type !== item.date_type){
+					this.filterObject.date_type = item.date_type;
+				}
+				this.filterObject.date_value = '1';
+				if(this.filterObject.date_type === '1'){
+					this.currentDate = this.weekFilter;
+				}
+				if(this.filterObject.date_type === '2'){
+					this.currentDate = this.monthFilter;
+				}
+				if(this.filterObject.date_type === '3'){
+					this.currentDate = this.quarterFilter;
+				}
+				if(this.filterObject.date_type === '4'){
+					this.currentDate = this.yearFilter;
+					this.filterObject.date_value = this.yearFilter[0];
+				}
+				
+				
+				console.log('用户切换类型filterObject',this.filterObject);
+				console.log('用户切换类型currentDate',this.currentDate);
+			},
+			itemClick(item){
+				this.filterObject.date_value = item.date_value;
+				// if(this.filterObject.date_type == '1' || this.filterObject.date_type == '3'){
+				// 	this.filterObject.date_value = item.date_value;
+				// }else if(this.filterObject.date_type == '2' || this.filterObject.date_type == '4'){
+				// 	this.filterObject.date_value = item;
+				// }
+				console.log('用户点击filterObject',this.filterObject);
+			},
+			/**
+			 * 日期转数组
+			 * @param {Object} date
+			 */
+			dateToArr(date) {
+			  if (!date) date = new Date()
+			  return moment(date).format('YYYY-MM').split('-').map(o => Number(o));
+			},
+			
+			initDate() {
+				
+				const arr = this.dateToArr();
+				
+				this.minDate = [arr[0] - 5, 1];
+				this.maxDate = [arr[0], 12]; // 年月
+				
+				this.getYears();
+				this.getMonths();
+				
+				this.currentDate = this.weekFilter;
+				console.log('获取currentDate list = ',this.currentDate);
+				console.log('获取周 list = ',this.weekFilter);
+			},
+			/**
+			 * 获取年份列表
+			 */
+			getYears() {
+				let list = []
+				let i = this.minDate[0]
+				do {
+					list.push(i)
+					i++
+				} while (i <= this.maxDate[0])
+				// this.yearFilter = list;
+				
+				var formList = [];
+				list.forEach(value=>{
+					var object = {};
+					object.date_type = '4';
+					object.name = value+'年';
+					object.date_value = value;
+					formList.push(object);
+				})
+				this.yearFilter = formList;
+				console.log('获取年份 list = ',this.yearFilter);
+			},
+			
+			/**
+			 * 获取月份列表
+			 */
+			getMonths() {
+				const list = Array.from({length: 12}, (v, k) => k + 1)
+				
+				/* 获取当前月份 */
+				let nowDate = new Date();
+				let min = 1 ;// 最小的月份
+				let max = nowDate.getMonth() + 1 ;// 最大的月份 当前月份
+				let monthList = list.slice(min - 1, max - min + 1);
+				// this.monthFilter = list.slice(min - 1, max - min + 1);
+				
+				var formList = [];
+				monthList.forEach(value=>{
+					var object = {};
+					object.date_type = '2';
+					object.name = value+'月';
+					object.date_value = value;
+					formList.push(object);
+				})
+				this.monthFilter = formList;
+				console.log('获取月份 list = ',this.monthFilter);
+			},
+			
+			
+		}
+	}
+</script>
+
+<style lang="less" scoped>
+	
+	
+	/* 金额订单 */
+	.amount-order-box{
+		color: #FFFFFF;
+		display: flex;
+		flex-direction: row; /* 水平布局 */
+		align-items: center; /* 垂直居中对齐 */
+		justify-content: space-between; /* 子元素之间的间距相等 */
+		background: linear-gradient(360deg, #FFFFFF 0%, #FFF0DC 100%);
+	}
+	.amount-box{
+		display: flex;
+		flex-direction: column;
+		width: 310rpx;
+		height: 136rpx;
+		font-size: 26rpx;
+		background: linear-gradient(180deg, #FFD53B 0%, #F76B1C 100%);
+		box-shadow: 0rpx 10rpx 20rpx 0rpx rgba(235,102,35,0.2);
+		border-radius: 10rpx;
+	}
+	/* 间隔样式 */
+	.amount-spacer {
+	  flex-grow: 0; /* 不参与flex增长 */
+	  flex-shrink: 0; /* 不参与flex收缩 */
+	}
+	.order-box{
+		display: flex;
+		flex-direction: column;
+		width: 310rpx;
+		height: 136rpx;
+		background: linear-gradient(141deg, #36B4FB 0%, #4B72F8 100%);
+		box-shadow: 0rpx 10rpx 20rpx 0rpx rgba(61,116,255,0.2);
+		border-radius: 10rpx;
+	}
+	.organ-nurse-box{
+		margin-top: 38rpx;
+		color: #49688E;
+		display: flex;
+		flex-direction: row; /* 水平布局 */
+		align-items: center; /* 垂直居中对齐 */
+		justify-content: space-between; /* 子元素之间的间距相等 */
+	}
+	.organ-box{
+		width: 200rpx;
+		height: 136rpx;
+		background: #FFFFFF;
+		box-shadow: 0rpx 6rpx 10rpx 0rpx rgba(147,152,159,0.2);
+		border-radius: 10rpx;
+		display: flex;
+		flex-direction: column; /* 水平布局 */
+		align-items: center; /* 垂直居中对齐 */
+	}
+	/* 设置“同比”字体颜色 */
+	.text-color1 {
+	  color: #49688E;
+	  font-size: 20rpx;
+	}
+	/* 设置“+20.16”字体颜色 */
+	.text-color2 {
+	  color: #6DA905;
+	  font-size: 20rpx;
+	}
+	.text-color3{
+		color: #F8643B;
+		font-size: 20rpx;
+	}
+	.text-font1{
+		font-size: 32rpx;
+		font-weight: 600;
+		color: #49688E;
+	}
+	.text-font2{
+		font-size: 26rpx;
+		font-weight: 600;
+		color: #49688E;
+	}
+	
+	/* 筛选条件 */
+	.filter-warp {
+		box-sizing: border-box;
+		overflow: hidden;
+		overflow-y: scroll;
+		box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.15);
+		background-color: rgba(255, 255, 255, 1);
+		border-radius: 10px;
+		position: relative;
+		width: 710rpx;
+		height: 650rpx;
+		margin: 20rpx 0 0 20rpx;
+		display: flex;
+		flex-direction: column;
+	}
+	.chart-first{
+		height: 380rpx;
+		bottom: 0;
+		bottom: constant(safe-area-inset-bottom);
+		bottom: env(safe-area-inset-bottom);
+		display: flex;
+		flex-direction: column; /* 水平布局 */
+	}
+	.filter-date-box{
+		margin: 30rpx;
+		display: flex;
+		flex-wrap: nowrap;
+		padding: 0 20rpx;
+		// justify-content: space-around;
+	}
+	.grade-title {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin: 24rpx 30rpx;
+	}
+	.icon_1 {
+	  width: 39rpx;
+	  height: 39rpx;
+	}
+	
+	.text-group_1 {
+	  width: 128rpx;
+	  height: 37rpx;
+	  overflow-wrap: break-word;
+	  color: rgba(59, 80, 112, 1);
+	  font-size: 32rpx;
+	  font-family: BDZYJT--GB1-0;
+	  text-align: left;
+	  white-space: nowrap;
+	  line-height: 37rpx;
+	  margin-top: 3rpx;
+	}
+	.grade-ul {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		padding: 0 30rpx;
+	}
+	.grade-li {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 140rpx;
+		height: 50rpx;
+		background: #F7F8FA;
+		border-radius: 40rpx;
+		font-size: 28rpx;
+		font-weight: 400;
+		color: #182545;
+		line-height: 26rpx;
+	}
+	.grade-li-active {
+		background: #3fa0fd;
+		font-size: 30rpx;
+		color: #ffffff;
+	}
+	
+	
+	.grade-week{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 120rpx;
+		height: 50rpx;
+		background: #F7F8FA;
+		font-size: 28rpx;
+		font-weight: 400;
+		color: #182545;
+		line-height: 50rpx;
+		border-radius: 8rpx;
+		display: inline-block;
+		&.active{
+			// background: #3fa0fd;
+			font-size: 28rpx;
+			color: #3fa0fd;
+		}
+	}
+
+	.grade-quarter{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 150rpx;
+		height: 50rpx;
+		background: #F7F8FA;
+		font-size: 28rpx;
+		font-weight: 400;
+		color: #182545;
+		line-height: 50rpx;
+		border-radius: 8rpx;
+		display: inline-block;
+		&.active{
+			// background: #3fa0fd;
+			font-size: 28rpx;
+			color: #3fa0fd;
+		}
+	}
+	
+	// .grade-year:nth-of-type(n+5) {
+	// 	margin-top: 20rpx;
+	// 	justify-self: flex-start;
+	// }
+</style>

@@ -199,6 +199,17 @@ export function arraySliceFive(data, array = [], optNum = 5) {
 	return arraySliceFive(data, array, optNum);
 }
 
+export function arraySliceSix(data, array = [], optNum = 6) {
+	data = JSON.parse(JSON.stringify(data))
+	if (data.length <= optNum) {
+		data.length > 0 && array.push(data);
+		return array;
+	}
+	array.push(data.splice(0, optNum));
+	return arraySliceFive(data, array, optNum);
+}
+
+
 /* 对象参数转为以？&拼接的字符 */
 export function paramsToStr(params) {
 	let p = '';

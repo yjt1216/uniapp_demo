@@ -156,24 +156,17 @@
   font-size: 30rpx;
   color: #ffffff;
 }
-.week-box.data-v-107df998 {
+.filter-date-box.data-v-107df998 {
   margin: 30rpx;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-.quarter-box.data-v-107df998 {
-  margin: 30rpx;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  flex-wrap: nowrap;
+  padding: 0 30rpx;
 }
 .grade-week.data-v-107df998 {
-  margin: 20rpx 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100rpx;
+  width: 120rpx;
   height: 50rpx;
   background: #F7F8FA;
   font-size: 28rpx;
@@ -181,26 +174,9 @@
   color: #182545;
   line-height: 26rpx;
   border-radius: 8rpx;
+  display: inline-block;
 }
 .grade-week.active.data-v-107df998 {
-  font-size: 28rpx;
-  color: #3fa0fd;
-}
-.grade-month.data-v-107df998 {
-  margin: 20rpx 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100rpx;
-  height: 50rpx;
-  background: #F7F8FA;
-  font-size: 28rpx;
-  font-weight: 400;
-  color: #182545;
-  line-height: 26rpx;
-  border-radius: 8rpx;
-}
-.grade-month.active.data-v-107df998 {
   font-size: 28rpx;
   color: #3fa0fd;
 }
@@ -208,7 +184,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 140rpx;
+  width: 150rpx;
   height: 50rpx;
   background: #F7F8FA;
   font-size: 28rpx;
@@ -216,25 +192,9 @@
   color: #182545;
   line-height: 26rpx;
   border-radius: 8rpx;
+  display: inline-block;
 }
 .grade-quarter.active.data-v-107df998 {
-  font-size: 28rpx;
-  color: #3fa0fd;
-}
-.grade-year.data-v-107df998 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100rpx;
-  height: 50rpx;
-  background: #F7F8FA;
-  font-size: 28rpx;
-  font-weight: 400;
-  color: #182545;
-  line-height: 26rpx;
-  border-radius: 8rpx;
-}
-.grade-year.active.data-v-107df998 {
   font-size: 28rpx;
   color: #3fa0fd;
 }

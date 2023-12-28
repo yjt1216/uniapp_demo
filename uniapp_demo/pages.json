@@ -359,6 +359,9 @@
 				},
 				{
 					"path": "pages/huabi/autograph_test"
+				},
+				{
+					"path": "pages/test_demo/test_demo"
 				}
 			]
 		}

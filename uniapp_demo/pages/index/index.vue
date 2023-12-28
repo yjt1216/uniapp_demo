@@ -37,6 +37,12 @@
 		<navigator url="/bundle_b/pages/chart_demo/chart_map">
 			<view class="demo-li"> 地图 <text class="demo-tip"> map </text></view>
 		</navigator>
+		
+		<navigator url="/bundle_b/pages/test_demo/test_demo">
+			<view class="demo-li"> 蓝湖代码 <text class="demo-tip"> test_demo </text></view>
+		</navigator>
+		
+		
 		<!-- <navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
 			<view class="demo-li">轮播图+商品列表 吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>

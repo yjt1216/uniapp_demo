@@ -2,40 +2,42 @@
 	<view class="table-demo">
 		<u-navbar title="表格" :fixed="true" :placeholder="true" :autoBack="true"></u-navbar>
 		
+		<view class="top-date">
+			<filter-date></filter-date>
+		</view>
 		
-		<view class="oragn-box">
+		
+		<view class="top-box">
 			
-			<view class="charts-box" >
-				<!-- :style="{ width: '400rpx', height: '400rpx' }" :echartsApp="true" -->
-				<!-- <qiun-data-charts type="ring" 
-					:tapLegend="false"
-					:opts="ringOpts"
-					:chartData="chartsDataPie2" :echartsH5="true" /> -->
-					
-				<qiun-data-charts
-					type="ring"
-					:opts="ringOpts"
-					:chartData="chartsDataPie2"
-					:tapLegend="false"
-				/>
-					
-			</view>
-			<view class="table-box">
-				<view class="table-head">
-					<view class="head-name">机构名称</view>
-					<view class="head-rate">占比</view>
-					<view class="head-amount">金额</view>
+			<view class="oragn-box">
+				
+				<view class="charts-box" >
+					<qiun-data-charts
+						type="ring"
+						:opts="ringOpts"
+						:chartData="chartsDataPie2"
+						:tapLegend="false"
+					/>
+						
 				</view>
-				<view class="table-content">
-					<view class="content-item" v-for="(item, index) in tableData" :key="index">
-						<view class="head-name">{{ item.date }}</view>
-						<view class="head-rate">{{ item.name }}</view>
-						<view class="head-amount">{{ item.address }}</view>
+				<view class="table-box">
+					<view class="table-head">
+						<view class="head-name">机构名称</view>
+						<view class="head-rate">占比</view>
+						<view class="head-amount">金额</view>
+					</view>
+					<view class="table-content">
+						<view class="content-item" v-for="(item, index) in tableData" :key="index">
+							<view class="head-name">{{ item.date }}</view>
+							<view class="head-rate">{{ item.name }}</view>
+							<view class="head-amount">{{ item.address }}</view>
+						</view>
 					</view>
 				</view>
+				
 			</view>
-			
 		</view>
+		
 		
 		
 		
@@ -44,20 +46,19 @@
 </template>
 
 <script>
-	import uniTable from '@/bundle_b/components/uni-table/components/uni-table/uni-table.vue';
-	import uniTr from '@/bundle_b/components/uni-table/components/uni-tr/uni-tr.vue';
-	import uniTd from '@/bundle_b/components/uni-table/components/uni-td/uni-td.vue';
-	import uniTh from '@/bundle_b/components/uni-table/components/uni-th/uni-th.vue';
+	
+	import moment from 'moment';
+	import operateData from '@/sheep/mock/operate_chart.json';
 	
 	import tableData from "@/sheep/mock/tableData.js"
 	import demodata from '@/sheep/mock/chart.json';
 	
+	import filterDate from '@/bundle_b/components/filter-date/filter-date.vue';
+	
+	
 	export default {
 		components:{
-			uniTable,
-			uniTr,
-			uniTd,
-			uniTh,
+			filterDate,
 		},
 		data(){
 			return {
@@ -165,7 +166,6 @@
 			this.selectedIndexs = []
 			this.getData(1);
 			
-			
 		},
 		onReady:function(){
 			// this.chartsDataPie2=JSON.parse(JSON.stringify(demodata.PieB));
@@ -178,10 +178,6 @@
 			}, 300);
 		},
 		methods:{
-			
-			/* 获取图表数据 */
-			// 分页触发
-			
 			
 			// 获取数据
 			getData(pageCurrent, value = '') {
@@ -229,13 +225,51 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
+	.top-date{
+		width: 100%;
+		height: 800rpx;
+	}
+	.top-box{
+		box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.15);
+		background-color: rgba(255, 255, 255, 1);
+		border-radius: 10px;
+		position: relative;
+		width: 710rpx;
+		height: 650rpx;
+		margin: 20rpx 0 0 20rpx;
+		display: flex;
+		flex-direction: column;
+	}
+	.top-box_1{
+		display: flex;
+		flex-direction: row;
+		
+	}
+	.icon_1 {
+	  width: 39rpx;
+	  height: 39rpx;
+	}
+	.text-group_1 {
+	  width: 128rpx;
+	  height: 37rpx;
+	  overflow-wrap: break-word;
+	  color: rgba(59, 80, 112, 1);
+	  font-size: 32rpx;
+	  font-family: BDZYJT--GB1-0;
+	  text-align: left;
+	  white-space: nowrap;
+	  line-height: 37rpx;
+	  margin-top: 3rpx;
+	  margin-left: 10rpx;
+	}
 	.oragn-box{
 		width: 100%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
+		
 	}
 	.charts-box{
 		width: 400rpx;
@@ -276,13 +310,4 @@
 		justify-content: space-between;
 	}
 	
-	
-	.uni-group {
-		display: flex;
-		align-items: center;
-	}
-	.uni-container{
-		font-size: 15rpx;
-		width: 300rpx;
-	}
 </style>

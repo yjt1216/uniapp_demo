@@ -1,12 +1,7 @@
 <template>
 	<view class="filte-date">
 		<u-navbar title="筛选日期" :fixed="true" :placeholder="true" :autoBack="true"></u-navbar>
-		<!-- <view v-for="(item,index) in yearFilter" :key="index" class="picker-item">
-		  {{ item }}年
-		</view>
-		<view v-for="(item,index) in monthFilter" :key="index" class="picker-item">
-		  {{ item }}月
-		</view> -->
+		
 		<view class="filter-warp">
 			<view class="grade-title">经营数据</view>
 			<view class="grade-ul">
@@ -18,44 +13,45 @@
 				</view>
 			</view>
 		</view>
-		<view class="week-box"  v-if="filterObject.date_type == '1'">
+		<!-- <view class="filter-date-box"  v-if="filterObject.date_type == '1'">
 		    <view 
 				class="grade-week"
 				:class="{active:filterObject.date_value==item.date_value}" 
 				v-for="(item, index) in weekFilter" :key="index" @tap="itemClick(item)">
 		        {{item.name}}
 		    </view>
-		</view>
+		</view> -->
 		
-		
-		
-		<view class="quarter-box"  v-if="filterObject.date_type == '2' ">
-		    <view class="grade-month" :class="{active:filterObject.date_value==item}"
-				v-for="(item, index) in monthFilter" :key="index" @tap="itemClick(item)">
-		        {{item }}月
-		    </view>
-		</view>
-		
-		
-		<view class="quarter-box" v-if=" filterObject.date_type == '3'">
-			<!-- <view :class="['grade-li',filterObject.date_value == item.date_value ? 'grade-li-active' : '']" 
-				v-for="(item, index) in quarterFilter" :key="index" @tap="itemClick(item)">
-			    {{item.name}}
-			</view> -->
-			<view
-				class="grade-quarter"
-				:class="{active:filterObject.date_value==item.date_value}" 
-				v-for="(item, index) in quarterFilter" :key="index" @tap="itemClick(item)">
-			    {{item.name}}
-			</view>
-			
-		</view>
-		
-		<view class="quarter-box" v-if=" filterObject.date_type == '4'">
-		    <view class="grade-year" :class="{active:filterObject.date_value==item}"
-				v-for="(item, index) in yearFilter" :key="index" @tap="itemClick(item)">
-		        {{item }}年
-		    </view>
+		<view class="filter-date-box"  >
+			<scroll-view scroll-x style="white-space: nowrap;">
+				<view
+					v-if="filterObject.date_type == '1'"
+					class="grade-week"
+					:class="{active:filterObject.date_value==item.date_value}" 
+					v-for="(item, index) in weekFilter" :key="index" @tap="itemClick(item)">
+				    {{item.name}}
+				</view>
+				<view
+					v-if="filterObject.date_type == '2'"
+					class="grade-week"
+					:class="{active:filterObject.date_value==item.date_value}" 
+					v-for="(item, index) in monthFilter" :key="index" @tap="itemClick(item)">
+				    {{item.name}}
+				</view>
+				<view 
+					v-if="filterObject.date_type == '3'"
+					class="grade-quarter" :class="{active:filterObject.date_value==item.date_value}"
+					v-for="(item, index) in quarterFilter" :key="index" @tap="itemClick(item)">
+				   {{item.name}}
+				</view>
+				<view
+					v-if="filterObject.date_type == '4'"
+					class="grade-week"
+					:class="{active:filterObject.date_value==item.date_value}" 
+					v-for="(item, index) in yearFilter" :key="index" @tap="itemClick(item)">
+				    {{item.name}}
+				</view>
+			</scroll-view>
 		</view>
 		
 		<view class="chart-first">
@@ -113,9 +109,28 @@
 			
 		</view>
 
-		<view class="grade-title">机构销售额占比TOP10</view>
+		<!-- <view class="test-box">
+			<scroll-view scroll-x style="white-space: nowrap;">
+				<view class="grade-month" style="display: inline-block;" :class="{active:filterObject.date_value==item}"
+					v-for="(item, index2) in monthFilter" :key="index2" @tap="itemClick(item)">
+					  {{item.name}}
+				</view>
+			</scroll-view>
+		</view> -->
 		
-		<view class="grade-title">机构订单额占比TOP10</view>
+		<!-- <view class="test-box">
+			<scroll-view scroll-x style="white-space: nowrap;">
+			   <view class="grade-week" :class="{active:filterObject.date_value==item.date_value}"
+					v-if="index === 0" :key="index" style="display: inline-block; margin-left: 15rpx;" @tap="itemClick(item)">
+			      {{item.name}}
+			    </view>
+			    <view class="grade-week" :class="{active:filterObject.date_value==item.date_value}"
+					v-else v-for="(item, index) in monthFilter" :key="index" style="display: inline-block;" @tap="itemClick(item)">
+			      {{item.name}}
+			    </view>
+			</scroll-view>
+		</view> -->
+		
 		
 	</view>
 </template>
@@ -123,12 +138,10 @@
 <script>
 	import moment from 'moment';
 	import operateData from '@/sheep/mock/operate_chart.json';
-	import uniTable from '@/bundle_b/components/uni-table/components/uni-table/uni-table.vue';
+	import { arraySliceSix } from '../../../sheep/utils/tools';
 	
 	export default {
-		components:{
-			uniTable
-		},
+		
 		data(){
 			return {
 				filterObject: {
@@ -156,19 +169,21 @@
 					}
 				],
 				/* 周数据 */
+				/* 周数据 */
 				weekFilter:[
-					{name:'上周',date_value:'1'},
-					{name:'本周',date_value:'2'},
+					{name:'上周',date_value:'1',date_type: '1'},
+					{name:'本周',date_value:'2',date_type: '1'},
 				],
 				/* 月数据 */
 				monthFilter:[],
 				/* 季度数据 */
 				quarterFilter:[
-					{name:'第一季度',date_value:'1'},
-					{name:'第二季度',date_value:'2'},
-					{name:'第三季度',date_value:'3'},
-					{name:'第四季度',date_value:'4'}
+					{name:'第一季度',date_value:'1',date_type: '3'},
+					{name:'第二季度',date_value:'2',date_type: '3'},
+					{name:'第三季度',date_value:'3',date_type: '3'},
+					{name:'第四季度',date_value:'4',date_type: '3'}
 				],
+				
 				
 				yearFilter: [],
 				
@@ -186,27 +201,43 @@
 			
 		},
 		methods:{
-			
+			swiperChange(e) {
+				console.log(e)
+			},
 			clickTagFun(item) {
-				console.log('用户点击item',item)
+				this.currentDate = [];
+				// console.log('用户点击item',item)
 				if(this.filterObject.date_type !== item.date_type){
 					this.filterObject.date_type = item.date_type;
 				}
-				if(this.filterObject.date_type === '4'){
+				
+				this.filterObject.date_value = '1';
+				if(this.filterObject.date_type == '1'){
+					this.currentDate = this.weekFilter;
+				}
+				if(this.filterObject.date_type == '2'){
+					this.currentDate = this.monthFilter;
+				}
+				if(this.filterObject.date_type == '3'){
+					this.currentDate = this.quarterFilter;
+				}
+				if(this.filterObject.date_type == '4'){
+					this.currentDate = this.yearFilter;
 					this.filterObject.date_value = this.yearFilter[0];
-				}else{
-					this.filterObject.date_value = '1';
 				}
 				
-				console.log('用户切换类型filterObject',this.filterObject);
-				
+				console.log('用户切换类型weekFilter',this.weekFilter);
+				console.log('用户切换类型currentDate',this.currentDate);
 			},
 			itemClick(item){
-				if(this.filterObject.date_type == '1' || this.filterObject.date_type == '3'){
-					this.filterObject.date_value = item.date_value;
-				}else if(this.filterObject.date_type == '2' || this.filterObject.date_type == '4'){
-					this.filterObject.date_value = item;
-				}
+				console.log('用户点击itemClick',item);
+				this.filterObject.date_value = item.date_value;
+				// if(this.filterObject.date_type == '1' || this.filterObject.date_type == '3'){
+				// 	this.filterObject.date_value = item.date_value;
+				// }else{
+				// 	/*  if(this.filterObject.date_type == '2' || this.filterObject.date_type == '4') */
+				// 	this.filterObject.date_value = item;
+				// }
 				console.log('用户点击filterObject',this.filterObject);
 			},
 			/**
@@ -219,7 +250,7 @@
 			},
 			
 			initDate() {
-				
+				this.currentDate = this.weekFilter;
 				const arr = this.dateToArr();
 				
 				this.minDate = [arr[0] - 5, 1];
@@ -238,8 +269,18 @@
 					list.push(i)
 					i++
 				} while (i <= this.maxDate[0])
-				this.yearFilter = list;
+				// this.yearFilter = list;
 				
+				var formList = [];
+				list.forEach(value=>{
+					var object = {};
+					object.date_type = '4';
+					object.name = value+'年';
+					object.date_value = value;
+					formList.push(object);
+				})
+				this.yearFilter = formList;
+				console.log('获取年份 list = ',this.yearFilter);
 			},
 			
 			/**
@@ -252,8 +293,19 @@
 				let nowDate = new Date();
 				let min = 1 ;// 最小的月份
 				let max = nowDate.getMonth() + 1 ;// 最大的月份 当前月份
+				let monthList = list.slice(min - 1, max - min + 1);
+				// this.monthFilter = list.slice(min - 1, max - min + 1);
 				
-				this.monthFilter = list.slice(min - 1, max - min + 1);
+				var formList = [];
+				monthList.forEach(value=>{
+					var object = {};
+					object.date_type = '2';
+					object.name = value+'月';
+					object.date_value = value;
+					formList.push(object);
+				})
+				this.monthFilter = formList;
+				console.log('获取月份 list = ',this.monthFilter);
 			},
 			
 			/* 虚拟数据 */
@@ -266,6 +318,7 @@
 </script>
 
 <style lang="scss" scoped>
+	
 	
 	.chart-first{
 		margin: 0 30rpx;
@@ -396,24 +449,32 @@
 	// .grade-li:nth-of-type(n+4) {
 	// 	margin-top: 20rpx;
 	// }
-	.week-box{
+	// .week-box{
+	// 	margin: 30rpx;
+	// 	display: flex;
+	// 	flex-wrap: wrap;
+	// 	justify-content: space-around;
+	// }
+	// .filter-date-box{
+	// 	margin: 30rpx;
+	// 	display: flex;
+	// 	flex-wrap: wrap;
+	// 	justify-content: space-around;
+	// }
+	
+	.filter-date-box{
 		margin: 30rpx;
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-around;
+		flex-wrap: nowrap;
+		padding: 0 30rpx;
+		// justify-content: space-around;
 	}
-	.quarter-box{
-		margin: 30rpx;
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-around;
-	}
+	
 	.grade-week{
-		margin: 20rpx 0;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 100rpx;
+		width: 120rpx;
 		height: 50rpx;
 		background: #F7F8FA;
 		font-size: 28rpx;
@@ -421,36 +482,37 @@
 		color: #182545;
 		line-height: 26rpx;
 		border-radius: 8rpx;
+		display: inline-block;
 		&.active{
 			// background: #3fa0fd;
 			font-size: 28rpx;
 			color: #3fa0fd;
 		}
 	}
-	.grade-month{
-		margin: 20rpx 0;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100rpx;
-		height: 50rpx;
-		background: #F7F8FA;
-		font-size: 28rpx;
-		font-weight: 400;
-		color: #182545;
-		line-height: 26rpx;
-		border-radius: 8rpx;
-		&.active{
-			// background: #3fa0fd;
-			font-size: 28rpx;
-			color: #3fa0fd;
-		}
-	}
+	// .grade-month{
+	// 	margin: 20rpx 0;
+	// 	display: flex;
+	// 	justify-content: center;
+	// 	align-items: center;
+	// 	width: 100rpx;
+	// 	height: 50rpx;
+	// 	background: #F7F8FA;
+	// 	font-size: 28rpx;
+	// 	font-weight: 400;
+	// 	color: #182545;
+	// 	line-height: 26rpx;
+	// 	border-radius: 8rpx;
+	// 	&.active{
+	// 		// background: #3fa0fd;
+	// 		font-size: 28rpx;
+	// 		color: #3fa0fd;
+	// 	}
+	// }
 	.grade-quarter{
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 140rpx;
+		width: 150rpx;
 		height: 50rpx;
 		background: #F7F8FA;
 		font-size: 28rpx;
@@ -458,6 +520,7 @@
 		color: #182545;
 		line-height: 26rpx;
 		border-radius: 8rpx;
+		display: inline-block;
 		&.active{
 			// background: #3fa0fd;
 			font-size: 28rpx;
@@ -465,24 +528,24 @@
 		}
 	}
 	
-	.grade-year{
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100rpx;
-		height: 50rpx;
-		background: #F7F8FA;
-		font-size: 28rpx;
-		font-weight: 400;
-		color: #182545;
-		line-height: 26rpx;
-		border-radius: 8rpx;
-		&.active{
-			// background: #3fa0fd;
-			font-size: 28rpx;
-			color: #3fa0fd;
-		}
-	}
+	// .grade-year{
+	// 	display: flex;
+	// 	justify-content: center;
+	// 	align-items: center;
+	// 	width: 100rpx;
+	// 	height: 50rpx;
+	// 	background: #F7F8FA;
+	// 	font-size: 28rpx;
+	// 	font-weight: 400;
+	// 	color: #182545;
+	// 	line-height: 26rpx;
+	// 	border-radius: 8rpx;
+	// 	&.active{
+	// 		// background: #3fa0fd;
+	// 		font-size: 28rpx;
+	// 		color: #3fa0fd;
+	// 	}
+	// }
 	// .grade-year:nth-of-type(n+5) {
 	// 	margin-top: 20rpx;
 	// 	justify-self: flex-start;
