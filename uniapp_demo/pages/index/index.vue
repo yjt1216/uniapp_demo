@@ -10,6 +10,32 @@
 		
 		<view class="group-title">功能示例</view>
 		
+		
+		
+		
+		
+		<navigator url="/bundle_b/pages/operate/operate_demo">
+			<view class="demo-li"> 经营统计 <text class="demo-tip"> table + charts </text></view>
+		</navigator>
+		<navigator url="/bundle_b/pages/chart_demo/echart_demo">
+			<view class="demo-li"> 圆环图 <text class="demo-tip"> echart </text></view>
+		</navigator>
+		<navigator url="/bundle_b/pages/chart_demo/chart_map">
+			<view class="demo-li"> 地图 <text class="demo-tip"> map </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_b/pages/test_demo/test_demo">
+			<view class="demo-li"> 蓝湖代码 <text class="demo-tip"> test_demo </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_b/pages/filter_date/filter_date">
+			<view class="demo-li"> 筛选日期 <text class="demo-tip"> filter </text></view>
+		</navigator>
+		
+		<!-- 
+		
+		
+		
 		<navigator url="/pages/login/login">
 			<view class="demo-li"> 登陆 <text class="demo-tip"> login </text></view>
 		</navigator>
@@ -24,26 +50,8 @@
 			<view class="demo-li"> 输入框<text class="demo-tip"> input </text></view>
 		</navigator>
 		
-		<navigator url="/bundle_b/pages/filter_date/filter_date">
-			<view class="demo-li"> 筛选日期 <text class="demo-tip"> filter </text></view>
-		</navigator>
 		
-		<navigator url="/bundle_b/pages/table_demo/table_demo">
-			<view class="demo-li"> 表格 <text class="demo-tip"> table </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/chart_demo/echart_demo">
-			<view class="demo-li"> 圆环图 <text class="demo-tip"> echart </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/chart_demo/chart_map">
-			<view class="demo-li"> 地图 <text class="demo-tip"> map </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_b/pages/test_demo/test_demo">
-			<view class="demo-li"> 蓝湖代码 <text class="demo-tip"> test_demo </text></view>
-		</navigator>
-		
-		
-		<!-- <navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
+		<navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
 			<view class="demo-li">轮播图+商品列表 吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>
 		<navigator url="/bundle/pages/nurse_order/nurse_order">
@@ -94,10 +102,7 @@
 			<view class="demo-li"> 底部按钮 <text class="demo-tip"> web view  </text></view>
 		</navigator>
 		
-		-->
-		
-		
-		<!-- <navigator url="/bundle/pages/list_input/list_input">
+		<navigator url="/bundle/pages/list_input/list_input">
 			<view class="demo-li">input<text class="demo-tip"> 循环创建input 底部签名 返回文件路径</text></view>
 		</navigator>
 		
@@ -118,7 +123,13 @@
 		<!-- <navigator url="/bundle/pages/tag_page/tag-page">
 			<view class="demo-li">tag_page<text class="demo-tip"> tag </text></view>
 		</navigator>
+		<navigator url="/bundle/pages/choose_photo/choose_photo">
+			<view class="demo-li"> choose photo<text class="demo-tip"> 选择图片 </text></view>
+		</navigator> -->
 		
+		<!-- <navigator url="/bundle/pages/choose_date/choose_date">
+			<view class="demo-li"> choose date<text class="demo-tip"> 日期picker </text></view>
+		</navigator> 
 		-->
 		
 		 
@@ -131,13 +142,6 @@
 			<view class="demo-li"> 键盘弹框顶起底部空间<text class="demo-tip"> keyboard </text></view>
 		</navigator>
 		
-		<!-- <navigator url="/bundle/pages/choose_photo/choose_photo">
-			<view class="demo-li"> choose photo<text class="demo-tip"> 选择图片 </text></view>
-		</navigator> -->
-		
-		<!-- <navigator url="/bundle/pages/choose_date/choose_date">
-			<view class="demo-li"> choose date<text class="demo-tip"> 日期picker </text></view>
-		</navigator> -->
 		
 		<navigator url="/bundle/pages/upload_img/upload_photo">
 			<view class="demo-li">upload photo<text class="demo-tip"> 压缩并保存图片 </text></view>
@@ -163,8 +167,16 @@
 		</navigator>
 		
 		
+		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
+			<view class="demo-li"> chart统计 <text class="demo-tip"> 统计图 </text></view>
+		</navigator> 
 		
-		<!-- <navigator url="/bundle_b/pages/pay/pay_page">
+		
+		
+		
+		<!-- 
+		
+		<navigator url="/bundle_b/pages/pay/pay_page">
 			<view class="demo-li"> 支付UI <text class="demo-tip"> pay </text></view>
 		</navigator>
 		<navigator url="/bundle_b/pages/weixin_openid/weixin_openid">
@@ -174,16 +186,6 @@
 		<navigator url="/bundle_b/pages/spread_code/spread_code">
 			<view class="demo-li"> 二维码生成 <text class="demo-tip"> QR code </text></view>
 		</navigator> 
-		
-		-->
-		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
-			<view class="demo-li"> chart统计 <text class="demo-tip"> 统计图 </text></view>
-		</navigator> 
-		
-		
-		
-		
-		<!-- 
 		
 		<navigator url="/bundle/pages/card_list/card_list">
 			<view class="demo-li"> 卡片list<text class="demo-tip"> 卡片 </text></view>

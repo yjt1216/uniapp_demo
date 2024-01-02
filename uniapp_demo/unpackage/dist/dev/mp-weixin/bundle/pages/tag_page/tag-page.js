@@ -143,7 +143,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var zyTag = function zyTag() {
   __webpack_require__.e(/*! require.ensure | bundle/components/zy-tag/zy-tag */ "bundle/components/zy-tag/zy-tag").then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/zy-tag/zy-tag.vue */ 1044));
+    return resolve(__webpack_require__(/*! @/bundle/components/zy-tag/zy-tag.vue */ 1036));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {

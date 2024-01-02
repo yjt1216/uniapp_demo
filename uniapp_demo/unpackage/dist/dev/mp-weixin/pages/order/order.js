@@ -99,7 +99,7 @@ var components
 try {
   components = {
     yNavbar: function () {
-      return __webpack_require__.e(/*! import() | components/y-navbar/y-navbar */ "components/y-navbar/y-navbar").then(__webpack_require__.bind(null, /*! @/components/y-navbar/y-navbar.vue */ 809))
+      return __webpack_require__.e(/*! import() | components/y-navbar/y-navbar */ "components/y-navbar/y-navbar").then(__webpack_require__.bind(null, /*! @/components/y-navbar/y-navbar.vue */ 801))
     },
   }
 } catch (e) {

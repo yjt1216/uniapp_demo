@@ -1,6 +1,6 @@
 <template>
 	<view class="table-demo">
-		<u-navbar title="表格" :fixed="true" :placeholder="true" :autoBack="true"></u-navbar>
+		<u-navbar title="经营统计" :fixed="true" :placeholder="true" :autoBack="true"></u-navbar>
 		
 		<view class="top-date">
 			<filter-date></filter-date>

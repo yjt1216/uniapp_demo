@@ -101,10 +101,10 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 802))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 794))
     },
     mescrollUni: function () {
-      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.vue */ 1221))
+      return Promise.all(/*! import() | uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni")]).then(__webpack_require__.bind(null, /*! @/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-uni.vue */ 1213))
     },
   }
 } catch (e) {

@@ -99,6 +99,7 @@
   flex-direction: column;
 }
 .chart-first.data-v-0b437c0a {
+  padding: 0 20rpx;
   height: 380rpx;
   bottom: 0;
   bottom: constant(safe-area-inset-bottom);
@@ -124,6 +125,7 @@
   height: 39rpx;
 }
 .text-group_1.data-v-0b437c0a {
+  margin-left: 10rpx;
   width: 128rpx;
   height: 37rpx;
   overflow-wrap: break-word;

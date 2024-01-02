@@ -12,102 +12,97 @@
 					{{item.label}}
 				</view>
 			</view>
-		</view>
-		<!-- <view class="filter-date-box"  v-if="filterObject.date_type == '1'">
-		    <view 
-				class="grade-week"
-				:class="{active:filterObject.date_value==item.date_value}" 
-				v-for="(item, index) in weekFilter" :key="index" @tap="itemClick(item)">
-		        {{item.name}}
-		    </view>
-		</view> -->
-		
-		<view class="filter-date-box"  >
-			<scroll-view scroll-x style="white-space: nowrap;">
-				<view
-					v-if="filterObject.date_type == '1'"
-					class="grade-week"
-					:class="{active:filterObject.date_value==item.date_value}" 
-					v-for="(item, index) in weekFilter" :key="index" @tap="itemClick(item)">
-				    {{item.name}}
-				</view>
-				<view
-					v-if="filterObject.date_type == '2'"
-					class="grade-week"
-					:class="{active:filterObject.date_value==item.date_value}" 
-					v-for="(item, index) in monthFilter" :key="index" @tap="itemClick(item)">
-				    {{item.name}}
-				</view>
-				<view 
-					v-if="filterObject.date_type == '3'"
-					class="grade-quarter" :class="{active:filterObject.date_value==item.date_value}"
-					v-for="(item, index) in quarterFilter" :key="index" @tap="itemClick(item)">
-				   {{item.name}}
-				</view>
-				<view
-					v-if="filterObject.date_type == '4'"
-					class="grade-week"
-					:class="{active:filterObject.date_value==item.date_value}" 
-					v-for="(item, index) in yearFilter" :key="index" @tap="itemClick(item)">
-				    {{item.name}}
-				</view>
-			</scroll-view>
-		</view>
-		
-		<view class="chart-first">
-			<view class="amount-order-box">
-				<view class="amount-box">
-					<view style="margin-left: 10rpx;">金额</view>
-					<view style="align-self: center;">202356.65万元</view>
-					<view style="align-self: center;">同比：+200%</view>
-				</view>
-				<!-- 设置间隔 -->
-				<view class="spacer" style="width: 30rpx;"></view>
-				<view class="order-box">
-					<view style="margin-left: 10rpx;">订单数</view>
-					<view style="align-self: center;">65849单</view>
-					<view style="align-self: center;">同比：-12.6%</view>
-				</view>
+			
+			<view class="filter-date-box"  >
+				<scroll-view scroll-x style="white-space: nowrap;">
+					<view
+						v-if="filterObject.date_type == 1"
+						class="grade-week"
+						:class="{active:filterObject.date_value==item.date_value}" 
+						v-for="(item, index) in weekFilter" :key="index" @tap="itemClick(item)">
+					    {{item.name}}
+					</view>
+					<view
+						v-if="filterObject.date_type == 2"
+						class="grade-week"
+						:class="{active:filterObject.date_value==item.date_value}" 
+						v-for="(item, index) in monthFilter" :key="index" @tap="itemClick(item)">
+					    {{item.name}}
+					</view>
+					<view 
+						v-if="filterObject.date_type == 3"
+						class="grade-quarter" :class="{active:filterObject.date_value==item.date_value}"
+						v-for="(item, index) in quarterFilter" :key="index" @tap="itemClick(item)">
+					   {{item.name}}
+					</view>
+					<view
+						v-if="filterObject.date_type == 4"
+						class="grade-week"
+						:class="{active:filterObject.date_value==item.date_value}" 
+						v-for="(item, index) in yearFilter" :key="index" @tap="itemClick(item)">
+					    {{item.name}}
+					</view>
+				</scroll-view>
 			</view>
-			<view class="organ-nurse-box">
-				<view class="organ-box">
-					<view>新增护士</view>
-					<view class="uni-row">
-						<span class="text-font1">20</span>
-						<span class="text-font2">人</span>
+			
+			<view class="chart-first">
+				<view class="amount-order-box">
+					<view class="amount-box">
+						<view style="margin-left: 10rpx;">金额</view>
+						<view style="align-self: center;">202356.65万元</view>
+						<view style="align-self: center;">同比：+200%</view>
 					</view>
-					<view class="uni-row">
-						<span class="text-color1">同比：</span>
-						<span class="text-color2">+50%</span>
-					</view>
-				</view>
-				<view class="spacer" style="width: 25rpx;"></view>
-				<view class="organ-box">
-					<view>新增机构</view>
-					<view class="uni-row">
-						<span class="text-font1">2</span>
-						<span class="text-font2">个</span>
-					</view>
-					<view class="uni-row">
-						<span class="text-color1">同比：</span>
-						<span class="text-color2">+20.2%</span>
+					<!-- 设置间隔 -->
+					<view class="spacer" style="width: 30rpx;"></view>
+					<view class="order-box">
+						<view style="margin-left: 10rpx;">订单数</view>
+						<view style="align-self: center;">65849单</view>
+						<view style="align-self: center;">同比：-12.6%</view>
 					</view>
 				</view>
-				<view class="spacer" style="width: 25rpx;"></view>
-				<view class="organ-box">
-					<view>新增用户</view>
-					<view class="uni-row">
-						<span class="text-font1">66956</span>
-						<span class="text-font2">人</span>
+				<view class="organ-nurse-box">
+					<view class="organ-box">
+						<view>新增护士</view>
+						<view class="uni-row">
+							<span class="text-font1">20</span>
+							<span class="text-font2">人</span>
+						</view>
+						<view class="uni-row">
+							<span class="text-color1">同比：</span>
+							<span class="text-color2">+50%</span>
+						</view>
 					</view>
-					<view class="uni-row">
-						<span class="text-color1">同比：</span>
-						<span class="text-color3">-19.32%</span>
+					<view class="spacer" style="width: 25rpx;"></view>
+					<view class="organ-box">
+						<view>新增机构</view>
+						<view class="uni-row">
+							<span class="text-font1">2</span>
+							<span class="text-font2">个</span>
+						</view>
+						<view class="uni-row">
+							<span class="text-color1">同比：</span>
+							<span class="text-color2">+20.2%</span>
+						</view>
+					</view>
+					<view class="spacer" style="width: 25rpx;"></view>
+					<view class="organ-box">
+						<view>新增用户</view>
+						<view class="uni-row">
+							<span class="text-font1">66956</span>
+							<span class="text-font2">人</span>
+						</view>
+						<view class="uni-row">
+							<span class="text-color1">同比：</span>
+							<span class="text-color3">-19.32%</span>
+						</view>
 					</view>
 				</view>
+				
 			</view>
 			
 		</view>
+		
+		
 
 		<!-- <view class="test-box">
 			<scroll-view scroll-x style="white-space: nowrap;">
@@ -138,7 +133,7 @@
 <script>
 	import moment from 'moment';
 	import operateData from '@/sheep/mock/operate_chart.json';
-	import { arraySliceSix } from '../../../sheep/utils/tools';
+	
 	
 	export default {
 		
@@ -146,99 +141,96 @@
 			return {
 				filterObject: {
 					/* 统计时间类型； 1：周；2：月；3：季度；4：年 */
-					date_type:'1',
+					date_type:1,
 					/* 统计时间值； 周：{1：本周；2：上周}；月：{1-12月}； 季度：{1-4季}；年：年份； */
-					date_value:'1'
+					date_value:1
 				},
 				gradeList: [
 					{
 						label: '周数据',
-						date_type: '1'
+						date_type: 1
 					},
 					{
 						label: '月数据',
-						date_type: '2'
+						date_type:2
 					},
 					{
 						label: '季度数据',
-						date_type: '3'
+						date_type: 3
 					},
 					{
 						label: '年数据',
-						date_type: '4'
+						date_type: 4
 					}
 				],
 				/* 周数据 */
-				/* 周数据 */
 				weekFilter:[
-					{name:'上周',date_value:'1',date_type: '1'},
-					{name:'本周',date_value:'2',date_type: '1'},
+					{name:'上周',date_value:1,date_type: 1},
+					{name:'本周',date_value:2,date_type: 1},
 				],
 				/* 月数据 */
 				monthFilter:[],
 				/* 季度数据 */
 				quarterFilter:[
-					{name:'第一季度',date_value:'1',date_type: '3'},
-					{name:'第二季度',date_value:'2',date_type: '3'},
-					{name:'第三季度',date_value:'3',date_type: '3'},
-					{name:'第四季度',date_value:'4',date_type: '3'}
+					{ name: '第一季度', firstMonth: 1, date_type: 3 ,date_value: 1},
+					{ name: '第二季度', firstMonth: 4, date_type: 3 ,date_value: 2},
+					{ name: '第三季度', firstMonth: 7, date_type: 3 ,date_value: 3},
+					{ name: '第四季度', firstMonth: 10, date_type: 3 ,date_value: 4}
 				],
-				
 				
 				yearFilter: [],
 				
 				maxDate: [],
 				minDate: [],
 				
-				/* 当前展示数据 */
-				currentDate:[],
-				
-				
+				/* 用户选择年份 */
+				selectYear:null,
+				/* 用户选择月份 */
+				selectMonth:null,
 			}
 		},
-		onLoad:function(option){
-			this.initDate();
-			
+		created:function(option){
+			console.log('fliter-date Created');
+			// this.initDate();
 		},
+		mounted:function(){
+			console.log('fliter-date mounted');
+			this.initDate();
+		},
+		
 		methods:{
-			swiperChange(e) {
-				console.log(e)
-			},
+			
 			clickTagFun(item) {
-				this.currentDate = [];
-				// console.log('用户点击item',item)
+				console.log('用户点击item',item);
 				if(this.filterObject.date_type !== item.date_type){
 					this.filterObject.date_type = item.date_type;
 				}
 				
-				this.filterObject.date_value = '1';
-				if(this.filterObject.date_type == '1'){
-					this.currentDate = this.weekFilter;
-				}
-				if(this.filterObject.date_type == '2'){
-					this.currentDate = this.monthFilter;
-				}
-				if(this.filterObject.date_type == '3'){
-					this.currentDate = this.quarterFilter;
-				}
-				if(this.filterObject.date_type == '4'){
-					this.currentDate = this.yearFilter;
-					this.filterObject.date_value = this.yearFilter[0];
+				if(this.filterObject.date_type === 4){
+					let nowDate = new Date();
+					// this.filterObject.date_value = item.date_value;
+					this.filterObject.date_value = nowDate.getFullYear();
+				}else if(this.filterObject.date_type === 2){
+					this.getMonths();
+				}else{
+					this.filterObject.date_value = 1;
 				}
 				
-				console.log('用户切换类型weekFilter',this.weekFilter);
-				console.log('用户切换类型currentDate',this.currentDate);
+				console.log('用户切换类型filterObject',this.filterObject);
+				
 			},
 			itemClick(item){
-				console.log('用户点击itemClick',item);
 				this.filterObject.date_value = item.date_value;
-				// if(this.filterObject.date_type == '1' || this.filterObject.date_type == '3'){
-				// 	this.filterObject.date_value = item.date_value;
-				// }else{
-				// 	/*  if(this.filterObject.date_type == '2' || this.filterObject.date_type == '4') */
-				// 	this.filterObject.date_value = item;
-				// }
+				if(this.filterObject.date_type === 4){
+					this.selectYear = item.date_value;
+					console.log('用户选择年份 = ',this.selectYear);
+					this.getPastQuartersInYear(this.selectYear);
+				}
+				if(this.filterObject.date_type === 2){
+					this.selectMonth = item.date_value;
+				}
 				console.log('用户点击filterObject',this.filterObject);
+				
 			},
 			/**
 			 * 日期转数组
@@ -250,37 +242,74 @@
 			},
 			
 			initDate() {
-				this.currentDate = this.weekFilter;
+				let nowDate = new Date();
+				/* 初始化 默认年 月 */
+				this.selectYear = nowDate.getFullYear();
+				this.selectMonth = nowDate.getMonth() + 1;
+				
 				const arr = this.dateToArr();
 				
 				this.minDate = [arr[0] - 5, 1];
 				this.maxDate = [arr[0], 12]; // 年月
 				
-				this.getYears();
+				this.getYearList();
 				this.getMonths();
+				this.getPastQuartersInYear(this.selectYear);
+				
+				this.filterObject.date_type = 1;
+				
+				console.log('获取selectYear = ',this.selectYear);
+				console.log('获取周 list = ',this.weekFilter);
 			},
 			/**
 			 * 获取年份列表
 			 */
-			getYears() {
-				let list = []
-				let i = this.minDate[0]
-				do {
-					list.push(i)
-					i++
-				} while (i <= this.maxDate[0])
-				// this.yearFilter = list;
+			getYearList(){
+				let startYear = 2019; // 假设这是你的起始年份
+				let now = new Date();
+				let currentYear = now.getFullYear();
 				
-				var formList = [];
-				list.forEach(value=>{
-					var object = {};
-					object.date_type = '4';
-					object.name = value+'年';
-					object.date_value = value;
-					formList.push(object);
-				})
-				this.yearFilter = formList;
-				console.log('获取年份 list = ',this.yearFilter);
+				// 创建一个空数组来存储结果
+				let yearsArray = [];
+				
+				// 遍历起始年份到当前年份
+				for (let year = startYear; year <= currentYear; year++) {
+				    yearsArray.push({
+				        name: `${year}年`,
+				        date_value: year, // 根据你的描述，这里使用年份作为date_value
+				        date_type: 3 // 这里假设date_type固定为3，根据实际需求进行调整
+				    });
+				}
+				
+				this.yearFilter = yearsArray;
+			},
+			/* 获取季度 */
+			getPastQuartersInYear(year) {
+				let quarters = [
+				  { name: '第一季度', firstMonth: 1, date_type: 3 ,date_value: 1},
+				  { name: '第二季度', firstMonth: 4, date_type: 3 ,date_value: 2},
+				  { name: '第三季度', firstMonth: 7, date_type: 3 ,date_value: 3},
+				  { name: '第四季度', firstMonth: 10, date_type: 3 ,date_value: 4}
+				];
+				let pastQuarters = [];
+				let currentMonth = new Date().getMonth() + 1; // getMonth()返回的月份是从0开始的，所以需要加1
+				
+				for (let i = 0; i < 4; i++) {
+				  let quarterStartMonth = i * 3 + 1;
+				  let quarterEndMonth = quarterStartMonth + 2;
+							
+				  if (year === (new Date()).getFullYear()) { // 如果是今年，则根据当前月份判断
+				    if (quarterStartMonth <= currentMonth && quarterEndMonth >= currentMonth) {
+				      pastQuarters.push(quarters[i]);
+				    }
+				  } else { // 如果不是今年，则记录完整的四个季度（假设我们关注的是整个年份）
+				    pastQuarters.push(quarters[i]);
+				  }
+				}
+				this.quarterFilter = pastQuarters;
+				// console.log(`当前季度：${this.quarterFilter}`);
+	
+				return pastQuarters;
 			},
 			
 			/**
@@ -291,15 +320,17 @@
 				
 				/* 获取当前月份 */
 				let nowDate = new Date();
+				let nowYear = nowDate.getFullYear();
 				let min = 1 ;// 最小的月份
-				let max = nowDate.getMonth() + 1 ;// 最大的月份 当前月份
+				/*  最大的月份为当前月份  如果选择年份不是今年 则最大年份为12*/
+				let max = this.selectYear == nowYear ? nowDate.getMonth() + 1 : 12 ;//
 				let monthList = list.slice(min - 1, max - min + 1);
 				// this.monthFilter = list.slice(min - 1, max - min + 1);
 				
 				var formList = [];
 				monthList.forEach(value=>{
 					var object = {};
-					object.date_type = '2';
+					object.date_type = 2;
 					object.name = value+'月';
 					object.date_value = value;
 					formList.push(object);
@@ -308,10 +339,6 @@
 				console.log('获取月份 list = ',this.monthFilter);
 			},
 			
-			/* 虚拟数据 */
-			getMockData(){
-				
-			},
 			
 		}
 	}
@@ -410,12 +437,18 @@
 	
 	/* 筛选条件 */
 	.filter-warp {
-		width: 100%;
-		padding: 0 34rpx;
 		box-sizing: border-box;
-	    max-height: 350rpx;
-	    overflow: hidden;
-		overflow-y: scroll
+		overflow: hidden;
+		overflow-y: scroll;
+		box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.15);
+		background-color: rgba(255, 255, 255, 1);
+		border-radius: 10px;
+		position: relative;
+		width: 710rpx;
+		height: 650rpx;
+		margin: 20rpx 0 0 20rpx;
+		display: flex;
+		flex-direction: column;
 	}
 	.grade-title {
 		font-size: 18px;

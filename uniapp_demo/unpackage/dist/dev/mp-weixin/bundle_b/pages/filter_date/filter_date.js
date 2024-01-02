@@ -101,7 +101,7 @@ var components
 try {
   components = {
     uNavbar: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-navbar/u-navbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-navbar/u-navbar")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-navbar/u-navbar.vue */ 1051))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-navbar/u-navbar */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-navbar/u-navbar")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-navbar/u-navbar.vue */ 1043))
     },
   }
 } catch (e) {
@@ -167,12 +167,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _moment = _interopRequireDefault(__webpack_require__(/*! moment */ 538));
 var _operate_chart = _interopRequireDefault(__webpack_require__(/*! @/sheep/mock/operate_chart.json */ 675));
-var _tools = __webpack_require__(/*! ../../../sheep/utils/tools */ 60);
-//
-//
-//
-//
-//
 //
 //
 //
@@ -310,100 +304,102 @@ var _default = {
     return {
       filterObject: {
         /* 统计时间类型； 1：周；2：月；3：季度；4：年 */
-        date_type: '1',
+        date_type: 1,
         /* 统计时间值； 周：{1：本周；2：上周}；月：{1-12月}； 季度：{1-4季}；年：年份； */
-        date_value: '1'
+        date_value: 1
       },
       gradeList: [{
         label: '周数据',
-        date_type: '1'
+        date_type: 1
       }, {
         label: '月数据',
-        date_type: '2'
+        date_type: 2
       }, {
         label: '季度数据',
-        date_type: '3'
+        date_type: 3
       }, {
         label: '年数据',
-        date_type: '4'
+        date_type: 4
       }],
-      /* 周数据 */
       /* 周数据 */
       weekFilter: [{
         name: '上周',
-        date_value: '1',
-        date_type: '1'
+        date_value: 1,
+        date_type: 1
       }, {
         name: '本周',
-        date_value: '2',
-        date_type: '1'
+        date_value: 2,
+        date_type: 1
       }],
       /* 月数据 */
       monthFilter: [],
       /* 季度数据 */
       quarterFilter: [{
         name: '第一季度',
-        date_value: '1',
-        date_type: '3'
+        firstMonth: 1,
+        date_type: 3,
+        date_value: 1
       }, {
         name: '第二季度',
-        date_value: '2',
-        date_type: '3'
+        firstMonth: 4,
+        date_type: 3,
+        date_value: 2
       }, {
         name: '第三季度',
-        date_value: '3',
-        date_type: '3'
+        firstMonth: 7,
+        date_type: 3,
+        date_value: 3
       }, {
         name: '第四季度',
-        date_value: '4',
-        date_type: '3'
+        firstMonth: 10,
+        date_type: 3,
+        date_value: 4
       }],
       yearFilter: [],
       maxDate: [],
       minDate: [],
-      /* 当前展示数据 */
-      currentDate: []
+      /* 用户选择年份 */
+      selectYear: null,
+      /* 用户选择月份 */
+      selectMonth: null
     };
   },
-  onLoad: function onLoad(option) {
+  created: function created(option) {
+    console.log('fliter-date Created');
+    // this.initDate();
+  },
+
+  mounted: function mounted() {
+    console.log('fliter-date mounted');
     this.initDate();
   },
   methods: {
-    swiperChange: function swiperChange(e) {
-      console.log(e);
-    },
     clickTagFun: function clickTagFun(item) {
-      this.currentDate = [];
-      // console.log('用户点击item',item)
+      console.log('用户点击item', item);
       if (this.filterObject.date_type !== item.date_type) {
         this.filterObject.date_type = item.date_type;
       }
-      this.filterObject.date_value = '1';
-      if (this.filterObject.date_type == '1') {
-        this.currentDate = this.weekFilter;
+      if (this.filterObject.date_type === 4) {
+        var nowDate = new Date();
+        // this.filterObject.date_value = item.date_value;
+        this.filterObject.date_value = nowDate.getFullYear();
+      } else if (this.filterObject.date_type === 2) {
+        this.getMonths();
+      } else {
+        this.filterObject.date_value = 1;
       }
-      if (this.filterObject.date_type == '2') {
-        this.currentDate = this.monthFilter;
-      }
-      if (this.filterObject.date_type == '3') {
-        this.currentDate = this.quarterFilter;
-      }
-      if (this.filterObject.date_type == '4') {
-        this.currentDate = this.yearFilter;
-        this.filterObject.date_value = this.yearFilter[0];
-      }
-      console.log('用户切换类型weekFilter', this.weekFilter);
-      console.log('用户切换类型currentDate', this.currentDate);
+      console.log('用户切换类型filterObject', this.filterObject);
     },
     itemClick: function itemClick(item) {
-      console.log('用户点击itemClick', item);
       this.filterObject.date_value = item.date_value;
-      // if(this.filterObject.date_type == '1' || this.filterObject.date_type == '3'){
-      // 	this.filterObject.date_value = item.date_value;
-      // }else{
-      // 	/*  if(this.filterObject.date_type == '2' || this.filterObject.date_type == '4') */
-      // 	this.filterObject.date_value = item;
-      // }
+      if (this.filterObject.date_type === 4) {
+        this.selectYear = item.date_value;
+        console.log('用户选择年份 = ', this.selectYear);
+        this.getPastQuartersInYear(this.selectYear);
+      }
+      if (this.filterObject.date_type === 2) {
+        this.selectMonth = item.date_value;
+      }
       console.log('用户点击filterObject', this.filterObject);
     },
     /**
@@ -417,36 +413,86 @@ var _default = {
       });
     },
     initDate: function initDate() {
-      this.currentDate = this.weekFilter;
+      var nowDate = new Date();
+      /* 初始化 默认年 月 */
+      this.selectYear = nowDate.getFullYear();
+      this.selectMonth = nowDate.getMonth() + 1;
       var arr = this.dateToArr();
       this.minDate = [arr[0] - 5, 1];
       this.maxDate = [arr[0], 12]; // 年月
 
-      this.getYears();
+      this.getYearList();
       this.getMonths();
+      this.getPastQuartersInYear(this.selectYear);
+      this.filterObject.date_type = 1;
+      console.log('获取selectYear = ', this.selectYear);
+      console.log('获取周 list = ', this.weekFilter);
     },
     /**
      * 获取年份列表
      */
-    getYears: function getYears() {
-      var list = [];
-      var i = this.minDate[0];
-      do {
-        list.push(i);
-        i++;
-      } while (i <= this.maxDate[0]);
-      // this.yearFilter = list;
+    getYearList: function getYearList() {
+      var startYear = 2019; // 假设这是你的起始年份
+      var now = new Date();
+      var currentYear = now.getFullYear();
 
-      var formList = [];
-      list.forEach(function (value) {
-        var object = {};
-        object.date_type = '4';
-        object.name = value + '年';
-        object.date_value = value;
-        formList.push(object);
-      });
-      this.yearFilter = formList;
-      console.log('获取年份 list = ', this.yearFilter);
+      // 创建一个空数组来存储结果
+      var yearsArray = [];
+
+      // 遍历起始年份到当前年份
+      for (var year = startYear; year <= currentYear; year++) {
+        yearsArray.push({
+          name: "".concat(year, "\u5E74"),
+          date_value: year,
+          // 根据你的描述，这里使用年份作为date_value
+          date_type: 3 // 这里假设date_type固定为3，根据实际需求进行调整
+        });
+      }
+
+      this.yearFilter = yearsArray;
+    },
+    /* 获取季度 */getPastQuartersInYear: function getPastQuartersInYear(year) {
+      var quarters = [{
+        name: '第一季度',
+        firstMonth: 1,
+        date_type: 3,
+        date_value: 1
+      }, {
+        name: '第二季度',
+        firstMonth: 4,
+        date_type: 3,
+        date_value: 2
+      }, {
+        name: '第三季度',
+        firstMonth: 7,
+        date_type: 3,
+        date_value: 3
+      }, {
+        name: '第四季度',
+        firstMonth: 10,
+        date_type: 3,
+        date_value: 4
+      }];
+      var pastQuarters = [];
+      var currentMonth = new Date().getMonth() + 1; // getMonth()返回的月份是从0开始的，所以需要加1
+
+      for (var i = 0; i < 4; i++) {
+        var quarterStartMonth = i * 3 + 1;
+        var quarterEndMonth = quarterStartMonth + 2;
+        if (year === new Date().getFullYear()) {
+          // 如果是今年，则根据当前月份判断
+          if (quarterStartMonth <= currentMonth && quarterEndMonth >= currentMonth) {
+            pastQuarters.push(quarters[i]);
+          }
+        } else {
+          // 如果不是今年，则记录完整的四个季度（假设我们关注的是整个年份）
+          pastQuarters.push(quarters[i]);
+        }
+      }
+      this.quarterFilter = pastQuarters;
+      // console.log(`当前季度：${this.quarterFilter}`);
+
+      return pastQuarters;
     },
     /**
      * 获取月份列表
@@ -460,23 +506,24 @@ var _default = {
 
       /* 获取当前月份 */
       var nowDate = new Date();
+      var nowYear = nowDate.getFullYear();
       var min = 1; // 最小的月份
-      var max = nowDate.getMonth() + 1; // 最大的月份 当前月份
+      /*  最大的月份为当前月份  如果选择年份不是今年 则最大年份为12*/
+      var max = this.selectYear == nowYear ? nowDate.getMonth() + 1 : 12; //
       var monthList = list.slice(min - 1, max - min + 1);
       // this.monthFilter = list.slice(min - 1, max - min + 1);
 
       var formList = [];
       monthList.forEach(function (value) {
         var object = {};
-        object.date_type = '2';
+        object.date_type = 2;
         object.name = value + '月';
         object.date_value = value;
         formList.push(object);
       });
       this.monthFilter = formList;
       console.log('获取月份 list = ', this.monthFilter);
-    },
-    /* 虚拟数据 */getMockData: function getMockData() {}
+    }
   }
 };
 exports.default = _default;

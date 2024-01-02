@@ -101,10 +101,10 @@ var components
 try {
   components = {
     navBar: function () {
-      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 802))
+      return __webpack_require__.e(/*! import() | components/nav-bar/nav-bar */ "components/nav-bar/nav-bar").then(__webpack_require__.bind(null, /*! @/components/nav-bar/nav-bar.vue */ 794))
     },
     uActionSheet: function () {
-      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-action-sheet/u-action-sheet */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-action-sheet/u-action-sheet")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-action-sheet/u-action-sheet.vue */ 1092))
+      return Promise.all(/*! import() | uni_modules/uview-ui/components/u-action-sheet/u-action-sheet */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uview-ui/components/u-action-sheet/u-action-sheet")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uview-ui/components/u-action-sheet/u-action-sheet.vue */ 1084))
     },
   }
 } catch (e) {
@@ -180,12 +180,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var suSticky = function suSticky() {
   Promise.all(/*! require.ensure | bundle/components/su-sticky/su-sticky */[__webpack_require__.e("common/vendor"), __webpack_require__.e("bundle/common/vendor"), __webpack_require__.e("bundle/components/su-sticky/su-sticky")]).then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/su-sticky/su-sticky.vue */ 1197));
+    return resolve(__webpack_require__(/*! @/bundle/components/su-sticky/su-sticky.vue */ 1189));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var shoproEmpty = function shoproEmpty() {
   __webpack_require__.e(/*! require.ensure | bundle/components/shopro-empty/shopro-empty */ "bundle/components/shopro-empty/shopro-empty").then((function () {
-    return resolve(__webpack_require__(/*! @/bundle/components/shopro-empty/shopro-empty.vue */ 1205));
+    return resolve(__webpack_require__(/*! @/bundle/components/shopro-empty/shopro-empty.vue */ 1197));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {
