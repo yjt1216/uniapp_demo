@@ -181,6 +181,20 @@
       ]
   	}]
   },
+  "UserRing": {
+  	"series": [{
+  		"data": [
+        {
+        	"name": "新增",
+        	"value": 50
+        }, 
+		{
+        	"name": "原有",
+        	"value": 30
+        }
+      ]
+  	}]
+  },
   "PieB": {
 	
   	"series": [{

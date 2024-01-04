@@ -21,7 +21,7 @@
 			<view class="demo-li"> 圆环图 <text class="demo-tip"> echart </text></view>
 		</navigator>
 		<navigator url="/bundle_b/pages/chart_demo/chart_map">
-			<view class="demo-li"> 地图 <text class="demo-tip"> map </text></view>
+			<view class="demo-li"> 地图 <text class="demo-tip"> chart_map </text></view>
 		</navigator>
 		
 		<navigator url="/bundle_b/pages/test_demo/test_demo">

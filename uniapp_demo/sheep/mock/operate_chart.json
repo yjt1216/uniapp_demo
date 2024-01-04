@@ -198,7 +198,7 @@
         },
         {
             "cate_id": 0,
-            "cate_name": "",
+            "cate_name": "基础护牙",
             "num": 14,
             "ratio": 11.29
         },
@@ -227,22 +227,22 @@
             "ratio": 4.84
         },
         {
-                "cate_id": 328,
-                "cate_name": "导管维护",
-                "num": 5,
-                "ratio": 4.03
+            "cate_id": 328,
+            "cate_name": "导管维护",
+            "num": 5,
+            "ratio": 4.03
         },
         {
-                "cate_id": 70,
-                "cate_name": "",
-                "num": 3,
-                "ratio": 2.42
+            "cate_id": 70,
+            "cate_name": "护理9",
+            "num": 3,
+            "ratio": 2.42
         },
         {
-                "cate_id": 69,
-                "cate_name": "",
-                "num": 3,
-                "ratio": 2.42
+            "cate_id": 69,
+            "cate_name": "护理10",
+            "num": 3,
+            "ratio": 2.42
         }
     ],
     "city_order_list": [

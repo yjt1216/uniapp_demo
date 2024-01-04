@@ -1,0 +1,74 @@
+
+.organ-sales{
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	min-height: 560rpx;
+}
+.sales-title{
+	margin-bottom: 34rpx;
+	margin-left: 20rpx;
+	width: 285rpx;
+	height: 37rpx;
+	font-size: 26rpx;
+	font-family: PingFangSC, PingFang SC;
+	font-weight: 500;
+	color: #505D6F;
+	line-height: 37rpx;
+}
+.charts-box{
+	margin: 10rpx;
+	margin-top: 100rpx;
+	width: 380rpx;
+	height: 400rpx;
+	/* background-color: palevioletred; */
+}
+.table-box{
+	/* width: 300rpx; */
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	padding-left: 10rpx;
+	/* background-color: aqua; */
+}
+.table-head{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 300rpx;
+}
+.table-content{
+	display: flex;
+	flex-direction: column;
+	width: 300rpx;
+}
+.head-name{
+	font-size: 18rpx;
+	width: 160rpx;
+	display: -webkit-box;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-line-clamp: 1; /* 限制显示两行 */
+	-webkit-box-orient: vertical; /* 设置为竖直排布 */
+	/* line-height: 1.5em; // 按照你的需要调整行高 */ 
+	/* height: 3em; // 行数 * 行高，这里假设是两行 */
+}
+.head-rate{
+	margin-left: 6rpx;
+	font-size: 18rpx;
+	width: 70rpx;
+}
+.head-amount{
+	margin-left: 6rpx;
+	font-size: 18rpx;
+	width: 70rpx;
+}
+.content-item{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+

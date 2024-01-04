@@ -35,7 +35,7 @@
 			};
 		},
 
-		 created() {
+		created() {
 
 			//@/uni_modules/qiun-data-charts/js_sdk/u-charts/config-ucharts.js 更详细配置的查看此处
 			// 文档可看 https://ext.dcloud.net.cn/plugin?id=271
@@ -105,7 +105,7 @@
 			}
 
 			//模拟从服务器获取数据
-			 this.getServerData()
+			this.getServerData()
 
 			//自定义格式化Tooltip显示内容  
 			uCharts.formatter.tooltipFun = (item, category, index, opts) => {
@@ -168,7 +168,7 @@
 					item.color = this.addColor(dataItem?.storeSym || 0)
 					return item
 				})
-
+				console.log('统计地图mapseries',mapseries);
 				this.chartsDataMap.series = mapseries
 			},
 			// 根据条件添加颜色
