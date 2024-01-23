@@ -110,7 +110,7 @@
 			//自定义格式化Tooltip显示内容  
 			uCharts.formatter.tooltipFun = (item, category, index, opts) => {
 				// console.log(item, index, "=item, category, index, opts=")
-				return item.data.storeSym ? `${item.name}地区门店数量：${item.data.storeSym}` : '暂无门面'
+				return item.data.storeSym ? `${item.name}：${item.data.storeSym}` : '暂无门面'
 			}
 
 		},
@@ -157,7 +157,7 @@
 
 				let mapseries = mapdata.features.map((item) => {
 					//根据接口数据查找到当前匹配的数据
-					let dataItem = data.find((x) => x.storeName == item.properties.name) || {
+					let dataItem = data.find((city) => city.storeName == item.properties.name) || {
 						storeSym: 0, //门店数量
 						companyNumber: 0, //缺编人数
 						storeName: item.properties.name, //地区

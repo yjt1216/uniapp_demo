@@ -1,8 +1,6 @@
 <template>
 	<view class="organ-sales">
 		
-		<!-- <image class="organ-left-img" src="../../static/chart/organ_order_n.png"></image>
-		<image class="organ-right-img" src="../../static/chart/organ_sold_s.png"></image> -->
 		<view class="table-box">
 			<view class="sales-title" >机构销售额占比TOP10</view>
 			<view class="table-head">
@@ -24,6 +22,7 @@
 				:opts="ringOpts"
 				:chartData="chartsDataPie"
 				:tapLegend="false"
+				tooltipFormat="tooltipFun"
 			/>
 		</view>
 		
@@ -31,9 +30,10 @@
 </template>
 
 <script>
-	
+	import uCharts from '@/uni_modules/qiun-data-charts/js_sdk/u-charts/config-ucharts.js' //在uniapp 插件库下载下来就是这个路径 可以自己改
+
 	export default {
-		name:'organ-sales',
+		name:'hospital-amount',
 		props: {
 			tableData: {
 				type: Array,
@@ -47,10 +47,27 @@
 					return {}
 				}
 			},
+			title:{
+				type:String,
+				default(){
+					return '0'
+				}
+			},
+			subtitle:{
+				type:String,
+				default(){
+					return '销售额'
+				}
+			},
+		},
+		watch:{
+			title(val){
+				console.log('watch ring销售额title',val);
+				this.ringOpts.title.name = `${val}`;
+			}
 		},
 		data(){
 			return {
-				
 				ringOpts: {
 					timing: "easeOut",
 					duration: 1000,
@@ -139,6 +156,13 @@
 					}
 				},
 				
+			}
+		},
+		created:function(){
+			uCharts.formatter.tooltipFun = (item, category, index, opts) => {
+				// console.log(item, index, "=item, category, index, opts=");
+				// return item.data.storeSym ? `${item.name}地区门店数量：${item.data.storeSym}` : '暂无门面'
+				return item.value ? `${item.name}：${item.value}` : '暂无'
 			}
 		},
 		mounted() {

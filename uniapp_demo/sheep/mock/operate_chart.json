@@ -1,7 +1,7 @@
 
 {
     "add_order_amount": {
-        "amount": "63135.99",
+        "amount": "63100.99",
         "common_ratio": 100
     },
     "add_order_num": {
@@ -117,13 +117,13 @@
         {
             "hospital_id": 10000,
             "hospital_name": "苏州大学第一附属医院",
-            "amount": "44465.75",
+            "amount": "10000",
             "ratio": 70.43
         },
         {
             "hospital_id": 10007,
             "hospital_name": "江苏省人民医院",
-            "amount": "10333.00",
+            "amount": "19658.00",
             "ratio": 16.37
         },
         {
@@ -158,7 +158,7 @@
         },
         {
             "hospital_id": 0,
-            "hospital_name": "",
+            "hospital_name": "八卦洲社区中卫生服务中心",
             "amount": "4.00",
             "ratio": 0.01
         }

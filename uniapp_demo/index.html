@@ -17,4 +17,27 @@
     <div id="app"><!--app-html--></div>
     <script type="module" src="/main.js"></script>
   </body>
+	<style>
+		/* 设置根元素html的基础字体大小 */
+		html {
+			font-size: 62.5%; /* 这样1rem = 10px (假设默认字体是16px) */
+		}
+  
+		body {
+			font-size: 1.4rem; /* 示例：设置body的字体大小为14px（在基准下1.4rem） */
+		}
+  
+      /* 根据屏幕宽度调整基础字体大小，实现响应式 */
+		@media screen and (min-width: 768px) {
+			html {
+				font-size: 75%; /* 在桌面端可能需要更大的字体，这里改为1rem = 12px */
+			}
+		}
+  
+		@media screen and (max-width: 480px) {
+			html {
+				font-size: 50%; /* 在小屏移动设备上，比如手机，可减小基础字体大小，例如1rem = 8px */
+			}
+		}
+    </style>
 </html>

@@ -1,1 +1,0 @@
-<view class="nurse-register"><view class="charts-box"><qiun-data-charts vue-id="43ab3bb8-1" type="ring" opts="{{opts}}" chartData="{{chartData}}" bind:__l="__l"></qiun-data-charts></view></view>

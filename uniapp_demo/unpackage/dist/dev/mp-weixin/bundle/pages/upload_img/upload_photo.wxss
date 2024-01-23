@@ -107,7 +107,7 @@
   font-size: 15px;
   font-family: Source Han Sans CN;
   font-weight: 400;
-  color: #FEFEFE;
+  color: #333;
   position: relative;
 }
 .feedback-wrap .feedback-image .feedback-image-box.data-v-46968198 {

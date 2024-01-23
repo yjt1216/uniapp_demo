@@ -7,13 +7,13 @@
 			<view class="table-head">
 				<view class="head-name">机构名称</view>
 				<view class="head-rate">占比</view>
-				<view class="head-amount">金额</view>
+				<view class="head-amount">数量</view>
 			</view>
 			<view class="table-content">
 				<view class="content-item" v-for="(item, index) in tableData" :key="index">
 					<view class="head-name">{{ item.hospital_name }}</view>
 					<view class="head-rate">{{ item.ratio }}</view>
-					<view class="head-amount">{{ item.amount }}</view>
+					<view class="head-amount">{{ item.num }}</view>
 				</view>
 			</view>
 		</view>
@@ -45,6 +45,24 @@
 					return {}
 				}
 			},
+			title:{
+				type:String,
+				default(){
+					return '0'
+				}
+			},
+			subtitle:{
+				type:String,
+				default(){
+					return '订单数'
+				}
+			},
+		},
+		watch:{
+			title(val){
+				console.log('watch ring订单title',val);
+				this.ringOpts.title.name = `${val}`;
+			}
 		},
 		data(){
 			return {
@@ -140,7 +158,7 @@
 			}
 		},
 		mounted() {
-			
+			this.ringOpts.title.name = `${this.title}`;
 		},
 		methods:{
 			

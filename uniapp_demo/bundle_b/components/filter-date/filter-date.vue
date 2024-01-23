@@ -111,7 +111,9 @@
 
 <script>
 	import moment from 'moment';
-	import operateData from '@/sheep/mock/operate_chart.json';
+	
+	import localStore from "@/sheep/config/local_store.js";
+	import { DEFAULT_FILTER } from '@/sheep/config/cachekey';
 	
 	export default {
 		name: "filter-date",
@@ -176,13 +178,28 @@
 				selectMonth:null,
 			}
 		},
-		created:function(option){
+		created: async function(option){
 			console.log('fliter-date Created');
-			// this.initDate();
+			/* 获取筛选条件 */
+			let defaultFilter = await localStore.get(DEFAULT_FILTER);
+			if(defaultFilter){
+				this.filterObject = defaultFilter;
+			}else{
+				this.filterObject.date_type = 1;
+			}
+			console.log('用户筛选类型filterObject',this.filterObject);
 		},
 		mounted:function(){
 			console.log('fliter-date mounted');
 			this.initDate();
+			
+		},
+		beforeDestroy:async function(){
+			await localStore.set(DEFAULT_FILTER,this.filterObject);
+			console.log('组件即将销毁');
+		},
+		destroyed:async function(){
+			console.log('组件已销毁',await localStore.get(DEFAULT_FILTER));	
 		},
 		
 		methods:{
@@ -228,7 +245,7 @@
 			  return moment(date).format('YYYY-MM').split('-').map(o => Number(o));
 			},
 			
-			initDate() {
+			async initDate() {
 				let nowDate = new Date();
 				/* 初始化 默认年 月 */
 				this.selectYear = nowDate.getFullYear();
@@ -244,13 +261,8 @@
 				this.getPastQuartersInYear(this.selectYear);
 				
 				
-				
-				this.filterObject.date_type = 1;
-				
-				
-				
-				console.log('获取selectYear = ',this.selectYear);
-				console.log('获取周 list = ',this.weekFilter);
+				//console.log('获取selectYear = ',this.selectYear);
+				//console.log('获取周 list = ',this.weekFilter);
 			},
 			/**
 			 * 获取年份列表

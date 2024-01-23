@@ -32,11 +32,31 @@
 						<text class="iconfont feedback-image-delete" @click="deleteImgHandle(index)">x</text>
 					</view>
 				</template>
+				<!-- chooseCompressImageFun -->
+				<view class="feedback-image-btn" @click="chooseCompressImageFun">
+					<image style="width: 80rpx; height: 80rpx; background-color: #eeeeee;" :src="'/static/images/mine_paizhao.png'" ></image>
+				</view>
+				
+			</view>
+		</view>
+		
+		<view class="feedback-image">
+			<view class="feedback-image-title">
+				<text>上传图片uni</text>
+			</view>
+			<view class="feedback-image-box">
+				<template v-for="(item,index) in tempFileList">
+					<view class="feedback-image-item" :key="item.path">
+						<image :src="item.path" class="feedback-image-icon"></image>
+						<text class="iconfont feedback-image-delete" @click="deleteImgHandle(index)">x</text>
+					</view>
+				</template>
 				<view class="feedback-image-btn" @click="chooseImageHandle">
 					<image style="width: 80rpx; height: 80rpx; background-color: #eeeeee;" :src="'/static/images/mine_paizhao.png'" ></image>
 				</view>
 			</view>
 		</view>
+		
 		
 		<uni-popup background-color="#fff" ref="popup" type="dialog" :is-mask-click="false">
 			<view class="box-pop">
@@ -57,6 +77,7 @@
 			</view>
 		</uni-popup>
 		
+
 	</view>
 </template>
 
@@ -165,6 +186,64 @@
 				}
 				
 			},
+			chooseImageHandleH5(){
+				console.log("[选择图片]")
+				
+				if(that.tempFileList.length < that.maxChooseImages){
+					uni.chooseMedia({
+						count: that.maxChooseImages, //默认9
+						mediaType:['image'],
+						sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+						sourceType: ['album'], //从相册选择
+						camera:'back',
+						success: function(res){
+							// console.log('选取结果',res)
+							let tempFiles= res.tempFiles;
+						    tempFiles.forEach(function(item,index){
+								if(that.tempFileList.length < that.maxChooseImages){
+									console.log('for in ',item)
+									// uni.compressImage({
+									// 	src: item.tempFilePath,
+									// 	quality: 60,
+									// 	success:function(compressI){
+									// 		console.log('压缩图片compressI',compressI)
+									// 		that.tempFileList.push({
+									// 			path: compressI.tempFilePath
+									// 		})
+									// 	}
+									// })
+									
+									that.translate(item.tempFilePath, 0.5, imgURL => {
+										//查看压缩后的大小
+										uni.getFileInfo({
+											filePath: imgUrl,
+											success: imgInfo => {
+												console.log('压缩后', imgInfo.size);
+											}
+										})
+										that.tempFileList.push({
+											path: imgURL
+										})
+									})
+									
+									
+								}else{
+									console.log('图片数已达到5张')
+								}
+								
+							})
+							
+						},
+						
+					})
+				}else{
+					uni.showToast({
+						title:'最大5张',
+						icon:'none'
+					})
+				}
+				
+			},
 			//删除图片
 			deleteImgHandle(currentIndex){
 				console.log("[删除图片]")
@@ -211,6 +290,30 @@
 					})
 					
 				})
+			},
+			/* 保存压缩图片 */
+			chooseCompressImageFun(){
+				that.tempFileList.forEach(function(item,index){
+					console.log('保存图片item',item)
+					
+					uni.saveImageToPhotosAlbum({
+						filePath:item.path,
+						success:function(res){
+							uni.showToast({
+								title:'保存成功',
+								icon:'none'
+							})
+						},
+						fail:function(err){
+							uni.showToast({
+								title:'保存失败',
+								icon:'none'
+							})
+						}
+					})
+					
+				})
+
 			}
 		}
 	}
@@ -298,7 +401,7 @@
 			font-size:15px;
 			font-family: Source Han Sans CN;
 			font-weight: 400;
-			color: #FEFEFE;
+			color: #333;
 			position: relative;
 		}
 		.feedback-image-box{

@@ -20,6 +20,51 @@ Vue.use(router);
 Vue.mixin(minxinsApp);
 Vue.use(uView);
 App.mpType = 'app'
+/* 公共图片压缩方法 */
+Vue.prototype.$compressImage = async function (maxWidth = 1024, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    uni.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const tempFilePaths = res.tempFilePaths[0];
+
+        uni.getImageInfo({
+          src: tempFilePaths,
+          success: (imageInfoRes) => {
+            const width = imageInfoRes.width;
+            const height = imageInfoRes.height;
+
+            uni.canvasToTempFilePath({
+              canvasId: 'myCanvas',
+              x: 0,
+              y: 0,
+              width: Math.min(width, maxWidth),
+              height: height * (Math.min(width, maxWidth) / width),
+              destWidth: Math.min(width, maxWidth),
+              destHeight: height * (Math.min(width, maxWidth) / width),
+              fileType: 'jpg',
+              quality,
+              success: (canvasRes) => {
+                resolve(canvasRes.tempFilePath);
+              },
+              fail(err) {
+                reject(err);
+              }
+            });
+          },
+          fail(err) {
+            reject(err);
+          }
+        });
+      },
+      fail(err) {
+        reject(err);
+      }
+    });
+  });
+};
 
 const app = new Vue({
     ...App,

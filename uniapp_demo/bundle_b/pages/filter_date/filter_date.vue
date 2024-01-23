@@ -39,7 +39,7 @@
 						v-if="filterObject.date_type == 4"
 						class="grade-week"
 						:class="{active:filterObject.date_value==item.date_value}" 
-						v-for="(item, index) in yearFilter" :key="index" @tap="itemClick(item)">
+						v-for="(item, index) in yearFilter" :key="index" @tap="itemClick(item)" :id="'item-' + index">
 					    {{item.name}}
 					</view>
 				</scroll-view>
@@ -199,7 +199,29 @@
 		},
 		
 		methods:{
-			
+			scrollToTarget() {
+			   this.$nextTick(() => {
+			   					   
+			   		let  targetIndex = this.yearFilter.length;
+			   		let targetId = 'item-' + targetIndex;
+			   		uni.createSelectorQuery().select('#' + targetId)
+			   					.boundingClientRect(res => {
+			   							if (res) {
+			   								this.$refs.scrollView.scrollLeft = res.left;
+			   							}
+			   						}).exec();
+			   });
+			},
+			scrollToItem(index) {
+			      this.$nextTick(() => {
+			        let targetId = 'item-' + index;
+			        uni.createSelectorQuery().select('#' + targetId).boundingClientRect(res => {
+			          if (res) {
+			            this.$refs.parentScroll.scrollLeft = res.left;
+			          }
+			        }).exec();
+			      });
+			    },
 			clickTagFun(item) {
 				console.log('用户点击item',item);
 				if(this.filterObject.date_type !== item.date_type){
@@ -210,6 +232,8 @@
 					let nowDate = new Date();
 					// this.filterObject.date_value = item.date_value;
 					this.filterObject.date_value = nowDate.getFullYear();
+					// this.scrollToTarget();
+					
 				}else if(this.filterObject.date_type === 2){
 					this.getMonths();
 				}else{

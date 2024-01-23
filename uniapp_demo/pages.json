@@ -50,6 +50,12 @@
 			}
 		},
 		{
+			"path": "pages/location/map_location",
+			"style": {
+				"navigationBarTitleText": "地图"
+			}
+		},
+		{
 			"path": "pages/web_view/web_view",
 			"style": {
 				"navigationStyle": "custom"
@@ -362,6 +368,18 @@
 				},
 				{
 					"path": "pages/test_demo/test_demo"
+				},
+				{
+					"path": "pages/chart_demo/chart_ring"
+				},
+				{
+					"path": "pages/chart_demo/china_map"
+				},
+				{
+					"path": "pages/test_demo/scroll_item"
+				},
+				{
+					"path": "pages/segment_demo/segment_demo"
 				}
 			]
 		}

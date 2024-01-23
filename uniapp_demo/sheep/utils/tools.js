@@ -28,6 +28,94 @@ export {
 }
 
 
+/**
+* H5端图片压缩
+*  参数说明：
+*  imgSrc 图片url
+*  scale缩放比例 0-1
+*  返回base64
+*  callback 回调设置返回值 
+*/
+export function translateImage(imgSrc, scale, callback) {
+	var img = new Image();
+	img.src = imgSrc;
+	img.onload = function() {
+		var that = this;
+		var h = that.height; // 默认按比例压缩
+		var w = that.width;
+		var canvas = document.createElement('canvas');
+		var ctx = canvas.getContext('2d');
+		var width = document.createAttribute("width");
+		width.nodeValue = w;
+		var height = document.createAttribute("height");
+		height.nodeValue = h;
+		canvas.setAttributeNode(width);
+		canvas.setAttributeNode(height);
+		ctx.drawImage(that, 0, 0, w, h);
+		var base64 = canvas.toDataURL('image/jpeg', scale); //压缩比例
+		canvas = null;
+		callback(base64);
+	}
+};
+
+
+/* 替换list中item的key值 */
+export function renameAndAddLabelShow(list, renameMap) {
+  return list.map(item => {
+    let newItem = { ...item, labelShow: false };
+    for (const [oldName, newName] of Object.entries(renameMap)) {
+      if (item.hasOwnProperty(oldName)) {
+        newItem[newName] = item[oldName];
+        // 可以选择性地删除旧属性（根据需求）
+        // delete newItem[oldName];
+      }
+    }
+    return newItem;
+  });
+}
+
+/**
+* 更新数组list中item包含的key名称并替换
+* @description 传递参数并发起跳转
+* @param {Object} list - [item]
+* @param {Object} renameMap - 重命名规则 oldname ---> newname
+* @param {Object} targetKeyName - 将数组绑定单新对象object中的data
+* @return result
+*/
+export function transformListWithRename(list, renameMap, targetKeyName = 'data') {
+	return {
+	    series: [{
+			labelLine: {
+				show: false
+			},
+			data: list.map(item => {
+				let newItem = { ...item };
+				for (const [oldName, newName] of Object.entries(renameMap)) {
+					if (item.hasOwnProperty(oldName)) {
+						newItem[newName] = item[oldName];
+						// 可以选择性地删除旧属性（根据需求）
+						// delete newItem[oldName];
+					}
+				}
+				newItem.labelShow = false; // 给每个新数据项添加默认的labelShow属性
+				return newItem;
+			})
+	    }]
+	};
+}
+
+/**
+* 获取数组list中所有item中value的和
+* @description 传递参数并发起跳转
+* @param {Object} list - [item]
+* @param {Object} key - item.key
+* @return result
+*/
+export function sumValues(list, key) {
+	return list.reduce((accumulator, currentItem) => {
+		return accumulator + (currentItem[key] || 0);
+	}, 0);
+}
 
 // 提示message
 /*
@@ -101,6 +189,62 @@ export function toast(info = {}, navigateOpt) {
 		}
 	}
 }
+
+
+	// 图片压缩公共方法
+	export function compressImage(file, quality = 0.8, maxWidth = 1024) {
+		return new Promise((resolve, reject) => {
+			let reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = function (e) {
+			  let img = new Image();
+			  img.src = e.target.result;
+			  img.onload = function () {
+				let canvas = document.createElement('canvas');
+				let ctx = canvas.getContext('2d');
+
+				// 调整canvas尺寸以适应图片的最大宽度
+				let width = img.width;
+				let height = img.height;
+				if (width > maxWidth) {
+				  height *= maxWidth / width;
+				  width = maxWidth;
+				}
+
+				canvas.width = width;
+				canvas.height = height;
+
+				// 绘制压缩后的图片到canvas上
+				ctx.drawImage(img, 0, 0, width, height);
+
+				// 将canvas内容转为base64格式并压缩质量
+				let dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+				// 将压缩后的base64转换为file对象（如果需要上传至服务器）
+				let compressedFile = dataURLtoBlob(dataUrl);
+
+				resolve(compressedFile);
+			  };
+			  img.onerror = function (err) {
+				reject(err);
+			  };
+			};
+			reader.onerror = function (error) {
+			  reject(error);
+			};
+		});
+
+  // base64转blob函数
+  function dataURLtoBlob(dataUrl) {
+    let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], 'compressed.jpg', { type: mime });
+  }
+}
+
 
 // normal.js
  

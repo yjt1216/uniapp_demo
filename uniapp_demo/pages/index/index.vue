@@ -11,31 +11,50 @@
 		<view class="group-title">功能示例</view>
 		
 		
-		
-		
+		<navigator url="/pages/location/map_location">
+			<view class="demo-li"> 地图 <text class="demo-tip"> map </text></view>
+		</navigator>
 		
 		<navigator url="/bundle_b/pages/operate/operate_demo">
 			<view class="demo-li"> 经营统计 <text class="demo-tip"> table + charts </text></view>
 		</navigator>
+		
+		<navigator url="/bundle/pages/upload_img/upload_photo">
+			<view class="demo-li">上传照片<text class="demo-tip"> 选择图片</text></view>
+		</navigator>
+		
+		<!-- 
 		<navigator url="/bundle_b/pages/chart_demo/echart_demo">
 			<view class="demo-li"> 圆环图 <text class="demo-tip"> echart </text></view>
 		</navigator>
+		<navigator url="/bundle_b/pages/chart_demo/chart_ring">
+			<view class="demo-li"> 圆环图 <text class="demo-tip"> chart_ring </text></view>
+		</navigator>
 		<navigator url="/bundle_b/pages/chart_demo/chart_map">
 			<view class="demo-li"> 地图 <text class="demo-tip"> chart_map </text></view>
+		</navigator>
+		<navigator url="/bundle_b/pages/chart_demo/china_map">
+			<view class="demo-li"> 地图 <text class="demo-tip"> china_map </text></view>
+		</navigator>
+		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
+			<view class="demo-li"> 统计图 <text class="demo-tip"> chart_demo </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_b/pages/segment_demo/segment_demo">
+			<view class="demo-li"> 分段 <text class="demo-tip"> segment_demo </text></view>
+		</navigator>
+		
+		
+		<navigator url="/bundle_b/pages/filter_date/filter_date">
+			<view class="demo-li"> 筛选日期 <text class="demo-tip"> filter </text></view>
+		</navigator>
+		<navigator url="/bundle_b/pages/test_demo/scroll_item">
+			<view class="demo-li"> 滚动特定item <text class="demo-tip"> scroll_item </text></view>
 		</navigator>
 		
 		<navigator url="/bundle_b/pages/test_demo/test_demo">
 			<view class="demo-li"> 蓝湖代码 <text class="demo-tip"> test_demo </text></view>
 		</navigator>
-		
-		<navigator url="/bundle_b/pages/filter_date/filter_date">
-			<view class="demo-li"> 筛选日期 <text class="demo-tip"> filter </text></view>
-		</navigator>
-		
-		<!-- 
-		
-		
-		
 		<navigator url="/pages/login/login">
 			<view class="demo-li"> 登陆 <text class="demo-tip"> login </text></view>
 		</navigator>
@@ -88,9 +107,7 @@
 			<view class="demo-li">签名<text class="demo-tip"> test</text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/upload_img/upload_photo">
-			<view class="demo-li">上传照片<text class="demo-tip"> 选择图片</text></view>
-		</navigator>
+		
 		
 		<navigator url="/pages/html_test/html_test">
 			<view class="demo-li">测试本地html<text class="demo-tip"> html_test</text></view>
@@ -130,10 +147,6 @@
 		<!-- <navigator url="/bundle/pages/choose_date/choose_date">
 			<view class="demo-li"> choose date<text class="demo-tip"> 日期picker </text></view>
 		</navigator> 
-		-->
-		
-		 
-		
 		<navigator url="/bundle/pages/pop_box/pop_box">
 			<view class="demo-li"> pop_box<text class="demo-tip"> 弹窗 </text></view>
 		</navigator>
@@ -171,10 +184,6 @@
 			<view class="demo-li"> chart统计 <text class="demo-tip"> 统计图 </text></view>
 		</navigator> 
 		
-		
-		
-		
-		<!-- 
 		
 		<navigator url="/bundle_b/pages/pay/pay_page">
 			<view class="demo-li"> 支付UI <text class="demo-tip"> pay </text></view>

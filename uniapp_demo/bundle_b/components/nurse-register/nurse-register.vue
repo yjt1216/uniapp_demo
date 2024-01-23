@@ -22,6 +22,29 @@
 					return {}
 				}
 			},
+			title:{
+				type:String,
+				default(){
+					return '0'
+				}
+			},
+			subtitle:{
+				type:String,
+				default(){
+					return '总和'
+				}
+			},
+		},
+		watch:{
+			title(val){
+				console.log('watch ring护士注册title',val);
+				this.opts.title.name = `${val}`;
+				
+			},
+			subtitle(val){
+				console.log('watch ring护士注册subtitle',val);
+				this.opts.subtitle.name = `${val}`;
+			}
 		},
 		data(){
 			return {
@@ -64,8 +87,8 @@
 						offsetY: 0
 					},
 					subtitle: {
-						name: "927",
-						fontSize: 25,
+						name: "总和",
+						fontSize: 14,
 						color: "#7cb5ec",
 						offsetX: 0,
 						offsetY: 0

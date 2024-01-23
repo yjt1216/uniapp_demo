@@ -1,0 +1,1 @@
+<view class="page-main"><liu-easy-map class="vue-ref" vue-id="a479e306-1" centerLat="36.05709" centerLng="103.82538" scale="{{14}}" markerData="{{markerData}}" polygons="{{polygons}}" data-ref="liuEasyMap" data-event-opts="{{[['^clickMarker',[['markerClick']]]]}}" bind:clickMarker="__e" bind:__l="__l"></liu-easy-map></view>

@@ -23,6 +23,12 @@
 					return {}
 				}
 			},
+			// cityOrderList:{
+			// 	type: Object,
+			// 	default(){
+			// 		return {}
+			// 	}
+			// }
 		},
 		data() {
 			return {
@@ -109,7 +115,7 @@
 			//模拟从服务器获取数据
 			// this.getServerData()
 		
-			//自定义格式化Tooltip显示内容  
+			//自定义格式化Tooltip显示内容   弹款
 			uCharts.formatter.tooltipFun = (item, category, index, opts) => {
 				// console.log(item, index, "=item, category, index, opts=");
 				// return item.data.storeSym ? `${item.name}地区门店数量：${item.data.storeSym}` : '暂无门面'
@@ -121,78 +127,7 @@
 			// this.getServerData();
 		},
 		methods: {
-			getStoreData(){
-				let mapseries = mapdata.features.map((item) => {
-					//根据接口数据查找到当前匹配的数据
-					let dataItem = data.find((x) => x.storeName == item.properties.name) || {
-						storeSym: 0, //门店数量
-						companyNumber: 0, //缺编人数 
-						storeName: item.properties.name, //地区
-					}
-					//添加到 json data中
-					item.data = dataItem
-					//设置颜色
-					item.color = this.addColor(dataItem?.storeSym || 0)
-					return item
-				})
-				console.log('统计地图mapseries',mapseries);
-				this.chartsDataMap.series = mapseries
-			},
 			
-			
-			getServerData() {
-				//模拟从服务器获取数据时的延时
-				setTimeout(() => {
-					//模拟服务器返回数据，如果数据格式和标准格式不同，需自行按下面的格式拼接
-					//模拟 接口数据 2
-					let data = [{
-							storeSym: 823, //门店数量
-							companyNumber: 0, //缺编人数
-							storeName: '北京', //地区
-						},
-						{
-							storeSym: 753, //门店数量
-							companyNumber: 0, //缺编人数
-							storeName: '天津', //地区
-						},
-						{
-							storeSym: 653, //门店数量
-							companyNumber: 0, //缺编人数
-							storeName: '上海', //地区
-						},
-						{
-							storeSym: 553, //门店数量
-							companyNumber: 0, //缺编人数
-							storeName: '新疆', //地区
-						},
-						{
-							storeSym: 832, //门店数量
-							companyNumber: 0, //缺编人数
-							storeName: '西藏', //地区
-						},
-					]
-					
-					
-					// this.chartsDataMap.series = mapdata.features.filter((x)=>this.storeName==x.properties.name)
-					
-					let mapseries = mapdata.features.map((item) => {
-						//根据接口数据查找到当前匹配的数据
-						let dataItem = data.find((x) => x.storeName == item.properties.name) || {
-							storeSym: 0, //门店数量
-							companyNumber: 0, //缺编人数
-							storeName: item.properties.name, //地区
-						}
-						//添加到 json data中
-						item.data = dataItem
-						//设置颜色
-						item.color = this.addColor(dataItem?.storeSym || 0)
-						return item
-					})
-					console.log('统计地图mapseries',mapseries);
-					this.chartsDataMap.series = mapseries
-					
-				}, 500);
-			},
 			// 根据条件添加颜色
 			addColor(count) {
 				if (count > 800) {
