@@ -1,0 +1,1 @@
+<view class="charts-box data-v-f227fffa"><qiun-data-charts vue-id="c2aa73b0-1" type="map" canvas2d="{{true}}" opts="{{config}}" canvasId="mapma" chartData="{{chartsDataMap}}" tooltipFormat="tooltipFun" data-event-opts="{{[['^getIndex',[['getIndex']]]]}}" bind:getIndex="__e" class="data-v-f227fffa" bind:__l="__l"></qiun-data-charts></view>

@@ -1,0 +1,1 @@
+.nurse-register{width:100%;display:flex;flex-direction:row;align-items:center;justify-content:center;min-height:560rpx}.charts-box{margin:10rpx;margin-top:100rpx;width:100%;height:400rpx}

@@ -29,7 +29,7 @@
 
 <script>
 	/* 签名 */
-	import SignaturePad from '@/components/SignaturePad/SignaturePad.vue';
+	import SignaturePad from '@/bundle/components/SignaturePad/SignaturePad.vue';
 	
 	export default {
 		components:{

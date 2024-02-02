@@ -12,7 +12,11 @@
 </template>
 
 <script>
+	import hicVideoPlayer from "bundle/components/hic-video-player/components/hic-video-player/hic-video-player";
 	export default {
+		components:{
+			hicVideoPlayer	
+		},
 		data(){
 			return {
 			    video_url: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',

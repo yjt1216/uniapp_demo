@@ -23,7 +23,7 @@
 				</view>
 			</view>
 		</view>
-		<uni-popup ref="popup" type="dialog">
+		<u-popup ref="popup" type="dialog">
 			
 			
 			<view class="intercept-call">
@@ -46,7 +46,7 @@
 			</view>
 			
 			
-		</uni-popup>
+		</u-popup>
 	</view>
 </template>
 

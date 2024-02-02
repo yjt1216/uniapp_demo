@@ -30,8 +30,14 @@
 
 <script>
 	// import tableData from "@/sheep/mock/tableData.js"
+	import uCharts from '@/bundle_b/components/qiun-data-charts/js_sdk/u-charts/config-ucharts.js' //在uniapp 插件库下载下来就是这个路径 可以自己改
+	import qiunDataCharts from "@/bundle_b/components/qiun-data-charts/components/qiun-data-charts/qiun-data-charts.vue";
+	
 	export default {
 		name:'organ-order',
+		components:{
+			qiunDataCharts
+		},
 		props: {
 			tableData: {
 				type: Array,

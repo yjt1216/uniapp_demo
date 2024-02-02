@@ -1,0 +1,1 @@
+<block wx:if="{{canvasId}}"><view class="compress data-v-5ece160e"><canvas style="{{'width:'+(canvasSize.width)+';'+('height:'+(canvasSize.height)+';')}}" canvas-id="{{canvasId}}" class="data-v-5ece160e"></canvas></view></block>

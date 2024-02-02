@@ -57,8 +57,28 @@
 			</view>
 		</view>
 		
+		<view class="u-demo-block">
+			<text class="u-demo-block__title">基础用法</text>
+			<view class="u-demo-block__content">
+				<view class="u-page__upload-item">
+				<u-upload
+					:useBeforeRead="true"
+				    :fileList="fileList1"
+				    @afterRead="afterRead"
+					@beforeRead="beforeReadImages"
+				    @delete="deletePic"
+				    name="1"
+				    multiple
+				    :maxCount="10"
+					@clickPreview="clickPreview"
+				></u-upload>
+				</view>
+			</view>
+		</view>
 		
-		<uni-popup background-color="#fff" ref="popup" type="dialog" :is-mask-click="false">
+		
+		
+		<u-popup background-color="#fff" ref="popup" type="dialog" :is-mask-click="false">
 			<view class="box-pop">
 				<view class="box-title">评价患者</view>
 				<view class="box-sub-title">本次服务中患者是否愿意配合</view>
@@ -75,15 +95,20 @@
 					<view class="bottom-item" @click="submitEvaluateFun">提交评价</view>
 				</view>
 			</view>
-		</uni-popup>
-		
+		</u-popup>
+		<helang-compress ref="helangCompress"></helang-compress>
 
 	</view>
 </template>
 
 <script>
 	let that=null;
+	import helangCompress from '@/components/helang-compress/helang-compress';
+	
 	export default {
+		components:{
+			helangCompress
+		},
 		data() {
 			return {
 				currentIndex:"0",
@@ -104,6 +129,7 @@
 				/* 图片最大选取 5张 */
 				maxChooseImages: 5,
 				cooperate:0,
+				fileList1: [],
 			};
 		},
 		onLoad() {
@@ -116,6 +142,65 @@
 			}
 		},
 		methods:{
+			async beforeReadImages(e){
+				console.log('u-upload beforeRead event',e);
+				
+				const size = (e.file[0].size) / 1024 / 1024
+				const index = e.file[0].url.indexOf('.')
+				const type = e.file[0].url.substring(index + 1)
+				if (type !== 'png' && type !== 'jpg' && type !== 'jpeg') {
+				    console.log('上', this.fileList1.length)
+				    this.$u.toast('文件格式不正确, 请上传png/jpg/jpeg图片格式文件')
+				    
+				    return false
+				} else {
+					/* 开启压缩图片 */
+					//   if (size > 4.1) {
+							// console.log('上', this.fileList1.length)
+							// this.$u.toast('上传图片大小不能超过4MB')
+							// return false
+					//   } else {
+							
+					//   }
+					/* 提取url 为一个新数组 */
+					let tempImages = e.file.map(item=>item.url);
+					that.$refs.helangCompress.compress({
+						src: tempImages,
+						maxSize: 800,
+						fileType: 'jpg',
+						quality: 0.75,
+						minSize: 640
+					}).then((res) => {
+						console.log('压缩成功res',res);
+						// 使用 .map() 方法将每个URL字符串转换为对象
+						const resultList = res.map(url => ({ url }));
+						this.fileList1 = resultList;
+					}).catch((err) => {
+						uni.hideLoading();
+						uni.showToast({
+							title: "文件大小超出限制",
+							icon: "none"
+						})
+					})
+				  
+				  
+				}
+				
+			},
+			// 新增图片
+			async afterRead(event) {
+				console.log('u-upload afterRead event',event);
+				
+				
+			},
+			// 删除图片
+			deletePic(event) {
+				this.fileList1.splice(event.index, 1);
+			},
+			/* 预览图片 */
+			clickPreview(event){
+				console.log('u-upload clickPreview event',event);
+			},
 			/* 评价患者  取消评价或者评价患者 皆跳转到 医废入科界面*/
 			cancelEvaluateFun(){
 				
@@ -264,14 +349,6 @@
 			savaImageFun(){
 				that.tempFileList.forEach(function(item,index){
 					console.log('保存图片item',item)
-					// uni.getImageInfo({
-					// 	src:item.path,
-					// 	success:function(image){
-					// 		console.log('压缩后图片信息image',image)
-					// 	}
-					// })
-					
-					
 					
 					uni.saveImageToPhotosAlbum({
 						filePath:item.path,
@@ -320,6 +397,11 @@
 </script>
 
 <style lang="scss" scoped>
+	.u-page {
+		&__upload-item{
+			margin-top:5px;
+		}
+	}
 .feedback-wrap{
 	width: 91.47%;
 	margin: 12px auto;

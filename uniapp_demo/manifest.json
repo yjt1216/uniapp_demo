@@ -10,8 +10,8 @@
         "usingComponents" : true,
         "nvueStyleCompiler" : "uni-app",
         "compilerVersion" : 3,
-		/* 手机键盘 问题 */
-		"softinputMode": "adjustResize",
+        /* 手机键盘 问题 */
+        "softinputMode" : "adjustResize",
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
             "waiting" : true,
@@ -70,8 +70,7 @@
             }
         },
         "requiredPrivateInfos" : [ "getLocation", "chooseLocation" ],
-		"libVersion" : "latest"
-		
+        "libVersion" : "latest"
     },
     "mp-alipay" : {
         "usingComponents" : true
@@ -92,38 +91,38 @@
             "mode" : "history"
         },
         "title" : "加载中",
-		"sdkConfigs": {
-			// 使用地图或位置相关功能必须填写其一
-			"maps": {
-			    "qqmap": {
-			        // 腾讯地图秘钥 https://lbs.qq.com/dev/console/key/manage
-			        "key": "ZNJBZ-E6RHJ-EV3F2-DL73K-ARTTH-3EBRZ"
-			    },
-			    "google": {
-			        // 谷歌地图秘钥（HBuilderX 3.2.10+）https://developers.google.com/maps/documentation/javascript/get-api-key
-			        "key": ""
-			    },
-			    "amap": {
-			        // 高德地图秘钥（HBuilderX 3.6.0+）https://console.amap.com/dev/key/app
-			        "key": "42795f9a59358dea58a8bxxx",
-			        // 高德地图安全密钥（HBuilderX 3.6.0+）https://console.amap.com/dev/key/app
-			        "securityJsCode": "",
-			        // 高德地图安全密钥代理服务器地址（HBuilderX 3.6.0+）https://lbs.amap.com/api/jsapi-v2/guide/abc/prepare
-			        "serviceHost": ""
-			    },
-			    "bmap": {
-			        // 百度地图秘钥（HBuilderX 3.99+）http://lbsyun.baidu.com/apiconsole/key#/home
-			        "key": "a98wDfMHjmyOgQ7nECDslayFLI5wYXbB"
-			    }
-			}
-		}
+        "sdkConfigs" : {
+            // 使用地图或位置相关功能必须填写其一
+            "maps" : {
+                "qqmap" : {
+                    // 腾讯地图秘钥 https://lbs.qq.com/dev/console/key/manage
+                    "key" : "ZNJBZ-E6RHJ-EV3F2-DL73K-ARTTH-3EBRZ"
+                },
+                "google" : {
+                    // 谷歌地图秘钥（HBuilderX 3.2.10+）https://developers.google.com/maps/documentation/javascript/get-api-key
+                    "key" : ""
+                },
+                "amap" : {
+                    // 高德地图秘钥（HBuilderX 3.6.0+）https://console.amap.com/dev/key/app
+                    "key" : "42795f9a59358dea58a8bxxx",
+                    // 高德地图安全密钥（HBuilderX 3.6.0+）https://console.amap.com/dev/key/app
+                    "securityJsCode" : "",
+                    // 高德地图安全密钥代理服务器地址（HBuilderX 3.6.0+）https://lbs.amap.com/api/jsapi-v2/guide/abc/prepare
+                    "serviceHost" : ""
+                },
+                "bmap" : {
+                    // 百度地图秘钥（HBuilderX 3.99+）http://lbsyun.baidu.com/apiconsole/key#/home
+                    "key" : "a98wDfMHjmyOgQ7nECDslayFLI5wYXbB"
+                }
+            }
+        }
     },
-	"uni_modules":{
-		"share":{
-			"name": "uni-share-module",
-			"main": "platforms/H5/share-module.js",
-			"version": "1.0.0",
-			"provider":"weixin"
-		}
-	}
+    "uni_modules" : {
+        "share" : {
+            "name" : "uni-share-module",
+            "main" : "platforms/H5/share-module.js",
+            "version" : "1.0.0",
+            "provider" : "weixin"
+        }
+    }
 }

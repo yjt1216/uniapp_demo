@@ -1,0 +1,1 @@
+<view class="content"><web-view src="{{link}}" webview-styles="{{webviewStyles}}"><cover-view class="footer-box"><cover-view data-event-opts="{{[['tap',[['readingClick',['$event']]]]]}}" class="share-txt" bindtap="__e">已阅</cover-view></cover-view></web-view><button data-event-opts="{{[['tap',[['readingClick',['$event']]]]]}}" class="btn-box" bindtap="__e">已阅</button></view>

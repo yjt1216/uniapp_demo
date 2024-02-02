@@ -6,11 +6,11 @@
 				<z-tabs :list="tabList" @change="tabChange"></z-tabs>
 			</template>
 			<view class="item" v-for="(order,index) in dataList" :key="index" @click="itemClickAction(order)">
-				<uni-card>
+				<view style="display: flex; flex-direction: column;">
 					<view class="item-title">{{order.order_id+order.item_name}}</view>
 					<view class="item-detail">{{order.intro}}</view>
 					<view class="item-address">{{order.address}}</view>
-				</uni-card>
+				</view>
 			</view>
 		</z-paging>
 	</view>

@@ -12,9 +12,14 @@
 </template>
 
 <script>
+	import uCharts from '@/bundle_b/components/qiun-data-charts/js_sdk/u-charts/config-ucharts.js' //在uniapp 插件库下载下来就是这个路径 可以自己改
+	import qiunDataCharts from "@/bundle_b/components/qiun-data-charts/components/qiun-data-charts/qiun-data-charts.vue";
 	
 	export default {
 		name:'nurse-register',
+		components:{
+			qiunDataCharts
+		},
 		props: {
 			chartData: {
 				type: Object,

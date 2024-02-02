@@ -46,7 +46,7 @@
 		<!-- 展开收起按钮 -->
 		<button @click="toggleCateExpand">{{ cateExpanded ? '收起' : '展开' }}</button>
 		
-		<uni-popup ref="infoPop" type="center" :isMaskClick="true" @touchmove.stop.prevent="disabledScroll">
+		<u-popup ref="infoPop" type="center" :isMaskClick="true" @touchmove.stop.prevent="disabledScroll">
 		    <view class="info-box" @touchmove.stop.prevent="disabledScroll">
 				<view class="cate-top" style="margin-top: 30rpx;">
 					<view style="font-weight: 500; font-size: 32rpx;">{{selectCateItem.cate_name}}</view>
@@ -69,7 +69,7 @@
 					</view>
 				</view>
 			</view>
-		</uni-popup>
+		</u-popup>
 		
 		
 	</view>

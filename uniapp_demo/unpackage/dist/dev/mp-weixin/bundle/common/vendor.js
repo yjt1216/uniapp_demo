@@ -1,6 +1,119 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["bundle/common/vendor"],{
 
-/***/ 1181:
+/***/ 1033:
+/*!***********************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/bundle/components/hic-video-player/utils/index.js ***!
+  \***********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.compareVersion = compareVersion;
+exports.debounce = debounce;
+exports.getExt = getExt;
+exports.getSystemInfo = getSystemInfo;
+exports.getSystemInfoSync = getSystemInfoSync;
+var systemInfo = null; // 系统信息
+
+/**
+ * @description 封装 uni.getSystemInfo 异步获取系统信息
+ */
+function getSystemInfo() {
+  return new Promise(function (resolve, reject) {
+    if (systemInfo) {
+      return resolve(systemInfo);
+    }
+    uni.getSystemInfo({
+      success: function success(res) {
+        systemInfo = res;
+        resolve(res);
+      },
+      fail: reject
+    });
+  });
+}
+
+/**
+ * @description 封装 uni.getSystemInfoSync 同步获取系统信息
+ */
+function getSystemInfoSync() {
+  var res = uni.getSystemInfoSync();
+  systemInfo = res;
+  return res;
+}
+
+/**
+ * @description 版本号比较
+ * @param {String} v1
+ * @param {String} v2
+ * @return {Boolean} v2 大于 v1 返回true, 否则返回false
+ * compareVersion('1.9.9', '1.11.0'); // true
+ */
+function compareVersion(v1, v2) {
+  v1 = v1.split('.');
+  v2 = v2.split('.');
+  var len = Math.max(v1.length, v2.length);
+  while (v1.length < len) {
+    v1.push('0');
+  }
+  while (v2.length < len) {
+    v2.push('0');
+  }
+  for (var i = 0; i < len; i++) {
+    var num1 = parseInt(v1[i]);
+    var num2 = parseInt(v2[i]);
+    if (num1 < num2) {
+      return true;
+    } else if (num1 > num2) {
+      return false;
+    }
+  }
+  return false;
+}
+
+/**
+ * 防抖 debounce
+ * 栗子：实时搜索，拖拽
+ */
+function debounce(fn) {
+  var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+  var timer;
+  return function () {
+    var _this = this;
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(_this, args);
+    }, delay);
+  };
+}
+
+/**
+ * 获取扩展名
+ * @param {String} url 视频播放地址
+ */
+function getExt(url) {
+  var index = url.indexOf('?');
+  if (index != -1) {
+    url = url.substring(0, index);
+  }
+  var ext = '';
+  var reg = /.+\./;
+  ext = url.replace(reg, '').toLowerCase();
+  return ext;
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
+/***/ 1085:
 /*!***************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/bundle/components/Rboy-upload-sfz/file.js ***!
   \***************************************************************************************************************/
@@ -17,7 +130,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1189:
+/***/ 1093:
 /*!*****************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/bundle/components/pick-regions/regions.json ***!
   \*****************************************************************************************************************/
@@ -28,7 +141,479 @@ module.exports = JSON.parse("[{\"code\":\"11\",\"name\":\"北京市\",\"childs\"
 
 /***/ }),
 
-/***/ 1259:
+/***/ 1114:
+/*!*****************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/bundle/components/SignaturePad/signature.js ***!
+  \*****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
+var Handwriting = /*#__PURE__*/function () {
+  // 内置数据
+
+  //划线轨迹 ; 生成线条的实际点
+
+  // 透明度
+  // 默认压力
+  //顺滑度，用60的距离来计算速度
+  // 笔记倍数
+  // 最小笔画半径
+  // 最大笔画半径
+
+  // 第一次触发
+  //画圆的半径
+
+  //裁剪区域
+
+  //笔迹
+
+  function Handwriting(opts) {
+    (0, _classCallCheck2.default)(this, Handwriting);
+    (0, _defineProperty2.default)(this, "ctx", '');
+    (0, _defineProperty2.default)(this, "canvasWidth", 300);
+    (0, _defineProperty2.default)(this, "canvasHeight", 900);
+    (0, _defineProperty2.default)(this, "linePrack", []);
+    (0, _defineProperty2.default)(this, "currentLine", []);
+    (0, _defineProperty2.default)(this, "transparent", 1);
+    (0, _defineProperty2.default)(this, "pressure", 0.5);
+    (0, _defineProperty2.default)(this, "smoothness", 100);
+    (0, _defineProperty2.default)(this, "lineSize", 1.5);
+    (0, _defineProperty2.default)(this, "lineMin", 0.5);
+    (0, _defineProperty2.default)(this, "lineMax", 2);
+    (0, _defineProperty2.default)(this, "currentPoint", {});
+    (0, _defineProperty2.default)(this, "firstTouch", true);
+    (0, _defineProperty2.default)(this, "radius", 1);
+    (0, _defineProperty2.default)(this, "cutArea", {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    });
+    (0, _defineProperty2.default)(this, "lastPoint", 0);
+    (0, _defineProperty2.default)(this, "chirography", []);
+    (0, _defineProperty2.default)(this, "startY", 0);
+    (0, _defineProperty2.default)(this, "deltaY", 0);
+    (0, _defineProperty2.default)(this, "startValue", 0);
+    // console.log(opts);
+    this.lineColor = opts.lineColor || '#1A1A1A'; // 颜色
+    this.slideValue = opts.slideValue || 50;
+    this.canvasName = opts.canvasName || 'handWriting';
+    this.ctx = opts.ctx;
+    this.init();
+  }
+  (0, _createClass2.default)(Handwriting, [{
+    key: "init",
+    value: function init() {
+      this.selectSlideValue(this.slideValue);
+    }
+  }, {
+    key: "setSize",
+    value: function setSize(rect) {
+      this.canvasWidth = rect.width;
+      this.canvasHeight = rect.height;
+    }
+
+    // 笔迹开始
+  }, {
+    key: "uploadScaleStart",
+    value: function uploadScaleStart(event) {
+      // console.log('start');
+      var e = event.mp;
+      // console.log(e.touches[0])
+      if (e.type != 'touchstart') return false;
+      this.ctx.setFillStyle(this.lineColor); // 初始线条设置颜色
+      this.ctx.setGlobalAlpha(this.transparent); // 设置半透明
+      this.currentPoint = {
+        x: e.touches[0].x,
+        y: e.touches[0].y
+      };
+      this.currentLine.unshift({
+        time: new Date().getTime(),
+        dis: 0,
+        x: this.currentPoint.x,
+        y: this.currentPoint.y
+      });
+      if (this.firstTouch) {
+        this.cutArea = {
+          top: this.currentPoint.y,
+          right: this.currentPoint.x,
+          bottom: this.currentPoint.y,
+          left: this.currentPoint.x
+        };
+        this.firstTouch = false;
+      }
+      this.pointToLine(this.currentLine);
+    }
+    // 笔迹移动
+  }, {
+    key: "uploadScaleMove",
+    value: function uploadScaleMove(event) {
+      // console.log('move');
+      var e = event.mp;
+      if (e.type != 'touchmove') return false;
+      if (e.cancelable) {
+        // 判断默认行为是否已经被禁用
+        if (!e.defaultPrevented) {
+          e.preventDefault();
+        }
+      }
+      var point = {
+        x: e.touches[0].x,
+        y: e.touches[0].y
+      };
+      //测试裁剪
+      if (point.y < this.cutArea.top) {
+        this.cutArea.top = point.y;
+      }
+      if (point.y < 0) this.cutArea.top = 0;
+      if (point.x > this.cutArea.right) {
+        this.cutArea.right = point.x;
+      }
+      if (this.canvasWidth - point.x <= 0) {
+        this.cutArea.right = this.canvasWidth;
+      }
+      if (point.y > this.cutArea.bottom) {
+        this.cutArea.bottom = point.y;
+      }
+      if (this.canvasHeight - point.y <= 0) {
+        this.cutArea.bottom = this.canvasHeight;
+      }
+      if (point.x < this.cutArea.left) {
+        this.cutArea.left = point.x;
+      }
+      if (point.x < 0) this.cutArea.left = 0;
+      this.lastPoint = this.currentPoint;
+      this.currentPoint = point;
+      this.currentLine.unshift({
+        time: new Date().getTime(),
+        dis: this.distance(this.currentPoint, this.lastPoint, 'move'),
+        x: point.x,
+        y: point.y
+      });
+      this.pointToLine(this.currentLine);
+    }
+    // 笔迹结束
+  }, {
+    key: "uploadScaleEnd",
+    value: function uploadScaleEnd(event) {
+      var e = event.mp;
+      if (e.type != 'touchend') return 0;
+      // console.log(e);
+      var point = {
+        x: e.changedTouches[0].x,
+        y: e.changedTouches[0].y
+      };
+      this.lastPoint = this.currentPoint;
+      this.currentPoint = point;
+      this.currentLine.unshift({
+        time: new Date().getTime(),
+        dis: this.distance(this.currentPoint, this.lastPoint, 'end'),
+        x: point.x,
+        y: point.y
+      });
+      if (this.currentLine.length > 2) {
+        var info = (this.currentLine[0].time - this.currentLine[this.currentLine.length - 1].time) / this.currentLine.length;
+        //$("#info").text(info.toFixed(2));
+      }
+      //一笔结束，保存笔迹的坐标点，清空，当前笔迹
+      //增加判断是否在手写区域；
+      this.pointToLine(this.currentLine);
+      var currentChirography = {
+        lineSize: this.lineSize,
+        lineColor: this.lineColor
+      };
+      this.chirography.unshift(currentChirography);
+      this.linePrack.unshift(this.currentLine);
+      this.currentLine = [];
+    }
+  }, {
+    key: "retDraw",
+    value: function retDraw() {
+      this.ctx.clearRect(0, 0, 700, 730);
+      this.ctx.draw();
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.linePrack = [];
+      this.currentLine = [];
+      this.retDraw();
+    }
+  }, {
+    key: "isEmpty",
+    value: function isEmpty() {
+      return this.linePrack.length === 0;
+    }
+
+    //画两点之间的线条；参数为:line，会绘制最近的开始的两个点；
+  }, {
+    key: "pointToLine",
+    value: function pointToLine(line) {
+      this.calcBethelLine(line);
+      // this.calcBethelLine1(line);
+      return;
+    }
+    //计算插值的方式；
+  }, {
+    key: "calcBethelLine",
+    value: function calcBethelLine(line) {
+      if (line.length <= 1) {
+        line[0].r = this.radius;
+        return;
+      }
+      var x0,
+        x1,
+        x2,
+        y0,
+        y1,
+        y2,
+        r0,
+        r1,
+        r2,
+        len,
+        lastRadius,
+        dis = 0,
+        time = 0,
+        curveValue = 0.5;
+      if (line.length <= 2) {
+        x0 = line[1].x;
+        y0 = line[1].y;
+        x2 = line[1].x + (line[0].x - line[1].x) * curveValue;
+        y2 = line[1].y + (line[0].y - line[1].y) * curveValue;
+        //x2 = line[1].x;
+        //y2 = line[1].y;
+        x1 = x0 + (x2 - x0) * curveValue;
+        y1 = y0 + (y2 - y0) * curveValue;
+        ;
+      } else {
+        x0 = line[2].x + (line[1].x - line[2].x) * curveValue;
+        y0 = line[2].y + (line[1].y - line[2].y) * curveValue;
+        x1 = line[1].x;
+        y1 = line[1].y;
+        x2 = x1 + (line[0].x - x1) * curveValue;
+        y2 = y1 + (line[0].y - y1) * curveValue;
+      }
+      //从计算公式看，三个点分别是(x0,y0),(x1,y1),(x2,y2) ；(x1,y1)这个是控制点，控制点不会落在曲线上；实际上，这个点还会手写获取的实际点，却落在曲线上
+      len = this.distance({
+        x: x2,
+        y: y2
+      }, {
+        x: x0,
+        y: y0
+      }, 'calc');
+      lastRadius = this.radius;
+      for (var _n = 0; _n < line.length - 1; _n++) {
+        dis += line[_n].dis;
+        time += line[_n].time - line[_n + 1].time;
+        if (dis > this.smoothness) break;
+      }
+      this.radius = Math.min(time / len * this.pressure + this.lineMin, this.lineMax) * this.lineSize;
+      line[0].r = this.radius;
+      //计算笔迹半径；
+      if (line.length <= 2) {
+        r0 = (lastRadius + this.radius) / 2;
+        r1 = r0;
+        r2 = r1;
+        //return;
+      } else {
+        r0 = (line[2].r + line[1].r) / 2;
+        r1 = line[1].r;
+        r2 = (line[1].r + line[0].r) / 2;
+      }
+      var n = 5;
+      var point = [];
+      for (var i = 0; i < n; i++) {
+        var t = i / (n - 1);
+        var x = (1 - t) * (1 - t) * x0 + 2 * t * (1 - t) * x1 + t * t * x2;
+        var y = (1 - t) * (1 - t) * y0 + 2 * t * (1 - t) * y1 + t * t * y2;
+        var r = lastRadius + (this.radius - lastRadius) / n * i;
+        point.push({
+          x: x,
+          y: y,
+          r: r
+        });
+        if (point.length == 3) {
+          var a = this.ctaCalc(point[0].x, point[0].y, point[0].r, point[1].x, point[1].y, point[1].r, point[2].x, point[2].y, point[2].r);
+          a[0].color = this.lineColor;
+          this.bethelDraw(a, 1);
+          point = [{
+            x: x,
+            y: y,
+            r: r
+          }];
+        }
+      }
+    }
+    //求两点之间距离
+  }, {
+    key: "distance",
+    value: function distance(a, b, type) {
+      var x = b.x - a.x;
+      var y = b.y - a.y;
+      return Math.sqrt(x * x + y * y) * 5;
+    }
+  }, {
+    key: "ctaCalc",
+    value: function ctaCalc(x0, y0, r0, x1, y1, r1, x2, y2, r2) {
+      var a = [],
+        vx01,
+        vy01,
+        norm,
+        n_x0,
+        n_y0,
+        vx21,
+        vy21,
+        n_x2,
+        n_y2;
+      vx01 = x1 - x0;
+      vy01 = y1 - y0;
+      norm = Math.sqrt(vx01 * vx01 + vy01 * vy01 + 0.0001) * 2;
+      vx01 = vx01 / norm * r0;
+      vy01 = vy01 / norm * r0;
+      n_x0 = vy01;
+      n_y0 = -vx01;
+      vx21 = x1 - x2;
+      vy21 = y1 - y2;
+      norm = Math.sqrt(vx21 * vx21 + vy21 * vy21 + 0.0001) * 2;
+      vx21 = vx21 / norm * r2;
+      vy21 = vy21 / norm * r2;
+      n_x2 = -vy21;
+      n_y2 = vx21;
+      a.push({
+        mx: x0 + n_x0,
+        my: y0 + n_y0,
+        color: "#1A1A1A"
+      });
+      a.push({
+        c1x: x1 + n_x0,
+        c1y: y1 + n_y0,
+        c2x: x1 + n_x2,
+        c2y: y1 + n_y2,
+        ex: x2 + n_x2,
+        ey: y2 + n_y2
+      });
+      a.push({
+        c1x: x2 + n_x2 - vx21,
+        c1y: y2 + n_y2 - vy21,
+        c2x: x2 - n_x2 - vx21,
+        c2y: y2 - n_y2 - vy21,
+        ex: x2 - n_x2,
+        ey: y2 - n_y2
+      });
+      a.push({
+        c1x: x1 - n_x2,
+        c1y: y1 - n_y2,
+        c2x: x1 - n_x0,
+        c2y: y1 - n_y0,
+        ex: x0 - n_x0,
+        ey: y0 - n_y0
+      });
+      a.push({
+        c1x: x0 - n_x0 - vx01,
+        c1y: y0 - n_y0 - vy01,
+        c2x: x0 + n_x0 - vx01,
+        c2y: y0 + n_y0 - vy01,
+        ex: x0 + n_x0,
+        ey: y0 + n_y0
+      });
+      a[0].mx = a[0].mx.toFixed(1);
+      a[0].mx = parseFloat(a[0].mx);
+      a[0].my = a[0].my.toFixed(1);
+      a[0].my = parseFloat(a[0].my);
+      for (var i = 1; i < a.length; i++) {
+        a[i].c1x = a[i].c1x.toFixed(1);
+        a[i].c1x = parseFloat(a[i].c1x);
+        a[i].c1y = a[i].c1y.toFixed(1);
+        a[i].c1y = parseFloat(a[i].c1y);
+        a[i].c2x = a[i].c2x.toFixed(1);
+        a[i].c2x = parseFloat(a[i].c2x);
+        a[i].c2y = a[i].c2y.toFixed(1);
+        a[i].c2y = parseFloat(a[i].c2y);
+        a[i].ex = a[i].ex.toFixed(1);
+        a[i].ex = parseFloat(a[i].ex);
+        a[i].ey = a[i].ey.toFixed(1);
+        a[i].ey = parseFloat(a[i].ey);
+      }
+      return a;
+    }
+  }, {
+    key: "bethelDraw",
+    value: function bethelDraw(point, is_fill, color) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(point[0].mx, point[0].my);
+      if (undefined != color) {
+        this.ctx.setFillStyle(color);
+        this.ctx.setStrokeStyle(color);
+      } else {
+        this.ctx.setFillStyle(point[0].color);
+        this.ctx.setStrokeStyle(point[0].color);
+      }
+      for (var i = 1; i < point.length; i++) {
+        this.ctx.bezierCurveTo(point[i].c1x, point[i].c1y, point[i].c2x, point[i].c2y, point[i].ex, point[i].ey);
+      }
+      this.ctx.stroke();
+      if (undefined != is_fill) {
+        this.ctx.fill(); //填充图形 ( 后绘制的图形会覆盖前面的图形, 绘制时注意先后顺序 )
+      }
+
+      this.ctx.draw(true);
+    }
+  }, {
+    key: "selectColorEvent",
+    value: function selectColorEvent(lineColor) {
+      this.lineColor = lineColor;
+    }
+  }, {
+    key: "selectSlideValue",
+    value: function selectSlideValue(slideValue) {
+      switch (slideValue) {
+        case 0:
+          this.lineSize = 0.1;
+          this.lineMin = 0.1;
+          this.lineMax = 0.1;
+          break;
+        case 25:
+          this.lineSize = 1;
+          this.lineMin = 0.5;
+          this.lineMax = 2;
+          break;
+        case 50:
+          this.lineSize = 1.5;
+          this.lineMin = 1;
+          this.lineMax = 3;
+          break;
+        case 75:
+          this.lineSize = 1.5;
+          this.lineMin = 2;
+          this.lineMax = 3.5;
+          break;
+        case 100:
+          this.lineSize = 3;
+          this.lineMin = 2;
+          this.lineMax = 3.5;
+          break;
+      }
+    }
+  }]);
+  return Handwriting;
+}();
+var _default = Handwriting;
+exports.default = _default;
+
+/***/ }),
+
+/***/ 1163:
 /*!*******************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/sheep/utils/helper.js ***!
   \*******************************************************************************************/
@@ -51,8 +636,8 @@ exports.os = os;
 exports.sleep = sleep;
 exports.sys = sys;
 var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
-var _test = _interopRequireDefault(__webpack_require__(/*! @/sheep/utils/test.js */ 64));
-var _tools = __webpack_require__(/*! ./tools */ 63);
+var _test = _interopRequireDefault(__webpack_require__(/*! @/sheep/utils/test.js */ 59));
+var _tools = __webpack_require__(/*! ./tools */ 58);
 /**
  * @description JS对象深度合并
  * @param {object} target 需要拷贝的对象
@@ -223,7 +808,167 @@ function sys() {
 
 /***/ }),
 
-/***/ 362:
+/***/ 1307:
+/*!********************************************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/bundle/components/hic-video-player/utils/autoFullScreen.js ***!
+  \********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.offDirectionChange = offDirectionChange;
+exports.onDirectionChange = onDirectionChange;
+var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ 13));
+/**
+ * 加速度计
+ * 监听设备方向 (专业术语是什么啊...? T^T)
+ * 
+ * 仿...$on $off
+ * 记录注册的回调事件
+ * 放数组
+ */
+
+// 是否在监听
+var isListen = false;
+// 记录回调函数
+var callbackList = [];
+var accX, accY, accZ;
+
+// 设备之前的方向
+var oldDirection = -1;
+
+/**
+ * 监听设备方向变化
+ * @param {Function} callback 方向变化的回调函数
+ * 	callback 返回参数: 0-正常竖向, 90-屏幕逆时针90度, -90-屏幕顺时针90度
+ */
+function onDirectionChange(callback) {
+  if (!(0, _typeof2.default)(callback) === 'function') {
+    // callback.constructor === Function (判断是否函数)
+    throw new Error('callback is not a function');
+  }
+  // 记录回调函数
+  var index = callbackList.findIndex(function (cb) {
+    return cb === callback;
+  });
+  if (index === -1) {
+    callbackList.push(callback);
+  }
+  if (isListen) {
+    return;
+  }
+  uni.onAccelerometerChange(function (res) {
+    var x = res.x,
+      y = res.y,
+      z = res.z;
+    accX = x, accY = y, accZ = z;
+    // console.log('--- 加速度计 --->', { x: x.toFixed(1), y: y.toFixed(1), z: z.toFixed(1) });
+    /**
+     * 竖屏: y <= -0.9
+     * 		requestFullScreen direction = 0
+     * 横屏: x 绝对值 >= 0.9
+     * 		x <= -0.9 屏幕朝左 -> direction =  90
+     * 		x >=  0.9 屏幕朝右 -> direction = -90
+     */
+    var direction = -1;
+    if (y <= -0.6) {
+      direction = 0;
+    } else if (x <= -0.6) {
+      direction = 90;
+    } else if (x >= 0.6) {
+      direction = -90;
+    }
+    if (direction !== -1 && oldDirection != direction) {
+      // (竖屏 || 横屏) && 方向变化 => 调用 callback 通知出去
+      callbackList.forEach(function (cb) {
+        cb(direction);
+      });
+    }
+    oldDirection = direction;
+  });
+  // 开始监听
+  startAccelerometer();
+}
+
+/**
+ * 取消监听设备方向变化
+ * @param {Function} callback
+ */
+function offDirectionChange(callback) {
+  var stop = false;
+  if (typeof callback === 'function') {
+    var index = callbackList.findIndex(function (cb) {
+      return cb === callback;
+    });
+    if (index !== -1) {
+      callbackList.splice(index, 1);
+    }
+  } else {
+    stop = true;
+  }
+  if (callbackList.length === 0) {
+    stop = true;
+  }
+  if (stop && isListen) {
+    // 没有传参callback || list数组为空 -> 取消监听
+    uni.offAccelerometerChange(function (res) {
+      console.log('加速度计取消监听', res);
+    });
+    // 停止监听
+    stopAccelerometer();
+  }
+}
+
+/**
+ * @description 开始监听加速度数据
+ * 封装 uni.startAccelerometer(OBJECT)
+ */
+function startAccelerometer() {
+  return new Promise(function (resolve, reject) {
+    uni.startAccelerometer({
+      interval: 'normal',
+      // 'game','normal','ui'
+      success: function success(res) {
+        console.log(res);
+        resolve();
+      },
+      fail: function fail(err) {
+        console.log(err);
+        reject();
+      }
+    });
+  });
+}
+
+/**
+ * @description 停止监听加速度数据
+ * 封装 uni.stopAccelerometer(OBJECT)
+ */
+function stopAccelerometer() {
+  return new Promise(function (resolve, reject) {
+    uni.stopAccelerometer({
+      success: function success(res) {
+        console.log(res);
+        resolve();
+      },
+      fail: function fail(err) {
+        console.log(err);
+        reject();
+      }
+    });
+  });
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
+/***/ 336:
 /*!******************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/js_sdk/mmmm-image-tools/index.js ***!
   \******************************************************************************************************/
@@ -437,7 +1182,7 @@ function base64ToPath(base64) {
 
 /***/ }),
 
-/***/ 411:
+/***/ 385:
 /*!***************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/bundle/static/icon_delete.png ***!
   \***************************************************************************************************/
@@ -448,7 +1193,921 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAA5CAYAAACM
 
 /***/ }),
 
-/***/ 996:
+/***/ 394:
+/*!**************************************************************************************************!*\
+  !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/common/qqmap-wx-jssdk.min.js ***!
+  \**************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(wx) {var _classCallCheck = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23);
+var _createClass = __webpack_require__(/*! @babel/runtime/helpers/createClass */ 24);
+var ERROR_CONF = {
+  KEY_ERR: 311,
+  KEY_ERR_MSG: 'key格式错误',
+  PARAM_ERR: 310,
+  PARAM_ERR_MSG: '请求参数信息有误',
+  SYSTEM_ERR: 600,
+  SYSTEM_ERR_MSG: '系统错误',
+  WX_ERR_CODE: 1000,
+  WX_OK_CODE: 200
+};
+var BASE_URL = 'https://apis.map.qq.com/ws/';
+var URL_SEARCH = BASE_URL + 'place/v1/search';
+var URL_SUGGESTION = BASE_URL + 'place/v1/suggestion';
+var URL_GET_GEOCODER = BASE_URL + 'geocoder/v1/';
+var URL_CITY_LIST = BASE_URL + 'district/v1/list';
+var URL_AREA_LIST = BASE_URL + 'district/v1/getchildren';
+var URL_DISTANCE = BASE_URL + 'distance/v1/';
+var URL_DIRECTION = BASE_URL + 'direction/v1/';
+var MODE = {
+  driving: 'driving',
+  transit: 'transit'
+};
+var EARTH_RADIUS = 6378136.49;
+var Utils = {
+  safeAdd: function safeAdd(x, y) {
+    var lsw = (x & 0xffff) + (y & 0xffff);
+    var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+    return msw << 16 | lsw & 0xffff;
+  },
+  bitRotateLeft: function bitRotateLeft(num, cnt) {
+    return num << cnt | num >>> 32 - cnt;
+  },
+  md5cmn: function md5cmn(q, a, b, x, s, t) {
+    return this.safeAdd(this.bitRotateLeft(this.safeAdd(this.safeAdd(a, q), this.safeAdd(x, t)), s), b);
+  },
+  md5ff: function md5ff(a, b, c, d, x, s, t) {
+    return this.md5cmn(b & c | ~b & d, a, b, x, s, t);
+  },
+  md5gg: function md5gg(a, b, c, d, x, s, t) {
+    return this.md5cmn(b & d | c & ~d, a, b, x, s, t);
+  },
+  md5hh: function md5hh(a, b, c, d, x, s, t) {
+    return this.md5cmn(b ^ c ^ d, a, b, x, s, t);
+  },
+  md5ii: function md5ii(a, b, c, d, x, s, t) {
+    return this.md5cmn(c ^ (b | ~d), a, b, x, s, t);
+  },
+  binlMD5: function binlMD5(x, len) {
+    x[len >> 5] |= 0x80 << len % 32;
+    x[(len + 64 >>> 9 << 4) + 14] = len;
+    var i;
+    var olda;
+    var oldb;
+    var oldc;
+    var oldd;
+    var a = 1732584193;
+    var b = -271733879;
+    var c = -1732584194;
+    var d = 271733878;
+    for (i = 0; i < x.length; i += 16) {
+      olda = a;
+      oldb = b;
+      oldc = c;
+      oldd = d;
+      a = this.md5ff(a, b, c, d, x[i], 7, -680876936);
+      d = this.md5ff(d, a, b, c, x[i + 1], 12, -389564586);
+      c = this.md5ff(c, d, a, b, x[i + 2], 17, 606105819);
+      b = this.md5ff(b, c, d, a, x[i + 3], 22, -1044525330);
+      a = this.md5ff(a, b, c, d, x[i + 4], 7, -176418897);
+      d = this.md5ff(d, a, b, c, x[i + 5], 12, 1200080426);
+      c = this.md5ff(c, d, a, b, x[i + 6], 17, -1473231341);
+      b = this.md5ff(b, c, d, a, x[i + 7], 22, -45705983);
+      a = this.md5ff(a, b, c, d, x[i + 8], 7, 1770035416);
+      d = this.md5ff(d, a, b, c, x[i + 9], 12, -1958414417);
+      c = this.md5ff(c, d, a, b, x[i + 10], 17, -42063);
+      b = this.md5ff(b, c, d, a, x[i + 11], 22, -1990404162);
+      a = this.md5ff(a, b, c, d, x[i + 12], 7, 1804603682);
+      d = this.md5ff(d, a, b, c, x[i + 13], 12, -40341101);
+      c = this.md5ff(c, d, a, b, x[i + 14], 17, -1502002290);
+      b = this.md5ff(b, c, d, a, x[i + 15], 22, 1236535329);
+      a = this.md5gg(a, b, c, d, x[i + 1], 5, -165796510);
+      d = this.md5gg(d, a, b, c, x[i + 6], 9, -1069501632);
+      c = this.md5gg(c, d, a, b, x[i + 11], 14, 643717713);
+      b = this.md5gg(b, c, d, a, x[i], 20, -373897302);
+      a = this.md5gg(a, b, c, d, x[i + 5], 5, -701558691);
+      d = this.md5gg(d, a, b, c, x[i + 10], 9, 38016083);
+      c = this.md5gg(c, d, a, b, x[i + 15], 14, -660478335);
+      b = this.md5gg(b, c, d, a, x[i + 4], 20, -405537848);
+      a = this.md5gg(a, b, c, d, x[i + 9], 5, 568446438);
+      d = this.md5gg(d, a, b, c, x[i + 14], 9, -1019803690);
+      c = this.md5gg(c, d, a, b, x[i + 3], 14, -187363961);
+      b = this.md5gg(b, c, d, a, x[i + 8], 20, 1163531501);
+      a = this.md5gg(a, b, c, d, x[i + 13], 5, -1444681467);
+      d = this.md5gg(d, a, b, c, x[i + 2], 9, -51403784);
+      c = this.md5gg(c, d, a, b, x[i + 7], 14, 1735328473);
+      b = this.md5gg(b, c, d, a, x[i + 12], 20, -1926607734);
+      a = this.md5hh(a, b, c, d, x[i + 5], 4, -378558);
+      d = this.md5hh(d, a, b, c, x[i + 8], 11, -2022574463);
+      c = this.md5hh(c, d, a, b, x[i + 11], 16, 1839030562);
+      b = this.md5hh(b, c, d, a, x[i + 14], 23, -35309556);
+      a = this.md5hh(a, b, c, d, x[i + 1], 4, -1530992060);
+      d = this.md5hh(d, a, b, c, x[i + 4], 11, 1272893353);
+      c = this.md5hh(c, d, a, b, x[i + 7], 16, -155497632);
+      b = this.md5hh(b, c, d, a, x[i + 10], 23, -1094730640);
+      a = this.md5hh(a, b, c, d, x[i + 13], 4, 681279174);
+      d = this.md5hh(d, a, b, c, x[i], 11, -358537222);
+      c = this.md5hh(c, d, a, b, x[i + 3], 16, -722521979);
+      b = this.md5hh(b, c, d, a, x[i + 6], 23, 76029189);
+      a = this.md5hh(a, b, c, d, x[i + 9], 4, -640364487);
+      d = this.md5hh(d, a, b, c, x[i + 12], 11, -421815835);
+      c = this.md5hh(c, d, a, b, x[i + 15], 16, 530742520);
+      b = this.md5hh(b, c, d, a, x[i + 2], 23, -995338651);
+      a = this.md5ii(a, b, c, d, x[i], 6, -198630844);
+      d = this.md5ii(d, a, b, c, x[i + 7], 10, 1126891415);
+      c = this.md5ii(c, d, a, b, x[i + 14], 15, -1416354905);
+      b = this.md5ii(b, c, d, a, x[i + 5], 21, -57434055);
+      a = this.md5ii(a, b, c, d, x[i + 12], 6, 1700485571);
+      d = this.md5ii(d, a, b, c, x[i + 3], 10, -1894986606);
+      c = this.md5ii(c, d, a, b, x[i + 10], 15, -1051523);
+      b = this.md5ii(b, c, d, a, x[i + 1], 21, -2054922799);
+      a = this.md5ii(a, b, c, d, x[i + 8], 6, 1873313359);
+      d = this.md5ii(d, a, b, c, x[i + 15], 10, -30611744);
+      c = this.md5ii(c, d, a, b, x[i + 6], 15, -1560198380);
+      b = this.md5ii(b, c, d, a, x[i + 13], 21, 1309151649);
+      a = this.md5ii(a, b, c, d, x[i + 4], 6, -145523070);
+      d = this.md5ii(d, a, b, c, x[i + 11], 10, -1120210379);
+      c = this.md5ii(c, d, a, b, x[i + 2], 15, 718787259);
+      b = this.md5ii(b, c, d, a, x[i + 9], 21, -343485551);
+      a = this.safeAdd(a, olda);
+      b = this.safeAdd(b, oldb);
+      c = this.safeAdd(c, oldc);
+      d = this.safeAdd(d, oldd);
+    }
+    return [a, b, c, d];
+  },
+  binl2rstr: function binl2rstr(input) {
+    var i;
+    var output = '';
+    var length32 = input.length * 32;
+    for (i = 0; i < length32; i += 8) {
+      output += String.fromCharCode(input[i >> 5] >>> i % 32 & 0xff);
+    }
+    return output;
+  },
+  rstr2binl: function rstr2binl(input) {
+    var i;
+    var output = [];
+    output[(input.length >> 2) - 1] = undefined;
+    for (i = 0; i < output.length; i += 1) {
+      output[i] = 0;
+    }
+    var length8 = input.length * 8;
+    for (i = 0; i < length8; i += 8) {
+      output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << i % 32;
+    }
+    return output;
+  },
+  rstrMD5: function rstrMD5(s) {
+    return this.binl2rstr(this.binlMD5(this.rstr2binl(s), s.length * 8));
+  },
+  rstrHMACMD5: function rstrHMACMD5(key, data) {
+    var i;
+    var bkey = this.rstr2binl(key);
+    var ipad = [];
+    var opad = [];
+    var hash;
+    ipad[15] = opad[15] = undefined;
+    if (bkey.length > 16) {
+      bkey = this.binlMD5(bkey, key.length * 8);
+    }
+    for (i = 0; i < 16; i += 1) {
+      ipad[i] = bkey[i] ^ 0x36363636;
+      opad[i] = bkey[i] ^ 0x5c5c5c5c;
+    }
+    hash = this.binlMD5(ipad.concat(this.rstr2binl(data)), 512 + data.length * 8);
+    return this.binl2rstr(this.binlMD5(opad.concat(hash), 512 + 128));
+  },
+  rstr2hex: function rstr2hex(input) {
+    var hexTab = '0123456789abcdef';
+    var output = '';
+    var x;
+    var i;
+    for (i = 0; i < input.length; i += 1) {
+      x = input.charCodeAt(i);
+      output += hexTab.charAt(x >>> 4 & 0x0f) + hexTab.charAt(x & 0x0f);
+    }
+    return output;
+  },
+  str2rstrUTF8: function str2rstrUTF8(input) {
+    return unescape(encodeURIComponent(input));
+  },
+  rawMD5: function rawMD5(s) {
+    return this.rstrMD5(this.str2rstrUTF8(s));
+  },
+  hexMD5: function hexMD5(s) {
+    return this.rstr2hex(this.rawMD5(s));
+  },
+  rawHMACMD5: function rawHMACMD5(k, d) {
+    return this.rstrHMACMD5(this.str2rstrUTF8(k), str2rstrUTF8(d));
+  },
+  hexHMACMD5: function hexHMACMD5(k, d) {
+    return this.rstr2hex(this.rawHMACMD5(k, d));
+  },
+  md5: function md5(string, key, raw) {
+    if (!key) {
+      if (!raw) {
+        return this.hexMD5(string);
+      }
+      return this.rawMD5(string);
+    }
+    if (!raw) {
+      return this.hexHMACMD5(key, string);
+    }
+    return this.rawHMACMD5(key, string);
+  },
+  getSig: function getSig(requestParam, sk, feature, mode) {
+    var sig = null;
+    var requestArr = [];
+    Object.keys(requestParam).sort().forEach(function (key) {
+      requestArr.push(key + '=' + requestParam[key]);
+    });
+    if (feature == 'search') {
+      sig = '/ws/place/v1/search?' + requestArr.join('&') + sk;
+    }
+    if (feature == 'suggest') {
+      sig = '/ws/place/v1/suggestion?' + requestArr.join('&') + sk;
+    }
+    if (feature == 'reverseGeocoder') {
+      sig = '/ws/geocoder/v1/?' + requestArr.join('&') + sk;
+    }
+    if (feature == 'geocoder') {
+      sig = '/ws/geocoder/v1/?' + requestArr.join('&') + sk;
+    }
+    if (feature == 'getCityList') {
+      sig = '/ws/district/v1/list?' + requestArr.join('&') + sk;
+    }
+    if (feature == 'getDistrictByCityId') {
+      sig = '/ws/district/v1/getchildren?' + requestArr.join('&') + sk;
+    }
+    if (feature == 'calculateDistance') {
+      sig = '/ws/distance/v1/?' + requestArr.join('&') + sk;
+    }
+    if (feature == 'direction') {
+      sig = '/ws/direction/v1/' + mode + '?' + requestArr.join('&') + sk;
+    }
+    sig = this.md5(sig);
+    return sig;
+  },
+  location2query: function location2query(data) {
+    if (typeof data == 'string') {
+      return data;
+    }
+    var query = '';
+    for (var i = 0; i < data.length; i++) {
+      var d = data[i];
+      if (!!query) {
+        query += ';';
+      }
+      if (d.location) {
+        query = query + d.location.lat + ',' + d.location.lng;
+      }
+      if (d.latitude && d.longitude) {
+        query = query + d.latitude + ',' + d.longitude;
+      }
+    }
+    return query;
+  },
+  rad: function rad(d) {
+    return d * Math.PI / 180.0;
+  },
+  getEndLocation: function getEndLocation(location) {
+    var to = location.split(';');
+    var endLocation = [];
+    for (var i = 0; i < to.length; i++) {
+      endLocation.push({
+        lat: parseFloat(to[i].split(',')[0]),
+        lng: parseFloat(to[i].split(',')[1])
+      });
+    }
+    return endLocation;
+  },
+  getDistance: function getDistance(latFrom, lngFrom, latTo, lngTo) {
+    var radLatFrom = this.rad(latFrom);
+    var radLatTo = this.rad(latTo);
+    var a = radLatFrom - radLatTo;
+    var b = this.rad(lngFrom) - this.rad(lngTo);
+    var distance = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLatFrom) * Math.cos(radLatTo) * Math.pow(Math.sin(b / 2), 2)));
+    distance = distance * EARTH_RADIUS;
+    distance = Math.round(distance * 10000) / 10000;
+    return parseFloat(distance.toFixed(0));
+  },
+  getWXLocation: function getWXLocation(success, fail, complete) {
+    wx.getLocation({
+      type: 'gcj02',
+      success: success,
+      fail: fail,
+      complete: complete
+    });
+  },
+  getLocationParam: function getLocationParam(location) {
+    if (typeof location == 'string') {
+      var locationArr = location.split(',');
+      if (locationArr.length === 2) {
+        location = {
+          latitude: location.split(',')[0],
+          longitude: location.split(',')[1]
+        };
+      } else {
+        location = {};
+      }
+    }
+    return location;
+  },
+  polyfillParam: function polyfillParam(param) {
+    param.success = param.success || function () {};
+    param.fail = param.fail || function () {};
+    param.complete = param.complete || function () {};
+  },
+  checkParamKeyEmpty: function checkParamKeyEmpty(param, key) {
+    if (!param[key]) {
+      var errconf = this.buildErrorConfig(ERROR_CONF.PARAM_ERR, ERROR_CONF.PARAM_ERR_MSG + key + '参数格式有误');
+      param.fail(errconf);
+      param.complete(errconf);
+      return true;
+    }
+    return false;
+  },
+  checkKeyword: function checkKeyword(param) {
+    return !this.checkParamKeyEmpty(param, 'keyword');
+  },
+  checkLocation: function checkLocation(param) {
+    var location = this.getLocationParam(param.location);
+    if (!location || !location.latitude || !location.longitude) {
+      var errconf = this.buildErrorConfig(ERROR_CONF.PARAM_ERR, ERROR_CONF.PARAM_ERR_MSG + ' location参数格式有误');
+      param.fail(errconf);
+      param.complete(errconf);
+      return false;
+    }
+    return true;
+  },
+  buildErrorConfig: function buildErrorConfig(errCode, errMsg) {
+    return {
+      status: errCode,
+      message: errMsg
+    };
+  },
+  handleData: function handleData(param, data, feature) {
+    if (feature == 'search') {
+      var searchResult = data.data;
+      var searchSimplify = [];
+      for (var i = 0; i < searchResult.length; i++) {
+        searchSimplify.push({
+          id: searchResult[i].id || null,
+          title: searchResult[i].title || null,
+          latitude: searchResult[i].location && searchResult[i].location.lat || null,
+          longitude: searchResult[i].location && searchResult[i].location.lng || null,
+          address: searchResult[i].address || null,
+          category: searchResult[i].category || null,
+          tel: searchResult[i].tel || null,
+          adcode: searchResult[i].ad_info && searchResult[i].ad_info.adcode || null,
+          city: searchResult[i].ad_info && searchResult[i].ad_info.city || null,
+          district: searchResult[i].ad_info && searchResult[i].ad_info.district || null,
+          province: searchResult[i].ad_info && searchResult[i].ad_info.province || null
+        });
+      }
+      param.success(data, {
+        searchResult: searchResult,
+        searchSimplify: searchSimplify
+      });
+    } else if (feature == 'suggest') {
+      var suggestResult = data.data;
+      var suggestSimplify = [];
+      for (var i = 0; i < suggestResult.length; i++) {
+        suggestSimplify.push({
+          adcode: suggestResult[i].adcode || null,
+          address: suggestResult[i].address || null,
+          category: suggestResult[i].category || null,
+          city: suggestResult[i].city || null,
+          district: suggestResult[i].district || null,
+          id: suggestResult[i].id || null,
+          latitude: suggestResult[i].location && suggestResult[i].location.lat || null,
+          longitude: suggestResult[i].location && suggestResult[i].location.lng || null,
+          province: suggestResult[i].province || null,
+          title: suggestResult[i].title || null,
+          type: suggestResult[i].type || null
+        });
+      }
+      param.success(data, {
+        suggestResult: suggestResult,
+        suggestSimplify: suggestSimplify
+      });
+    } else if (feature == 'reverseGeocoder') {
+      var reverseGeocoderResult = data.result;
+      var reverseGeocoderSimplify = {
+        address: reverseGeocoderResult.address || null,
+        latitude: reverseGeocoderResult.location && reverseGeocoderResult.location.lat || null,
+        longitude: reverseGeocoderResult.location && reverseGeocoderResult.location.lng || null,
+        adcode: reverseGeocoderResult.ad_info && reverseGeocoderResult.ad_info.adcode || null,
+        city: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.city || null,
+        district: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.district || null,
+        nation: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.nation || null,
+        province: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.province || null,
+        street: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.street || null,
+        street_number: reverseGeocoderResult.address_component && reverseGeocoderResult.address_component.street_number || null,
+        recommend: reverseGeocoderResult.formatted_addresses && reverseGeocoderResult.formatted_addresses.recommend || null,
+        rough: reverseGeocoderResult.formatted_addresses && reverseGeocoderResult.formatted_addresses.rough || null
+      };
+      if (reverseGeocoderResult.pois) {
+        var pois = reverseGeocoderResult.pois;
+        var poisSimplify = [];
+        for (var i = 0; i < pois.length; i++) {
+          poisSimplify.push({
+            id: pois[i].id || null,
+            title: pois[i].title || null,
+            latitude: pois[i].location && pois[i].location.lat || null,
+            longitude: pois[i].location && pois[i].location.lng || null,
+            address: pois[i].address || null,
+            category: pois[i].category || null,
+            adcode: pois[i].ad_info && pois[i].ad_info.adcode || null,
+            city: pois[i].ad_info && pois[i].ad_info.city || null,
+            district: pois[i].ad_info && pois[i].ad_info.district || null,
+            province: pois[i].ad_info && pois[i].ad_info.province || null
+          });
+        }
+        param.success(data, {
+          reverseGeocoderResult: reverseGeocoderResult,
+          reverseGeocoderSimplify: reverseGeocoderSimplify,
+          pois: pois,
+          poisSimplify: poisSimplify
+        });
+      } else {
+        param.success(data, {
+          reverseGeocoderResult: reverseGeocoderResult,
+          reverseGeocoderSimplify: reverseGeocoderSimplify
+        });
+      }
+    } else if (feature == 'geocoder') {
+      var geocoderResult = data.result;
+      var geocoderSimplify = {
+        title: geocoderResult.title || null,
+        latitude: geocoderResult.location && geocoderResult.location.lat || null,
+        longitude: geocoderResult.location && geocoderResult.location.lng || null,
+        adcode: geocoderResult.ad_info && geocoderResult.ad_info.adcode || null,
+        province: geocoderResult.address_components && geocoderResult.address_components.province || null,
+        city: geocoderResult.address_components && geocoderResult.address_components.city || null,
+        district: geocoderResult.address_components && geocoderResult.address_components.district || null,
+        street: geocoderResult.address_components && geocoderResult.address_components.street || null,
+        street_number: geocoderResult.address_components && geocoderResult.address_components.street_number || null,
+        level: geocoderResult.level || null
+      };
+      param.success(data, {
+        geocoderResult: geocoderResult,
+        geocoderSimplify: geocoderSimplify
+      });
+    } else if (feature == 'getCityList') {
+      var provinceResult = data.result[0];
+      var cityResult = data.result[1];
+      var districtResult = data.result[2];
+      param.success(data, {
+        provinceResult: provinceResult,
+        cityResult: cityResult,
+        districtResult: districtResult
+      });
+    } else if (feature == 'getDistrictByCityId') {
+      var districtByCity = data.result[0];
+      param.success(data, districtByCity);
+    } else if (feature == 'calculateDistance') {
+      var calculateDistanceResult = data.result.elements;
+      var distance = [];
+      for (var i = 0; i < calculateDistanceResult.length; i++) {
+        distance.push(calculateDistanceResult[i].distance);
+      }
+      param.success(data, {
+        calculateDistanceResult: calculateDistanceResult,
+        distance: distance
+      });
+    } else if (feature == 'direction') {
+      var direction = data.result.routes;
+      param.success(data, direction);
+    } else {
+      param.success(data);
+    }
+  },
+  buildWxRequestConfig: function buildWxRequestConfig(param, options, feature) {
+    var that = this;
+    options.header = {
+      "content-type": "application/json"
+    };
+    options.method = 'GET';
+    options.success = function (res) {
+      var data = res.data;
+      if (data.status === 0) {
+        that.handleData(param, data, feature);
+      } else {
+        param.fail(data);
+      }
+    };
+    options.fail = function (res) {
+      res.statusCode = ERROR_CONF.WX_ERR_CODE;
+      param.fail(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
+    };
+    options.complete = function (res) {
+      var statusCode = +res.statusCode;
+      switch (statusCode) {
+        case ERROR_CONF.WX_ERR_CODE:
+          {
+            param.complete(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
+            break;
+          }
+        case ERROR_CONF.WX_OK_CODE:
+          {
+            var data = res.data;
+            if (data.status === 0) {
+              param.complete(data);
+            } else {
+              param.complete(that.buildErrorConfig(data.status, data.message));
+            }
+            break;
+          }
+        default:
+          {
+            param.complete(that.buildErrorConfig(ERROR_CONF.SYSTEM_ERR, ERROR_CONF.SYSTEM_ERR_MSG));
+          }
+      }
+    };
+    return options;
+  },
+  locationProcess: function locationProcess(param, locationsuccess, locationfail, locationcomplete) {
+    var that = this;
+    locationfail = locationfail || function (res) {
+      res.statusCode = ERROR_CONF.WX_ERR_CODE;
+      param.fail(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
+    };
+    locationcomplete = locationcomplete || function (res) {
+      if (res.statusCode == ERROR_CONF.WX_ERR_CODE) {
+        param.complete(that.buildErrorConfig(ERROR_CONF.WX_ERR_CODE, res.errMsg));
+      }
+    };
+    if (!param.location) {
+      that.getWXLocation(locationsuccess, locationfail, locationcomplete);
+    } else if (that.checkLocation(param)) {
+      var location = Utils.getLocationParam(param.location);
+      locationsuccess(location);
+    }
+  }
+};
+var QQMapWX = /*#__PURE__*/function () {
+  "use strict";
+
+  function QQMapWX(options) {
+    _classCallCheck(this, QQMapWX);
+    if (!options.key) {
+      throw Error('key值不能为空');
+    }
+    this.key = options.key;
+  }
+  _createClass(QQMapWX, [{
+    key: "search",
+    value: function search(options) {
+      var that = this;
+      options = options || {};
+      Utils.polyfillParam(options);
+      if (!Utils.checkKeyword(options)) {
+        return;
+      }
+      var requestParam = {
+        keyword: options.keyword,
+        orderby: options.orderby || '_distance',
+        page_size: options.page_size || 10,
+        page_index: options.page_index || 1,
+        output: 'json',
+        key: that.key
+      };
+      if (options.address_format) {
+        requestParam.address_format = options.address_format;
+      }
+      if (options.filter) {
+        requestParam.filter = options.filter;
+      }
+      var distance = options.distance || "1000";
+      var auto_extend = options.auto_extend || 1;
+      var region = null;
+      var rectangle = null;
+      if (options.region) {
+        region = options.region;
+      }
+      if (options.rectangle) {
+        rectangle = options.rectangle;
+      }
+      var locationsuccess = function locationsuccess(result) {
+        if (region && !rectangle) {
+          requestParam.boundary = "region(" + region + "," + auto_extend + "," + result.latitude + "," + result.longitude + ")";
+          if (options.sig) {
+            requestParam.sig = Utils.getSig(requestParam, options.sig, 'search');
+          }
+        } else if (rectangle && !region) {
+          requestParam.boundary = "rectangle(" + rectangle + ")";
+          if (options.sig) {
+            requestParam.sig = Utils.getSig(requestParam, options.sig, 'search');
+          }
+        } else {
+          requestParam.boundary = "nearby(" + result.latitude + "," + result.longitude + "," + distance + "," + auto_extend + ")";
+          if (options.sig) {
+            requestParam.sig = Utils.getSig(requestParam, options.sig, 'search');
+          }
+        }
+        wx.request(Utils.buildWxRequestConfig(options, {
+          url: URL_SEARCH,
+          data: requestParam
+        }, 'search'));
+      };
+      Utils.locationProcess(options, locationsuccess);
+    }
+  }, {
+    key: "getSuggestion",
+    value: function getSuggestion(options) {
+      var that = this;
+      options = options || {};
+      Utils.polyfillParam(options);
+      if (!Utils.checkKeyword(options)) {
+        return;
+      }
+      var requestParam = {
+        keyword: options.keyword,
+        region: options.region || '全国',
+        region_fix: options.region_fix || 0,
+        policy: options.policy || 0,
+        page_size: options.page_size || 10,
+        page_index: options.page_index || 1,
+        get_subpois: options.get_subpois || 0,
+        output: 'json',
+        key: that.key
+      };
+      if (options.address_format) {
+        requestParam.address_format = options.address_format;
+      }
+      if (options.filter) {
+        requestParam.filter = options.filter;
+      }
+      if (options.location) {
+        var locationsuccess = function locationsuccess(result) {
+          requestParam.location = result.latitude + ',' + result.longitude;
+          if (options.sig) {
+            requestParam.sig = Utils.getSig(requestParam, options.sig, 'suggest');
+          }
+          wx.request(Utils.buildWxRequestConfig(options, {
+            url: URL_SUGGESTION,
+            data: requestParam
+          }, "suggest"));
+        };
+        Utils.locationProcess(options, locationsuccess);
+      } else {
+        if (options.sig) {
+          requestParam.sig = Utils.getSig(requestParam, options.sig, 'suggest');
+        }
+        wx.request(Utils.buildWxRequestConfig(options, {
+          url: URL_SUGGESTION,
+          data: requestParam
+        }, "suggest"));
+      }
+    }
+  }, {
+    key: "reverseGeocoder",
+    value: function reverseGeocoder(options) {
+      var that = this;
+      options = options || {};
+      Utils.polyfillParam(options);
+      var requestParam = {
+        coord_type: options.coord_type || 5,
+        get_poi: options.get_poi || 0,
+        output: 'json',
+        key: that.key
+      };
+      if (options.poi_options) {
+        requestParam.poi_options = options.poi_options;
+      }
+      var locationsuccess = function locationsuccess(result) {
+        requestParam.location = result.latitude + ',' + result.longitude;
+        if (options.sig) {
+          requestParam.sig = Utils.getSig(requestParam, options.sig, 'reverseGeocoder');
+        }
+        wx.request(Utils.buildWxRequestConfig(options, {
+          url: URL_GET_GEOCODER,
+          data: requestParam
+        }, 'reverseGeocoder'));
+      };
+      Utils.locationProcess(options, locationsuccess);
+    }
+  }, {
+    key: "geocoder",
+    value: function geocoder(options) {
+      var that = this;
+      options = options || {};
+      Utils.polyfillParam(options);
+      if (Utils.checkParamKeyEmpty(options, 'address')) {
+        return;
+      }
+      var requestParam = {
+        address: options.address,
+        output: 'json',
+        key: that.key
+      };
+      if (options.region) {
+        requestParam.region = options.region;
+      }
+      if (options.sig) {
+        requestParam.sig = Utils.getSig(requestParam, options.sig, 'geocoder');
+      }
+      wx.request(Utils.buildWxRequestConfig(options, {
+        url: URL_GET_GEOCODER,
+        data: requestParam
+      }, 'geocoder'));
+    }
+  }, {
+    key: "getCityList",
+    value: function getCityList(options) {
+      var that = this;
+      options = options || {};
+      Utils.polyfillParam(options);
+      var requestParam = {
+        output: 'json',
+        key: that.key
+      };
+      if (options.sig) {
+        requestParam.sig = Utils.getSig(requestParam, options.sig, 'getCityList');
+      }
+      wx.request(Utils.buildWxRequestConfig(options, {
+        url: URL_CITY_LIST,
+        data: requestParam
+      }, 'getCityList'));
+    }
+  }, {
+    key: "getDistrictByCityId",
+    value: function getDistrictByCityId(options) {
+      var that = this;
+      options = options || {};
+      Utils.polyfillParam(options);
+      if (Utils.checkParamKeyEmpty(options, 'id')) {
+        return;
+      }
+      var requestParam = {
+        id: options.id || '',
+        output: 'json',
+        key: that.key
+      };
+      if (options.sig) {
+        requestParam.sig = Utils.getSig(requestParam, options.sig, 'getDistrictByCityId');
+      }
+      wx.request(Utils.buildWxRequestConfig(options, {
+        url: URL_AREA_LIST,
+        data: requestParam
+      }, 'getDistrictByCityId'));
+    }
+  }, {
+    key: "calculateDistance",
+    value: function calculateDistance(options) {
+      var that = this;
+      options = options || {};
+      Utils.polyfillParam(options);
+      if (Utils.checkParamKeyEmpty(options, 'to')) {
+        return;
+      }
+      var requestParam = {
+        mode: options.mode || 'walking',
+        to: Utils.location2query(options.to),
+        output: 'json',
+        key: that.key
+      };
+      if (options.from) {
+        options.location = options.from;
+      }
+      if (requestParam.mode == 'straight') {
+        var locationsuccess = function locationsuccess(result) {
+          var locationTo = Utils.getEndLocation(requestParam.to);
+          var data = {
+            message: "query ok",
+            result: {
+              elements: []
+            },
+            status: 0
+          };
+          for (var i = 0; i < locationTo.length; i++) {
+            data.result.elements.push({
+              distance: Utils.getDistance(result.latitude, result.longitude, locationTo[i].lat, locationTo[i].lng),
+              duration: 0,
+              from: {
+                lat: result.latitude,
+                lng: result.longitude
+              },
+              to: {
+                lat: locationTo[i].lat,
+                lng: locationTo[i].lng
+              }
+            });
+          }
+          var calculateResult = data.result.elements;
+          var distanceResult = [];
+          for (var i = 0; i < calculateResult.length; i++) {
+            distanceResult.push(calculateResult[i].distance);
+          }
+          return options.success(data, {
+            calculateResult: calculateResult,
+            distanceResult: distanceResult
+          });
+        };
+        Utils.locationProcess(options, locationsuccess);
+      } else {
+        var locationsuccess = function locationsuccess(result) {
+          requestParam.from = result.latitude + ',' + result.longitude;
+          if (options.sig) {
+            requestParam.sig = Utils.getSig(requestParam, options.sig, 'calculateDistance');
+          }
+          wx.request(Utils.buildWxRequestConfig(options, {
+            url: URL_DISTANCE,
+            data: requestParam
+          }, 'calculateDistance'));
+        };
+        Utils.locationProcess(options, locationsuccess);
+      }
+    }
+  }, {
+    key: "direction",
+    value: function direction(options) {
+      var that = this;
+      options = options || {};
+      Utils.polyfillParam(options);
+      if (Utils.checkParamKeyEmpty(options, 'to')) {
+        return;
+      }
+      var requestParam = {
+        output: 'json',
+        key: that.key
+      };
+      if (typeof options.to == 'string') {
+        requestParam.to = options.to;
+      } else {
+        requestParam.to = options.to.latitude + ',' + options.to.longitude;
+      }
+      var SET_URL_DIRECTION = null;
+      options.mode = options.mode || MODE.driving;
+      SET_URL_DIRECTION = URL_DIRECTION + options.mode;
+      if (options.from) {
+        options.location = options.from;
+      }
+      if (options.mode == MODE.driving) {
+        if (options.from_poi) {
+          requestParam.from_poi = options.from_poi;
+        }
+        if (options.heading) {
+          requestParam.heading = options.heading;
+        }
+        if (options.speed) {
+          requestParam.speed = options.speed;
+        }
+        if (options.accuracy) {
+          requestParam.accuracy = options.accuracy;
+        }
+        if (options.road_type) {
+          requestParam.road_type = options.road_type;
+        }
+        if (options.to_poi) {
+          requestParam.to_poi = options.to_poi;
+        }
+        if (options.from_track) {
+          requestParam.from_track = options.from_track;
+        }
+        if (options.waypoints) {
+          requestParam.waypoints = options.waypoints;
+        }
+        if (options.policy) {
+          requestParam.policy = options.policy;
+        }
+        if (options.plate_number) {
+          requestParam.plate_number = options.plate_number;
+        }
+      }
+      if (options.mode == MODE.transit) {
+        if (options.departure_time) {
+          requestParam.departure_time = options.departure_time;
+        }
+        if (options.policy) {
+          requestParam.policy = options.policy;
+        }
+      }
+      var locationsuccess = function locationsuccess(result) {
+        requestParam.from = result.latitude + ',' + result.longitude;
+        if (options.sig) {
+          requestParam.sig = Utils.getSig(requestParam, options.sig, 'direction', options.mode);
+        }
+        wx.request(Utils.buildWxRequestConfig(options, {
+          url: SET_URL_DIRECTION,
+          data: requestParam
+        }, 'direction'));
+      };
+      Utils.locationProcess(options, locationsuccess);
+    }
+  }]);
+  return QQMapWX;
+}();
+;
+module.exports = QQMapWX;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/wx.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 920:
 /*!***************************************************************************************************************************************************!*\
   !*** /Users/wangyunzhu/Desktop/yinjiangtao/uniapp_demo/uniapp_demo/uni_modules/mescroll-uni/components/mescroll-uni/mixins/mescroll-more-item.js ***!
   \***************************************************************************************************************************************************/

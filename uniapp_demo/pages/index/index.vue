@@ -15,6 +15,10 @@
 			<view class="demo-li"> 地图 <text class="demo-tip"> map </text></view>
 		</navigator>
 		
+		<navigator url="/bundle_b/pages/map_demo/map_demo">
+			<view class="demo-li"> 地图 <text class="demo-tip"> chooseLocation </text></view>
+		</navigator>
+		
 		<navigator url="/bundle_b/pages/operate/operate_demo">
 			<view class="demo-li"> 经营统计 <text class="demo-tip"> table + charts </text></view>
 		</navigator>
@@ -96,18 +100,9 @@
 			<view class="demo-li">横屏签名<text class="demo-tip"> 签名界面</text></view>
 		</navigator>
 		
-		<navigator url="/bundle_b/pages/swiper_action/swiper_action">
-			<view class="demo-li"> swiper action<text class="demo-tip"> 左滑按钮 </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/swiper_action/swipe_action">
-			<view class="demo-li"> swipe action<text class="demo-tip"> 左滑按钮 </text></view>
-		</navigator>
-		
 		<navigator url="/bundle_b/pages/huabi/autograph_test">
 			<view class="demo-li">签名<text class="demo-tip"> test</text></view>
 		</navigator>
-		
-		
 		
 		<navigator url="/pages/html_test/html_test">
 			<view class="demo-li">测试本地html<text class="demo-tip"> html_test</text></view>
@@ -131,9 +126,7 @@
 			<view class="demo-li">头部底部<text class="demo-tip"> 头部 数据列表list 底部 </text></view>
 		</navigator> -->
 		
-		<!-- <navigator url="/pages/location/location">
-			<view class="demo-li">地图定位<text class="demo-tip"> QQ 地图定位功能 </text></view>
-		</navigator>
+		<!-- 
 		<navigator url="/bundle/pages/take_photo/take_photo">
 			<view class="demo-li">take_photo<text class="demo-tip"> take photo </text></view>
 		</navigator> -->
@@ -213,9 +206,7 @@
 		<!-- <navigator url="/bundle/pages/drop_down/drop_down">
 			<view class="demo-li"> drop_down <text class="demo-tip"> 筛选 </text></view>
 		</navigator>
-		<navigator url="/bundle/pages/form_page/form_page">
-			<view class="demo-li"> form_page <text class="demo-tip"> form 校验 </text></view>
-		</navigator>
+		
 		
 		<navigator url="/bundle/pages/wallet/wallet">
 			<view class="demo-li"> wallet <text class="demo-tip"> 我的钱包 </text></view>

@@ -43,18 +43,7 @@
 				"navigationStyle": "custom"
 			}
 		},
-		{
-			"path": "pages/location/location",
-			"style": {
-				"navigationBarTitleText": "QQ地图定位"
-			}
-		},
-		{
-			"path": "pages/location/map_location",
-			"style": {
-				"navigationBarTitleText": "地图"
-			}
-		},
+		
 		{
 			"path": "pages/web_view/web_view",
 			"style": {
@@ -134,13 +123,7 @@
 						"navigationStyle": "custom" 
 					}
 				},
-				{
-					"path": "pages/form_page/form_page",
-					"style": {
-						"navigationStyle": "custom" 
-						// "navigationBarTitleText": "表单"
-					}
-				},
+				
 				{
 					"path": "pages/upload_img/upload_photo",
 					"style": {
@@ -205,12 +188,7 @@
 						"navigationBarTitleText": "pop box"
 					}
 				},
-				{
-					"path": "pages/card_list/card_list",
-					"style": {
-						"navigationBarTitleText": "卡片"
-					}
-				},
+				
 				{
 					"path": "pages/video_player/video_player",
 					"style": {
@@ -321,18 +299,7 @@
 						"navigationStyle": "custom" 
 					}
 				},
-				{
-					"path": "pages/swiper_action/swiper_action",
-					"style": {
-						"navigationStyle": "custom" 
-					}
-				},
-				{
-					"path": "pages/swiper_action/swipe_action",
-					"style": {
-						"navigationBarTitleText": "滑动单元格"
-					}
-				},
+				
 				{
 					"path": "pages/lesson_play/lesson_play",
 					"style": {
@@ -380,6 +347,9 @@
 				},
 				{
 					"path": "pages/segment_demo/segment_demo"
+				},
+				{
+					"path": "pages/map_demo/map_demo"
 				}
 			]
 		}

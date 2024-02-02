@@ -1,0 +1,1 @@
+.input-demo{display:flex;flex-direction:column;align-items:center}.input-box{width:90%;height:120rpx;padding:10rpx 30rpx;border-radius:20rpx}.input-item{min-height:96rpx;line-height:96rpx;background-color:#7fffd4;text-indent:20rpx}

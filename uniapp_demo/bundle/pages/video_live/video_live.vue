@@ -16,7 +16,12 @@
 
 
 <script>
+	import hicVideoPlayer from "bundle/components/hic-video-player/components/hic-video-player/hic-video-player";
+	
     export default {
+		components:{
+			hicVideoPlayer	
+		},
         data() {
 			return {
 				liveUrl: 'https://live.fanmingming.com/player/?vurl=https://livedoc.cgtn.com/500d/prog_index.m3u8'

@@ -21,12 +21,6 @@
 				
 				
 				
-				<uni-card>
-					<view>这是一个基础卡片示例，内容较少，此示例展示了一个没有任何属性不带阴影的卡片。</view>
-					<view>这是一个基础卡片示例，内容较少，此示例展示了一个没有任何属性不带阴影的卡片。</view>
-				</uni-card>
-				
-				
 			</scroll-view>
 		</view>
 		
@@ -60,18 +54,18 @@
 			<!-- 取消 确定 -->
 		</modal>
 		
-		<uni-popup ref="loginbox" type="center" :is-mask-click="false">
+		<u-popup ref="loginbox" type="center" :is-mask-click="false">
 			<view class="evaluate-fox" 
 				:style="{background:'url('+loginPopBG+');background-repeat: no-repeat;background-size: cover;'}">
 				
 				<button class="u-reset-button form-cancel-btn u-m-y-40"   @click="sureLoginFun">去登录</button>
 				<button class="u-reset-button form-save-btn u-m-y-40" @click="cancelLoginFun">取消</button>
 			</view>
-		</uni-popup>
+		</u-popup>
 		
 		
 		<!-- 评估 不通过时 再次确认  sureAppraisePass -->
-		<uni-popup ref="sureAppraiseBox" type="center" :is-mask-click="false">
+		<u-popup ref="sureAppraiseBox" type="center" :is-mask-click="false">
 			<view class="appraise-fox">
 				<view class="appraise-title">温馨提示</view>
 				<view class="appraise-subtitle">请确认本次评估内容，是否不通过</view>
@@ -81,11 +75,11 @@
 				</view>
 				
 			</view>
-		</uni-popup>
+		</u-popup>
 		
 		
 		<!-- 选择项目弹框 -->
-		<uni-popup ref="popup" type="center" :maskClick="false">
+		<u-popup ref="popup" type="center" :maskClick="false">
 		    <view class="popup-project">
 				<view class="title"><text>选择项目</text></view>
 				<view class="checkboxgroupBox">
@@ -106,13 +100,13 @@
 					<button type="primary" plain="true" size="mini" @tap="okPopup">确认</button>
 				</view>
 			</view>
-		</uni-popup>
+		</u-popup>
 
 
 		
 
 		<!-- 权限验证 - 弹框 -->
-		<uni-popup ref="smsPop" type="center" :maskClick="false">
+		<u-popup ref="smsPop" type="center" :maskClick="false">
 		    <view class="sms-box">
 				<view class="sms-title">获取验证码</view>
 				<view class="input-box__phone">
@@ -128,7 +122,7 @@
 					<view class="sms-bottom__ok" @tap="okSmsPopup">确认</view>
 				</view>
 			</view>
-		</uni-popup>
+		</u-popup>
 
 		
 		
