@@ -25,7 +25,8 @@
 		},
 		data() {
 			return {
-				mapkey: 'SFABZ-WANWW-FISRY-3IGTF-HV7RE-YSFTI', //这里是腾讯地图的key
+				//这里是腾讯地图的key
+				mapkey: 'SFABZ-WANWW-FISRY-3IGTF-HV7RE-YSFTI', 
 				lat: '',
 				lng: '',
 				weShow: false

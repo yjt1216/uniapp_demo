@@ -11,20 +11,20 @@
 		</view> -->
 		<!-- <view style="margin-top: 100rpx;">{{prov}}{{city}}{{address}}</view> -->
 
-		<!-- <view v-if="showMap">
+		<view v-if="showMap">
 			<selectLoc :showMap="showMap" @close="closeLoc" @confirm="confirmLoc"></selectLoc>
-		</view> -->
-		
-		
+		</view>
 		
 		
 	</view>
 </template>
 
 <script>
+	let that = null;
 	import selectLoc from '../../components/selectLoc/selectLoc.vue';
 	
 	import gcoord from 'gcoord';
+	import addressit from "addressit";
 	
 	export default {
 		components: {
@@ -40,13 +40,19 @@
 				city: '',
 				area: '',
 				address: '',
-				mapkey: 'SFABZ-WANWW-FISRY-3IGTF-HV7RE-YSFTI', //这里是腾讯地图的key
+				//这里是腾讯地图的key
+				mapkey: 'SFABZ-WANWW-FISRY-3IGTF-HV7RE-YSFTI', 
 			}
 		},
 		onLoad() {
-
+			that = this;
+			
 		},
 		methods: {
+			
+			showErr(err){
+				console.error('ceshi ---- err',err)
+			},
 			confirmLoc(res) {
 				this.showMap = false;
 				this.lat = res.lat;
@@ -61,25 +67,26 @@
 				this.showMap = false;
 			},
 			getLocationInfo(){
-				uni.chooseLocation({
-				    success: res => {
-						console.log('获取当前地理位置res', res);
-						console.log('位置名称：' + res.name);
-						console.log('详细地址：' + res.address);
-						console.log('纬度：' + res.latitude);
-						console.log('经度：' + res.longitude);
+				this.showMap = true;
+				// uni.chooseLocation({
+				//     success: res => {
+				// 		console.log('获取当前地理位置res', res);
+				// 		console.log('位置名称：' + res.name);
+				// 		console.log('详细地址：' + res.address);
+				// 		console.log('纬度：' + res.latitude);
+				// 		console.log('经度：' + res.longitude);
 						
-						/* 百度坐标系BD-09  腾讯坐标系GCJ-02 */
+				// 		/* 百度坐标系BD-09  腾讯坐标系GCJ-02 */
 						
-						var result = gcoord.transform(
-							[res.latitude,res.longitude],
-							gcoord.GCJ02, //当前坐标  腾讯高德坐标系
-							gcoord.BD09, // 目标坐标  百度坐标系
-						);
-						console.log('坐标系转换result', result);
-						this.getAreaIdByLatLon(res.latitude,res.longitude,this.mapkey);
-				    },
-				});
+				// 		var result = gcoord.transform(
+				// 			[res.latitude,res.longitude],
+				// 			gcoord.GCJ02, //当前坐标  腾讯高德坐标系
+				// 			gcoord.BD09, // 目标坐标  百度坐标系
+				// 		);
+				// 		console.log('坐标系转换result', result);
+				// 		this.getAreaIdByLatLon(res.latitude,res.longitude,this.mapkey);
+				//     },
+				// });
 				
 			},
 			/* 根据经纬度获取区areaId */
@@ -95,22 +102,35 @@
 				
 				// 发送请求获取详细地址信息，其中包含areaId
 				uni.request({
-				  url: url,
-				  method: 'GET',
-				  success: function(res) {
+					url: url,
+					method: 'GET',
+					success: function(res) {
 						let geoData = res.data;
 						console.log('经纬度获取地理位置:', geoData);
 						if (geoData.status === 0 && geoData.result) {
-						  let ad_info = geoData.result.ad_info;
+							const {ad_info,address_component,formatted_addresses} = geoData.result;
+							
+						  
 						  let areaId = ad_info.adcode; // 这里得到的是区县级别的adcode
 						  console.log('经纬度获取Area ID:', areaId);
+						  
+						  let address = formatted_addresses.standard_address;
+						  
+						  // let street = address.replace(/.+?(省|市|自治区|自治州|县|区)/g,'')
+						  // let street = address.replace(/^(.*?[省|市|县|区])\s*/, '');
+						  // let street = address.replace(/^(.*?[省|市|县|区][^0-9]*)(?=\d)/, '');
+						  
+						  let street = address.split('区')[1].trim();
+						  that.title = street;
+						  
+						  
 						} else {
 						  console.error('获取areaId失败：', geoData);
 						}
-				  },
-				  fail: function(err) {
-				    console.error('请求失败：', err);
-				  }
+					},
+					fail: function(err) {
+						console.error('请求失败：', err);
+					}
 				});
 			},
 			

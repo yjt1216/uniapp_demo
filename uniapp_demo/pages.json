@@ -352,6 +352,14 @@
 					"path": "pages/map_demo/map_demo"
 				}
 			]
+		},
+		{
+			"root": "bundle_c",
+			"pages": [
+				{
+					"path": "pages/amap_location/amap_location"
+				}
+			]
 		}
 		
 	],

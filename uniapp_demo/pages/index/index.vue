@@ -11,12 +11,12 @@
 		<view class="group-title">功能示例</view>
 		
 		
-		<navigator url="/pages/location/map_location">
-			<view class="demo-li"> 地图 <text class="demo-tip"> map </text></view>
+		<navigator url="/bundle_c/pages/amap_location/amap_location">
+			<view class="demo-li"> 高德地图 <text class="demo-tip"> amap </text></view>
 		</navigator>
 		
 		<navigator url="/bundle_b/pages/map_demo/map_demo">
-			<view class="demo-li"> 地图 <text class="demo-tip"> chooseLocation </text></view>
+			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> chooseLocation </text></view>
 		</navigator>
 		
 		<navigator url="/bundle_b/pages/operate/operate_demo">
@@ -26,7 +26,9 @@
 		<navigator url="/bundle/pages/upload_img/upload_photo">
 			<view class="demo-li">上传照片<text class="demo-tip"> 选择图片</text></view>
 		</navigator>
-		
+		<navigator url="/bundle/pages/action_sheet/action_sheet">
+			<view class="demo-li">输入<text class="demo-tip"> textarea</text></view>
+		</navigator>
 		<!-- 
 		<navigator url="/bundle_b/pages/chart_demo/echart_demo">
 			<view class="demo-li"> 圆环图 <text class="demo-tip"> echart </text></view>
@@ -237,14 +239,14 @@ import localStore from '../../sheep/config/local_store';
 			}
 		},
 		mounted(option) {
-			console.log('index on mounted ',option);
+			// console.log('index on mounted ',option);
 		},
 		onLoad(option) {
 			uni.setNavigationBarTitle({
 				title: 'mescroll ('+ uni.getSystemInfoSync().platform + ')'
 			})
 			
-			console.log('index on load ',option);
+			// console.log('index on load ',option);
 			//    await Cache.set('user_info', { name: 'John Doe', age: 30 }, 60);
 			
 			this.getUserInfo();

@@ -16,6 +16,7 @@
         ]
     },
     "dependencies": {
+        "addressit": "^1.8.2",
         "gcoord": "^1.0.5"
     }
 }

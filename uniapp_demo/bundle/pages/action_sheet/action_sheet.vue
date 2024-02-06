@@ -1,7 +1,7 @@
 <template>
 	<view class="action-sheet">
 		<nav-bar title="action sheet" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
-		<view>
+		<view style="padding: 0 30rpx;">
 			<u-form :model="student" ref="uForm">
 				<u-form-item :leftIconStyle="{color: '#888', fontSize: '32rpx'}" left-icon="account" label-width="120"
 					label="姓名" prop="name">
@@ -16,6 +16,10 @@
 				<u-form-item label="班级" label-width="150" @click="openClassSelect">
 					<u-input type="select" v-model="student.class"
 						placeholder="请选择班级" border="none" disabled></u-input>
+				</u-form-item>
+				
+				<u-form-item label="地址" label-width="150" :required="true" labelPosition="top">
+					<u-textarea v-model="student.address" placeholder="请输入您的详细地址" ></u-textarea>
 				</u-form-item>
 				
 				<u-action-sheet :actions="schoolSelectList" :show="schoolSelectShow"
@@ -40,7 +44,8 @@
 				student: {
 					name: '',
 					school: '',
-					class: ''
+					class: '',
+					address:'',
 				},
 				schoolSelectShow: false,
 				classSelectShow: false,

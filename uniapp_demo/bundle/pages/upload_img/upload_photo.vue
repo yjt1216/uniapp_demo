@@ -17,7 +17,9 @@
 				<text class="feedback-con-num">{{conLength}}/200</text>
 			</view>
 			<view class="feedback-con-msg">
-				<textarea @input="getFeedbackMessageHandle" maxlength="200" class="feedback-con-textarea" placeholder="请输入反馈内容并上传图片" placeholder-class="placeholderclass"></textarea>
+				<textarea @input="getFeedbackMessageHandle" maxlength="200" class="feedback-con-textarea" 
+					placeholder="请输入反馈内容并上传图片" placeholder-class="placeholderclass">
+				</textarea>
 			</view>
 		</view>
 		<!-- 上传图片 -->

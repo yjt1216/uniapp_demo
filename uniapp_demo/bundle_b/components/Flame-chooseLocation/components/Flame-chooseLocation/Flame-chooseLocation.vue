@@ -49,7 +49,8 @@
 	* @property {Boolean} exact = [false|true] 是否开启移动端精确定位
 	* @property {String} mapkey = '' 腾讯地图开放平台申请的key
 	* @event {Function} confirm 确认选择 ,返回选择的位置信息
-*/
+	*/
+   
 	export default {
 		components: {},
 		mixins: [],
@@ -67,6 +68,7 @@
 				default: false
 			}
 		},
+		
 		data() {
 			return {
 				keyword: '',
@@ -90,8 +92,11 @@
 			// option路由传值接收参数
 		},
 		onShow() {},
-		mounted() {},
+		mounted() {
+			
+		},
 		methods: {
+		// latitude: " 31.266634", longitude: "120.737635"
 			focusInput() {
 				this.showCancel = true
 			},
@@ -126,7 +131,7 @@
 				this.map.setCenter(new TMap.LatLng(lat, lng))
 			},
 			async requireFunc(params = {}, path = '') {
-
+				console.log('requireFunc param',params)
 				return new Promise((resolve, reject) => {
 					let data = {
 						key: this.mapkey,
@@ -251,6 +256,7 @@
 				const params = {
 					page_size: 20,
 					page_index: 1,
+					enableHighAccuracy: true,
 					...data
 				}
 				const res = await this.requireFunc(params, '/ws/place/v1/search')
@@ -264,6 +270,11 @@
 						this.searchList = res.data
 					}
 				}
+				
+				
+				
+				
+				
 			},
 			async searchLoc(data) {
 				const params = {
@@ -301,7 +312,13 @@
 				this.map.on('dblclick', () => {
 					this.changeDragend()
 				})
+				
+				
+				
+				
 			},
+			
+			
 			// 拖拽结束更新列表
 			changeDragend() {
 				this.selectAdress = {}
