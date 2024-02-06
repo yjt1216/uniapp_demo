@@ -24,7 +24,7 @@
 	import selectLoc from '../../components/selectLoc/selectLoc.vue';
 	
 	import gcoord from 'gcoord';
-	import addressit from "addressit";
+	
 	
 	export default {
 		components: {
