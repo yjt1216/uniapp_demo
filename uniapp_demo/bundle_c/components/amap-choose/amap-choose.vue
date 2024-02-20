@@ -143,7 +143,7 @@
 			
 			toChecked(obj) {
 				console.log('选择地址obj',obj);
-				this.checked = obj;
+				// this.checked = obj;
 				
 				if(this.marker) {
 					this.marker.setMap(null);
@@ -182,46 +182,49 @@
 				}
 				
 				AMap.plugin('AMap.Geolocation', function() {
-				  var geolocation = new AMap.Geolocation({
-				    // 是否使用高精度定位，默认：true
-				    enableHighAccuracy: true,
-				    // 设置定位超时时间，默认：无穷大
-				    timeout: 10000,
-				    // 定位按钮的停靠位置的偏移量，默认：Pixel(10, 20)
-				    buttonOffset: new AMap.Pixel(10, 20),
-				    //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-				    zoomToAccuracy: true,     
-				    //  定位按钮的排放位置,  RB表示右下
-				    buttonPosition: 'RB'
-				  })
+					var geolocation = new AMap.Geolocation({
+						// 是否使用高精度定位，默认：true
+						enableHighAccuracy: true,
+						// 设置定位超时时间，默认：无穷大
+						timeout: 10000,
+						// 定位按钮的停靠位置的偏移量，默认：Pixel(10, 20)
+						buttonOffset: new AMap.Pixel(10, 20),
+						//  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+						zoomToAccuracy: true,     
+						//  定位按钮的排放位置,  RB表示右下
+						buttonPosition: 'RB'
+					})
 				  
-				  geolocation.getCurrentPosition(function(status,result){
-					if(result.info == "SUCCESS" && result.position && result.position){
-						that.addMarker(result.position.lng, result.position.lat)
-						// that.getPlaces('', `${result.position.lng}, ${result.position.lat}`)
-						// that.getNearbyPlaces(result.position.lng, result.position.lat);
-						that.getNowPlace(`${result.position.lng}, ${result.position.lat}`);
-					}
-				  });
+					geolocation.getCurrentPosition(function(status,result){
+						console.log('高德地图定位经纬度result',result);
+						if(result.info == "SUCCESS" && result.position && result.position){
+							that.addMarker(result.position.lng, result.position.lat)
+							// that.getPlaces('', `${result.position.lng}, ${result.position.lat}`)
+							// that.getNearbyPlaces(result.position.lng, result.position.lat);
+							that.getNowPlace(`${result.position.lng}, ${result.position.lat}`);
+						}
+					});
 				
 				})
 			},
 			
 			getNowPlace(location) {
+				let that = this;
 				uni.request({
 					url: `https://restapi.amap.com/v3/geocode/regeo?key=${this.AMapKeyWeb}&location=${location}`,
 					method: 'GET',
 					success: (res) => {
 						let result = res.data;
+						console.log('高德地图定位result',result);
 						if(result.status == '1') {
 							let tempObj = result.regeocode;
-							this.checked = {
-								adcode: tempObj.addressComponent.adcode,
-								city: tempObj.addressComponent.city,
-								district: tempObj.addressComponent.district,
-								location,
-								addressLocal: tempObj.formatted_address
-							}
+							that.checked.adcode = tempObj.addressComponent.adcode;
+							that.checked.city = tempObj.addressComponent.city;
+							that.checked.district = tempObj.addressComponent.district;
+							that.checked.location = location;
+							that.checked.addressLocal = tempObj.formatted_address
+							
+							console.log('高德地图定位checked',this.checked);
 						}
 						
 					},
@@ -277,6 +280,7 @@
 			https://restapi.amap.com/v5/place/around?location=116.473168,39.993015&radius=10000&types=011100&key=<用户的key>
 			that.getNearbyPlaces(e.lnglat.lng, e.lnglat.lat);
 			*/
+		   /* 获取周边信息 */
 			getNearbyPlaces(lng,lat) {
 				let nearbyUrl = `https://restapi.amap.com/v3/place/around?key=${this.AMapKeyWeb}&location=${lng},${lat}&output=JSON`;
 				console.log('获取周边nearbyUrl',nearbyUrl);
@@ -284,7 +288,7 @@
 					url: nearbyUrl,
 					method: 'GET',
 					success: (res) => {
-						console.log('获取周边res',res);
+						// console.log('获取周边res',res);
 						let result = res.data;
 						if(result.status === '1')  {
 							this.list = result.pois;
