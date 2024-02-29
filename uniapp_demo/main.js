@@ -9,11 +9,14 @@ import minxinsApp from '@/mixins/app';
 import {router,RouterMount} from './router.js'
 import routerLink from './js_sdk/uni-simple-router/link.vue';
 
+import location from "@/sheep/utils/location.js"
+
 
 
 // Vue.component('mescroll-body', MescrollBody)
 Vue.prototype.$toast = toast
 Vue.prototype.$Cache = Cache
+Vue.prototype.$location = location;
 Vue.config.productionTip = false
 Vue.component('RouterLink', routerLink)
 Vue.use(router);

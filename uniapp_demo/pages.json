@@ -357,7 +357,16 @@
 			"root": "bundle_c",
 			"pages": [
 				{
-					"path": "pages/amap_location/amap_location"
+					"path": "pages/amap_location/amap_location",
+					"style": {
+						"navigationBarTitleText": "高德地图"
+					}
+				},
+				{
+					"path": "pages/qqmap_location/qqmap_location",
+					"style": {
+						"navigationBarTitleText": "腾讯地图"
+					}
 				}
 			]
 		}

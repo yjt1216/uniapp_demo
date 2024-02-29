@@ -87,25 +87,33 @@
     "vueVersion" : "2",
     "h5" : {
         "router" : {
-            "base" : "/mobile",
+            "base" : "/h5/",
             "mode" : "history"
         },
         "title" : "加载中",
         "sdkConfigs" : {
             // 使用地图或位置相关功能必须填写其一
             "maps" : {
-                "bmap" : {
-                    // 百度地图秘钥（HBuilderX 3.99+）http://lbsyun.baidu.com/apiconsole/key#/home
-                    "key" : "a98wDfMHjmyOgQ7nECDslayFLI5wYXbB"
-                },
                 "amap" : {
                     "key" : "bb54d32661ce014f5a1bf3d8b5ef4199",
                     "securityJsCode" : "5415fa334caddaff7fc9faf59e411a0c",
                     "serviceHost" : ""
                 }
             }
+        },
+        "devServer" : {
+            "https" : true
         }
     },
+    // "bmap" : {
+    //     // 百度地图秘钥（HBuilderX 3.99+）http://lbsyun.baidu.com/apiconsole/key#/home
+    //     "key" : "a98wDfMHjmyOgQ7nECDslayFLI5wYXbB"
+    // }
+    // "amap" : {
+    //     "key" : "bb54d32661ce014f5a1bf3d8b5ef4199",
+    //     "securityJsCode" : "5415fa334caddaff7fc9faf59e411a0c",
+    //     "serviceHost" : ""
+    // }
     "uni_modules" : {
         "share" : {
             "name" : "uni-share-module",

@@ -30,7 +30,10 @@
 				],
 				tabIndex: 0 ,// 当前tab的下标
 				showMap:false,
-				initLocation:'120.737635,31.266634',
+				initLocation:'',
+				// initLocation:'120.737635,31.266634',
+				// initLocation:'120.63212,31.26249',
+				
 				//高德地图webjs的key 
 				keyMap:'bb54d32661ce014f5a1bf3d8b5ef4199',
 				//高德地图web服务的key
@@ -47,11 +50,13 @@
 				this.showMap = true;
 			},
 			changeShow(statue){
+				console.log('changeShow',statue)
 				this.showMap = statue;
 			},
 			placeChoose(e){
 				console.log('选择地址e',e);
 				this.chooseAddrss = e.address;
+				this.showMap = false;
 			}
 		}
 	}

@@ -12,5 +12,22 @@ module.exports = {
 				}, true )
 			})
 		]
+	},
+	lintOnSave:true,
+	productionSourceMap: false,
+	css:{},
+	devServer:{
+		disableHostCheck:true,
+		// proxy:{
+		// 	'/api':{
+		// 		/* 背地服务接口 */
+		// 		// target:'https://didi.wellnurse.cn',
+		// 		target: dataUrl,
+		// 		ws:true,
+		// 		pathRewrite:{
+		// 			'^/api':'/',
+		// 		}
+		// 	}
+		// }
 	}
 }

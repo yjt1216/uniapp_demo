@@ -82,11 +82,12 @@
 				var script = document.createElement("script");
 				script.type = "text/javascript";
 				script.setAttribute('id', 'mapTest')
-				script.src = `https://map.qq.com/api/js?v=2.exp&key=${that.keyMap}`;
+				script.src = `https://webapi.amap.com/maps?v=2.0&key=${that.keyMap}`;
 				document.body.appendChild(script);
 				that.loop();
 			})()
 		},
+		
 		
 		methods:{
 			loop() {

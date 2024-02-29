@@ -18,7 +18,9 @@
 		<navigator url="/bundle_b/pages/map_demo/map_demo">
 			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> chooseLocation </text></view>
 		</navigator>
-		
+		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
+			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> qqmap_location </text></view>
+		</navigator>
 		<navigator url="/bundle_b/pages/operate/operate_demo">
 			<view class="demo-li"> 经营统计 <text class="demo-tip"> table + charts </text></view>
 		</navigator>
@@ -29,6 +31,11 @@
 		<navigator url="/bundle/pages/action_sheet/action_sheet">
 			<view class="demo-li">输入<text class="demo-tip"> textarea</text></view>
 		</navigator>
+		
+		<navigator url="/bundle/pages/upload_img/upload_photo">
+			<view class="demo-li">upload photo<text class="demo-tip"> 压缩并保存图片 </text></view>
+		</navigator>
+		
 		<!-- 
 		<navigator url="/bundle_b/pages/chart_demo/echart_demo">
 			<view class="demo-li"> 圆环图 <text class="demo-tip"> echart </text></view>
@@ -151,9 +158,7 @@
 		</navigator>
 		
 		
-		<navigator url="/bundle/pages/upload_img/upload_photo">
-			<view class="demo-li">upload photo<text class="demo-tip"> 压缩并保存图片 </text></view>
-		</navigator>
+		
 		
 		
 		<navigator url="/bundle/pages/list_h/list_h">
@@ -220,8 +225,8 @@
 </template>
 
 <script>
-import localStore from '../../sheep/config/local_store';
-	
+	import localStore from '../../sheep/config/local_store';
+	import gcoord from 'gcoord';
 	export default {
 		data(){
 			return {
@@ -236,6 +241,8 @@ import localStore from '../../sheep/config/local_store';
 				bannerImages:[],
 				code:'',
 				state:'',
+				latitude:null,
+				longitude:null,
 			}
 		},
 		mounted(option) {
@@ -245,19 +252,103 @@ import localStore from '../../sheep/config/local_store';
 			uni.setNavigationBarTitle({
 				title: 'mescroll ('+ uni.getSystemInfoSync().platform + ')'
 			})
+			// #ifdef H5
+			if (navigator.geolocation) {
+			    navigator.geolocation.getCurrentPosition(position => {
+			        // 成功获取位置
+			        console.log(position.coords.latitude, position.coords.longitude);
+			    }, error => {
+			        // 处理定位失败错误
+			        console.error(error);
+			    });
+			} else {
+			    console.error('Geolocation is not supported by this browser.');
+			}
+			// #endif
+
 			
 			// console.log('index on load ',option);
 			//    await Cache.set('user_info', { name: 'John Doe', age: 30 }, 60);
-			
+			this.getUserLocation();
 			this.getUserInfo();
 			
+			/* 
+			 
+			https://webapi.amap.com/maps?v=1.4.15&key=bb54d32661ce014f5a1bf3d8b5ef4199&plugin=AMap.Geolocation  
 			
+			//web js
+			https://webapi.amap.com/maps?v=2.0&key=bb54d32661ce014f5a1bf3d8b5ef4199
+			
+			
+			https://webapi.amap.com/maps?v=2.0&key=0b1f8852511cd6954ec64ad6caef928a
+			  
+			  
+			https://webapi.amap.com/maps?v=2.0&key=bb54d32661ce014f5a1bf3d8b5ef4199&plugin=AMap.Geolocation  
+			
+			 */
+			
+	
+		},
+		onReady:function(){
+			this.getUserLocation();
 		},
 		methods:{
 			async getUserInfo(){
 				const userInfo = await localStore.get('user_info');
 				console.log('首页getUserInfo--userInfo',userInfo);
 			},
+			getUserLocation(){
+				let that = this;
+				
+				
+				// gcj02
+				// wgs84
+				// uni.getLocation({
+				// 	type: 'gcj02',
+				// 	success: function (res) {
+				// 		console.log('首页getLocation',res);
+				// 		console.log('经度：', res.longitude);
+				// 		console.log('纬度：', res.latitude);
+				// 	},
+				// 	fail: (error) => {
+				// 		console.log('当前位置error' + error);
+				// 	},
+				// 	complete: (result) => {
+				// 		console.log('当前位置complete' , result);
+				// 		console.log('result经度：', result.longitude);
+				// 		console.log('result纬度：', result.latitude);
+				// 		uni.hideLoading();
+				// 		that.longitude = result.longitude;
+				// 		that.latitude = result.latitude;
+						
+				// 	}
+				// });
+				
+				that.$location.getlocation().then(res=>{
+					console.log('首页getLocation',res);
+					// uni.hideLoading();
+				}).catch(err=>{
+					console.log('首页getLocation-err',err);
+					// uni.hideLoading();
+				})
+				
+				
+			},
+			// async getUserLocation() {
+			//     const { success, errMsg, result } = await uni.getLocation({
+			//         type: 'gcj02', // 根据需要选择坐标系，默认是gcj02（国测局地理坐标系）
+			//         altitude: false, // 是否需要海拔信息，默认为false
+			//         accuracy: 'high', // 定位精度，默认为'high'
+			//     });
+			// 	console.log('首页getLocation',res);
+			//     if (success) {
+			//         this.latitude = result.latitude;
+			//         this.longitude = result.longitude;
+			//         console.log('定位成功，经纬度：', this.latitude, this.longitude);
+			//     } else {
+			//         console.error('定位失败，错误信息：', errMsg);
+			//     }
+			// },
 			shareClick(){
 				this.$share.share({
 				  title: '分享标题',

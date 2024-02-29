@@ -168,7 +168,7 @@
 					let tempImages = e.file.map(item=>item.url);
 					that.$refs.helangCompress.compress({
 						src: tempImages,
-						maxSize: 800,
+						maxSize: 1980,
 						fileType: 'jpg',
 						quality: 0.75,
 						minSize: 640

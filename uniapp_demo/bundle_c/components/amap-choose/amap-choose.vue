@@ -134,16 +134,24 @@
 					}
 					
 					let location = this.checked.location.split(',');
-					
+					this.$emit('changeShow', false)
 					this.$emit('placeChoose', {address, adcode: this.checked.adcode, latitude:location[1], longitude:location[0]})
 					this.showPlace = false;
 					this.cancel();
+					
 				}
 			},
 			
 			toChecked(obj) {
+				let that = this;
 				console.log('选择地址obj',obj);
 				// this.checked = obj;
+				// that.checked.adcode = obj.addressComponent.adcode;
+				// that.checked.city = obj.addressComponent.city;
+				// that.checked.district = obj.addressComponent.district;
+				that.checked.location = obj.location;
+				that.checked.addressLocal = obj.address
+				that.checked.adname = obj.adname
 				
 				if(this.marker) {
 					this.marker.setMap(null);
@@ -172,7 +180,7 @@
 					that.getNowPlace(`${e.lnglat.lng}, ${e.lnglat.lat}`);
 				})
 				
-				if(this.initLocation.length > 0) {
+				if(this.initLocation.length > 3) {
 					let tempArr = this.initLocation.split(',');
 					that.addMarker(tempArr[0], tempArr[1])
 					// that.getPlaces('', `${tempArr[0]}, ${tempArr[1]}`);
@@ -196,8 +204,18 @@
 					})
 				  
 					geolocation.getCurrentPosition(function(status,result){
-						console.log('高德地图定位经纬度result',result);
+						console.log('获取用户当前经纬度result',result);
+						
 						if(result.info == "SUCCESS" && result.position && result.position){
+							
+							const { longitude, latitude } = result.position;
+							
+							// 设置地图中心点为当前定位结果
+							map.setCenter([longitude, latitude]);
+							
+							// 可以同时设置缩放级别
+							map.setZoom(18); // 这里以15为例，你可以根据实际需求设置合适的缩放级别
+							
 							that.addMarker(result.position.lng, result.position.lat)
 							// that.getPlaces('', `${result.position.lng}, ${result.position.lat}`)
 							// that.getNearbyPlaces(result.position.lng, result.position.lat);
@@ -215,7 +233,7 @@
 					method: 'GET',
 					success: (res) => {
 						let result = res.data;
-						console.log('高德地图定位result',result);
+						console.log('getNowPlace-result',result);
 						if(result.status == '1') {
 							let tempObj = result.regeocode;
 							that.checked.adcode = tempObj.addressComponent.adcode;
