@@ -369,6 +369,12 @@
 					}
 				},
 				{
+					"path": "pages/qqmap_location/track_location",
+					"style": {
+						"navigationBarTitleText": "轨迹"
+					}
+				},
+				{
 					"path": "pages/navi_search/navi_search",
 					"style" : {
 						"navigationStyle": "custom",  //移除顶部标题导航栏

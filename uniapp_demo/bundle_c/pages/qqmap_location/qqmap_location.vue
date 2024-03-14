@@ -19,8 +19,7 @@
 
 <script>
 import {wgs84togcj02} from "@/sheep/utils/tools.js"
-import { lineString } from '@turf/helpers';
-import  buffer  from '@turf/buffer';
+
 export default {
 	name: '',
 	data() {
@@ -134,43 +133,6 @@ export default {
                 //dottedLine:'',//是否虚线,默认false
 			}];
             
-            //绘制缓冲区 阴影
-			// if(arr2.length <1) return;
-			// var linestrings = lineString(arr2);
-			// console.log("linestrings",linestrings)
-			// // 默认单位是千米，与下面的写法一致
-			// var buffereds = buffer(linestrings, 100, {units: 'meters'});
-			// console.log('buffereds ==',buffereds);
-			// var polygonlist = buffereds.geometry.coordinates[0];
-			// var mapPolygon=[];
-			// JSON.parse(JSON.stringify(polygonlist)).map((item)=>{
-			// 	// 绘制路线点
-			// 	mapPolygon.push({
-			// 		// latitude: wgs84togcj02(item[0], item[1])[1],
-			// 		// longitude: wgs84togcj02(item[0], item[1])[0]
-			// 		latitude: item[1],
-			// 		longitude:item[0]
-			// 	});
-			// })
-			// that.polygons = [{
-			// 	points: JSON.parse(JSON.stringify(mapPolygon)),
-			// 	strokeWidth:2,
-			// 	strokeColor:'#0070d9',
-			// 	fillColor:'#0070d933',
-			// 	zIndex:2
-			// }];
-			
-			//动态轨迹 方法一（微信小程序中无效果）
-			// this.mapContext.moveAlong({
-			// 	markerId: 1,
-			// 	path: that.polyline[0].points,
-			// 	duration: 5000,
-			// 	autoRotate:true,
-			// 	success(res) {
-			// 		console.log('####:',res);
-			// 	}
-			// });
-				
 			//动态轨迹 方法二
 			// this.movePoint();
 		},

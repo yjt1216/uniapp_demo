@@ -24,7 +24,6 @@
 	export default{
 		components:{
 			PrivacyPopup,
-			
 		},
 		data(){
 			return {

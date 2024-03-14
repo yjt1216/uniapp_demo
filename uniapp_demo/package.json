@@ -16,7 +16,6 @@
         ]
     },
     "dependencies": {
-        "@turf/turf": "^6.5.0",
         "addressit": "^1.8.2",
         "gcoord": "^1.0.6",
         "luch-request": "^3.1.1",

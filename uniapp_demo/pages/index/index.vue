@@ -42,7 +42,11 @@
 		
 		
 		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
-			<view class="demo-li">qqmap update<text class="demo-tip"> 后台定位 </text></view>
+			<view class="demo-li">qqmap update<text class="demo-tip"> 行程轨迹 </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_c/pages/qqmap_location/track_location">
+			<view class="demo-li">lcoation update<text class="demo-tip"> 行程轨迹2 </text></view>
 		</navigator>
 		
 		<!-- 
