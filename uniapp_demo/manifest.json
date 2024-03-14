@@ -69,8 +69,15 @@
                 "desc" : "你的位置信息将用于更好的数据展示"
             }
         },
-        "requiredPrivateInfos" : [ "getLocation", "chooseLocation" ],
-        "libVersion" : "latest"
+        // "requiredPrivateInfos" : [ "getLocation", "chooseLocation" ],
+        "libVersion" : "latest",
+		"requiredPrivateInfos": [ 
+		    "getLocation",
+			"chooseLocation",
+		    "onLocationChange",
+		    "startLocationUpdateBackground"
+		],
+		"requiredBackgroundModes" : [ "location" ] //必填
     },
     "mp-alipay" : {
         "usingComponents" : true

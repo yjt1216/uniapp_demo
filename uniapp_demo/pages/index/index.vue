@@ -36,7 +36,21 @@
 			<view class="demo-li">upload photo<text class="demo-tip"> 压缩并保存图片 </text></view>
 		</navigator>
 		
+		<navigator url="/bundle_c/pages/location_update/location_update">
+			<view class="demo-li">lcoation update<text class="demo-tip"> 后台定位 </text></view>
+		</navigator>
+		
+		
+		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
+			<view class="demo-li">qqmap update<text class="demo-tip"> 后台定位 </text></view>
+		</navigator>
+		
 		<!-- 
+		
+		<navigator url="/bundle_c/pages/navi_search/navi_search">
+			<view class="demo-li">navi search<text class="demo-tip"> 导航栏搜索 </text></view>
+		</navigator>
+		
 		<navigator url="/bundle_b/pages/chart_demo/echart_demo">
 			<view class="demo-li"> 圆环图 <text class="demo-tip"> echart </text></view>
 		</navigator>
@@ -269,8 +283,8 @@
 			
 			// console.log('index on load ',option);
 			//    await Cache.set('user_info', { name: 'John Doe', age: 30 }, 60);
-			this.getUserLocation();
-			this.getUserInfo();
+			// this.getUserLocation();
+			// this.getUserInfo();
 			
 			/* 
 			 
@@ -290,7 +304,7 @@
 	
 		},
 		onReady:function(){
-			this.getUserLocation();
+			// this.getUserLocation();
 		},
 		methods:{
 			async getUserInfo(){

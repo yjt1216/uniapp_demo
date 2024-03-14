@@ -367,6 +367,20 @@
 					"style": {
 						"navigationBarTitleText": "腾讯地图"
 					}
+				},
+				{
+					"path": "pages/navi_search/navi_search",
+					"style" : {
+						"navigationStyle": "custom",  //移除顶部标题导航栏
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "pages/location_update/location_update",
+					"style": {
+						"navigationBarTitleText": "腾讯地图"
+					}
 				}
 			]
 		}

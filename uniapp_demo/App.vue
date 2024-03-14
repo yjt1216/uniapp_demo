@@ -4,6 +4,7 @@
 		globalData:{
 			statusBarB:0,
 			customBarH:0,
+			showPrivacy: false,
 		},
 		onLaunch: function() {
 			console.log('App Launch')

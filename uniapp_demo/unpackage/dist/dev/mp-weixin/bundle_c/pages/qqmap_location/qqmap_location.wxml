@@ -1,1 +1,1 @@
-<view class="content"><image class="logo" src="/static/logo.png"></image><view data-event-opts="{{[['tap',[['getLocationInfo',['$event']]]]]}}" class="text-area" bindtap="__e"><text class="title">{{title}}</text></view></view>
+<view class="wrap"><map style="height:100vh;width:100%;" id="myMap" latitude="{{map.latitude}}" longitude="{{map.longitude}}" polyline="{{polyline}}" show-location="{{true}}" polygons="{{polygons}}" markers="{{markers}}"></map></view>
