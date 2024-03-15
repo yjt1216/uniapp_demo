@@ -7,7 +7,6 @@
 			style="height: 100vh; width:100%;"
 			:latitude="map.latitude"
 			:longitude="map.longitude"
-			
 			:polyline="polyline"
 			:show-location="true"
 			:polygons="polygons"
@@ -70,27 +69,27 @@ export default {
 			// that.map.latitude = wgs84togcj02(geometry[0].lng, geometry[0].lat)[1];
 			// that.map.longitude = wgs84togcj02(geometry[0].lng, geometry[0].lat)[0];
 			
-			that.map.latitude = 31.2666;
-			that.map.longitude = 120.737732;
+			that.map.latitude = geometry[0].lat;
+			that.map.longitude = geometry[0].lng;
 			
-				that.markers.push({
-					id: 0,
-					latitude: that.map.latitude,
-					longitude: that.map.longitude,
-					width:24,
-					height:32,
-					// iconPath: require('../../static/images/touxiang.png'),
-					callout:{
-						content: '开始：',
-						color:"#dc8f21",
-						fontSize:12,
-						borderRadius:4,
-						bgColor:"#ffffff",
-						padding:2,
-						display:"ALWAYS",
-						textAlign:"center",
-					}
-				})
+			that.markers.push({
+				id: 0,
+				latitude: that.map.latitude,
+				longitude: that.map.longitude,
+				width:24,
+				height:32,
+				// iconPath: require('../../static/images/touxiang.png'),
+				callout:{
+					content: '开始：',
+					color:"#00ff00",
+					fontSize:12,
+					borderRadius:4,
+					bgColor:"#ffffff",
+					padding:2,
+					display:"ALWAYS",
+					textAlign:"center",
+				}
+			})
 			
 			JSON.parse(JSON.stringify(geometry)).forEach((item,index) => {
 				let obj = {};
@@ -124,7 +123,7 @@ export default {
 			that.polyline = [{
 				points: arr,//经纬度数组
 				color: '#dc8f21',//线的颜色
-				width: 10,//线的宽度
+				width: 5,//线的宽度
 				borderWidth: 2, //线的厚度
 				arrowLine: true, //带箭头的线
                 //colorList:[],//彩虹线

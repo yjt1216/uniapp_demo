@@ -1,8 +1,7 @@
 <template>
 	<view class="map_wrap">
-		
+		<u-navbar title="行程轨迹" :autoBack="true" :placeholder="true"></u-navbar>
 		<map 
-			
 			id="myMap" 
 			style="height: 100vh; width:100%;"
 			:markers="markers" 
@@ -14,7 +13,11 @@
 			:longitude="polyline[0].points[0].longitude">
 		</map>
 		
-		
+		<view class="drivingDataContent">
+			
+			<view class="button-group-left button-group-common" @click="handleStartMove">开始</view>
+			<view class="button-group-right button-group-common" @click="handleStopMove">停止</view>
+		</view>
 		
 	</view>
 	
@@ -60,17 +63,9 @@
 				isDtail: false, //是否显示详情
 				isQuery: true, //未点击查询时展示框
 				isStart: false, //是否播放行车轨迹
-				timeData: [{
-					name: '今天'
-				}, {
-					name: '昨天'
-				}, {
-					name: '三天内'
-				}, {
-					name: '自定义'
-				}],
-				current: 0,
-				title: 'map',
+				
+				
+				
 				latitude: 39.909, // 默认纬度
 				longitude: 116.39742, // 默认经度(北京天安门)
 				covers: [{
@@ -81,17 +76,7 @@
 					width: "20",
 					height: "20"
 				}],
-				// controls: [{ // 控件
-				// 	id: 99,
-				// 	position: { // 控件位置
-				// 		left: 160,
-				// 		top: 120
-				// 	},
-				// 	iconPath: 'https://hellouniapp.dcloud.net.cn/static/location.png' // 控件图标
-				// }],
-				// address_info: "",
-				// address_info_recomd: "",
-				// address: ""
+				
 			}
 		},
 		onReady() {
@@ -101,64 +86,7 @@
 			this.getTrack() //获取轨迹信息(只做演示，未进行远程请求)
 		},
 		methods: {
-			formatter(type, value) {
-				if (type === 'year') {
-					return `${value}年`
-				}
-				if (type === 'month') {
-					return `${value}月`
-				}
-				if (type === 'day') {
-					return `${value}日`
-				}
-				return value
-			},
-			confirmPickerend(e) {
-				this.endTime = e.value
-				this.showpickerEnd = false
-			},
-			confirmPickerstart(e) {
-				this.startTime = e.value
-				this.showpickerStart = false
-				this.showpickerEnd = true
-			},
-			// 展示详情数据
-			upDetail() {
-				// 如果处于播放形成轨迹时,禁止打开详情
-				if (this.isStart) {
-					uni.showToast({
-						icon: 'none',
-						title: '请停止播放新城轨迹后查看详情'
-					})
-					return
-				}
-				this.isDtail = !this.isDtail
-			},
-			// 切换日期选择tab
-			checkDate(index) {
-				this.current = index
-				if(index === 3){
-					this.showpickerStart = true
-				}
-			},
-			// 倍速切换
-			speedReturn() {
-				console.log('倍速++')
-			},
-			// 显示隐藏查询条件弹框
-			queryPop() {
-				this.isQuery = !this.isQuery
-			},
-			// 查询方法
-			queryData() {
-				this.isQuery = !this.isQuery
-			},
-			// 取消返回上一页
-			cancel() {
-				uni.navigateBack({
-					delta: 1 //返回上个页面
-				})
-			},
+			
 			//模拟获取远程数据
 			getTrack() {
 				this.polyline[0].points = [{
@@ -238,16 +166,60 @@
 				this.markers[0].latitude = this.polyline[0].points[0].latitude
 				this.markers[0].longitude = this.polyline[0].points[0].longitude
 				
-				/* 添加终点位置 */
+				
+				let currentIndex = this.polyline[0].points.length - 1;
+				
+				let currentlat = this.polyline[0].points[currentIndex].latitude
+				let currentlng = this.polyline[0].points[currentIndex].longitude
+				
+				/* 添加起点 */
 				this.markers.push({
 					id: 0,
+					latitude: this.polyline[0].points[0].latitude,
+					longitude: this.polyline[0].points[0].longitude,
+					width:24,
+					height:32,
+					iconPath: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/start.png',
+					// callout:{
+					// 	content: '起点',
+					// 	color:"#00ff00",
+					// 	fontSize:12,
+					// 	borderRadius:4,
+					// 	bgColor:"#ffffff",
+					// 	padding:2,
+					// 	display:"ALWAYS",
+					// 	textAlign:"center",
+					// }
+				})
+				/* 添加终点位置 */
+				this.markers.push({
+					id: 1,
 					latitude: this.endMarker.latitude,
 					longitude: this.endMarker.longitude,
 					width:24,
 					height:32,
-					// iconPath: require('../../static/images/touxiang.png'),
+					iconPath: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/end.png',
+					// callout:{
+					// 	content: '终点',
+					// 	color:"#ff0000",
+					// 	fontSize:12,
+					// 	borderRadius:4,
+					// 	bgColor:"#ffffff",
+					// 	padding:2,
+					// 	display:"ALWAYS",
+					// 	textAlign:"center",
+					// }
+				})
+				/* 目前所在位置 */
+				this.markers.push({
+					id: 2,
+					latitude: currentlat,
+					longitude: currentlng,
+					width:24,
+					height:32,
+					// iconPath: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/end.png',
 					callout:{
-						content: '终点',
+						content: '当前',
 						color:"#ff0000",
 						fontSize:12,
 						borderRadius:4,
