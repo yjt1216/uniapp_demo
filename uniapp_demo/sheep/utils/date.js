@@ -2,7 +2,8 @@ export default{
 	isWeek,
 	getAge,
 	comparDate,
-	isDuringDate
+	isDuringDate,
+	timeFormat,
 }
 
 export function isDuringDate(curDateStr,beginDateStr,endDateStr){
@@ -78,3 +79,37 @@ export function getAge(strAge){
                 return ("输入的日期格式错误！");
             }
 }
+
+/**
+  * 格式化时间
+  timeFormat | date(timestamp, format = "yyyy-mm-dd")
+  该函数必须传入第一个参数，第二个参数是可选的，函数返回一个格式化好的时间。
+  time <String> 任何合法的时间格式
+  format <String> 时间格式，可选。
+  默认为yyyy-mm-dd，年为"yyyy"，月为"mm"，日为"dd"，时为"hh"，分为"MM"，秒为"ss"，格式可以自由搭配
+  如： yyyy:mm:dd，yyyy-mm-dd，yyyy年mm月dd日，yyyy年mm月dd日 hh时MM分ss秒，yyyy/mm/dd/，MM:ss等组合
+*/
+export function timeFormat (dateTime = null, fmt = 'yyyy-mm-dd') {
+	// 如果为null,则格式化当前时间
+	if (!dateTime) dateTime = Number(new Date())
+	// 如果dateTime长度为10或者13，则为秒和毫秒的时间戳，如果超过13位，则为其他的时间格式
+	if (dateTime.toString().length === 10) dateTime *= 1000
+	const date = new Date(dateTime)
+	let ret
+	const opt = {
+	  'y+': date.getFullYear().toString(), // 年
+	  'm+': (date.getMonth() + 1).toString(), // 月
+	  'd+': date.getDate().toString(), // 日
+	  'h+': date.getHours().toString(), // 时
+	  'M+': date.getMinutes().toString(), // 分
+	  's+': date.getSeconds().toString() // 秒
+	  // 有其他格式化字符需求可以继续添加，必须转化成字符串
+	}
+	for (const k in opt) {
+	  ret = new RegExp('(' + k + ')').exec(fmt)
+	  if (ret) {
+		fmt = fmt.replace(ret[1], (ret[1].length === 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, '0')))
+	  }
+	}
+	return fmt
+  }

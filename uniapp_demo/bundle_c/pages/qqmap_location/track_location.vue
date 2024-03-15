@@ -211,24 +211,26 @@
 					// }
 				})
 				/* 目前所在位置 */
-				this.markers.push({
-					id: 2,
-					latitude: currentlat,
-					longitude: currentlng,
-					width:24,
-					height:32,
-					// iconPath: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/end.png',
-					callout:{
-						content: '当前',
-						color:"#ff0000",
-						fontSize:12,
-						borderRadius:4,
-						bgColor:"#ffffff",
-						padding:2,
-						display:"ALWAYS",
-						textAlign:"center",
-					}
-				})
+				if(this.endMarker.latitude !== currentlat && this.endMarker.longitude !== currentlng){
+					this.markers.push({
+						id: 2,
+						latitude: currentlat,
+						longitude: currentlng,
+						width:24,
+						height:32,
+						// iconPath: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/end.png',
+						callout:{
+							content: '当前',
+							color:"#ff0000",
+							fontSize:12,
+							borderRadius:4,
+							bgColor:"#ffffff",
+							padding:2,
+							display:"ALWAYS",
+							textAlign:"center",
+						}
+					})
+				}
 				
 			},
 			//开始移动

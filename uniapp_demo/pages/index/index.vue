@@ -46,7 +46,7 @@
 		</navigator>
 		
 		<navigator url="/bundle_c/pages/qqmap_location/track_location">
-			<view class="demo-li">lcoation update<text class="demo-tip"> 行程轨迹2 </text></view>
+			<view class="demo-li">track location<text class="demo-tip"> 行程轨迹2 </text></view>
 		</navigator>
 		
 		<!-- 

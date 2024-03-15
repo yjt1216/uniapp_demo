@@ -1,5 +1,6 @@
 <template>
 	<view class="feedback-wrap">
+		<u-navbar title="长传照片" :placeholder="true" :autoBack="true"></u-navbar>
 		<view class="feedback-btn" @click="submitHandle">提交反馈</view>
 		<!-- 反馈类型 -->
 		<view class="feedback-type">

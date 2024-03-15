@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar title="定位轨迹"></u-navbar>
+		<u-navbar title="定位轨迹" :placeholder="true" :autoBack="true"></u-navbar>
 		<view style="margin-top: 180rpx;">top</view>
 		
 		
@@ -19,6 +19,10 @@
 </template>
 
 <script>
+	
+	let that = null;
+	
+	import {timeFormat} from '@/sheep/utils/date.js'
 	import PrivacyPopup from '@/bundle_c/components/privacy-popup/privacy-popup.vue'
 	// import trajectoryMap from '@/bundle_c/components/trajectory-map/trajectory-map.vue'
 	export default{
@@ -50,20 +54,8 @@
 			}
 		},
 		onLoad() {
-			wx.getPrivacySetting({
-			    success: res => {
-			        console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }
-			        if (res.needAuthorization) {
-			          // 需要弹出隐私协议
-			          this.$refs.privacyPopup.$refs.popup.open();
-			        } else {
-						// 用户已经同意过隐私协议，所以不需要再弹出隐私协议，也能调用已声明过的隐私接口
-						this.clickOpenLocationUpdate()
-			        }
-			      },
-			    fail: () => {},
-			    complete: () => {}
-			})
+			that = this;
+			
 		},
 		methods:{
 			handleAgreePrivacyAuthorization() {
@@ -81,14 +73,29 @@
 				this.clickOpenLocationUpdate()
 			},
 			getPrivacyFun(){
-				if(getApp().globalData.showPrivacy){
-					this.$refs.privacyPopup.$refs.popup.open();
-				}else{
-					this.clickOpenLocationUpdate()
-				}
+				
+				wx.getPrivacySetting({
+				    success: res => {
+				        console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }
+				        if (res.needAuthorization) {
+				          // 需要弹出隐私协议
+				          this.$refs.privacyPopup.$refs.popup.open();
+				        } else {
+							// 用户已经同意过隐私协议，所以不需要再弹出隐私协议，也能调用已声明过的隐私接口
+							this.clickOpenLocationUpdate()
+				        }
+				      },
+				    fail: (err) => {
+						console.log(err)
+					},
+				    complete: () => {}
+				})
+				
 			},
 			stopLocationFun(){
-				
+				uni.stopLocationUpdate();
+				clearInterval(this.uploadTimer);
+				this.uploadTimer = null;
 			},
 			clickOpenLocationUpdate(){
 				
@@ -104,18 +111,18 @@
 								wx.onLocationChange(function (res) {
 								  let {latitude, longitude} = res;
 								  // 记录最新的经纬度信息
-								  this.lastKnownLocation = { latitude, longitude };
+								  that.lastKnownLocation = { latitude, longitude };
 								  // 设置定时器，每10分钟检查一次是否需要上传
-								  if (!this.uploadTimer) {
-									this.uploadTimer = setInterval(() => {
+								  if (!that.uploadTimer) {
+									that.uploadTimer = setInterval(() => {
 									  // 在这里实现你的上传逻辑
-									  this.uploadLocation(this.lastKnownLocation);
+									  that.uploadLocationFun(that.lastKnownLocation);
 									  
 									  // 如果不需要继续定期上传，记得清除定时器
 									  // clearInterval(this.uploadTimer);
-									}, 3 * 60 * 1000); // 每10分钟执行一次
+									}, 1 * 60 * 1000); // 每10分钟执行一次
 								  }
-								}.bind(this));
+								}.bind(that));
 							},
 							fail: function (err) {
 								console.error('开启后台定位失败', err)
@@ -147,21 +154,39 @@
 				
 				
 			},
-			uploadLocation(locationData){
+			uploadLocationFun(locationData){
+				
+				let now = new Date();
+				let formattedDateTime = timeFormat(now, 'yyyy年mm月dd日 hh时MM分ss秒');
+				
+				
+				
 				// 实现你的上传逻辑，例如通过接口将经纬度数据发送到服务器
-				console.log('上床定位信息',locationData);
-				// uni.request({
-				//     url: 'your-server-url',
-				//     method: 'POST',
-				//     data: locationData,
-				//     success: function(res) {
-				//       console.log('位置信息上传成功：', res.data);
-				//     },
-				//     fail: function(err) {
-				//       console.error('位置信息上传失败：', err);
-				//     }
-				// });
+				console.log('上传定位信息',locationData,formattedDateTime);
+				
 			},
+			/* 弹框去设置 授权 */
+			gotoSettingFun(){
+				const _this = this
+				const setting = 'scope.userLocationBackground'
+				uni.openSetting({
+					success (res) {
+						console.log('原生设置页回调->', res)
+						const { authSetting } = res || {}
+						// 已开启位置授权
+						if (authSetting.hasOwnProperty(setting) && authSetting[setting]) {
+							console.log('已成功开启位置服务->But这里没有返回任何位置信息相关信息')
+							
+							that.clickOpenLocationUpdate()
+							
+						}
+					},
+					fail () {
+						uni.hideLoading();
+						toast('获取位置信息失败，按“右上菜单 - 关于\n - 右上菜单 - 设置 - 位置信息”授权')
+					}
+				})
+			}
 		}
 	}
 </script>
