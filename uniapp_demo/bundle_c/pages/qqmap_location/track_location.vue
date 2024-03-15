@@ -13,11 +13,17 @@
 			:longitude="polyline[0].points[0].longitude">
 		</map>
 		
-		<view class="drivingDataContent">
+		<view class="drivingContent">
 			
-			<view class="button-group-left button-group-common" @click="handleStartMove">开始</view>
-			<view class="button-group-right button-group-common" @click="handleStopMove">停止</view>
+			<view class="button-group-common" @click="handleStartMove">开启行动轨迹</view>
+			
 		</view>
+		
+		<!-- <view class="drivingDataContent">
+			
+			<view class="button-group-common" @click="handleStartMove">开始</view>
+			<view class=" button-group-common" @click="handleStopMove">停止</view>
+		</view> -->
 		
 	</view>
 	
@@ -297,97 +303,6 @@
 	// 	overflow: unset;
 	// }
 
-	.card-roll-content {
-		position: absolute;
-		top: 170rpx;
-		left: 0;
-
-		.card-roll-common {
-			display: flex;
-			align-items: center;
-			width: 259rpx;
-			height: 44rpx;
-			box-sizing: border-box;
-			padding-left: 20rpx;
-			font-size: 20rpx;
-			background-color: rgba(0, 0, 0, 0.5);
-			border-radius: 0 22rpx 22rpx 0;
-			margin-top: 20rpx;
-			color: #ffffff;
-		}
-
-		.card-roll-4 {
-			background-color: rgba(4, 138, 251, 1);
-		}
-	}
-
-	.lineClass {
-		border-top: 1px solid #e9e9e9;
-	}
-
-	.button-group-common {
-		position: absolute;
-		bottom: 296rpx;
-		width: 138rpx;
-		height: 52rpx;
-		background-color: #fff;
-		display: flex;
-		justify-content: center;
-		border-radius: 26rpx;
-		align-items: center;
-		color: #222222;
-		font-size: 24rpx;
-		box-shadow: $box-shaow-common;
-	}
-
-	.button-group-left {
-		left: 0;
-	}
-
-	.button-group-right {
-		right: 0;
-	}
-
-	.icon-img-up-speed {
-		width: 20rpx;
-		height: 10rpx;
-		margin-left: 10rpx;
-	}
-
-	.icon-img-query {
-		width: 20rpx;
-		height: 20rpx;
-		margin-left: 10rpx;
-	}
-
-	.start-icon-content {
-		position: absolute;
-		width: 80rpx;
-		height: 34rpx;
-		top: -17rpx;
-		left: 50%;
-		margin-left: -31rpx;
-		background-color: #fff;
-		border-radius: 10rpx;
-		display: flex;
-		justify-content: center;
-		.icon-img-start {
-			position: absolute;
-			width: 100%;
-			height: 80rpx;
-			position: absolute;
-			top: -96rpx;
-			left: -2rpx;
-		}
-
-		.icon-img-up,
-		.icon-img-down {
-			width: 64rpx;
-			height: 38rpx;
-			padding: 8rpx 16rpx;
-		}
-	}
-
 	.drivingContent {
 		position: absolute;
 		width: 690rpx;
@@ -400,297 +315,34 @@
 		box-sizing: border-box;
 		padding: 20rpx;
 		box-shadow: $box-shaow-common;
-
-		.carId {
-			display: flex;
-			justify-content: space-between;
-			margin-bottom: 20rpx;
-
-			.carId-name {
-				font-size: 36rpx;
-				font-weight: bold;
-			}
-
-			.carId-number {
-				font-size: 24rpx;
-			}
-		}
-
-		.carId-time {
-			font-size: 28rpx;
-			font-weight: bold;
-			padding-top: 20rpx;
-		}
-
-		.dateClass {
-			display: flex;
-			justify-content: space-between;
-
-			.carName {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				width: 142rpx;
-				height: 54rpx;
-				font-size: 28rpx;
-				border-radius: 27rpx;
-				background-color: #E5E5E5;
-				color: #666666;
-			}
-
-			.active {
-				color: #ffffff;
-				background-color: #048AFB;
-			}
-		}
-	}
-
-	.drivingDataContent {
-		position: absolute;
-		width: 690rpx;
-		// height: 242rpx;
-		bottom: 20rpx;
-		left: 50%;
-		margin-left: -345rpx;
-		box-sizing: border-box;
-		background-color: rgba(255, 255, 255, 0.1);
-		border-radius: $borderRadius;
-		box-shadow: $box-shaow-common;
-
-		.drivingData-bg {
-			box-sizing: border-box;
-			border-radius: $borderRadius;
-			padding: 30rpx 40rpx 40rpx;
-			background-color: $bgF;
-			box-shadow: $box-shaow-common;
-		}
-
-		.driving-tips {
-			height: 160rpx;
-			background-color: $bgF;
-			border-radius: $borderRadius;
-			box-sizing: border-box;
-			padding: 20rpx;
-			margin-top: 20rpx;
-			box-shadow: $box-shaow-common;
-
-			.driving-tips-title {
-				display: flex;
-				align-items: center;
-
-				.driving-tips-ticon {
-					width: 50rpx;
-					height: 50rpx;
-					.icon-img-down{
-						width: 50rpx;
-						height: 50rpx;
-					}
-				}
-			}
-
-			.driving-tips-name,
-			.driving-tips-count {
-				font-size: 30rpx;
-				font-weight: bold;
-				color: #666666;
-				margin-left: 10rpx;
-			}
-
-			.driving-tips-content {
-				margin-top: 10rpx;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				color: #999999;
-			}
-		}
-
-		.driving-tips-fast {
-			height: 200rpx;
-
-			.fast-left {
-				display: flex;
-				align-items: center;
-
-				.fast-left-icon {
-					width: 50rpx;
-					height: 50rpx;
-				}
-
-				.fast-left-name {
-					font-size: 15px;
-					font-weight: bold;
-					color: #666666;
-					margin-left: 5px;
-				}
-			}
-
-			.fast-info {
-				display: flex;
-				justify-content: space-around;
-				margin-top: 18rpx;
-
-				.fast-info-1,
-				.fast-info-2,
-				.fast-info-3 {
-					text-align: center;
-				}
-
-				.fast-info-1-item,
-				.fast-info-2-item,
-				.fast-info-3-item {
-					font-size: 36rpx;
-					font-weight: bold;
-					color: #222222;
-				}
-
-				.fast-info-1-item-name,
-				.fast-info-2-item-name,
-				.fast-info-3-item-name {
-					font-size: 22rpx;
-					font-weight: bold;
-					color: #999999;
-					margin-top: 18rpx;
-				}
-			}
-		}
-
-		.carId {
-			display: flex;
-			justify-content: space-between;
-			margin-bottom: 20rpx;
-
-			.carId-name {
-				font-size: 36rpx;
-				font-weight: bold;
-			}
-
-			.carId-number {
-				font-size: 24rpx;
-			}
-		}
-
-		.carId-info {
-			display: flex;
-			justify-content: space-between;
-			margin-top: 50rpx;
-
-			.carId-info-1,
-			.carId-info-2,
-			.carId-info-3 {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				font-size: 22rpx;
-				color: #999999;
-			}
-
-			.carId-info-1-speed {
-				font-size: 36rpx;
-				font-weight: bold;
-				color: #048AFB;
-				padding-bottom: 20rpx;
-			}
-
-			.carId-info-2-time {
-				font-size: 36rpx;
-				font-weight: bold;
-				color: #31CF93;
-				padding-bottom: 20rpx;
-			}
-
-			.carId-info-3-count {
-				font-size: 36rpx;
-				font-weight: bold;
-				color: #E66F57;
-				padding-bottom: 20rpx;
-			}
-
-		}
-	}
-
-	.carId-info-trip {
-		.trip-common {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-
-		.trip-content {
-			margin-top: 20rpx;
-
-			.trip-left {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-
-				.trip-left-icon {
-					width: 22rpx;
-					height: 22rpx;
-					background-color: #31cf93;
-					border-radius: 50%;
-				}
-
-				.trip-left-icon-end {
-					background-color: #e8ae32;
-				}
-
-				.trip-left-name {
-					color: #666666;
-					font-size: 28rpx;
-					font-weight: bold;
-					margin-left: 16rpx;
-				}
-			}
-
-			.trip-right {
-				color: #999999;
-				font-size: 24rpx;
-			}
-		}
-
-		.trip-adreass {
-			color: #666666;
-			font-size: 24rpx;
-			letter-spacing: 4rpx;
-			line-height: 30rpx;
-			margin-top: 20rpx;
-			word-break: break-all;
-			text-overflow: ellipsis;
-			word-wrap: break-word;
-			white-space: pre-wrap;
-		}
-
-		.trip-end {}
-	}
-
-	.foot {
+		
 		display: flex;
-		justify-content: space-between;
-		position: absolute;
-		width: 690rpx;
-		height: 100rpx;
-		bottom: 10rpx;
-		left: 50%;
-		margin-left: -345rpx;
-
-		.foot-com {
-			width: 332rpx;
-			height: 74rpx;
-			display: flex;
-			font-size: 30rpx;
-			color: #999999;
-			justify-content: center;
-			align-items: center;
-			background-color: #ffffff;
-			border-radius: 20rpx;
-			box-shadow: $box-shaow-common;
-		}
-
-		.foot-query {
-			background-color: #048AFB;
-			color: #ffffff;
-		}
-
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		
 	}
+
+	.lineClass {
+		border-top: 1px solid #e9e9e9;
+	}
+
+	.button-group-common {
+		position: absolute;
+		// bottom: 296rpx;
+		width: 500rpx;
+		height: 64rpx;
+		background-color: #ff8c00;
+		display: flex;
+		justify-content: center;
+		border-radius: 26rpx;
+		align-items: center;
+		color: #fff;
+		font-size: 24rpx;
+		box-shadow: $box-shaow-common;
+	}
+
+	
+	
+
 </style>

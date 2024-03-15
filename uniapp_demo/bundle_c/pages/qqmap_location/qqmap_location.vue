@@ -1,6 +1,7 @@
 <!-- 路线轨迹回放 -->
 <template>
 	<view class="wrap">
+		<u-navbar title="行程轨迹" :autoBack="true" :placeholder="true"></u-navbar>
 		<!-- 缩放视野以包含所有给定的坐标点  :include-points="polygons[0].points" -->
 		<map
 			id="myMap"

@@ -1,1 +1,1 @@
-<view class="wrap"><map style="height:100vh;width:100%;" id="myMap" latitude="{{map.latitude}}" longitude="{{map.longitude}}" polyline="{{polyline}}" show-location="{{true}}" polygons="{{polygons}}" markers="{{markers}}"></map></view>
+<view class="wrap"><u-navbar vue-id="4edfd8dd-1" title="行程轨迹" autoBack="{{true}}" placeholder="{{true}}" bind:__l="__l"></u-navbar><map style="height:100vh;width:100%;" id="myMap" latitude="{{map.latitude}}" longitude="{{map.longitude}}" polyline="{{polyline}}" show-location="{{true}}" polygons="{{polygons}}" markers="{{markers}}"></map></view>

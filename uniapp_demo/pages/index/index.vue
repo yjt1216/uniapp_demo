@@ -40,9 +40,12 @@
 			<view class="demo-li">lcoation update<text class="demo-tip"> 后台定位 </text></view>
 		</navigator>
 		
+		<navigator url="/bundle_c/pages/qqmap_location/trajectory_location">
+			<view class="demo-li">原版轨迹<text class="demo-tip"> 行程轨迹 </text></view>
+		</navigator>
 		
 		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
-			<view class="demo-li">qqmap update<text class="demo-tip"> 行程轨迹 </text></view>
+			<view class="demo-li">qqmap update<text class="demo-tip"> 行程轨迹1 </text></view>
 		</navigator>
 		
 		<navigator url="/bundle_c/pages/qqmap_location/track_location">
