@@ -682,6 +682,10 @@ page {
 .bg-gray {
   background-color: #E5E5E5;
 }
+.u-r {
+  display: flex;
+  flex-direction: row;
+}
 /* 定义字体大小 */
 .xxl {
   font-size: 36rpx;

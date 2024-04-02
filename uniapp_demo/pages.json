@@ -406,6 +406,12 @@
 					"style": {
 						"navigationBarTitleText": "在线咨询"
 					}
+				},
+				{
+					"path": "pages/online_consult/online_time",
+					"style": {
+						"navigationBarTitleText": "在线咨询时段"
+					}
 				}
 			]
 		}

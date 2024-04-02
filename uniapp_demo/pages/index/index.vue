@@ -30,7 +30,9 @@
 		<navigator url="/bundle_c/pages/online_consult/online_consult">
 			<view class="demo-li">在线咨询<text class="demo-tip"> online </text></view>
 		</navigator>
-		
+		<navigator url="/bundle_c/pages/online_consult/online_time">
+			<view class="demo-li">在线咨询时段<text class="demo-tip"> time </text></view>
+		</navigator>
 		
 		<!-- 
 		<navigator url="/bundle_c/pages/qqmap_location/trajectory_location">

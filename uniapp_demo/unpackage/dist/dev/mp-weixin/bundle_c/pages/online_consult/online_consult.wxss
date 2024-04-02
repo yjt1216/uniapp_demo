@@ -1,0 +1,26 @@
+
+page{ background: #f8f8f8;
+}
+.dayWeekMain{
+	overflow: hidden;
+	padding: 0 20rpx;
+}
+.dayWeekBox{
+	width: 100rpx;
+	/* padding: 10rpx 0; */
+	text-align: center;
+	border-radius: 10rpx;
+	/* margin-top: 30rpx;
+	margin-left: 20rpx; */
+	float: left;
+}
+.textSize{
+	display: block;
+	font-size: 24rpx;
+}
+.selBg1{ background: #fff;color: #000;
+}
+.selBg2{ background: red;color: #fff;
+}
+
+

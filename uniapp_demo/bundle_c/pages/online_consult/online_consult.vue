@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<u-navbar :auto-back="true" :placeholder="true" title="在线咨询"></u-navbar>
 		<!-- 日期星期几 -->
 		<view class="dayWeekMain">
 			<view class="dayWeekBox"
@@ -10,6 +11,10 @@
 				<text class="textSize">{{ item.week }}</text>
 			</view>
 		</view>
+		
+		<!-- 当天时段 -->
+		
+		
 	</view>
 </template>
 
@@ -22,9 +27,10 @@
 				 * 当前周的周一 周三 周五
 				 * 当前周的周一已过 1 = 下一周的周一
 				 * */
-				days:'1,3,5,7',
+				days:'1,2,3,4,5,6,7',
 				dayWeekList:[],
-				
+				/* 当天时段 从早8点到晚17点 */
+				timeList:[],
 			}
 		},
 		onLoad() {
@@ -92,7 +98,40 @@
 					console.log('已选中：' + item.year + '/' + item.monDate + '/' + item.week)
 				}
 			},
-			
+			initHours(flag){
+				/* 当前时间 */
+				let aDate = new Date();
+				let curHour = aDate.getHours();
+				_this.timeList = [];
+				for(let j=_this.startHour*1;j<_this.endHour*1;j++){
+					for(let k=0;k<60;k+=_this.step){
+						if(flag){
+							_this.timeList.push({
+								label:_this.forMatNumber(j)+":"+_this.forMatNumber(k),
+								disabled:false
+							});
+						}else{
+							// console.log(_this.isExpedited+"加急状态");
+							if(_this.isExpedited){
+								_this.timeList.push({
+									label:_this.forMatNumber(j)+":"+_this.forMatNumber(k),
+									disabled:curHour+_this.afterHours<j?false:true
+								});
+							}else{
+								_this.timeList.push({
+									label:_this.forMatNumber(j)+":"+_this.forMatNumber(k),
+									disabled:true
+								});
+							}
+							
+							
+						}
+					}
+				};
+			},
+			forMatNumber(n){
+				return n<10?'0'+n:n
+			},
 		}
 	}
 </script>
@@ -102,19 +141,20 @@
 	
 	.dayWeekMain{
 		overflow: hidden;
+		padding: 0 20rpx;
 	}
 	.dayWeekBox{
-		width: 150upx;
-		padding: 30upx 0;
+		width: 100rpx;
+		/* padding: 10rpx 0; */
 		text-align: center;
-		border-radius: 10upx;
-		margin-top: 30upx;
-		margin-left: 30upx;
+		border-radius: 10rpx;
+		/* margin-top: 30rpx;
+		margin-left: 20rpx; */
 		float: left;
 	}
 	.textSize{
 		display: block;
-		font-size: 28upx;
+		font-size: 24rpx;
 	}
 	
 	.selBg1{ background: #fff;color: #000; }
