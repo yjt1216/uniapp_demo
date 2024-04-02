@@ -394,6 +394,18 @@
 					"style": {
 						"navigationBarTitleText": "腾讯地图"
 					}
+				},
+				{
+					"path": "pages/phone_record/phone_record",
+					"style": {
+						"navigationBarTitleText": "电话录音"
+					}
+				},
+				{
+					"path": "pages/online_consult/online_consult",
+					"style": {
+						"navigationBarTitleText": "在线咨询"
+					}
 				}
 			]
 		}

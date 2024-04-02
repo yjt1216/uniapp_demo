@@ -15,8 +15,8 @@
 		
 		<view class="drivingContent">
 			
-			<view class="button-group-common" @click="handleStartMove">开启行动轨迹</view>
-			
+			<view v-if="!trajectoryState" class="button-group-common" @click="handleStartMove">开启行动轨迹</view>
+			<view v-else class="button-group-common" @click="handleStopMove">停止记录行动轨迹</view>
 		</view>
 		
 		<!-- <view class="drivingDataContent">
@@ -39,8 +39,8 @@
 					longitude: 116.488778
 				},
 				
-				showpickerStart: false,
-				showpickerEnd: false,
+				/* 是否已经开启行程轨迹 */
+				trajectoryState: false,
 				pickerValue: Number(new Date()),
 				mapContext: null, //地图对象
 				nextPointIndex: 1, //下一个坐标点的索引
@@ -160,6 +160,8 @@
 						longitude: 116.484648
 					}
 				]
+				
+				
 				// this.durationTime = Math.ceil(30000 / this.polyline[0].points.length) //默认播放全程使用30秒，计算相连两点动画时长
 				this.initMarkers()
 			},
@@ -342,7 +344,20 @@
 		box-shadow: $box-shaow-common;
 	}
 
-	
+	.button-group-stop {
+		position: absolute;
+		// bottom: 296rpx;
+		width: 500rpx;
+		height: 64rpx;
+		background-color: #FFA500;
+		display: flex;
+		justify-content: center;
+		border-radius: 26rpx;
+		align-items: center;
+		color: orangered;
+		font-size: 24rpx;
+		box-shadow: $box-shaow-common;
+	}
 	
 
 </style>

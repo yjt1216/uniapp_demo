@@ -11,6 +11,40 @@
 		<view class="group-title">功能示例</view>
 		
 		
+		<navigator url="/bundle/pages/upload_img/upload_photo">
+			<view class="demo-li">上传照片<text class="demo-tip"> 选择图片</text></view>
+		</navigator>
+		<navigator url="/bundle/pages/action_sheet/action_sheet">
+			<view class="demo-li">输入<text class="demo-tip"> textarea</text></view>
+		</navigator>
+		
+		<navigator url="/bundle/pages/upload_img/upload_photo">
+			<view class="demo-li">upload photo<text class="demo-tip"> 压缩并保存图片 </text></view>
+		</navigator>
+		
+		
+		<navigator url="/bundle_c/pages/phone_record/phone_record">
+			<view class="demo-li">phone record<text class="demo-tip"> 电话录音 </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_c/pages/online_consult/online_consult">
+			<view class="demo-li">在线咨询<text class="demo-tip"> online </text></view>
+		</navigator>
+		
+		
+		<!-- 
+		<navigator url="/bundle_c/pages/qqmap_location/trajectory_location">
+			<view class="demo-li">原版轨迹<text class="demo-tip"> 行程轨迹 </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
+			<view class="demo-li">qqmap update<text class="demo-tip"> 行程轨迹1 </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_c/pages/qqmap_location/track_location">
+			<view class="demo-li">track location<text class="demo-tip"> 行程轨迹2 </text></view>
+		</navigator>
+		
 		<navigator url="/bundle_c/pages/amap_location/amap_location">
 			<view class="demo-li"> 高德地图 <text class="demo-tip"> amap </text></view>
 		</navigator>
@@ -25,34 +59,9 @@
 			<view class="demo-li"> 经营统计 <text class="demo-tip"> table + charts </text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/upload_img/upload_photo">
-			<view class="demo-li">上传照片<text class="demo-tip"> 选择图片</text></view>
-		</navigator>
-		<navigator url="/bundle/pages/action_sheet/action_sheet">
-			<view class="demo-li">输入<text class="demo-tip"> textarea</text></view>
-		</navigator>
-		
-		<navigator url="/bundle/pages/upload_img/upload_photo">
-			<view class="demo-li">upload photo<text class="demo-tip"> 压缩并保存图片 </text></view>
-		</navigator>
-		
 		<navigator url="/bundle_c/pages/location_update/location_update">
 			<view class="demo-li">lcoation update<text class="demo-tip"> 后台定位 </text></view>
 		</navigator>
-		
-		<navigator url="/bundle_c/pages/qqmap_location/trajectory_location">
-			<view class="demo-li">原版轨迹<text class="demo-tip"> 行程轨迹 </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
-			<view class="demo-li">qqmap update<text class="demo-tip"> 行程轨迹1 </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/qqmap_location/track_location">
-			<view class="demo-li">track location<text class="demo-tip"> 行程轨迹2 </text></view>
-		</navigator>
-		
-		<!-- 
 		
 		<navigator url="/bundle_c/pages/navi_search/navi_search">
 			<view class="demo-li">navi search<text class="demo-tip"> 导航栏搜索 </text></view>

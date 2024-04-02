@@ -1,0 +1,107 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 根节点 */
+.content.data-v-72946f6e {
+	/* 组件默认100%宽度,可在此规定宽度 */
+	width: 90%;
+	margin: 0 auto;
+	margin-top: 30rpx;
+}
+/* END */
+.title.data-v-72946f6e {
+	font-weight: bold;
+	font-size: 40rpx;
+	margin-bottom: 30rpx;
+}
+
