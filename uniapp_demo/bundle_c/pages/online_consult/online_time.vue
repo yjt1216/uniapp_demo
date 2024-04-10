@@ -7,14 +7,15 @@
 		<view class="user-content title">
 			预约日期
 		</view>
-		<view class="w-time-days">
+		<view class="online-days">
 			<scroll-view scroll-x>
-				<view class="w-time-scroll">
-					<view class="w-time-day" :style="{'color':tabIndex==index?theme:'#333','border-color':tabIndex==index?theme:'#ddd'}" 
+				<view class="days-scroll">
+					<view class="day-item" :class="{ 'not-clickable': !isClickable(day.week) }"
+						:style="{'color':dayIndex==index?theme:'#333','border-color':dayIndex==index?theme:'#ddd'}" 
 						v-for="(day,index) in dayList" 
 						:key="index" @tap="toggleDayIndex(day,index)">
-						<view class="w-time-week">{{day.week}}</view>
-						<view class="w-time-date">{{day.month}}/{{day.day}}</view>
+						<view class="day-week">{{day.week}}</view>
+						<view class="day-date">{{day.month}}/{{day.day}}</view>
 					</view>
 				</view>
 			</scroll-view>
@@ -22,13 +23,28 @@
 		<view class="user-content title">
 			预约时段
 		</view>
-		<view class="w-time-body">
-			<scroll-view scroll-y class="w-time-list-scroll">
-				<view class="w-time-list">
-					<view class="w-time-item" :style="{'color':itemIndex==index?theme:'#333','border-color':itemIndex==index?theme:'#ddd'}" 
-						:class="{'w-time-item-active':!item.disabled}" 
-						v-for="(item,index) in timeList" :key="index" @tap="toggleItem(item,index)">
+		<view class="online-hour">
+			<scroll-view scroll-y class="hour-scroll">
+				<view class="hour-list">
+					<view class="hour-item" :style="{'color':itemIndex==index?theme:'#333','border-color':itemIndex==index?theme:'#ddd'}" 
+						:class="{'hour-item-active':!item.disabled}" 
+						v-for="(item,index) in hourList" :key="index" @tap="toggleHourItem(item,index)">
 						{{item.label}}
+					</view>
+				</view>
+			</scroll-view>
+		</view>
+		
+		<view class="user-content title">
+			通话时长
+		</view>
+		<!-- call_duration -->
+		<view class="online-duration">
+			<scroll-view scroll-x class="hour-scroll">
+				<view class="duration-list">
+					<view class="duration-item" :style="{'color':durationIndex==index?theme:'#333','border-color':durationIndex==index?theme:'#ddd'}"
+						v-for="(duration,index) in callDurationlist" :key="index" @tap="toggleDurationIndex(duration,index)">
+						{{duration.name}}
 					</view>
 				</view>
 			</scroll-view>
@@ -47,17 +63,19 @@
 	export default {
 		data() {
 			return {
-				
+				//工作日
+				workDayList:["周一","周二","周三","周四","周五",],
+				//一周
 				dayList:[],
-				timeList:[],
-				tabIndex:0,
+				hourList:[],
+				dayIndex:0,
 				itemIndex:-1,
+				theme:"#fa800a",
 				
 				
-				time:"",
 				selectTime:[],
 				uniSelectTime:[],
-				showclear:false,
+				
 				/* 时间间隔 默认30分钟 */
 				step:60,
 				
@@ -67,67 +85,72 @@
 				endHour:18,
 				/* 延后时间 默认延后2小时 */
 				afterHours:2,
-				theme:"#fa800a",
 				
-				afterDays:7,
-				/* 是否可以勾选 加急服务 */
-				isExpedited:false,
+				afterDays:30,
+				/* 通话时长 */
+				callDurationlist:[],
+				durationIndex:-1,
 			}
 		},
 		created(){
 			_this=this;
-			_this.initPicker();
+			_this.initDays();
 			_this.initHours();
 			
+			let durationList = ['5分钟','10分钟','15分钟','20分钟','25分钟','30分钟'];
+			let transformedList = durationList.map(duration => ({ name: duration }));
 			
-			console.log('时间timeList',_this.timeList);
+			this.callDurationlist = transformedList;
+			console.log('初始化通话时长',this.callDurationlist);
 		},
-		watch:{
-			isExpedited(e){
-				console.log('w-time-picker监听是否加急',e);
-				_this.initPicker();
-				_this.initHours();
-			},
-		},
+		
 		methods:{
-			/* 勾选 加急 */
-			change(e){
-				// console.log('用户勾选加急费e',e.detail.value.length)
-				if(e){}
-				_this.isExpedited = e.detail.value.length == 1;
-				// console.log('用户勾选加急费exCheck',_this.isExpedited)
-				
+			isClickable(day){
+				return this.workDayList.includes(day);
 			},
 			submit(){
-				console.log('点击选择时间uniSelectTime',this.uniSelectTime);
+				console.log('点击选择时间',this.uniSelectTime);
 				
 			},
 			/* 选择哪一天 */
 			toggleDayIndex(item,index){
 				console.log('选择日期day',item);
-				_this.tabIndex=index;
-				_this.itemIndex=-1;
-				_this.initHours(!item.isToday);
+				if(this.isClickable(item.week)){
+					_this.dayIndex=index;
+					_this.itemIndex=-1;
+					_this.initHours(!item.isToday);
+				}else{
+					uni.showToast({
+						title:'休息日',
+						mask:true,
+						icon:'none'
+					})
+				}
+				
 				
 			},
 			/* 选择哪一天的哪一个小时 */
-			toggleItem(item,index){
-				console.log('点击选择时间item',item,'openTime');
+			toggleHourItem(item,index){
+				console.log('点击选择时间item',item);
 				if(!item.disabled){
-					_this.time=item;
-					let tabItem=_this.dayList[_this.tabIndex];
-					let result=tabItem.year+"-"+tabItem.month+"-"+tabItem.day+" "+_this.time.label+":00";
+					
+					let tabItem=_this.dayList[_this.dayIndex];
+					let result=tabItem.year+"-"+tabItem.month+"-"+tabItem.day+" "+ item.label+":00";
 					let date = tabItem.year+"-"+tabItem.month+"-"+tabItem.day
 					_this.itemIndex=index;
 					this.selectTime.push(result)
 					this.uniSelectTime = this.uniarr(this.selectTime)
-					if(this.uniSelectTime.length>0) this.showclear=true
+					
 				}
+			},
+			toggleDurationIndex(duration,index){
+				console.log('选择通话时长',duration);
+				_this.durationIndex = index;
 			},
 			retTime(){
 				this.uniSelectTime.splice(0,this.uniSelectTime.length)
 				this.selectTime.splice(0,this.selectTime.length)
-				this.showclear = false
+				
 			},
 			forMatNumber(n){
 				return n<10?'0'+n:n
@@ -139,33 +162,26 @@
 				/* 当前时间 */
 				let aDate = new Date();
 				let curHour = aDate.getHours();
-				_this.timeList = [];
+				_this.hourList = [];
 				for(let j=_this.startHour*1;j<_this.endHour*1;j++){
 					for(let k=0;k<60;k+=_this.step){
 						if(flag){
-							_this.timeList.push({
+							_this.hourList.push({
 								label:_this.forMatNumber(j)+":"+_this.forMatNumber(k),
 								disabled:false
 							});
 						}else{
 							
-							if(_this.isExpedited){
-								_this.timeList.push({
-									label:_this.forMatNumber(j)+":"+_this.forMatNumber(k),
-									disabled:curHour+_this.afterHours<j?false:true
-								});
-							}else{
-								_this.timeList.push({
-									label:_this.forMatNumber(j)+":"+_this.forMatNumber(k),
-									disabled:curHour+_this.afterHours<j?false:true
-								});
-							}
+							_this.hourList.push({
+								label:_this.forMatNumber(j)+":"+_this.forMatNumber(k),
+								disabled:curHour+_this.afterHours<j?false:true
+							});
 						}
 					}
 				};
 			},
 			
-			initPicker(){
+			initDays(){
 				let aDate=new Date();
 				let weekList=["周日","周一","周二","周三","周四","周五","周六"];
 				_this.dayList.push({
@@ -185,7 +201,7 @@
 						isToday:false
 					})
 				};
-				// console.log('dayList',_this.dayList);
+				console.log('dayList',_this.dayList);
 			},
 			
 		}
@@ -193,6 +209,15 @@
 </script>
 
 <style lang="scss">
+	.w-time-picker{
+		width: 100%;
+		height: 100%;
+		z-index: 9999;
+		background-color: #fff;
+		display: flex;
+		flex-direction: column;
+		
+	}
 	.user-content{
 		margin: 20rpx;
 	}
@@ -236,16 +261,16 @@
 		font-size: 20rpx;
 		font-weight: bold;
 	}
-	.w-time-days{
+	.online-days{
 		overflow: hidden;
 		
 		
 		padding: 16rpx;
 		background-color: #fff;
-		.w-time-scroll{
+		.days-scroll{
 			white-space: nowrap;
 		}
-		.w-time-day{
+		.day-item{
 			display: inline-block;
 			width: 80rpx;
 			text-align: center;
@@ -255,34 +280,31 @@
 			margin: 0 10rpx ;
 			
 			color:#333;
-			.w-time-week{
+			.day-week{
 				font-size: 22rpx;
 				line-height: 1;
 			}
-			.w-time-date{
+			.day-date{
 				font-size: 22rpx;
 				line-height: 1;
 				margin-top: 10rpx;
 			}
 		}
-		.w-time-day-active{
-			color:#f00;
-			border-color:#f00;
-		}
+		
 	}
-	.w-time-body{
+	.online-hour{
 		flex:1;
 		overflow: hidden;
-		background-color:#f5f5f5;
-		.w-time-list-scroll{
+		background-color:#fff;
+		.hour-scroll{
 			height: 100%;
 		}
-		.w-time-list{
+		.hour-list{
 			display: flex;
 			flex-wrap: wrap;
 			padding:20upx 10upx;
 		}
-		.w-time-item{
+		.hour-item{
 			width: 120upx;
 			height: 64upx;
 			line-height: 64upx;
@@ -294,11 +316,37 @@
 			transition: all 0.3s ease;
 			color: #ddd !important;
 		}
-		.w-time-item-active{
+		.hour-item-active{
 			background-color: #fff;
 			color: #000 !important;
+			border-color: #FA800A;
 		}
 	}
+	.online-duration{
+		.duration-list{
+			display: flex;
+			flex-wrap: wrap;
+			padding:20upx 10upx;
+		}
+		.duration-item{
+			width: 120upx;
+			height: 64upx;
+			line-height: 64upx;
+			margin:0 10upx 20upx;
+			text-align: center;
+			border:solid 1px #ddd;
+			border-radius: 6upx;
+			font-size: 28upx;
+			transition: all 0.3s ease;
+			color: #333 !important;
+		}
+		.duration-item-active{
+			background-color: #fff;
+			color: #000 !important;
+			border-color: #FA800A;
+		}
+	}
+	
 	.w-time-footer{
 		height: 88upx;
 		display: flex;
@@ -314,13 +362,5 @@
 			color:#fff;
 		}
 	}
-	.w-time-picker{
-		width: 100%;
-		height: 100%;
-		z-index: 9999;
-		background: rgba(66, 66, 66, 0.26);
-		display: flex;
-		flex-direction: column;
-		
-	}
+	
 </style>

@@ -1,26 +1,37 @@
 
-page{ background: #f8f8f8;
+.list-container.data-v-ac33276e {
+	/* Add your desired container styles */
+	white-space: nowrap;
 }
-.dayWeekMain{
+.online-days.data-v-ac33276e{
 	overflow: hidden;
-	padding: 0 20rpx;
+	padding: 16rpx;
+	background-color: #fff;
 }
-.dayWeekBox{
-	width: 100rpx;
-	/* padding: 10rpx 0; */
+.days-scroll.data-v-ac33276e{
+	white-space: nowrap;
+}
+.day-item.data-v-ac33276e{
+	display: inline-block;
+	width: 80rpx;
 	text-align: center;
-	border-radius: 10rpx;
-	/* margin-top: 30rpx;
-	margin-left: 20rpx; */
-	float: left;
+	border:solid 1px #ddd;
+	border-radius: 6rpx;
+	padding: 10rpx 0;
+	margin: 0 10rpx ;
+	color:#333;
 }
-.textSize{
-	display: block;
-	font-size: 24rpx;
+.day-week.data-v-ac33276e{
+	font-size: 22rpx;
+	line-height: 1;
 }
-.selBg1{ background: #fff;color: #000;
+.day-date.data-v-ac33276e{
+	font-size: 22rpx;
+	line-height: 1;
+	margin-top: 10rpx;
 }
-.selBg2{ background: red;color: #fff;
+.day-item.not-clickable.data-v-ac33276e {
+	/* 防止用户点击 */
+  pointer-events: none;
 }
-
 

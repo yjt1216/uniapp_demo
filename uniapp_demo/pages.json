@@ -412,6 +412,18 @@
 					"style": {
 						"navigationBarTitleText": "在线咨询时段"
 					}
+				},
+				{
+					"path": "pages/online_consult/online_change",
+					"style": {
+						"navigationBarTitleText": "切换时段"
+					}
+				},
+				{
+					"path": "pages/audio_play/audio_play",
+					"style": {
+						"navigationBarTitleText": "音频播放"
+					}
 				}
 			]
 		}
