@@ -79,12 +79,12 @@ export default {
     this.audioInit();
   },
   //实例销毁之前调用。在这一步，实例仍然完全可用。
-  beforeDestroy(){
-    console.info('实例销毁;播放状态切换：停止');
-    this.innerAudioContext.stop();
-    this.innerAudioContext.destroy();
-    AudioPlayerCcContainer[this.uuid] = null;
-  },
+	beforeDestroy(){
+		console.info('实例销毁;播放状态切换：停止');
+		this.innerAudioContext.stop();
+		this.innerAudioContext.destroy();
+		AudioPlayerCcContainer[this.uuid] = null;
+	},
   watch:{
     play(val){
       console.info(`play: ${val}`);
@@ -181,110 +181,114 @@ export default {
     },
     //音频初始化
     audioInit() {
-      let _self = this,
-          //是否单独播放
-          alone = true;
+		let _self = this,
+        //是否单独播放
+        alone = true;
+		console.log('_self.innerAudioContext',_self.innerAudioContext);
+		if (this.src.length > 0) {
+			let time = parseInt(Date.parse(new Date()) / (1000 * 60 * 30)),
+				src = `${this.src}?v=${time}`;
 
-      if (this.src.length > 0) {
-        let time = parseInt(Date.parse(new Date()) / (1000 * 60 * 30)),
-            src = `${this.src}?v=${time}`;
+			console.info(`uuid：${this.uuid}`);
+			console.info(`加载音频地址：${src}`);
 
-        console.info(`uuid：${this.uuid}`);
-        console.info(`加载音频地址：${src}`);
+			_self.innerAudioContext.autoplay = _self.autoplay;
+			_self.innerAudioContext.loop = _self.loop;
 
-        _self.innerAudioContext.autoplay = _self.autoplay;
-        _self.innerAudioContext.loop = _self.loop;
+			AudioPlayerCcContainer[_self.uuid] = _self.innerAudioContext;
+		}
 
-        AudioPlayerCcContainer[_self.uuid] = _self.innerAudioContext;
-      }
-
-      //初始化加载事件
-      this.innerAudioContext.onCanplay(() => {
-        console.info('初始化加载事件');
-        _self.ready = true;
-        _self.max = _self.innerAudioContext.duration;
-
-        if (_self.innerAudioContext.duration <= 0) {
-          setTimeout(function (){
-            _self.max = this.innerAudioContext.duration;
-            console.info(`max: ${_self.max};src: ${_self.innerAudioContext.src}`);
-          }, 200)
-        }
-      });
+		//初始化加载事件
+		this.innerAudioContext.onCanplay(() => {
+			console.info('初始化加载事件');
+			_self.ready = true;
+			if(_self.innerAudioContext.duration){
+				_self.max = _self.innerAudioContext.duration;
+			}
+			
+			if (_self.innerAudioContext.duration <= 0) {
+			  setTimeout(function (){
+				_self.max = this.innerAudioContext.duration;
+				console.info(`max: ${_self.max};src: ${_self.innerAudioContext.src}`);
+			  }, 200)
+			}
+		});
 
       //开始播放事件
-      this.innerAudioContext.onPlay(() => {
-        console.info('开始播放', `是否单独播放${alone}`);
-        if (!this.play) {
-          this.playAudio()
-        }
-        if (_self.alonePlay) {
-          for (let uuid in AudioPlayerCcContainer){
-            if (this.uuid !== uuid) {
-              AudioPlayerCcContainer[uuid] && AudioPlayerCcContainer[uuid].pause();
-            }
-          }
-        }
-      });
+		this.innerAudioContext.onPlay(() => {
+			console.info('开始播放', `是否单独播放${alone}`);
+			if (!this.play) {
+			  this.playAudio()
+			}
+			if (_self.alonePlay) {
+			  for (let uuid in AudioPlayerCcContainer){
+				if (this.uuid !== uuid) {
+				  AudioPlayerCcContainer[uuid] && AudioPlayerCcContainer[uuid].pause();
+				}
+			  }
+			}
+		});
 
-      //音频播放进度更新事件
-      this.innerAudioContext.onTimeUpdate(() => {
-        if (this.srcChange) {
-          _self.srcChange = false;
-          _self.max = _self.innerAudioContext.duration;
-          console.info(`max: ${_self.max};src: ${_self.innerAudioContext.src}`);
-        }
+		//音频播放进度更新事件
+		this.innerAudioContext.onTimeUpdate(() => {
+			if (this.srcChange) {
+				_self.srcChange = false;
+				if(_self.innerAudioContext.duration){
+					_self.max = _self.innerAudioContext.duration;
+					console.info(`max: ${_self.max};src: ${_self.innerAudioContext.src}`);
+				}
+			}
 
-        _self.current = _self.innerAudioContext.currentTime;
-      });
+			_self.current = _self.innerAudioContext.currentTime;
+		});
 
-      //音频暂停事件
-      this.innerAudioContext.onPause((e) => {
-        console.info(`播放暂停`, e);
-        if (_self.play) {
-          _self.pauseAudio();
-        }
-      });
+		//音频暂停事件
+		this.innerAudioContext.onPause((e) => {
+			console.info(`播放暂停`, e);
+			if (_self.play) {
+			  _self.pauseAudio();
+			}
+		});
 
-      //音频停止事件
-      this.innerAudioContext.onStop((e) => {
-        console.info(`播放停止`, e);
-      });
+		//音频停止事件
+		this.innerAudioContext.onStop((e) => {
+			console.info(`播放停止`, e);
+		});
 
-      //音频自然播放结束事件
-      this.innerAudioContext.onEnded((e) => {
-        console.info(`播放结束`, e);
-        _self.stopAudio();
-        _self.$emit('ended')
-      });
+		//音频自然播放结束事件
+		this.innerAudioContext.onEnded((e) => {
+			console.info(`播放结束`, e);
+			_self.stopAudio();
+			_self.$emit('ended')
+		});
 
-      this.innerAudioContext.onSeeked((e) => {
-        console.info(`音频完成 seek 操作事件`, e);
-      });
+		this.innerAudioContext.onSeeked((e) => {
+			console.info(`音频完成 seek 操作事件`, e);
+		});
 
-      this.innerAudioContext.onSeeking((e) => {
-        console.info(`音频进行 seek 操作事件`, e);
-      });
+		this.innerAudioContext.onSeeking((e) => {
+			console.info(`音频进行 seek 操作事件`, e);
+		});
 
-      //异常监听
-      this.innerAudioContext.onError((err) => {
-        console.info(err);
+		//异常监听
+		this.innerAudioContext.onError((err) => {
+			console.info(err);
 
-        _self.ready = false;
-        let errorMap = {
-          10001: "系统错误",
-          10002: "网络错误",
-          10003: "文件错误",
-          10004: "格式错误",
-          "-1": "文件加载失败"
-        }
+			_self.ready = false;
+			let errorMap = {
+			  10001: "系统错误",
+			  10002: "网络错误",
+			  10003: "文件错误",
+			  10004: "格式错误",
+			  "-1": "文件加载失败"
+			}
 
-        let errorMsg = errorMap[err ?? "-1"]
+			let errorMsg = errorMap[err ?? "-1"]
 
-        uni.showToast({title: errorMsg, icon: 'error'});
-      });
+			uni.showToast({title: errorMsg, icon: 'error'});
+		});
 
-      this.init = true;
+		this.init = true;
     },
     //播放
     playAudio(){

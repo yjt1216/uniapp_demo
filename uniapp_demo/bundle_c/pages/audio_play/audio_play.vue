@@ -1,50 +1,26 @@
 <template>
 	<view class="container">
 		<u-navbar :auto-back="true" :placeholder="true" title="音频播放"></u-navbar>
+		
 		<view>
-		  <view class="title-1">其他音频测试：</view>
-		  <view class="list">
-			<audio-cc :title="musicList[1].title" :src="musicList[1].src" :alonePlay="alonePlay"></audio-cc>
-		  </view>
+			<view class="title-1">列表播放器：</view>
+			<view class="list">
+				<audio-cc v-on:ended="ended" v-on:currentChange="currentChange" :title="music.title" :src="music.src" 
+					:alonePlay="alonePlay" :autoplay="autoplay" :firstCurrent="firstCurrent" :playbackRate="playbackRate">
+				</audio-cc>
+			</view>
 		</view>
 
 		<view>
-		  <view class="title-1">列表播放器：</view>
-		  <view class="list">
-			<audio-cc v-on:ended="ended" v-on:currentChange="currentChange" :title="music.title" :src="music.src" :alonePlay="alonePlay" :autoplay="autoplay" :firstCurrent="firstCurrent" :playbackRate="playbackRate"></audio-cc>
-		  </view>
+			<view class="title-1">音频列表：</view>
+			<view class="list">
+				<button :class="{'item': true, 'active': index===selectedMusicIndex}" v-for="(music, index) in musicList" 
+					:key="index" @click="selectedMusicIndex=index">{{ music.title }}
+				</button>
+			</view>
 		</view>
 
-		<view>
-		  <view class="title-1">音频列表：</view>
-		  <view class="list">
-			<button :class="{'item': true, 'active': index===selectedMusicIndex}" v-for="(music, index) in musicList" :key="index" @click="selectedMusicIndex=index">{{ music.title }}</button>
-		  </view>
-		</view>
-
-		<view>
-		  <view class="title-1">功能列表：</view>
-		  <view class="list">
-			<button @click="selectedMusicIndex < 0 ? selectedMusicIndex = musicList.length - 1: selectedMusicIndex--">上一首</button>
-			<button @click="selectedMusicIndex === (musicList.length - 1) ? selectedMusicIndex = 0: selectedMusicIndex++">下一首</button>
-			<button @click="autoplayNext=!autoplayNext">自动播放下一首:{{ autoplayNext ? '启用': '禁止' }}</button>
-			<button @click="alonePlay=!alonePlay">是否支持多音频同事播放:{{ !alonePlay ? '启用': '禁止' }}</button>
-		  </view>
-		</view>
-
-		<view>
-		  <view class="title-1">倍速设置：</view>
-		  <view class="list">
-			<view class="item"><input v-model="playbackRate" /></view>
-		  </view>
-		</view>
-
-		<view>
-		  <view class="title-1">首次快进（秒）：</view>
-		  <view class="list">
-			<view class="item"><input v-model="firstCurrent" /></view>
-		  </view>
-		</view>
+		
 	</view>
 </template>
 
