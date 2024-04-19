@@ -424,6 +424,12 @@
 					"style": {
 						"navigationBarTitleText": "音频播放"
 					}
+				},
+				{
+					"path": "pages/audio_play/audio_player",
+					"style": {
+						"navigationBarTitleText": "音频播放"
+					}
 				}
 			]
 		}
