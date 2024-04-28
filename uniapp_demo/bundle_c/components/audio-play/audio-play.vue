@@ -9,24 +9,24 @@
 					<view class="audo-top">
 					
 						<!--上一首-->
-						<image src="./xys.png" style="width:40rpx;height:40rpx;transform:rotate(180deg)" mode="aspectFill"
+						<image src="/bundle_c/static/icon/xys.png" style="width:40rpx;height:40rpx;transform:rotate(180deg)" mode="aspectFill"
 						@click="upper(1)"></image>
 						<!--上一首-->
  
 						<!--快退-->
-							<image src="./kt.png" style="width:40rpx;height:40rpx;" mode="widthFix" @click="jump('kt')"></image>
+							<image src="/bundle_c/static/icon/kt.png" style="width:40rpx;height:40rpx;" mode="widthFix" @click="jump('kt')"></image>
 						<!--快退-->
 
 						<!--播放-->
-						  <image :src="succes?'./bofang2.png':'./zt.png'" style="width:180rpx;height:180rpx;"  mode="aspectFill" @click="plays()"></image>
+						  <image :src="succes?'/bundle_c/static/icon/bofang2.png':'/bundle_c/static/icon/zt.png'" style="width:180rpx;height:180rpx;"  mode="aspectFill" @click="plays()"></image>
 						<!--播放-->
 
 						<!--快进-->
-						<image  src="./kj.png" style="width:40rpx;height:40rpx;" mode="widthFix" @click="jump('kj')"></image>
+						<image  src="/bundle_c/static/icon/kj.png" style="width:40rpx;height:40rpx;" mode="widthFix" @click="jump('kj')"></image>
 						<!--快进-->
 
 						<!--下一首-->
-						<image src="./xys.png" style="width:40rpx;height:40rpx;" mode="aspectFill" @click="upper(2)"></image>
+						<image src="/bundle_c/static/icon/xys.png" style="width:40rpx;height:40rpx;" mode="aspectFill" @click="upper(2)"></image>
 						<!--下一首-->
 					
 					</view>
@@ -96,7 +96,7 @@
 	 [Author:chenxin  交流vx:cxalq8-24]  
 	*/
 	export default {
-		name: "cx-audio-play",
+		name: "audio-play",
 		props: {
 			list: { //音频数据
 				Type: Array,
@@ -190,10 +190,10 @@
 		},
 		computed: {
 			timer() {
-				return calcTimer(this.currentTime)
+				return calcTimer(this.currentTime);
 			},
 			overTimer() {
-				return calcTimer(this.duration)
+				return calcTimer(this.duration);
 			}
 		},
 		watch: {
@@ -325,7 +325,8 @@
 
 			// 视频加载完成
 			loadedmetadata(data) {
-				this.duration = data.detail.duration
+				console.log('视频加载完成',data);
+				this.duration = data.detail.duration;
 			},
 			
 			//音频结束触发

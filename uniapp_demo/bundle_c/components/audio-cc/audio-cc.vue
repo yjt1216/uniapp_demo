@@ -70,13 +70,16 @@ export default {
       accuracy: 3000,
       ready: false,
       init: false,
-      srcChange: false
+      srcChange: false,
+	  // currentVolume:0,
     };
   },
   //在实例创建完成后被立即调用。
   mounted() {
     this.createUuid();
     this.audioInit();
+	let _this = this;
+	
   },
   //实例销毁之前调用。在这一步，实例仍然完全可用。
 	beforeDestroy(){
@@ -88,6 +91,14 @@ export default {
   watch:{
     play(val){
       console.info(`play: ${val}`);
+	  // if(this.currentVolume === 0){
+		 //  uni.showModal({
+		 //    title: '音量提示',
+		 //    content: '您的设备可能处于静音模式或音量较低，请检查并调整音量以正常播放音频。',
+		 //    showCancel: false,
+		 //  });
+		 //  return;
+	  // }
       if (this.src.length > 0) {
         if (val) {
           console.info(`uuid：${this.uuid};播放状态切换：播放`);
@@ -173,11 +184,11 @@ export default {
   },
   methods:{
     changeState(){
-      if (this.ready) {
-        this.play = !this.play;
-      } else {
-        uni.showToast({title: '音频加载失败请更换源'});
-      }
+		if (this.ready) {
+			this.play = !this.play;
+		} else {
+			uni.showToast({title: '音频加载失败请更换源'});
+		}
     },
     //音频初始化
     audioInit() {

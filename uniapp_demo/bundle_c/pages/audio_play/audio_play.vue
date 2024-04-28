@@ -5,17 +5,23 @@
 		<view>
 			<view class="title-1">列表播放器：</view>
 			<view class="list">
-				<audio-cc v-on:ended="ended" v-on:currentChange="currentChange" :title="music.title" :src="music.src" 
+				<!-- <audio-cc v-on:ended="ended" v-on:currentChange="currentChange" :title="music.title" :src="music.src" 
 					:alonePlay="alonePlay" :autoplay="autoplay" :firstCurrent="firstCurrent" :playbackRate="playbackRate">
-				</audio-cc>
+				</audio-cc> -->
+				
+				<luch-audio :src="music.record_url" @onError="onAudioError" :initAudio="initCb" @onPlay="audioPlay"
+					:name="music.call_at" :author="music.call_duration" :play.sync="audioToPlay">
+				</luch-audio>
+				
 			</view>
 		</view>
 
 		<view>
 			<view class="title-1">音频列表：</view>
 			<view class="list">
-				<button :class="{'item': true, 'active': index===selectedMusicIndex}" v-for="(music, index) in musicList" 
-					:key="index" @click="selectedMusicIndex=index">{{ music.title }}
+				<button :class="{'item': true, 'active': index===srcIndex}" v-for="(music, index) in musicList" 
+					:key="index" @click="srcIndex=index">
+					{{ music.call_at }}
 				</button>
 			</view>
 		</view>
@@ -26,57 +32,73 @@
 
 <script>
 	
-	import audioCc from '@/bundle_c/components/audio-cc/audio-cc.vue';
+	import luchAudio from '@/bundle_c/components/audio-play/audio-test.vue'
 	export default {
 		components:{
-			audioCc
+			luchAudio
 		},
 		data() {
 			return {
-				selectedMusicIndex: 0,
-				musicList: [
-				  {
-					src: 'http://downsc.chinaz.net/files/download/sound1/201206/1638.mp3',
-					title: '测试音频',
-				  },
-				  {
-					src: 'http://music.163.com/song/media/outer/url?id=447925558.mp3',
-					title: '你',
-				  },
-				  {
-					src: 'https://www.cambridgeenglish.org/images/153149-movers-sample-listening-test-vol2.mp3',
-					title: '晚风',
-				  },
-				  {
-					src:'https://www.cambridgeenglish.org/images/506891-a2-key-for-schools-listening-sample-test.mp3',
-					title:'qita'
-				  },
-				  {
-					src: 'https://mpge.5nd.com/2022/2022-6-15/3277704/1.mp3',
-					title: '有一个姑娘',
-				  },
+				
+				musicList:[
+					{
+						call_at: "2024-04-15 13:12:05",
+						call_duration: 24,
+						record_url: "http://222.92.38.178:8091/storage/import/order/2024/04/15/20240415_131735_661cb86f1770f.mp3",
+						release_time: "2024-04-15 13:12:38",
+						start_time: "2024-04-15 13:12:14",
+					},
+					{
+						call_at: "2024-04-15 13:11:16",
+						call_duration: 9,
+						record_url: "http://222.92.38.178:8091/storage/import/order/2024/04/15/20240415_134742_661cbf7eacf7d.mp3",
+						release_time: "2024-04-15 13:11:38",
+						start_time: "2024-04-15 13:11:29",
+					}
 				],
-				firstCurrent: 4.1,
-				autoplay: false,
-				autoplayNext: false,
-				playbackRate: 1.0,
-				alonePlay: false
+				
+				srcIndex: 0,
+				audioToPlay: false
+				
 			}
 		},
 		computed:{
 			music(){
-				return this.musicList[this.selectedMusicIndex]
+				return this.musicList[this.srcIndex];
 			}
 		},
 		methods: {
-			ended(){
-				if (this.autoplayNext) {
-					this.selectedMusicIndex === (this.musicList.length - 1) ? this.selectedMusicIndex = 0: this.selectedMusicIndex++
+			initCb(context, data) {
+				// 设置属性
+				// context.loop = true
+				console.log('initCb data', data);
+				context.onCanplay(() => {
+					console.log('context duration', context.duration);
+				});
+				context.onEnded(() => {
+					console.log('当前视频播放结束');
+				})
+			},
+			audioPlay () {
+				console.log('视频开始播放了');
+			},
+			nextAudio() {
+				if (this.srcIndex === this.musicList.length - 1) {
+					this.srcIndex = 0;
+				} else {
+					this.srcIndex++;
 				}
 			},
-			currentChange(current){
-				console.info('进度记录', current)
-			}
+			audioHandle () {
+				this.audioToPlay = !this.audioToPlay
+			},
+			onAudioError(e) {
+				console.log('播放出错');
+				console.log(e);
+			},
+			changeMusicPlay(index){
+				this.srcIndex = index;
+			},
 		}
 	}
 </script>

@@ -28,6 +28,9 @@
 .u-page__upload-item.data-v-46968198 {
   margin-top: 5px;
 }
+.u-demo-block.data-v-46968198 {
+  margin-top: 30rpx;
+}
 .feedback-wrap.data-v-46968198 {
   width: 91.47%;
   margin: 12px auto;
@@ -42,7 +45,7 @@
   font-size: 15px;
   font-family: Source Han Sans CN;
   font-weight: 400;
-  color: #FEFEFE;
+  color: #333;
 }
 .feedback-wrap .feedback-type .feedback-type-con.data-v-46968198 {
   display: flex;
@@ -76,7 +79,7 @@
   font-size: 15px;
   font-family: Source Han Sans CN;
   font-weight: 400;
-  color: #FEFEFE;
+  color: #333;
   position: relative;
 }
 .feedback-wrap .feedback-con .feedback-con-title .feedback-con-num.data-v-46968198 {

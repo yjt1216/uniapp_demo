@@ -10,18 +10,36 @@
 		
 		<view class="group-title">功能示例</view>
 		
-		
-		<navigator url="/bundle/pages/upload_img/upload_photo">
-			<view class="demo-li">上传照片<text class="demo-tip"> 选择图片</text></view>
-		</navigator>
 		<navigator url="/bundle/pages/action_sheet/action_sheet">
 			<view class="demo-li">输入<text class="demo-tip"> textarea</text></view>
 		</navigator>
 		
 		<navigator url="/bundle/pages/upload_img/upload_photo">
-			<view class="demo-li">upload photo<text class="demo-tip"> 压缩并保存图片 </text></view>
+			<view class="demo-li">压缩并保存图片 <text class="demo-tip"> upload photo </text></view>
 		</navigator>
 		
+		<navigator url="/bundle/pages/choose_photo/choose_images">
+			<view class="demo-li"> 选择图片after<text class="demo-tip"> choose photo </text></view>
+		</navigator>
+		
+		
+		<navigator url="/bundle/pages/choose_photo/choose_photo">
+			<view class="demo-li"> 选择图片before<text class="demo-tip"> choose images </text></view>
+		</navigator>
+		<navigator url="/bundle_c/pages/audio_play/audio_player">
+			<view class="demo-li">音频播放<text class="demo-tip"> audio player </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_c/pages/audio_play/audio_play">
+			<view class="demo-li">音频播放Luch<text class="demo-tip"> audio play test </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_c/pages/audio_play/audio_list">
+			<view class="demo-li">音频列表<text class="demo-tip"> audio list </text></view>
+		</navigator>
+		
+		
+		<!-- 
 		
 		<navigator url="/bundle_c/pages/phone_record/phone_record">
 			<view class="demo-li">phone record<text class="demo-tip"> 电话录音 </text></view>
@@ -37,12 +55,8 @@
 			<view class="demo-li">切换咨询时段<text class="demo-tip"> time </text></view>
 		</navigator>
 		
-		<navigator url="/bundle_c/pages/audio_play/audio_play">
-			<view class="demo-li">音频播放<text class="demo-tip"> audio </text></view>
-		</navigator>
 		
 		
-		<!-- 
 		<navigator url="/bundle_c/pages/qqmap_location/trajectory_location">
 			<view class="demo-li">原版轨迹<text class="demo-tip"> 行程轨迹 </text></view>
 		</navigator>
@@ -182,11 +196,9 @@
 		<!-- <navigator url="/bundle/pages/tag_page/tag-page">
 			<view class="demo-li">tag_page<text class="demo-tip"> tag </text></view>
 		</navigator>
-		<navigator url="/bundle/pages/choose_photo/choose_photo">
-			<view class="demo-li"> choose photo<text class="demo-tip"> 选择图片 </text></view>
-		</navigator> -->
 		
-		<!-- <navigator url="/bundle/pages/choose_date/choose_date">
+		
+		<navigator url="/bundle/pages/choose_date/choose_date">
 			<view class="demo-li"> choose date<text class="demo-tip"> 日期picker </text></view>
 		</navigator> 
 		<navigator url="/bundle/pages/pop_box/pop_box">

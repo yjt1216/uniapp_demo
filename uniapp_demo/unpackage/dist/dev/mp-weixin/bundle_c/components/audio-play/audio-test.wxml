@@ -1,0 +1,1 @@
+<view class="luch-audio__warp data-v-72b7e6c2"><view data-event-opts="{{[['tap',[['handleBtnClick',['$event']]]]]}}" class="luch-audio__cover data-v-72b7e6c2" bindtap="__e"><u-icon vue-id="0dde0847-1" name="mic" color="#2979ff" size="28" class="data-v-72b7e6c2" bind:__l="__l"></u-icon><text class="data-v-72b7e6c2">{{videoIsPlay?'播放':'暂停'}}</text></view></view>

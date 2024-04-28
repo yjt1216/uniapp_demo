@@ -11,49 +11,23 @@
 				</template>
 			</view>
 		</view>
-		<!-- 反馈内容 -->
-		<view class="feedback-con">
-			<view class="feedback-con-title">
-				<text>反馈内容</text>
-				<text class="feedback-con-num">{{conLength}}/200</text>
-			</view>
-			<view class="feedback-con-msg">
-				<textarea @input="getFeedbackMessageHandle" maxlength="200" class="feedback-con-textarea" 
-					placeholder="请输入反馈内容并上传图片" placeholder-class="placeholderclass">
-				</textarea>
-			</view>
-		</view>
-		<!-- 上传图片 -->
-		<view class="feedback-image">
-			<view class="feedback-image-title">
-				<text>上传图片</text>
-			</view>
-			<view class="feedback-image-box">
-				<template v-for="(item,index) in tempFileList">
-					<view class="feedback-image-item" :key="item.path">
-						<image :src="item.path" class="feedback-image-icon"></image>
-						<text class="iconfont feedback-image-delete" @click="deleteImgHandle(index)">x</text>
-					</view>
-				</template>
-				<!-- chooseCompressImageFun -->
-				<view class="feedback-image-btn" @click="chooseCompressImageFun">
-					<image style="width: 80rpx; height: 80rpx; background-color: #eeeeee;" :src="'/static/images/mine_paizhao.png'" ></image>
-				</view>
-				
-			</view>
-		</view>
 		
 		<view class="feedback-image">
 			<view class="feedback-image-title">
-				<text>上传图片uni</text>
+				<text>上传图片uni 压缩</text>
 			</view>
 			<view class="feedback-image-box">
 				<template v-for="(item,index) in tempFileList">
-					<view class="feedback-image-item" :key="item.path">
-						<image :src="item.path" class="feedback-image-icon"></image>
+					<view class="feedback-image-item" :key="item.url">
+						<image :src="item.url" class="feedback-image-icon"></image>
 						<text class="iconfont feedback-image-delete" @click="deleteImgHandle(index)">x</text>
 					</view>
 				</template>
+				<!-- <view class="feedback-image-btn" @click="chooseMediaHandle">
+					<image style="width: 80rpx; height: 80rpx; background-color: #eeeeee;" :src="'/static/images/mine_paizhao.png'" ></image>
+				</view> -->
+				
+				
 				<view class="feedback-image-btn" @click="chooseImageHandle">
 					<image style="width: 80rpx; height: 80rpx; background-color: #eeeeee;" :src="'/static/images/mine_paizhao.png'" ></image>
 				</view>
@@ -81,24 +55,23 @@
 		
 		
 		
-		<u-popup background-color="#fff" ref="popup" type="dialog" :is-mask-click="false">
+		<!-- <u-popup background-color="#fff" ref="popup" type="dialog" :is-mask-click="false">
 			<view class="box-pop">
 				<view class="box-title">评价患者</view>
 				<view class="box-sub-title">本次服务中患者是否愿意配合</view>
 				<u-divider hairline="true" lineColor="#888"></u-divider>
 				<view class="rate-center">
-					<!-- <u-rate :count="5" v-model="cooperate" activeColor="#f0ad4e" inactiveColor="#666666"></u-rate> -->
 					<uni-rate size="18" allowHalf="true" v-model="cooperate" active-color="#FA800A" color="#666666" @change="cooperateChange"></uni-rate>
 				</view>
 				
 				<u-divider hairline="false" dashed="true" lineColor="#888"></u-divider>
-				<!-- 取消 确定 -->
+				
 				<view class="box-bottom">
 					<view class="bottom-item" @click="cancelEvaluateFun">取消评价</view>
 					<view class="bottom-item" @click="submitEvaluateFun">提交评价</view>
 				</view>
 			</view>
-		</u-popup>
+		</u-popup> -->
 		<helang-compress ref="helangCompress"></helang-compress>
 
 	</view>
@@ -128,7 +101,7 @@
 				feedbackValue:"",//反馈内容
 				conLength:0,
 				tempFileList:[],//选择图片临时存储
-				tempFileObject:[],//上传腾讯云返回图片路径
+				
 				/* 图片最大选取 5张 */
 				maxChooseImages: 5,
 				cooperate:0,
@@ -146,54 +119,51 @@
 		},
 		methods:{
 			async beforeReadImages(e){
-				console.log('u-upload beforeRead event',e);
+				// console.log('u-upload beforeRead event',e);
+				/* 提取url 为一个新数组 */
+				let tempImages = e.file.map(item=>item.url);
 				
-				const size = (e.file[0].size) / 1024 / 1024
-				const index = e.file[0].url.indexOf('.')
-				const type = e.file[0].url.substring(index + 1)
-				if (type !== 'png' && type !== 'jpg' && type !== 'jpeg') {
-				    console.log('上', this.fileList1.length)
-				    this.$u.toast('文件格式不正确, 请上传png/jpg/jpeg图片格式文件')
-				    
-				    return false
-				} else {
-					/* 开启压缩图片 */
-					//   if (size > 4.1) {
-							// console.log('上', this.fileList1.length)
-							// this.$u.toast('上传图片大小不能超过4MB')
-							// return false
-					//   } else {
-							
-					//   }
-					/* 提取url 为一个新数组 */
-					let tempImages = e.file.map(item=>item.url);
-					that.$refs.helangCompress.compress({
-						src: tempImages,
-						maxSize: 1980,
-						fileType: 'jpg',
-						quality: 0.75,
-						minSize: 640
-					}).then((res) => {
-						console.log('压缩成功res',res);
-						// 使用 .map() 方法将每个URL字符串转换为对象
-						const resultList = res.map(url => ({ url }));
-						this.fileList1 = resultList;
-					}).catch((err) => {
-						uni.hideLoading();
-						uni.showToast({
-							title: "文件大小超出限制",
-							icon: "none"
+				const resultList = tempImages.map(url => ({ url }));
+				console.log('u-upload beforeRead resultList',resultList);
+				
+				tempImages.forEach(async function(item,index){
+					if(that.fileList1.length < that.maxChooseImages){
+						// #ifdef MP-WEIXIN
+						uni.compressImage({
+							src: item,
+							quality: 60,
+							success:function(compressI){
+								console.log('压缩图片compressI',compressI)
+								
+								that.fileList1.push({
+									url:compressI.tempFilePath
+								})
+								
+								console.log('u-upload beforeRead fileList1',that.fileList1);
+							}
 						})
-					})
-				  
-				  
-				}
+						// #endif
+						// #ifdef H5
+						let imgTest = await that.translate(item,0.6);
+						console.log('图片数已达到5张',imgTest)
+						that.fileList1.push({
+							url: imgTest
+						})
+						// #endif
+						
+						
+					}else{
+						console.log('图片数已达到5张')
+					}
+					
+				})
 				
+				
+			
 			},
 			// 新增图片
 			async afterRead(event) {
 				console.log('u-upload afterRead event',event);
-				
 				
 			},
 			// 删除图片
@@ -230,15 +200,14 @@
 				this.feedbackValue=e.detail.value
 			},
 			//上传图片
-			chooseImageHandle(){
-				console.log("[上传图片]")
+			chooseMediaHandle(){
 				
 				if(that.tempFileList.length < that.maxChooseImages){
 					uni.chooseMedia({
 						count: that.maxChooseImages, //默认9
 						mediaType:['image'],
-						sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-						sourceType: ['album'], //从相册选择
+						sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+						sourceType: ['album','camera'], //从相册选择
 						camera:'back',
 						success: function(res){
 							// console.log('选取结果',res)
@@ -274,46 +243,42 @@
 				}
 				
 			},
-			chooseImageHandleH5(){
-				console.log("[选择图片]")
+			chooseImageHandle(){
+				console.log("[上传图片]")
 				
 				if(that.tempFileList.length < that.maxChooseImages){
-					uni.chooseMedia({
+					uni.chooseImage({
 						count: that.maxChooseImages, //默认9
 						mediaType:['image'],
-						sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-						sourceType: ['album'], //从相册选择
+						sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+						sourceType: ['album','camera'], //从相册选择
 						camera:'back',
 						success: function(res){
-							// console.log('选取结果',res)
-							let tempFiles= res.tempFiles;
-						    tempFiles.forEach(function(item,index){
+							console.log('选取结果',res)
+							let tempFiles= res.tempFilePaths;
+							// let tempImages = e.file.map(item=>item.url);
+						    tempFiles.forEach(async function(item,index){
 								if(that.tempFileList.length < that.maxChooseImages){
-									console.log('for in ',item)
-									// uni.compressImage({
-									// 	src: item.tempFilePath,
-									// 	quality: 60,
-									// 	success:function(compressI){
-									// 		console.log('压缩图片compressI',compressI)
-									// 		that.tempFileList.push({
-									// 			path: compressI.tempFilePath
-									// 		})
-									// 	}
-									// })
-									
-									that.translate(item.tempFilePath, 0.5, imgURL => {
-										//查看压缩后的大小
-										uni.getFileInfo({
-											filePath: imgUrl,
-											success: imgInfo => {
-												console.log('压缩后', imgInfo.size);
-											}
-										})
-										that.tempFileList.push({
-											path: imgURL
-										})
+									// console.log('for in ',item);
+									// #ifdef MP-WEIXIN
+									uni.compressImage({
+										src: item.tempFilePath,
+										quality: 60,
+										success:function(compressI){
+											console.log('压缩图片compressI',compressI)
+											that.tempFileList.push({
+												url: compressI.tempFilePath
+											})
+										}
 									})
-									
+									// #endif
+									// #ifdef H5
+									let imgTest = await that.translate(item,0.6);
+									console.log('图片数已达到5张',imgTest)
+									that.tempFileList.push({
+										url: imgTest
+									})
+									// #endif
 									
 								}else{
 									console.log('图片数已达到5张')
@@ -332,6 +297,7 @@
 				}
 				
 			},
+			
 			//删除图片
 			deleteImgHandle(currentIndex){
 				console.log("[删除图片]")
@@ -345,16 +311,14 @@
 				
 				this.savaImageFun();
 				
-				// this.$refs.popup.open()
-				
 			},
 			/* 保存图片 */
 			savaImageFun(){
 				that.tempFileList.forEach(function(item,index){
-					console.log('保存图片item',item)
 					
+					// #ifdef MP-WEIXIN
 					uni.saveImageToPhotosAlbum({
-						filePath:item.path,
+						filePath:item.url,
 						success:function(res){
 							uni.showToast({
 								title:'保存成功',
@@ -362,39 +326,65 @@
 							})
 						},
 						fail:function(err){
+							console.log('保存图片err',err)
 							uni.showToast({
 								title:'保存失败',
 								icon:'none'
 							})
 						}
 					})
+					// #endif
+					
 					
 				})
 			},
-			/* 保存压缩图片 */
-			chooseCompressImageFun(){
-				that.tempFileList.forEach(function(item,index){
-					console.log('保存图片item',item)
-					
-					uni.saveImageToPhotosAlbum({
-						filePath:item.path,
-						success:function(res){
-							uni.showToast({
-								title:'保存成功',
-								icon:'none'
-							})
-						},
-						fail:function(err){
-							uni.showToast({
-								title:'保存失败',
-								icon:'none'
-							})
-						}
-					})
-					
+			translate(imgSrc, scale) {
+				//imgSrc:图片的路径
+				//scale:缩放比例 0-1之间
+				return new Promise((reslove, reject) => {
+					var img = new Image(); //创建Image对象生成一个<img>标签
+					img.src = imgSrc; //将图片路径赋给<img>标签的src
+					img.onload = () => {//onload在图片加载成功后触发，在onload中完成压缩功能
+						var h = img.height/2; // 获取原本图片的宽高
+						var w = img.width/2;  //默认按比例压缩,根据需求修改
+						var canvas = document.createElement('canvas');//创建画布
+						var ctx = canvas.getContext('2d');  //设置为2d效果
+						var width = document.createAttribute("width"); //创建属性节点
+						width.nodeValue = w; //设置属性值
+						var height = document.createAttribute("height");
+						height.nodeValue = h;
+						canvas.setAttributeNode(width); //设置画布宽高
+						canvas.setAttributeNode(height);
+						ctx.drawImage(img, 0, 0, w,h);//将图片贴到画布上
+						//img:图片 0,0:粘贴的位置 w,h:粘贴图片的大小
+						var base64 = canvas.toDataURL('image/png', scale);
+						//'image/png':压缩返回图片的类型 scale:图片质量
+						//如果要base64的流，可以直接将结果返回了
+						canvas = null; //清除画布
+						var blob = this.base64ToBlob(base64); //需要二进制流调用该方法拿到
+						let blobUrl = window.URL.createObjectURL(blob);//blob地址
+						reslove(blobUrl)
+					}
 				})
+			 },
+			// base64转Blob
+			base64ToBlob(base64) { 
+				var arr = base64.split(','),
+				mime = arr[0].match(/:(.*?);/)[1],
+				bstr = atob(arr[1]),
+				n = bstr.length,
+				u8arr = new Uint8Array(n);
+				while (n--) {
+					u8arr[n] = bstr.charCodeAt(n);
+				}
+				return new Blob([u8arr],  {
+					type: mime,
+				});
+			},
 
-			}
+			
+			
+			
 		}
 	}
 </script>
@@ -404,6 +394,9 @@
 		&__upload-item{
 			margin-top:5px;
 		}
+	}
+	.u-demo-block{
+		margin-top: 30rpx;
 	}
 .feedback-wrap{
 	width: 91.47%;
@@ -417,7 +410,7 @@
 			font-size:15px;
 			font-family: Source Han Sans CN;
 			font-weight: 400;
-			color: #FEFEFE;
+			color: #333;
 		}
 		.feedback-type-con{
 			display: flex;
@@ -451,7 +444,7 @@
 			font-size:15px;
 			font-family: Source Han Sans CN;
 			font-weight: 400;
-			color: #FEFEFE;
+			color: #333;
 			position: relative;
 			.feedback-con-num{
 				position: absolute;

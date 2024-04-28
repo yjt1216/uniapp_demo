@@ -164,6 +164,13 @@
 					}
 				},
 				{
+					"path": "pages/choose_photo/choose_images",
+					"style": {
+						"navigationBarTitleText": "选择照片"
+					}
+				},
+				
+				{
 					"path": "pages/take_photo/take_images",
 					"style": {
 						"navigationBarTitleText": "image"
@@ -268,12 +275,6 @@
 					}
 				},
 				{
-					"path": "pages/choose_date/choose_date",
-					"style": {
-						"navigationBarTitleText": "日期选择"
-					}
-				},
-				{
 					"path": "pages/list_h/list_left",
 					"style": {
 						"navigationStyle": "custom" 
@@ -368,18 +369,18 @@
 						"navigationBarTitleText": "腾讯地图"
 					}
 				},
-				{
-					"path": "pages/qqmap_location/track_location",
-					"style": {
-						"navigationBarTitleText": "轨迹"
-					}
-				},
-				{
-					"path": "pages/qqmap_location/trajectory_location",
-					"style": {
-						"navigationBarTitleText": "轨迹"
-					}
-				},
+				// {
+				// 	"path": "pages/qqmap_location/track_location",
+				// 	"style": {
+				// 		"navigationBarTitleText": "轨迹"
+				// 	}
+				// },
+				// {
+				// 	"path": "pages/qqmap_location/trajectory_location",
+				// 	"style": {
+				// 		"navigationBarTitleText": "轨迹"
+				// 	}
+				// },
 				
 				{
 					"path": "pages/navi_search/navi_search",
@@ -429,6 +430,12 @@
 					"path": "pages/audio_play/audio_player",
 					"style": {
 						"navigationBarTitleText": "音频播放"
+					}
+				},
+				{
+					"path": "pages/audio_play/audio_list",
+					"style": {
+						"navigationBarTitleText": "音频列表"
 					}
 				}
 			]
