@@ -1,3 +1,30 @@
+	
+	/* 筛选条件 */
+	.filter-warp {
+		box-sizing: border-box;
+		overflow: hidden;
+		overflow-y: scroll;
+		box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.15);
+		background-color: rgba(255, 255, 255, 1);
+		border-radius: 10px;
+		position: relative;
+		width: 710rpx;
+		height: 650rpx;
+		margin: 20rpx 0 0 20rpx;
+		display: flex;
+		flex-direction: column;
+	}
+	.chart-first{
+		padding: 0 20rpx;
+		height: 380rpx;
+		// bottom: 0;
+		// bottom: constant(safe-area-inset-bottom);
+		// bottom: env(safe-area-inset-bottom);
+		display: flex;
+		flex-direction: column; /* 水平布局 */
+		// background: linear-gradient(180deg , #FFFFFF 0%, #FFF0DC 100%);
+		background: linear-gradient(to bottom, #FFF0DC, #FFFFFF);
+	}
 	/* 金额订单 */
 	.amount-order-box{
 		color: #FFFFFF;
@@ -8,6 +35,7 @@
 		background: linear-gradient(360deg, #FFFFFF 0%, #FFF0DC 100%);
 	}
 	.amount-box{
+		margin-top: 20rpx;
 		display: flex;
 		flex-direction: column;
 		width: 310rpx;
@@ -23,6 +51,7 @@
 	  flex-shrink: 0; /* 不参与flex收缩 */
 	}
 	.order-box{
+		margin-top: 20rpx;
 		display: flex;
 		flex-direction: column;
 		width: 310rpx;
@@ -74,30 +103,6 @@
 		color: #49688E;
 	}
 	
-	/* 筛选条件 */
-	.filter-warp {
-		box-sizing: border-box;
-		overflow: hidden;
-		overflow-y: scroll;
-		box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.15);
-		background-color: rgba(255, 255, 255, 1);
-		border-radius: 10px;
-		position: relative;
-		width: 710rpx;
-		height: 650rpx;
-		margin: 20rpx 0 0 20rpx;
-		display: flex;
-		flex-direction: column;
-	}
-	.chart-first{
-		padding: 0 20rpx;
-		height: 380rpx;
-		bottom: 0;
-		bottom: constant(safe-area-inset-bottom);
-		bottom: env(safe-area-inset-bottom);
-		display: flex;
-		flex-direction: column; /* 水平布局 */
-	}
 	.filter-date-box{
 		margin: 30rpx;
 		display: flex;
@@ -149,9 +154,13 @@
 		line-height: 26rpx;
 	}
 	.grade-li-active {
-		background: #3fa0fd;
+		// background: #3fa0fd;
+		
 		font-size: 30rpx;
 		color: #ffffff;
+		background: linear-gradient( 66deg, #1C72F9 0%, #2DAAFF 100%);
+		box-shadow: 0rpx 10rpx 20rpx 0rpx rgba(0,145,255,0.4);
+		border-radius: 40rpx;
 	}
 	
 	
@@ -171,7 +180,8 @@
 		&.active{
 			// background: #3fa0fd;
 			font-size: 28rpx;
-			color: #3fa0fd;
+			// color: #3fa0fd;
+			color:#F9673B;
 		}
 	}
 
@@ -191,7 +201,8 @@
 		&.active{
 			// background: #3fa0fd;
 			font-size: 28rpx;
-			color: #3fa0fd;
+			// color: #3fa0fd;
+			color:#F9673B;
 		}
 	}
 	
@@ -199,3 +210,5 @@
 	// 	margin-top: 20rpx;
 	// 	justify-self: flex-start;
 	// }
+	
+	

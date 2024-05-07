@@ -351,6 +351,9 @@
 				},
 				{
 					"path": "pages/map_demo/map_demo"
+				},
+				{
+					"path": "pages/table_sort/table_sort"
 				}
 			]
 		},

@@ -1,6 +1,12 @@
 <template>
 	<view class="service-cate">
 		<view class="cate-list-box" v-if="!cateExpanded">
+			<view style="display: flex; flex-direction: row;white-space: nowrap;">
+				<text>排名</text>
+				<text>项目</text>
+				<text>占比</text>
+				<text>成交单数</text>
+			</view>
 			<view class="cate-item-box" v-for="(item, index) in serviceCateList.slice(0, 3)" :key="index"
 				@click="serviceCateItemClick(item)">
 				<view class="cate-top">

@@ -1,174 +1,184 @@
 <template>
-	<view class="u-page">
-		<u-navbar :autoBack="true" title="上传文件" :placeholder="true"></u-navbar>
-		
-		<view class="u-demo-block">
-			<text class="u-demo-block__title">before压缩</text>
-			<view class="u-demo-block__content">
-				<view class="u-page__upload-item">
-				
-				<u-upload
-					:useBeforeRead="true"
-				    :fileList="fileList1"
-					@beforeRead="beforeReadImages"
-				    @delete="deletePic"
-					:compressed="true"
-				    name="1"
-				    multiple
-				    :maxCount="4">
-				</u-upload>
-				
-				</view>
+	<view class="container">
+		<u-navbar title="传照片" :placeholder="true" :autoBack="true"></u-navbar>
+		<uni-card :is-shadow="false" is-full>
+			<text class="uni-h6">文件选择上传组件，可以选择图片、视频等任意文件并上传到当前绑定的服务空间。</text>
+		</uni-card>
+		<uni-section title="只选择图片" type="line">
+			<view class="example-body">
+				<uni-file-picker 
+					limit="9" 
+					title="最多选择9张图片"
+					@select="chooseFiles"
+					@delete="delPic"
+					:source-type="sourceType">
+				</uni-file-picker>
 			</view>
-		</view>
+		</uni-section>
 		
-		<button type="primary" @click="saveImages">保存图片</button>
+		<button type="primary" @click="saveImages" >保存图片</button>
 		
+		<uni-section title="只选择视频" type="line">
+			<view class="example-body">
+				<uni-file-picker limit="9" file-mediatype="video" title="最多选择9个视频" :source-type="sourceType"></uni-file-picker>
+			</view>
+		</uni-section>
+		<uni-section title="自定义图片和视频选择的来源" type="line">
+			<view class="example-body">
+				<uni-file-picker limit="9" title="从相册选图" :source-type="['album']"></uni-file-picker>
+			</view>
+			<view class="example-body">
+				<uni-file-picker limit="9" title="使用相机" file-mediatype="video" :source-type="['camera']"></uni-file-picker>
+			</view>
+		</uni-section>
+		<!-- #ifdef H5 || MP-WEIXIN -->
+		<uni-section title="选择任意文件" type="line">
+			<view class="example-body">
+				<uni-file-picker limit="5" file-mediatype="all" title="最多选择5个文件"></uni-file-picker>
+			</view>
+		</uni-section>
+		<!-- #endif -->
+
+		<uni-section title="自定义图片大小" type="line">
+			<view class="example-body custom-image-box">
+				<text class="text">选择头像</text>
+				<uni-file-picker limit="1" :del-icon="false" disable-preview :imageStyles="imageStyles"
+					file-mediatype="image">选择</uni-file-picker>
+			</view>
+		</uni-section>
+
+		<uni-section title="自定义图片大小" type="line">
+			<view class="example-body ">
+				<uni-file-picker readonly :value="fileLists" :imageStyles="imageStyles" file-mediatype="image">
+				</uni-file-picker>
+				<uni-file-picker readonly :value="fileLists" :listStyles="listStyles" file-mediatype="all">
+				</uni-file-picker>
+			</view>
+		</uni-section>
+
+		<helang-compress ref="helangCompress"></helang-compress>
+
 	</view>
 </template>
 
 <script>
 	let that = null;
-	import {compress, compressAccurately} from 'image-conversion';
-	
+	import helangCompress from '@/components/helang-compress/helang-compress';
 	export default {
+		components:{
+			helangCompress
+		},
 		data() {
 			return {
-				fileList1: [],
-				fileList2: [],
-				fileList3: [{
-					url: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-				}],
-				fileList4: [{
-						url: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-					},
-					{
-						url: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
+				sourceType: ['album', 'camera'],
+				imageStyles: {
+					width: 64,
+					height: 64,
+					border: {
+						radius: '50%'
 					}
-				],
-				fileList5: [],
-				fileList6: [],
-				fileList7: [],
-				maxSelect:5,
-				compressWidth:375,
+				},
+				listStyles: {
+					// 是否显示边框
+					border: true,
+					// 是否显示分隔线
+					dividline: true,
+					// 线条样式
+					borderStyle: {
+						width: 1,
+						color: 'blue',
+						style: 'dashed',
+						radius: 2
+					}
+				},
+				fileLists: [{
+					url: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/b7c7f970-517d-11eb-97b7-0dc4655d6e68.jpg',
+					extname: 'png',
+					name: 'shuijiao.png'
+				}, {
+					url: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/b7c7f970-517d-11eb-97b7-0dc4655d6e68.jpg',
+					extname: 'png',
+					name: 'uniapp-logo.png'
+				}, {
+					url: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/b7c7f970-517d-11eb-97b7-0dc4655d6e68.jpg',
+					extname: 'png',
+					name: 'shuijiao.png'
+				}],
+				chooseImages:[],
 			}
 		},
 		onLoad() {
 			that = this;
 		},
 		methods: {
-			// 删除图片
-			deletePic(event) {
-				this[`fileList${event.name}`].splice(event.index, 1)
-			},
-			
-			/* 检测图片并压缩 */
-			async beforeReadImages(e){
+			chooseFiles(res){
+				console.log('选择文件：',res);
 				
-				/* 提取url 为一个新数组 */
-				let tempImages = e.file;
-				// console.log('u-upload beforeRead tempImages',tempImages);
-				tempImages.forEach(async function(item,index){
-					console.log('u-upload beforeRead item',item);
-					/* 判断图片大小是否超标 直接压缩 */
-					// #ifdef H5
-					that.compressImageH5(item);
-					// #endif
-					
-					// #ifndef H5
-					let dataMp = await that.noH5compress(item);
-					console.log('压缩图data',dataMp);
-					that.fileList1.push({
-						url: dataMp
-					})
-					// #endif
-					
-				})
-				
-			},
-			//非H5 压缩方法
-			noH5compress(e){
-				console.log('压缩图e',e);
-				return new Promise((reslove)=>{
-					uni.compressImage({
-					  src: e,
-					  quality: this.compressQuality*100,
-					  success: (res) => {
-						reslove(res.tempFilePath)
-					  }
-					})
+				that.$refs.helangCompress.compress({
+				    src: res.tempFilePaths,
+				    maxSize: 1024,
+				    fileType: 'jpg',
+				    quality: 0.75,
+				    minSize: 640
+				}).then((res) => {
+				    console.log('单张压缩',res);
+					const resultList = res.map(url => ({ url }));
+					that.chooseImages.push(...resultList);
+				    console.log('压缩成功后chooseImages',that.chooseImages);
+				}).catch((err) => {
+				    uni.hideLoading();
+					console.log('单张压缩err',err);
 				})
 			},
-			compressImageH5(filePath){
-				console.log('压缩H5图片file',filePath);
-				that.translate(filePath.url,0.5,imgUrl=>{
-					console.log('压缩后imgUrl', imgUrl);
-					//查看压缩后的大小
-					uni.getFileInfo({
-						filePath: imgUrl,
-						success: imgInfo => {
-							console.log('压缩后', imgInfo);
+			saveImages(imageUrl){
+				if(this.chooseImages.length > 0){
+					uni.saveImageToPhotosAlbum({
+						filePath:this.chooseImages[0],
+						success:function(res){
+							uni.showToast({
+								title:'保存成功',
+								icon:'none'
+							})
+						},
+						fail:function(err){
+							console.log('保存图片err',err)
+							uni.showToast({
+								title:'保存失败',
+								icon:'none'
+							});
 						}
 					})
-				})
+				}else{
+					console.log('保存图片失败 数组为空');
+				}
 				
 			},
-			
-			saveImages(filePath){
-				uni.saveImageToPhotosAlbum({
-					filePath:this.fileList1[0].url,
-					success:function(res){
-						uni.showToast({
-							title:'保存成功',
-							icon:'none'
-						})
-					},
-					fail:function(err){
-						uni.showToast({
-							title:'保存失败',
-							icon:'none'
-						})
-					}
-				})
+			delPic(res){
+				console.log('删除文件：',res);
+				this.chooseImages.splice(res.index, 1);
+				console.log('删除文件后',this.chooseImages);
 			},
-			/**
-			* H5端图片压缩
-			*  参数说明：
-			*  imgSrc 图片url
-			*  scale缩放比例 0-1
-			*  返回base64
-			*  callback 回调设置返回值 
-			*/
-			translate(imgSrc, scale, callback) {
-				var img = new Image();
-				img.src = imgSrc;
-				img.onload = function() {
-					var that = this;
-					var h = that.height; // 默认按比例压缩
-					var w = that.width;
-					var canvas = document.createElement('canvas');
-					var ctx = canvas.getContext('2d');
-					var width = document.createAttribute("width");
-					width.nodeValue = w;
-					var height = document.createAttribute("height");
-					height.nodeValue = h;
-					canvas.setAttributeNode(width);
-					canvas.setAttributeNode(height);
-					ctx.drawImage(that, 0, 0, w, h);
-					var base64 = canvas.toDataURL('image/jpeg', scale); //压缩比例
-					canvas = null;
-					callback(base64);
-				}
-			},
-
-		},
+		}
 	}
 </script>
 
 <style lang="scss">
-	.u-page {
-		&__upload-item{
-			margin-top:5px;
-		}
+	.example-body {
+		padding: 10px;
+		padding-top: 0;
+	}
+
+	.custom-image-box {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.text {
+		font-size: 14px;
+		color: #333;
 	}
 </style>

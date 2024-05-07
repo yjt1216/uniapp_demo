@@ -19,11 +19,11 @@
 		</view>
 		<view class="charts-box" >
 			<qiun-data-charts
-				type="ring"
+				type="rose"
 				:opts="ringOpts"
 				:chartData="chartsDataPie"
-				:tapLegend="false"
-			/>
+				:tapLegend="false">
+			</qiun-data-charts>
 		</view>
 	</view>
 </template>

@@ -2,7 +2,7 @@
 	<view class="nurse-register">
 		<view class="charts-box">
 		  <qiun-data-charts 
-		    type="ring"
+		    type="pie"
 		    :opts="opts"
 		    :chartData="chartData"
 		  />

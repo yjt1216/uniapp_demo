@@ -99,18 +99,6 @@
             "hospital_name": "",
             "num": 4,
             "ratio": 3.23
-        },
-        {
-            "hospital_id": 10024,
-            "hospital_name": "八卦洲社区卫生服务中心",
-            "num": 2,
-            "ratio": 1.61
-        },
-        {
-            "hospital_id": 10001,
-            "hospital_name": "苏州大学第二附属医院",
-            "num": 2,
-            "ratio": 1.61
         }
     ],
     "hospital_order_amount_list": [
@@ -267,7 +255,7 @@
             {
                 "hospital_id": 10000,
                 "name": "苏州大学第一附属医院",
-                "star": "42.2500",
+                "star": "47.2500",
                 "attitude": "3.9375",
                 "skill": "3.9375",
                 "effect": "4.5000",
@@ -275,19 +263,37 @@
             },
             {
                 "hospital_id": 10007,
-                "name": "江苏省人民医院",
+                "name": "江苏省人民科技医院",
                 "star": "38.0000",
                 "attitude": "4.0000",
                 "skill": "4.0000",
                 "effect": "4.3333",
-                "num": 3
-            }
+                "num": 13
+            },
+			{
+			    "hospital_id": 10005,
+			    "name": "苏州大学第二附属医院",
+			    "star": "22.2500",
+			    "attitude": "3.9375",
+			    "skill": "3.9375",
+			    "effect": "4.5000",
+			    "num": 12
+			},
+			{
+			    "hospital_id": 10008,
+			    "name": "江苏省南京人民医院",
+			    "star": "18.0000",
+			    "attitude": "4.0000",
+			    "skill": "4.0000",
+			    "effect": "4.3333",
+			    "num": 7
+			}
         ],
         "nurse_list": [
             {
-                "nurse_id": null,
-                "nurse_name": null,
-                "hospital_name": null,
+                "nurse_id": 10017,
+                "nurse_name": "玩儿笑",
+                "hospital_name": "南京附一",
                 "star": "42.3636",
                 "attitude": "4.1818",
                 "skill": "4.1818",
@@ -304,16 +310,7 @@
                 "effect": "5.0000",
                 "num": 3
             },
-            {
-                "nurse_id": 10011,
-                "nurse_name": "王小妹",
-                "hospital_name": "苏州大学第一附属医院",
-                "star": "41.5000",
-                "attitude": "3.5000",
-                "skill": "3.5000",
-                "effect": "4.5000",
-                "num": 2
-            },
+            
             {
                 "nurse_id": 10030,
                 "nurse_name": "测试",

@@ -57,14 +57,20 @@
 						<view class="amount-box">
 							<view style="margin-left: 10rpx;">金额</view>
 							<view style="align-self: center;">{{add_order_amount.amount}}</view>
-							<view style="align-self: center;">同比：{{add_order_amount.common_ratio}}</view>
+							<!-- <view style="align-self: center;">同比：{{add_order_amount.common_ratio}}</view> -->
+							<view style="align-self: center;">
+								同比：{{add_order_amount.common_ratio>0?'+'+add_order_amount.common_ratio:add_order_amount.common_ratio}}%
+							</view>
 						</view>
 						<!-- 设置间隔 -->
 						<view class="spacer" style="width: 30rpx;"></view>
 						<view class="order-box">
 							<view style="margin-left: 10rpx;">订单数</view>
 							<view style="align-self: center;">{{add_order_num.num}}</view>
-							<view style="align-self: center;">同比：{{add_order_amount.common_ratio}}</view>
+							<!-- <view style="align-self: center;">同比：{{add_order_amount.common_ratio}}</view> -->
+							<view style="align-self: center;">
+								同比：{{add_order_amount.common_ratio>0?'+'+add_order_amount.common_ratio:add_order_amount.common_ratio}}%
+							</view>
 						</view>
 					</view>
 					<view class="organ-nurse-box">
@@ -131,10 +137,9 @@
 		
 		<!-- 服务类目下单Top10 -->
 		<view class="service-cate-box">
-			<view class="box-title">服务类目下单Top10</view>
-			
+			<view class="box-title">服务类目下单排行榜</view>
+			<view style="border: 1rpx solid #d7dde5; width: 630rpx; height: 1rpx; margin: 20rpx 0rpx;"></view>
 			<service-cate :serviceCateList="serviceCateList"></service-cate>
-			
 		</view>
 		
 		<!-- 护士注册数 -->
@@ -164,34 +169,41 @@
 			<view class="box-title">机构分布</view>
 			<service-cate :serviceCateList="city_order_list" dataType="4"></service-cate>
 		</view>
-		<!-- 评价统计 -->
-		<view class="service-cate-box">
-			<view class="box-title">评价统计</view>
-			<view class="evaluate-stat-box">
-				<view class="evaluate-box">
-					<view style="margin-left: 10rpx;">评分次数</view>
-					<view style="align-self: center;">{{evaluate.all_evaluate_times}}</view>
-				</view>
-				<!-- 设置间隔 -->
-				<view class="spacer" style="width: 30rpx;"></view>
-				<view class="evaluate-box">
-					<view style="margin-left: 10rpx;">评分率</view>
-					<view style="align-self: center;">{{evaluate.evaluate_rate}}</view>
-					
-				</view>
-				<view class="spacer" style="width: 30rpx;"></view>
-				<view class="evaluate-box">
-					<view style="margin-left: 10rpx;">平均值</view>
-					<view style="align-self: center;">{{evaluate.average_star}}</view>
-					
-				</view>
-				
-			</view>
-		</view>
+		<!-- 机构评价统计 -->
 		
 		<view class="hospital-table-box">
-			<view class="title">默认</view>
-			<view class="hospital-nurse-box"></view>
+			
+			<view class="hospital-nurse-box">
+				<view class="evaluate-top">
+					<image class="left-image" src="../../static/chart/evaluate_left.png"></image>
+					<view class="evaluate-title" style="display: flex; flex-direction: column; text-align: center;">
+						<text style="font-size: 26rpx; color: #505D6F;">机构评价统计TOP10</text>
+						<text style="font-size: 16rpx; color: #9AA1A9; margin-top: 9rpx;" >Evaluation statistics TOP10</text>
+					</view>
+					<image class="left-image" src="../../static/chart/evaluate_right.png"></image>
+				</view>
+				
+				<view class="evaluate-stat-box">
+					<view class="evaluate-box">
+						<view style="margin-left: 10rpx; color: #49688E;">评分次数</view>
+						<view style="align-self: center; color: #49688E; font-size: 32rpx;">{{evaluate.all_evaluate_times}}</view>
+					</view>
+					<!-- 设置间隔 -->
+					<view class="spacer" style="width: 30rpx;"></view>
+					<view class="evaluate-box">
+						<view style="margin-left: 10rpx; color: #49688E;">评分率</view>
+						<view style="align-self: center;color: #49688E;font-size: 32rpx;">{{evaluate.evaluate_rate}}</view>
+						
+					</view>
+					<view class="spacer" style="width: 30rpx;"></view>
+					<view class="evaluate-box">
+						<view style="margin-left: 10rpx;color: #49688E;">平均值</view>
+						<view style="align-self: center;color: #49688E;font-size: 32rpx;">{{evaluate.average_star}}</view>
+						
+					</view>
+					
+				</view>
+			</view>
 			<view class="h-table">
 				<view class="h-tr h-tr-3 h-thead ">
 					<view class="h-td">机构</view>
@@ -204,20 +216,6 @@
 				<view class="h-tr h-tr-3">
 					
 					<view class="h-td h-td-colspan h-td-rowspan" >
-						<!-- <view class="h-tr h-tr-2">
-							<view class="h-td">南京鼓楼幸福颐养康复医疗中心</view>
-							<view class="h-td">5</view>
-							<view class="h-td">5</view>
-							<view class="h-td">5</view>
-							<view class="h-td">5</view>
-						</view>
-						<view class="h-tr h-tr-2">
-							<view class="h-td">苏州大学第一附属医院</view>
-							<view class="h-td">5</view>
-							<view class="h-td">5.0.0.0</view>
-							<view class="h-td">5</view>
-							<view class="h-td">5.0.0.0</view>
-						</view> -->
 						<view class="h-tr h-tr-2" v-for="(hospital,index) in evaluate.hospital_list" :key="index">
 							<view class="h-td">{{hospital.name}}</view>
 							<view class="h-td">{{hospital.star}}</view>
@@ -228,13 +226,7 @@
 						</view> 
 					</view>
 				</view>
-				<view class="h-tr h-tr-3">
-					<view class="h-td">-</view>
-					<view class="h-td">-</view>
-					<view class="h-td">-</view>
-					<view class="h-td">-</view>
-					<view class="h-td">-</view>
-				</view>
+				
 			</view>
 		</view>
 		
@@ -491,7 +483,7 @@
 					item.color = this.addColor(dataItem?.storeSym || 0)
 					return item
 				})
-				this.chartsDataMap.series = mapseries
+				this.chartsDataMap.series = mapseries;
 			  // console.log('服务项目',this.serviceCateList);
 			}, 300);
 		},
@@ -869,18 +861,31 @@
 		flex-direction: row; /* 水平布局 */
 		align-items: center; /* 垂直居中对齐 */
 		justify-content: space-between; /* 子元素之间的间距相等 */
-		background: linear-gradient(360deg, #FFFFFF 0%, #FFF0DC 100%);
+		// background: linear-gradient(360deg, #FFFFFF 0%, #FFF0DC 100%);
 	}
 	.evaluate-box{
 		display: flex;
 		flex-direction: column;
-		width: 310rpx;
+		width: 200rpx;
 		height: 136rpx;
-		font-size: 26rpx;
-		background: linear-gradient(180deg, #FFD53B 0%, #F76B1C 100%);
-		box-shadow: 0rpx 10rpx 20rpx 0rpx rgba(235,102,35,0.2);
+		font-size: 24rpx;
 		border-radius: 10rpx;
 		justify-content: center;
+		align-items: center;
+	}
+	.evaluate-top {
+		margin-top: 46rpx;
+		display: flex;
+		flex-direction: row; /* 水平布局 */
+		align-items: center; /* 垂直居中对齐 */
+		justify-content: space-between; /* 子元素之间的间距相等 */
+		.evaluate-title{
+			margin: 0 30rpx;
+		}
+		.left-image{
+			width: 82rpx;
+			height: 32rpx;
+		}
 	}
 	/* 间隔样式 */
 	.evaluate-spacer {
@@ -890,12 +895,19 @@
 	
 	.hospital-table-box{
 		padding: 10rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 	.hospital-nurse-box{
-		border-radius: 20rpx;
-		height: 60rpx;
-		width: 200rpx;
+		// border-radius: 20rpx;
+		width: 690rpx;
+		height: 312rpx;
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
+		background: linear-gradient(to bottom ,#DBFDFF, #FFFFFF );
+		border-radius: 20rpx 20rpx 0rpx 0rpx;
+		align-items: center;
+		padding: 0 25rpx;
 	}
 </style>

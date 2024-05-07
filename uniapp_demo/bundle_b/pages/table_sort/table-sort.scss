@@ -15,8 +15,7 @@
 		align-items: stretch;
 		align-content: center;
 		
-		// border-color: #ccc;
-		border-color: #EBEDF3;
+		border-color: #ccc;
 		border-style: solid;
 		border-width: 0;
 		border-top-width: 1px;
@@ -44,10 +43,9 @@
 		padding: 3px;
 		word-break:break-all;
 		// border-color: #ccc;
-		border-color: #EBEDF3;
-		border-style: solid;
-		border-width: 0;
-		border-right-width: 1px;
+		// border-style: solid;
+		// border-width: 0;
+		// border-right-width: 1px;
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;

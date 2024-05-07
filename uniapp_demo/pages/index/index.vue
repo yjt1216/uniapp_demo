@@ -18,15 +18,25 @@
 			<view class="demo-li">压缩并保存图片 <text class="demo-tip"> upload photo </text></view>
 		</navigator>
 		
-		<navigator url="/bundle/pages/choose_photo/choose_images">
-			<view class="demo-li"> 选择图片after<text class="demo-tip"> choose photo </text></view>
-		</navigator>
+		<!-- <navigator url="/bundle/pages/choose_photo/choose_images">
+			<view class="demo-li"> 选择图片<text class="demo-tip"> choose photo </text></view>
+		</navigator> -->
 		
 		
 		<navigator url="/bundle/pages/choose_photo/choose_photo">
-			<view class="demo-li"> 选择图片before<text class="demo-tip"> choose images </text></view>
+			<view class="demo-li"> 选择图片after<text class="demo-tip">uni choose 压缩 </text></view>
 		</navigator>
-		<navigator url="/bundle_c/pages/audio_play/audio_player">
+		
+		
+		<navigator url="/bundle_b/pages/operate/operate_demo">
+			<view class="demo-li"> 经营统计 <text class="demo-tip"> table + charts </text></view>
+		</navigator>
+		<navigator url="/bundle_b/pages/table_sort/table_sort">
+			<view class="demo-li"> 表格 <text class="demo-tip"> table </text></view>
+		</navigator>
+		
+		
+		<!-- <navigator url="/bundle_c/pages/audio_play/audio_player">
 			<view class="demo-li">音频播放<text class="demo-tip"> audio player </text></view>
 		</navigator>
 		
@@ -36,7 +46,7 @@
 		
 		<navigator url="/bundle_c/pages/audio_play/audio_list">
 			<view class="demo-li">音频列表<text class="demo-tip"> audio list </text></view>
-		</navigator>
+		</navigator> -->
 		
 		
 		<!-- 
@@ -79,9 +89,7 @@
 		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
 			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> qqmap_location </text></view>
 		</navigator>
-		<navigator url="/bundle_b/pages/operate/operate_demo">
-			<view class="demo-li"> 经营统计 <text class="demo-tip"> table + charts </text></view>
-		</navigator>
+		
 		
 		<navigator url="/bundle_c/pages/location_update/location_update">
 			<view class="demo-li">lcoation update<text class="demo-tip"> 后台定位 </text></view>

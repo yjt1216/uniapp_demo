@@ -11,10 +11,23 @@
         "amount": "1500.00",
         "num": 3
     },
-    {
-        "item_id": 10004,
-        "item_name": "血压测量",
-        "amount": "100.00",
-        "num": 2
-    }
+	{
+	    "hospital_id": 10013,
+	    "hospital_name": "南京福寿康鼓楼护理站",
+	    "amount": "4970.00",
+	    "num": 3
+	},
+	{
+	    "hospital_id": 10002,
+	    "hospital_name": "苏州市立医院",
+	    "amount": "2073.00",
+	    "num": 4
+	},
+	{
+	    "hospital_id": 10012,
+	    "hospital_name": "南京市栖霞区医院",
+	    "amount": "765.24",
+	    "num": 1
+	}
+    
 ]
