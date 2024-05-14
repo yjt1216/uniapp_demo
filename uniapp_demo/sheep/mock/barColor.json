@@ -1,0 +1,54 @@
+
+[
+	{
+		"type": "linear",
+		"x": 0,
+		"y": 0,
+		"x2": 0,
+		"y2": 1,
+		"colorStops": [
+			{"offset": 0, "color": "#49FDE1" },
+			{ "offset": 1, "color": "#28C5F6" }
+		],
+		"global": false 
+	},
+	{
+		"type": "linear",
+		"x": 0,
+		"y": 0,
+		"x2": 0,
+		"y2": 1,
+		"colorStops": [
+			{ "offset": 0, "color": "#74EFFF" }, 
+			{ "offset": 1, "color": "#5F85FF" }
+		],
+		"global": false 
+	},
+	{
+		"type": "linear",
+		"x": 0,
+		"y": 0,
+		"x2": 0,
+		"y2": 1,
+		"colorStops": [{
+	      "offset": 0, "color": "#FF94D6" 
+		}, {
+	      "offset": 1, "color": "#FF7585" 
+		}],
+		"global": false 
+	},
+	{
+		"type": "linear",
+		"x": 0,
+		"y": 0,
+		"x2": 0,
+		"y2": 1,
+		"colorStops": [{
+			"offset": 0, "color": "#FFB269" 
+		}, {
+			"offset": 1, "color": "#FF7A69" 
+		}],
+		"global": false 
+	}
+	
+]
