@@ -20,12 +20,12 @@
 				</view>
 			</template>
 			<!-- 用于 占位 -->
-			<template v-else >
+			<!-- <template v-else >
 				<view class="space-image" style="width:100%;height:100%;" >
 					<image mode="scaleToFill" :width="'calc(100% - ' + previousMargin + ')'" height="100%"
 						:border-radius="radius" :src="'/static/images/didi.jpg'"></image>
 				</view>
-			</template>
+			</template> -->
 		</view>
 	</view>
 </template>

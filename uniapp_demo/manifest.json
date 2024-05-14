@@ -71,13 +71,13 @@
         },
         // "requiredPrivateInfos" : [ "getLocation", "chooseLocation" ],
         "libVersion" : "latest",
-		"requiredPrivateInfos": [ 
-		    "getLocation",
-			"chooseLocation",
-		    "onLocationChange",
-		    "startLocationUpdateBackground"
-		],
-		"requiredBackgroundModes" : [ "location" ] //必填
+        "requiredPrivateInfos" : [
+            "getLocation",
+            "chooseLocation",
+            "onLocationChange",
+            "startLocationUpdateBackground"
+        ],
+        "requiredBackgroundModes" : [ "location" ] //必填
     },
     "mp-alipay" : {
         "usingComponents" : true

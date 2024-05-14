@@ -1,14 +1,19 @@
 <template>
-	
 	<view>
-		<u-navbar title="ring" :fixed="true" :placeholder="true" :autoBack="true"></u-navbar>
-			
+		<u-navbar title="圆环图表" :placeholder="true" :autoBack="true"></u-navbar>
 		<view class="charts-box">
-		  <qiun-data-charts 
-		    type="ring"
-		    :opts="opts"
-		    :chartData="chartData"
-		  />
+			<qiun-data-charts 
+				type="ring"
+				:opts="opts"
+				:chartData="chartData"
+				:canvas2d="true"
+				canvasId="SjDeROdKPPuTpcIahceEfOYGgTaXvJVh"
+				:animation="false"
+				:tapLegend="false"
+				:ontap="false"
+				:onmouse="false">
+			</qiun-data-charts>
+		  
 		</view>
 	</view>
 </template>
@@ -29,7 +34,7 @@ export default {
         fontSize: 13,
         fontColor: "#666666",
         dataLabel: false,
-        dataPointShape: true,
+        dataPointShape: false,
         dataPointShapeType: "solid",
         touchMoveLimit: 60,
         enableScroll: false,
@@ -75,7 +80,7 @@ export default {
             borderColor: "#FFFFFF",
             centerColor: "#FFFFFF",
             customRadius: 0,
-            linearType: "none"
+            linearType: "custom"
           },
           tooltip: {
             showBox: true,
@@ -119,56 +124,7 @@ export default {
         let res = {
             series: [
               {
-                data: [
-					// {"name":"一班","value":2000},
-					// {"name":"二班","value":1800},
-					// {"name":"三班","value":1600},
-					// {"name":"四班","value":1400},
-					// {"name":"五班","value":1200},
-					// {"name":"六班","value":1000},
-					// {"name":"七班","value":800},
-					// {"name":"八班","value":600},
-					// {"name":"九班","value":100},
-					// {"name":"十班","value":20},
-					 
-					
-					{
-					    "name": "苏州大学第一附属医院",
-					    "value": 44465.75,
-					    "ratio": 70.43
-					},
-					{
-					    "name": "江苏省人民医院",
-					    "value": 10333.00,
-					},
-					{
-					    "name": "南京福寿康鼓楼护理站",
-					    "value": 4970.00,
-					},
-					{
-					    "name": "苏州市立医院",
-					    "value": 2073.00,
-					},
-					{
-					    "name": "南京市栖霞区医院",
-					    "value": 765.24,
-					    
-					},
-					{
-					    "name": "苏州大学第二附属医院",
-					    "value": 275.00,
-					},
-					{
-					    "name": "八卦洲社区卫生服务中心",
-					    "value": 250.00,
-					    
-					},
-					{
-					    "name": "八卦洲社区中卫生服务中心",
-					    "value": 4.00,
-					}
-					
-				]
+                data: [{"name":"苏州大学第一附属医院","value":44465.75},{"name":"江苏省人民医院","value":10333},{"name":"南京福寿康鼓楼护理站","value":4970},{"name":"苏州市立医院","value":2073},{"name":"南京市栖霞区医院","value":765.24},{"name":"苏州大学第二附属医院","value":275},{"name":"八卦洲社区卫生服务中心","value":250},{"name":"八卦洲社区中卫生服务中心","value":4}]
               }
             ]
           };

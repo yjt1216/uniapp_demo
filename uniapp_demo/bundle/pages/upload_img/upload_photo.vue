@@ -306,15 +306,15 @@
 			},
 			//提交反馈意见
 			submitHandle(){
-				console.log("[反馈意见]")
-				console.log(this.tempFileList)
+				
+				console.log("[反馈意见]-保存图片",this.fileList1);
 				
 				this.savaImageFun();
 				
 			},
 			/* 保存图片 */
 			savaImageFun(){
-				that.tempFileList.forEach(function(item,index){
+				that.fileList1.forEach(function(item,index){
 					
 					// #ifdef MP-WEIXIN
 					uni.saveImageToPhotosAlbum({

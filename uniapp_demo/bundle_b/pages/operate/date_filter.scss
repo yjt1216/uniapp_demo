@@ -211,4 +211,10 @@
 	// 	justify-self: flex-start;
 	// }
 	
-	
+	.user-register-box{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding: 30rpx 20rpx;
+		justify-content: space-between;
+	}

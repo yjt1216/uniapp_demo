@@ -354,6 +354,12 @@
 				},
 				{
 					"path": "pages/table_sort/table_sort"
+				},
+				{
+					"path": "pages/chart_demo/chart_bar"
+				},
+				{
+					"path": "pages/chart_demo/charts_pie"
 				}
 			]
 		},
@@ -440,6 +446,33 @@
 					"style": {
 						"navigationBarTitleText": "音频列表"
 					}
+				},
+				{
+					"path": "pages/echarts_demo/echarts_demo",
+					"style": {
+						"navigationBarTitleText": "echarts图表"
+					}
+				},
+				{
+					"path": "pages/echarts_demo/ring_echarts"
+				},
+				{
+					"path": "pages/echarts_demo/rose_echart"
+				},
+				{
+					"path": "pages/echarts_demo/bar_echarts"
+				},
+				{
+					"path": "pages/echarts_demo/progress_echarts"
+				},
+				{
+					"path": "pages/echarts_demo/bar_test"
+				},
+				{
+					"path": "pages/echarts_demo/map_echarts"
+				},
+				{
+					"path": "pages/echarts_demo/mamp_echart"
 				}
 			]
 		}

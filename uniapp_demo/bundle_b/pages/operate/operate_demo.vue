@@ -117,6 +117,12 @@
 		</view>
 		
 		
+		<view class="user-register-box">
+			<user-register></user-register>
+			<user-old></user-old>
+		</view>
+		
+		
 		
 		<!-- 机构销售额占比Top10 -->
 		<view class="organ-sales-box" v-if="isSalesChart">
@@ -226,9 +232,40 @@
 						</view> 
 					</view>
 				</view>
-				
 			</view>
 		</view>
+		
+		
+		<view class="hospital-table-box">
+			<view class="h-table">
+				<view class="h-tr h-tr-3 h-thead ">
+					<view class="h-td">排名</view>
+					<view class="h-td">机构</view>
+					<view class="h-td">数量</view>
+					<view class="h-td">占比</view>
+				</view>
+				<view class="h-tr h-tr-3">
+					
+					<view class="h-td h-td-colspan h-td-rowspan" >
+						<view class="h-tr h-tr-2" v-for="(hospital,index) in evaluate.hospital_list" :key="index">
+							<view class="h-td">{{index}}</view>
+							<view class="h-td">{{hospital.name}}</view>
+							<view class="h-td">{{hospital.star}}</view>
+							<view class="h-td">{{hospital.num}}</view>
+						</view> 
+					</view>
+				</view>
+				
+			</view>
+			
+			<!-- 展开收起按钮 -->
+			<view style="height: 30rpx; width: 80rpx; text-align: center; margin-bottom: 30rpx;" @click="toggleCateExpand">
+				{{ cateExpanded ? '收起' : '展开' }}
+				<image class="expanded-img" v-if="cateExpanded" src="../../static/chart/list_open.png"></image>
+				<image class="expanded-img" v-else src="../../static/chart/list_close.png"></image>
+			</view>
+		</view>
+		
 		
 		
 		
@@ -238,7 +275,7 @@
 
 <script>
 	
-	import tableData from "@/sheep/mock/tableData.js"
+	import tableData from "@/sheep/mock/tableData.js";
 	import demodata from '@/sheep/mock/chart.json';
 	import operateChart from '@/sheep/mock/operate_chart.json';
 	import mapdata from '@/sheep/mock/mapdata.json' //自己的存放路径 我这是在ucharts 实例拷下来的 下面有我的这个文件
@@ -247,6 +284,8 @@
 	import organSales from "@/bundle_b/components/organ-sales/organ-sales.vue";
 	import organOrder from "@/bundle_b/components/organ-order/organ-order.vue";
 	import nurseRegister from "@/bundle_b/components/nurse-register/nurse-register.vue";
+	import userRegister from "@/bundle_b/components/user-register/user-register.vue";
+	import userOld from "@/bundle_b/components/user-register/user-old.vue";
 	
 	import chartMap from "@/bundle_b/components/map-chart/map-chart.vue";
 	
@@ -267,8 +306,9 @@
 			organOrder,
 			serviceCate,
 			nurseRegister,
-			
+			userRegister,
 			chartMap,
+			userOld
 		},
 		data(){
 			return {
@@ -359,7 +399,7 @@
 				add_nurse:{},
 				/* 评价统计 */
 				evaluate:{},
-				
+				cateExpanded:false,
 			}
 		},
 		onLoad: async function(){
@@ -454,8 +494,8 @@
 				      }
 				    ]
 				};
-				console.log('页面即将销毁userRes',nurserRes.series[0].data);
-				console.log('页面即将销毁userRes',userRes.series[0].data);
+				// console.log('页面即将销毁userRes',nurserRes.series[0].data);
+				// console.log('页面即将销毁userRes',userRes.series[0].data);
 				
 				let totalNurse = sumValues(nurserRes.series[0].data,'value');
 				let totalUser = sumValues(userRes.series[0].data,'value');
@@ -492,6 +532,9 @@
 			console.log('页面即将销毁');
 		},
 		methods:{
+			toggleCateExpand() {
+			    this.cateExpanded = !this.cateExpanded;
+			},
 			addColor(count) {
 				if (count > 800) {
 					return '#bc3e10';
@@ -909,5 +952,9 @@
 		border-radius: 20rpx 20rpx 0rpx 0rpx;
 		align-items: center;
 		padding: 0 25rpx;
+	}
+	.expanded-img{
+		width: 18rpx;
+		height: 20rpx;
 	}
 </style>

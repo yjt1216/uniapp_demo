@@ -6,16 +6,23 @@
       :chartData="chartsDataMap"
     /> -->
 	<qiun-data-charts type="map" :canvas2d="true" :opts="config" canvasId="mapma" :chartData="chartsDataMap"
-		tooltipFormat="tooltipFun" @getIndex="getIndex" />
+		tooltipFormat="tooltipFun" @getIndex="getIndex"></qiun-data-charts>
+		
+	
   </view>
 </template>
 
 <script>
-	import mapdata from '@/sheep/mock/mapdata.json' //自己的存放路径 我这是在ucharts 实例拷下来的 下面有我的这个文件
-	import uCharts from '@/bundle_b/components/qiun-data-charts/js_sdk/u-charts/config-ucharts.js' //在uniapp 插件库下载下来就是这个路径 可以自己改
-	
+	//自己的存放路径 我这是在ucharts 实例拷下来的 下面有我的这个文件
+	import mapdata from '@/sheep/mock/mapdata.json' ;
+	//在uniapp 插件库下载下来就是这个路径 可以自己改
+	import uCharts from '@/bundle_b/components/qiun-data-charts/js_sdk/u-charts/config-ucharts.js' ;
+	import qiunDataCharts from "@/bundle_b/components/qiun-data-charts/components/qiun-data-charts/qiun-data-charts.vue";
 	export default {
 		name:'chart-map',
+		components:{
+			qiunDataCharts
+		},
 		props: {
 			chartsDataMap: {
 				type: Object,

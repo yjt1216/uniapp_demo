@@ -141,3 +141,151 @@ MD5签名：
 
 **九、附录（可选）**
 - 可在微信小程序中搜索相关小程序 在App Store中搜索相关app
+
+
+
+
+{
+	action: ""
+	data: "https://data.szdepin.com/storage/file/2024/05/07/66399f0661245.png"
+	no: "1"
+	options: Array(1)
+	qTypeId: "q_photo"
+	qid: "1710317949763"
+	required: true
+	timestamp: "1710317949763"
+	title: "患处近期照片"
+}
+
+##玫瑰图花瓣颜色 渐变
+
+ {
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#4B65F8' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#75CEFF' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+},
+ {
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#B5FEED' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#1ABED5' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+},
+ {
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#F76B1C' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#FFE483' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+},
+ {
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#F65B4B' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#FFDDC8' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+},
+ {
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#FBF4D9' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#D5A34C' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+},
+{
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#C8E1FD' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#505D6F' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+},
+{
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#F76B1C' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#FFE483' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+},
+{
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#F65B4B' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#FFDDC8' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+},
+{
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#FBF4D9' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#D5A34C' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+},
+{
+  type: 'linear',
+  x: 0,
+  y: 0,
+  x2: 0,
+  y2: 1,
+  colorStops: [{
+      offset: 0, color: '#C8E1FD' // 0% 处的颜色
+  }, {
+      offset: 1, color: '#505D6F' // 100% 处的颜色
+  }],
+  global: false // 缺省为 false
+}

@@ -10,7 +10,7 @@ import {router,RouterMount} from './router.js'
 import routerLink from './js_sdk/uni-simple-router/link.vue';
 
 import location from "@/sheep/utils/location.js"
-
+import uiEcharts from '@/uni_modules/ui-echarts'
 
 
 // Vue.component('mescroll-body', MescrollBody)
@@ -22,6 +22,7 @@ Vue.component('RouterLink', routerLink)
 Vue.use(router);
 Vue.mixin(minxinsApp);
 Vue.use(uView);
+Vue.use(uiEcharts);
 App.mpType = 'app'
 /* 公共图片压缩方法 */
 Vue.prototype.$compressImage = async function (maxWidth = 1024, quality = 0.8) {

@@ -22,9 +22,6 @@
 			  </view>
 		</su-sticky>
 		
-		
-		
-		<shopro-empty v-if="walletList.length === 0" tipText='暂无数据' :image="'/static/images/order_none.png'"></shopro-empty>
 		<u-action-sheet :show="showSheet" :actions="range" title="月份" @select="selectMonth"></u-action-sheet>
 		
 	</view>

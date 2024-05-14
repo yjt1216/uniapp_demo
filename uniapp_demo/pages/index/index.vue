@@ -7,25 +7,7 @@
 			<ad-swipers height="340rpx" :lists="bannerList"></ad-swipers>
 		</view> -->
 		
-		
 		<view class="group-title">功能示例</view>
-		
-		<navigator url="/bundle/pages/action_sheet/action_sheet">
-			<view class="demo-li">输入<text class="demo-tip"> textarea</text></view>
-		</navigator>
-		
-		<navigator url="/bundle/pages/upload_img/upload_photo">
-			<view class="demo-li">压缩并保存图片 <text class="demo-tip"> upload photo </text></view>
-		</navigator>
-		
-		<!-- <navigator url="/bundle/pages/choose_photo/choose_images">
-			<view class="demo-li"> 选择图片<text class="demo-tip"> choose photo </text></view>
-		</navigator> -->
-		
-		
-		<navigator url="/bundle/pages/choose_photo/choose_photo">
-			<view class="demo-li"> 选择图片after<text class="demo-tip">uni choose 压缩 </text></view>
-		</navigator>
 		
 		
 		<navigator url="/bundle_b/pages/operate/operate_demo">
@@ -36,7 +18,35 @@
 		</navigator>
 		
 		
-		<!-- <navigator url="/bundle_c/pages/audio_play/audio_player">
+		
+		<navigator url="/bundle_b/pages/chart_demo/chart_list">
+			<view class="demo-li"> 图表示例列表 <text class="demo-tip"> ucharts </text></view>
+		</navigator>
+		
+		<!-- 
+		
+		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
+			<view class="demo-li"> 统计图 <text class="demo-tip"> chart_demo </text></view>
+		</navigator>
+		
+		<navigator url="/bundle/pages/action_sheet/action_sheet">
+			<view class="demo-li">输入<text class="demo-tip"> textarea</text></view>
+		</navigator>
+		 <navigator url="/bundle/pages/upload_img/upload_photo">
+			<view class="demo-li">压缩并保存图片 <text class="demo-tip"> upload photo </text></view>
+		</navigator>
+		<navigator url="/bundle/pages/choose_photo/choose_images">
+			<view class="demo-li"> 选择图片<text class="demo-tip"> choose photo </text></view>
+		</navigator>
+		<navigator url="/bundle/pages/choose_photo/choose_photo">
+			<view class="demo-li"> 选择图片after<text class="demo-tip">uni choose 压缩 </text></view>
+		</navigator> 
+		
+		<navigator url="/bundle_c/pages/echarts_demo/echarts_demo">
+			<view class="demo-li"> echarts图表 <text class="demo-tip"> echarts </text></view>
+		</navigator> 
+		
+		<navigator url="/bundle_c/pages/audio_play/audio_player">
 			<view class="demo-li">音频播放<text class="demo-tip"> audio player </text></view>
 		</navigator>
 		
@@ -99,21 +109,7 @@
 			<view class="demo-li">navi search<text class="demo-tip"> 导航栏搜索 </text></view>
 		</navigator>
 		
-		<navigator url="/bundle_b/pages/chart_demo/echart_demo">
-			<view class="demo-li"> 圆环图 <text class="demo-tip"> echart </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/chart_demo/chart_ring">
-			<view class="demo-li"> 圆环图 <text class="demo-tip"> chart_ring </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/chart_demo/chart_map">
-			<view class="demo-li"> 地图 <text class="demo-tip"> chart_map </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/chart_demo/china_map">
-			<view class="demo-li"> 地图 <text class="demo-tip"> china_map </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
-			<view class="demo-li"> 统计图 <text class="demo-tip"> chart_demo </text></view>
-		</navigator>
+		
 		
 		<navigator url="/bundle_b/pages/segment_demo/segment_demo">
 			<view class="demo-li"> 分段 <text class="demo-tip"> segment_demo </text></view>
