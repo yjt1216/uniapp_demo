@@ -289,3 +289,56 @@ MD5签名：
   }],
   global: false // 缺省为 false
 }
+
+修改 u-charts.js 源码
+
+// 记录该省的数量
+const count = data[i].data.storeSym;
+​
+// 绘制省份名称
+point = coordinateToPoint(centerPoint[1], centerPoint[0], bounds, scale, xoffset, yoffset);
+context.beginPath();
+context.textAlign = 'left';
+context.setFontSize(fontSize)
+context.setFillStyle(data[i].textColor || opts.fontColor)
+// 记录省份名称x轴位置
+const x = point.x - measureText(text, fontSize, context) / 2
+// 如果该省份有数量，就将x位置偏移一点
+context.fillText(text, !count ? x : (x + fontSize / 4), point.y + fontSize / 2);
+context.closePath();
+context.stroke();
+// 省份绘制完成
+​
+// 如果有数量 开始绘制
+if (count) {
+    context.beginPath();
+    // 定义省份名称前面的圆点的中心 后续绘制以此为原点进行计算
+    const centerx = point.x - measureText(text, fontSize, context) / 2
+    const centery = point.y + fontSize / 2
+    // 绘制icon背景
+    context.moveTo(centerx, centery);
+    context.arc(centerx, centery - fontSize * 2, fontSize * 1, 45 * Math.PI/180, 135 * Math.PI/180, true);
+    context.lineTo(centerx, centery);
+    context.fillStyle = '#B9AF57';
+    context.fill();
+    context.closePath();
+​
+    // 绘制icon上的数量
+    context.beginPath();
+    context.textAlign = 'center';
+    context.setFontSize(fontSize)
+    context.setFillStyle(data[i].textColor || opts.fontColor)
+    context.fillStyle = '#FFFFFF'
+    // 因为icon大小是固定的，数量太大样式会有问题，如果太多的话显示 99+
+    context.fillText(count < 100 ? count : '99+', centerx, centery - fontSize * 1.5)
+    
+    // 绘制白色圆点
+    context.arc(centerx, centery, 1, 0, Math.PI * 2, false)
+    context.strokeStyle = 'transparent'
+    context.fillStyle = 'white'
+    context.fill()
+    context.closePath();
+    context.stroke();
+}
+
+

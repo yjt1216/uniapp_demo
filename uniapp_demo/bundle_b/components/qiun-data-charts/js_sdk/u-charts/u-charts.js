@@ -5803,7 +5803,10 @@ function drawMapDataPoints(series, opts, config, context) {
       }
     }
   }
+  
+  console.log('ucharts.js中修改源码data',data);
   if (opts.dataLabel == true) {
+  	  // 绘制省份名称
     for (var i = 0; i < data.length; i++) {
       var centerPoint = data[i].properties.centroid;
       if (centerPoint) {
@@ -5816,16 +5819,84 @@ function drawMapDataPoints(series, opts, config, context) {
         if(mapOption.active && mapOption.activeTextColor && opts.tooltip && opts.tooltip.index == i){
           fontColor = mapOption.activeTextColor;
         }
-        let text = data[i].properties.name;
-        context.beginPath();
-        context.setFontSize(fontSize)
-        context.setFillStyle(fontColor)
-        context.fillText(text, point.x - measureText(text, fontSize, context) / 2, point.y + fontSize / 2);
-        context.closePath();
-        context.stroke();
+        // let text = data[i].properties.name;
+        // context.beginPath();
+        // context.setFontSize(fontSize)
+        // context.setFillStyle(fontColor)
+        // context.fillText(text, point.x - measureText(text, fontSize, context) / 2, point.y + fontSize / 2);
+        // context.closePath();
+        // context.stroke();
+		
+		// 记录该省的数量
+		// const count = opts.series[data[i].properties.name];
+		// ​console.log('ucharts.js中修改源码count',count);
+		
+		
+		
+		// 记录该省的数量
+		const count = data[i].data.storeSym;
+		// 绘制省份名称
+		point = coordinateToPoint(centerPoint[1], centerPoint[0], bounds, scale, xoffset, yoffset);
+		
+		// 省份绘制完成
+		// 如果有数量 开始绘制
+		if (count) {
+			
+			//绘制图标
+		 //    context.beginPath();
+		 //    // 定义省份名称前面的圆点的中心 后续绘制以此为原点进行计算
+		 //    const centerx = point.x 
+		 //    const centery = point.y + fontSize / 2
+		 //    // 绘制icon背景
+		 //    context.moveTo(centerx, centery);
+		 //    context.arc(centerx, centery - fontSize * 2, fontSize * 1, 45 * Math.PI/180, 135 * Math.PI/180, true);
+		 //    context.lineTo(centerx, centery);
+		 //    context.fillStyle = '#1ABBAB';
+		 //    context.fill();
+		 //    context.closePath();
+		 
+			// 绘制圆点
+			context.beginPath();
+			const centerx = point.x;
+			const centery = point.y + fontSize / 2;
+			const radius = fontSize / 2; // 为了使圆点大小适中，通常取半径为字体大小的一半或根据需要调整
+			
+			// 绘制圆形
+			context.arc(centerx, centery, radius, 0, 2 * Math.PI);
+			context.fillStyle = '#1ABBAB';
+			context.fill();
+			context.closePath();
+			
+			
+		 
+		    // 绘制icon上的数量
+		    context.beginPath();
+		 //    context.textAlign = 'center';
+		 //    context.setFontSize(fontSize)
+		 //    context.setFillStyle(data[i].textColor || opts.fontColor)
+		 //    context.fillStyle = '#FFFFFF'
+		 //    // 因为icon大小是固定的，数量太大样式会有问题，如果太多的话显示 99+
+		 //    context.fillText(count < 100 ? count : '99+', centerx, centery - fontSize * 1.5)
+		    
+		    // 绘制白色圆点
+		    context.arc(centerx, centery, 1, 0, Math.PI * 2, false)
+		    context.strokeStyle = 'transparent'
+		    context.fillStyle = 'white'
+		    context.fill()
+		    context.closePath();
+		    context.stroke();
+		}
+
+		
+		
       }
     }
   }
+  
+ 
+
+  
+  
   opts.chartData.mapData = {
     bounds: bounds,
     scale: scale,

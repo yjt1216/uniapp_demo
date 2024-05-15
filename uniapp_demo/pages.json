@@ -314,21 +314,6 @@
 					"path": "pages/pay/web_view"
 				},
 				{
-					"path": "pages/weixin_openid/weixin_openid"
-				},
-				{
-					"path": "pages/spread_code/spread_code"
-				},
-				{
-					"path": "pages/chart_demo/chart_demo"
-				},
-				{
-					"path": "pages/chart_demo/echart_demo"
-				},
-				{
-					"path": "pages/chart_demo/chart_map"
-				},
-				{
 					"path":"pages/keyboard_pop/keyboard_pop"
 				},
 				{
@@ -338,11 +323,12 @@
 					"path": "pages/test_demo/test_demo"
 				},
 				{
-					"path": "pages/chart_demo/chart_ring"
+					"path": "pages/weixin_openid/weixin_openid"
 				},
 				{
-					"path": "pages/chart_demo/china_map"
+					"path": "pages/spread_code/spread_code"
 				},
+				
 				{
 					"path": "pages/test_demo/scroll_item"
 				},
@@ -356,10 +342,25 @@
 					"path": "pages/table_sort/table_sort"
 				},
 				{
+					"path": "pages/chart_demo/chart_demo"
+				},
+				{
+					"path": "pages/chart_demo/chart_map"
+				},
+				{
+					"path": "pages/chart_demo/chart_ring"
+				},
+				{
+					"path": "pages/chart_demo/china_map"
+				},
+				{
 					"path": "pages/chart_demo/chart_bar"
 				},
 				{
 					"path": "pages/chart_demo/charts_pie"
+				},
+				{
+					"path": "pages/chart_demo/chart_list"
 				}
 			]
 		},
@@ -473,6 +474,9 @@
 				},
 				{
 					"path": "pages/echarts_demo/mamp_echart"
+				},
+				{
+					"path": "pages/progress_page/progress_page"
 				}
 			]
 		}

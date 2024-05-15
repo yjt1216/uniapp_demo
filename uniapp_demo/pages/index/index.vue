@@ -23,6 +23,15 @@
 			<view class="demo-li"> 图表示例列表 <text class="demo-tip"> ucharts </text></view>
 		</navigator>
 		
+		
+		<navigator url="/bundle_c/pages/echarts_demo/echarts_demo">
+			<view class="demo-li"> echarts图表 <text class="demo-tip"> echarts </text></view>
+		</navigator> 
+		
+		<navigator url="/bundle_c/pages/progress_page/progress_page">
+			<view class="demo-li"> 模拟进度条 <text class="demo-tip"> 模拟 </text></view>
+		</navigator>
+		
 		<!-- 
 		
 		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
@@ -42,9 +51,7 @@
 			<view class="demo-li"> 选择图片after<text class="demo-tip">uni choose 压缩 </text></view>
 		</navigator> 
 		
-		<navigator url="/bundle_c/pages/echarts_demo/echarts_demo">
-			<view class="demo-li"> echarts图表 <text class="demo-tip"> echarts </text></view>
-		</navigator> 
+		
 		
 		<navigator url="/bundle_c/pages/audio_play/audio_player">
 			<view class="demo-li">音频播放<text class="demo-tip"> audio player </text></view>
