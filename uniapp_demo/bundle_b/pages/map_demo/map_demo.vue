@@ -15,6 +15,12 @@
 			<selectLoc :showMap="showMap" @close="closeLoc" @confirm="confirmLoc"></selectLoc>
 		</view>
 		
+		<!-- #ifdef H5 -->
+		<iframe id="geoPage" width=0 height=0 frameborder=0  style="display:none;" scrolling="no"
+		    src="https://apis.map.qq.com/tools/geolocation?key=UIDBZ-2QUCR-C6CW5-WSLAN-NWUQO-SOFB7&referer=uniapp_demo">
+		</iframe>
+		
+		<!-- #endif -->
 		
 	</view>
 </template>
@@ -46,6 +52,33 @@
 		},
 		onLoad() {
 			that = this;
+			// #ifdef H5
+			window.addEventListener('message', function(event) {
+			    // 接收位置信息
+			    var loc = event.data;
+			    console.log('location', loc);
+			}, false);
+			// #endif
+			
+			
+			// #ifdef H5
+			// 在页面中调用getCurrentPosition方法获取当前位置
+			navigator.geolocation.getCurrentPosition(function(position) {
+				console.log('location position', position);
+			  // 获取到位置信息后，可以根据需要进行处理和使用
+			  const latitude = position.coords.latitude; // 纬度
+			  const longitude = position.coords.longitude; // 经度
+			  const altitude = position.coords.altitude; // 海拔高度
+			  const accuracy = position.coords.accuracy; // 位置精度
+			  const altitudeAccuracy = position.coords.altitudeAccuracy; // 海拔高度精度
+			  const heading = position.coords.heading; // 方向
+			  const speed = position.coords.speed; // 速度
+			}, function(error) {
+			  // 如果获取位置信息失败，可以在这里处理错误
+			  console.log(error);
+			});
+
+			// #endif
 			
 		},
 		methods: {

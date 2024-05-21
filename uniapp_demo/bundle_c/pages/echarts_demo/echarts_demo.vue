@@ -21,10 +21,13 @@
 		<navigator url="/bundle_c/pages/echarts_demo/progress_echarts">
 			<view class="demo-li"> 进度图表 <text class="demo-tip"> echarts </text></view>
 		</navigator>
-		
-		<navigator url="/bundle_c/pages/echarts_demo/map_echarts">
-			<view class="demo-li"> 地图 <text class="demo-tip"> echarts </text></view>
+		<navigator url="/bundle_c/pages/echarts_demo/ring_echarts">
+			<view class="demo-li"> ring <text class="demo-tip"> echarts </text></view>
 		</navigator>
+		
+		<!-- <navigator url="/bundle_c/pages/echarts_demo/map_echarts">
+			<view class="demo-li"> 地图 <text class="demo-tip"> echarts </text></view>
+		</navigator> -->
 		
 		<navigator url="/bundle_c/pages/echarts_demo/mamp_echart">
 			<view class="demo-li"> 地图 <text class="demo-tip"> echarts </text></view>

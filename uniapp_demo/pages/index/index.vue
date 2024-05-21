@@ -32,6 +32,14 @@
 			<view class="demo-li"> 模拟进度条 <text class="demo-tip"> 模拟 </text></view>
 		</navigator>
 		
+		
+		<navigator url="/bundle_b/pages/map_demo/map_demo">
+			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> chooseLocation </text></view>
+		</navigator>
+		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
+			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> qqmap_location </text></view>
+		</navigator>
+		
 		<!-- 
 		
 		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
@@ -100,12 +108,7 @@
 			<view class="demo-li"> 高德地图 <text class="demo-tip"> amap </text></view>
 		</navigator>
 		
-		<navigator url="/bundle_b/pages/map_demo/map_demo">
-			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> chooseLocation </text></view>
-		</navigator>
-		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
-			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> qqmap_location </text></view>
-		</navigator>
+		
 		
 		
 		<navigator url="/bundle_c/pages/location_update/location_update">

@@ -31,10 +31,6 @@
 				}
 			});
 			
-			
-			
-			
-			
 		},
 		onShow: function() {
 			console.log('App Show 微信静默授权')
@@ -74,10 +70,6 @@
 			   uni.navigateTo({
 				 url: '/pages/webview/webview?link=' + link
 			   })
-			  
-			 
-			  
-			  
 			   
 			},
 		},

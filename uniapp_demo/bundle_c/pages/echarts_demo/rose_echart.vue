@@ -6,100 +6,92 @@
 </template>
 
 <script>
-	import linearColor from "@/sheep/mock/colors.json";
+	
 	import * as opt from '@/sheep/mock/option.js';
+	import  echarts from '@/uni_modules/ui-echarts/static/echarts.min.js';
 	export default{
 		data(){
 			return {
 				roseOptions:{},
 				roseData:[],
+				linearColor:[
+					["#4B65F8","#75CEFF"],
+					["#B5FEED","#1ABED5"],
+					["#F76B1C","#FFE483"],
+					["#F65B4B","#FFDDC8"],
+					["#FBF4D9","#D5A34C"],
+					["#C8E1FD","#505D6F"],
+					["#F76B1C","#FFE483"],
+					["#F65B4B","#FFDDC8"],
+					["#FBF4D9","#D5A34C"],
+					["#C8E1FD","#505D6F"]
+				],
 			}
 		},
 		onLoad() {
-			console.log('渐变色',linearColor);
+			
 		},
 		onReady() {
 			this.roseData = [
-				{ value: 30, name: '要客服务' },
+				{ value: 66, name: '要客服务' },
 				
-				{ value: 28, name: '应急行业' },
+				{ value: 54, name: '应急行业' },
 				
-				{ value: 26, name: '综合服务业' },
-				{ value: 24, name: '建筑行业' },
+				{ value: 18, name: '综合服务业' },
+				{ value: 20, name: '建筑行业' },
 				{ value: 22, name: '交通物流' },
 				
-				{ value: 18, name: '卫生健康' },
+				{ value: 20, name: '卫生健康' },
 				{ value: 16, name: '制造能源' },
 				{ value: 14, name: '教育行业' },
 				{ value: 12, name: '农业农村' },
 				
 				{ value: 10, name: '其他' }
 			];
-			this.roseOptions = {
-				color:linearColor,
-				tooltip: {
-					trigger: 'item',
-					formatter: '{a} <br/>{b}: {c} ({d}%)'
-				},
-				title: {
-					text: '2673682',
-					left: 'center',
-					top: '50%',
-					textStyle: {
-						textAlign: 'center',
-						fill: '#505D6F',
-						fontSize: 12,
-						fontWeight: 400
-					}
-				},
-				graphic: {
-					type: 'text',
-					left: 'center',
-					top: '45%',
-					style: {
-						text: '行业总数',
-						textAlign: 'center',
-						fill: '#505D6F',
-						fontSize: 15
-					}
-				},
-				series: [
-					{
-						type: 'pie',
-						// radius: [50, 150],
-						radius: [50, 120],
-						center: ['50%', '50%'],
-						roseType: 'area',
-						itemStyle: {
-							borderRadius: 8
-						},
-						label: {
-							//alignTo: 'edge',
-							formatter: '{name|{b}}\n{time|{c} %}',
-							lineHeight: 15,
-							rich: {
-								time: {
-									fontSize: 10,
-									color: '#999'
-								}
-							},
-							normal: {
-								show: true,
-								position: 'inside', //标签的位置
-								formatter: "{d}%",
-								textStyle: {
-									color: '#fff',
-								}
-							},
-							
-						},
-						data: this.roseData,
-					}
-				]
-			};
+			
+			this.roseOptions = opt['rose2']['simple'];
+			
+			// this.roseOptions.series.data = this.roseData;
+			
+			
+			let newData = this.configColor(this.roseData,this.linearColor);
+			
+			// 打印新数组（这里仅示例说明，实际运行需要在支持echarts的环境中执行）
+			console.log('新生成渐变色数据list',newData);
+			
+			this.roseOptions.series[0].data = newData;
+			
 		},
 		methods:{
-			
+			configColor(roseData,colorPairs){
+				const newArray = [];
+				let colorIndex = 0; // 用于循环选取colors中的颜色对
+				
+				roseData.forEach((item, index) => {
+				    const startColor = colorPairs[colorIndex][0];
+				    const endColor = colorPairs[colorIndex][1];
+								
+				    // 如果到达colors末尾，则重置索引以循环使用颜色
+				    if (colorIndex === colorPairs.length - 1) {
+				        colorIndex = 0;
+				    } else {
+				        colorIndex++;
+				    }
+								
+				    newArray.push({
+				        value: item.value,
+				        name: `rose${index + 1}`,
+				        itemStyle: {
+				            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+				                { offset: 0, color: startColor },
+				                { offset: 1, color: endColor }
+				            ])
+				        }
+				    });
+				});
+								
+				return newArray;
+			}
 		}
 	}
 </script>

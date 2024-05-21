@@ -342,3 +342,226 @@ if (count) {
 }
 
 
+马丽芳;安有同;白雪龙;别梦欣;曹晓丽;程光耀;陈海波;陈建奇;陈俊;陈林;陈燕强;
+陈亚萍;陈宜飞;陈振北;崔强;崔晓龙;崔学东;德品客服康康;德品客服谢谢;董香军;
+段荣启;范晨霞;房广认;范梦婷;范乃学;范秋雯;冯宇娇;高丽慧;葛秋菊;葛瑞龙;葛骁;葛小伟;
+宫建明;郭胜利;韩书豪;韩婷;韩瑶;何明俞;何小多;何宇豪;贺子琦;洪星星;侯琴;华良;黄金金;黄小军;
+黄正华;惠雅虹;胡莉;胡力宇;胡仕祥;户晓慧;胡业树;江芳;蒋国栋;蒋丽洁;江灵燕;蒋世祥;姜炎(姜炎);
+焦娜;贾翔腾;邝煜嘉;梁恩泽;梁绮颖;李冬山;李金艳;李克峰;李明新;凌三仙;李爽爽;刘冬;刘洪伟;刘俊杰;
+刘娜娜;刘时雨;刘祥;刘尧尧;刘业兵;刘粤建;刘子宁;李小兰;李新亮;李勇;李泽浩;陆秋艳;鲁天成;陆迅;
+吕苏豫;吕梓涵;马磊;马益顺;倪继董;倪凯莉;潘君;潘涛;蒲绪凯;齐常锋;秦礼星;齐长新;邵贵辉;邵薇;
+盛存媚;沈梦静;舒译乐;司俊豪;宋兴豹;孙毅;唐秋思;谭冠芝;陶善斌;陶维杰;涂立轩;万飞;王超;王琛琛;
+王春;王飞;王海龙;王慧;王健;王凯;王利峰;王璐;王蒙;王猛;王敏;王瑞龙;王尚华;王帅宾;王顺杰;王卫东;
+王晓博;汪晓婷;王新闻;王宴池;王亚洲;王宇航;王志慧;魏斌;魏凤楼;魏锦;魏良楼;魏鹏飞;吴晶晶;吴茜南;
+吴晓静;吴晓丽;吴艳;吴祎凡(一凡);吴永林;吴兆刚;肖开宝;夏韶银;谢缙;谢淑华;谢伟;谢祥富;熊欢;薛帅;
+徐辉;许慧洁;许建全;徐静静;徐丽花;徐文杰;闫高伟;杨恒伟;杨乐;杨清凤;杨琴燕;杨同军;杨璇;杨植洲;严鸿;
+闫三孩;严为民;姚一君;尹江涛;殷孟涛;俞俊妹;曾昭玮;翟雯静;长安;张博文;张朝福;张鼎盈;张飞;张建新;
+张丽;张岭;张明珠;张强;张世玲;张伟;章学超;张翼;张依;张长成;詹郑;赵兴军;郑启江;周帆;周芳;周锴;
+周启祥;朱光;朱海明;朱虹芸;朱嘉庆;朱艳;朱莹;朱永锋
+
+
+研发部：
+	张朝福;陈林;陈亚萍;陈宜飞;华良;黄小军;李冬山;刘子宁;
+	鲁天成;吕梓涵;倪凯莉;王飞;王健;王志慧;闫高伟;严鸿;
+	严为民;尹江涛;曾昭玮;翟雯静;张强;朱虹芸;朱嘉庆
+	
+	
+	
+	
+	
+	option = {
+			tooltip: {
+				trigger: 'item',
+				formatter: '{a} <br/>{b}: {c} ({d}%)'
+			},
+			title: {
+				text: '265849',
+				top: '45%',
+				textAlign: 'center',
+				left: '29%',
+				textStyle: {
+					color: '#fff',
+					fontSize: 15,
+					fontWeight: '400'
+				},
+				subtext: '销售额',
+				subtextStyle: {
+					color: '#fff',
+					fontSize: 14,
+					fontWeight: '400'
+				}
+			},
+			series: [
+				{
+					name: 'Access From',
+					type: 'pie',
+					center: ['30%', '50%'],
+					// radius: ['60%', '70%'],
+					radius: ['35%', '60%'],
+					labelLine: {
+						length: 35
+					},
+					label: {
+						normal: {
+							show: true,
+							position: 'inside', //标签的位置
+							formatter: "{d}%",
+							textStyle: {
+								color: '#fff'
+							}
+						},
+						emphasis: {
+							show: true,
+							textStyle: {
+								fontWeight: 'bold'
+							}
+						}
+					},
+					data: [
+						{ value: 1048, name: 'Baidu' },
+						{ value: 335, name: 'Direct' },
+						{ value: 310, name: 'Email' },
+						{ value: 251, name: 'Google' },
+						{ value: 234, name: 'Union Ads' },
+						{ value: 147, name: 'Bing' },
+						{ value: 135, name: 'Video Ads' },
+						{ value: 102, name: 'Others' }
+					]
+				},
+				{
+					// title背景层
+					name: '背景圆环',
+					z: 5,
+					backgroundColor: '#fff',
+					type: 'pie',
+					// left:'30%',
+					cursor: 'default',
+					center: ['30%', '50%'],
+					radius: '25%',
+					hoverAnimation: false,
+					legendHoverLink: false,
+					silent: true, //不响应和触发鼠标事件
+					labelLine: {
+						normal: {
+							show: false
+						}
+					},
+					data: [
+						{
+							value: 0,
+							itemStyle: {
+								normal: {
+									color: '#717171'
+								}
+							}
+						}
+					]
+				}
+			]
+		};
+		
+		
+		rose 
+		
+		option = {
+				
+				title: {
+					text: '265849',
+					textAlign: 'center',
+					left: '35%',
+					top: '33%',
+					textStyle: {
+						textAlign: 'center',
+						fill: '#505D6F',
+						fontSize: 10,
+						fontWeight: 400
+					},
+					subtext: '销售额',
+					subtextStyle: {
+						textAlign: 'center',
+						color: '#505D6F',
+						fontSize: 8,
+						fontWeight: '400'
+					}
+				},
+				
+				series: [
+					{
+						name: 'Radius Mode',
+						type: 'pie',
+						radius: ["15%", "40%"],
+						center: ['38%', '33%'],
+						roseType: 'radius',
+						itemStyle: {
+							borderRadius: 5,
+							normal:{
+								color: function (params) {
+									console.log('bottom打印渐变色配置',params);
+									var colorList = [
+										["#4B65F8","#75CEFF"],
+										["#B5FEED","#1ABED5"],
+										["#F76B1C","#FFE483"],
+										["#F65B4B","#FFDDC8"],
+										["#FBF4D9","#D5A34C"],
+										["#C8E1FD","#505D6F"],
+										["#F76B1C","#FFE483"],
+										["#F65B4B","#FFDDC8"],
+										["#FBF4D9","#D5A34C"],
+										["#C8E1FD","#505D6F"]
+									];
+									var index = params.dataIndex;
+									if (params.dataIndex >= colorList.length) {
+										index = params.dataIndex - colorList.length;
+									}
+									return new echarts.graphic.LinearGradient(0, 0, 0, 1,
+										[
+											{
+												offset: 0,
+												color: colorList[index][0]
+											},
+											{
+												  offset: 1,
+												  color: colorList[index][1]
+											}
+										]);
+								}
+							}
+						},
+						label: {
+							show: true,
+							formatter: '{name|{b}}\n{time|{c} %}',
+							lineHeight: 15,
+							rich: {
+								time: {
+									fontSize: 10,
+									color: '#999'
+								}
+							},
+							normal: {
+								show: true,
+								position: 'inside', //标签的位置
+								formatter: "{d}%",
+								textStyle: {
+									color: '#fff',
+									fontSize: 8,
+								},
+							},
+						},
+						emphasis: {
+							label: {
+								show: true
+							}
+						},
+						data: [
+							{ value: 40, name: 'rose 1' },
+							{ value: 33, name: 'rose 2' },
+							{ value: 28, name: 'rose 3' },
+							{ value: 22, name: 'rose 4' },
+							{ value: 20, name: 'rose 5' },
+							{ value: 15, name: 'rose 6' },
+							{ value: 12, name: 'rose 7' },
+							{ value: 10, name: 'rose 8' }
+						]
+					}
+				]
+			}

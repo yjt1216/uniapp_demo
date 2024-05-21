@@ -80,6 +80,7 @@ export const rose = {
 		]
 	}
 };
+
 // 柱状统计图表 立体 + 渐变色
 export const statck = {
 	simple:{
@@ -306,6 +307,119 @@ export const statck = {
 	
 };
 
+// 南丁格尔rose 
+export const rose2 = {
+	simple: {
+		title: {
+			text: '2673682',
+			left: 'center',
+			top: '50%',
+			textStyle: {
+				textAlign: 'center',
+				fill: '#505D6F',
+				fontSize: 12,
+				fontWeight: 400
+			}
+		},
+		graphic: {
+			type: 'text',
+			left: 'center',
+			top: '45%',
+			style: {
+				text: '销售额',
+				textAlign: 'center',
+				fill: '#505D6F',
+				fontSize: 15
+			}
+		},
+		tooltip: {
+			trigger: 'item',
+			formatter: '{a} <br/>{b} : {c} ({d}%)'
+		},
+		series: [
+			{
+				name: 'Radius Mode',
+				type: 'pie',
+				radius: [45, 120],
+				center: ['50%', '50%'],
+				roseType: 'radius',
+				itemStyle: {
+					borderRadius: 5,
+					normal:{
+						color: function (params) {
+							console.log('bottom打印渐变色配置',params);
+							var colorList = [
+								["#4B65F8","#75CEFF"],
+								["#B5FEED","#1ABED5"],
+								["#F76B1C","#FFE483"],
+								["#F65B4B","#FFDDC8"],
+								["#FBF4D9","#D5A34C"],
+								["#C8E1FD","#505D6F"],
+								["#F76B1C","#FFE483"],
+								["#F65B4B","#FFDDC8"],
+								["#FBF4D9","#D5A34C"],
+								["#C8E1FD","#505D6F"]
+							];
+							var index = params.dataIndex;
+							if (params.dataIndex >= colorList.length) {
+								index = params.dataIndex - colorList.length;
+							}
+							return new echarts.graphic.LinearGradient(0, 0, 0, 1,
+								[
+									{
+										offset: 0,
+										color: colorList[index][0]
+									},
+									{
+										  offset: 1,
+										  color: colorList[index][1]
+									}
+								]);
+						}
+					}
+				},
+				label: {
+					show: true,
+					formatter: '{name|{b}}\n{time|{c} %}',
+					lineHeight: 15,
+					rich: {
+						time: {
+							fontSize: 10,
+							color: '#999'
+						}
+					},
+					normal: {
+						show: true,
+						position: 'inside', //标签的位置
+						formatter: "{d}%",
+						textStyle: {
+							color: '#fff',
+							fontSize: 8,
+						},
+					},
+				},
+				emphasis: {
+					label: {
+						show: true
+					}
+				},
+				data: [
+					{ value: 40, name: 'rose 1' },
+					{ value: 33, name: 'rose 2' },
+					{ value: 28, name: 'rose 3' },
+					{ value: 22, name: 'rose 4' },
+					{ value: 20, name: 'rose 5' },
+					{ value: 15, name: 'rose 6' },
+					{ value: 12, name: 'rose 7' },
+					{ value: 10, name: 'rose 8' }
+				]
+			}
+		]
+	}
+};
+
+
+
 // 圆环图 + 中心圆圈
 export const circle = {
 	simple: {
@@ -373,7 +487,7 @@ export const circle = {
 				// title背景层
 				name: '背景圆环',
 				z: 5,
-				backgroundColor: '#8C8D8E',
+				backgroundColor: '#fff',
 				type: 'pie',
 				// left:'30%',
 				cursor: 'default',
@@ -392,7 +506,7 @@ export const circle = {
 						value: 0,
 						itemStyle: {
 							normal: {
-								color: '#4C505840'
+								color: '#717171'
 							}
 						}
 					}
@@ -401,6 +515,7 @@ export const circle = {
 		]
 	}
 };
+
 
 //进度圆环
 export const progress = {

@@ -361,6 +361,9 @@
 				},
 				{
 					"path": "pages/chart_demo/chart_list"
+				},
+				{
+					"path": "pages/chart_demo/ucharts_rose"
 				}
 			]
 		},
@@ -469,9 +472,9 @@
 				{
 					"path": "pages/echarts_demo/bar_test"
 				},
-				{
-					"path": "pages/echarts_demo/map_echarts"
-				},
+				// {
+				// 	"path": "pages/echarts_demo/map_echarts"
+				// },
 				{
 					"path": "pages/echarts_demo/mamp_echart"
 				},

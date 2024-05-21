@@ -34,7 +34,33 @@
 							mercator: true
 						}
 					}
-				}
+				},
+				cityOrderList:[
+					{
+						city_id: 3205,
+						city_name: "苏州市",
+						num: 66,
+						ratio: 53.23
+					},
+					{
+						city_id: 3201,
+						city_name: "南京市",
+						num: 54,
+						ratio: 43.55
+					},
+					{
+						city_id: 3203,
+						city_name: "无锡市",
+						num: 50,
+						ratio: 40.55
+					},
+					{
+						city_id: 3204,
+						city_name: "昆山市",
+						num: 45,
+						ratio: 20.55
+					}
+				]
 
 			};
 		},
@@ -128,7 +154,8 @@
 				// 	series: mapdata.features,
 				// }
 
-				//模拟 接口数据 2 
+				// 模拟 接口数据 2 
+				
 				let data = [{
 						storeSym: 823, //门店数量
 						companyNumber: 0, //缺编人数
@@ -155,6 +182,12 @@
 						storeName: '西藏', //地区
 					},
 				]
+				
+				// let data = this.cityOrderList.map(item => ({
+				//     storeSym: item.num, // 使用num字段作为storeSym
+				//     companyNumber: 0, // 设置缺编人数为0
+				//     storeName: item.city_name // 使用city_name字段作为storeName
+				// }));
 
 
 				// this.chartsDataMap.series = mapdata.features.filter((x)=>this.storeName==x.properties.name)

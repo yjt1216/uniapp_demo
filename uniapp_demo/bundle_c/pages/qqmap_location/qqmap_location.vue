@@ -14,6 +14,9 @@
 			:markers="markers">
 		</map>
 		
+		
+		
+		
 	</view>
 </template>
 
