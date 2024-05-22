@@ -111,9 +111,9 @@
         "devServer" : {
             "https" : true
         },
-		"permission":{
-			"name":"geolocation"
-		}
+        "permission" : {
+            "name" : "geolocation"
+        }
     },
     // "bmap" : {
     //     // 百度地图秘钥（HBuilderX 3.99+）http://lbsyun.baidu.com/apiconsole/key#/home

@@ -84,6 +84,6 @@
 	@import 'styles/builder.scss';
 	@import 'styles/common.scss';
 	@import 'styles/login_exam.scss';
-	@import "@/uni_modules/ui-echarts/index.scss";
+	@import "@/pages_echarts/components/ui-echarts/index.scss";
 	// @import url('static/font/iconfont.css');
 </style>

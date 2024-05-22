@@ -10,21 +10,18 @@
 		<view class="group-title">功能示例</view>
 		
 		
-		<navigator url="/bundle_b/pages/operate/operate_demo">
-			<view class="demo-li"> 经营统计 <text class="demo-tip"> table + charts </text></view>
-		</navigator>
 		<navigator url="/bundle_b/pages/table_sort/table_sort">
 			<view class="demo-li"> 表格 <text class="demo-tip"> table </text></view>
 		</navigator>
 		
 		
 		
-		<navigator url="/bundle_b/pages/chart_demo/chart_list">
+		<navigator url="/pages_ucharts/pages/list/list">
 			<view class="demo-li"> 图表示例列表 <text class="demo-tip"> ucharts </text></view>
 		</navigator>
 		
 		
-		<navigator url="/bundle_c/pages/echarts_demo/echarts_demo">
+		<navigator url="/pages_echarts/pages/demo/demo">
 			<view class="demo-li"> echarts图表 <text class="demo-tip"> echarts </text></view>
 		</navigator> 
 		

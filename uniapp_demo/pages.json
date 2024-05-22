@@ -292,9 +292,6 @@
 					}
 				},
 				{
-					"path": "pages/operate/operate_demo"
-				},
-				{
 					"path": "pages/input_demo/input_demo",
 					"style": {
 						"navigationStyle": "custom" 
@@ -340,31 +337,8 @@
 				},
 				{
 					"path": "pages/table_sort/table_sort"
-				},
-				{
-					"path": "pages/chart_demo/chart_demo"
-				},
-				{
-					"path": "pages/chart_demo/chart_map"
-				},
-				{
-					"path": "pages/chart_demo/chart_ring"
-				},
-				{
-					"path": "pages/chart_demo/china_map"
-				},
-				{
-					"path": "pages/chart_demo/chart_bar"
-				},
-				{
-					"path": "pages/chart_demo/charts_pie"
-				},
-				{
-					"path": "pages/chart_demo/chart_list"
-				},
-				{
-					"path": "pages/chart_demo/ucharts_rose"
 				}
+				
 			]
 		},
 		{
@@ -451,35 +425,61 @@
 						"navigationBarTitleText": "音频列表"
 					}
 				},
-				{
-					"path": "pages/echarts_demo/echarts_demo",
-					"style": {
-						"navigationBarTitleText": "echarts图表"
-					}
-				},
-				{
-					"path": "pages/echarts_demo/ring_echarts"
-				},
-				{
-					"path": "pages/echarts_demo/rose_echart"
-				},
-				{
-					"path": "pages/echarts_demo/bar_echarts"
-				},
-				{
-					"path": "pages/echarts_demo/progress_echarts"
-				},
-				{
-					"path": "pages/echarts_demo/bar_test"
-				},
-				// {
-				// 	"path": "pages/echarts_demo/map_echarts"
-				// },
-				{
-					"path": "pages/echarts_demo/mamp_echart"
-				},
+				
 				{
 					"path": "pages/progress_page/progress_page"
+				}
+			]
+		},
+		{
+			"root": "pages_echarts",
+			"pages": [
+				{
+					"path": "pages/demo/demo"
+				},
+				{
+					"path": "pages/bars/bars"
+				},
+				{
+					"path": "pages/pies/pies"
+				},
+				{
+					"path": "pages/ring/ring"
+				},
+				{
+					"path": "pages/rose/rose"
+				},
+				{
+					"path": "pages/progress/progress"
+				}
+			]
+		},
+		{
+			"root": "pages_ucharts",
+			"pages": [
+				{
+					"path": "pages/demo/demo"
+				},
+				{
+					"path": "pages/list/list"
+				},
+				{
+					"path": "pages/bars/bars"
+				},
+				{
+					"path": "pages/map/chart_map"
+				},
+				{
+					"path": "pages/map/china_map"
+				},
+				{
+					"path": "pages/pie/chart_pie"
+				},
+				{
+					"path": "pages/ring/chart_ring"
+				},
+				{
+					"path": "pages/rose/chart_rose"
 				}
 			]
 		}

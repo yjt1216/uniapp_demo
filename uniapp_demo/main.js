@@ -10,7 +10,7 @@ import {router,RouterMount} from './router.js'
 import routerLink from './js_sdk/uni-simple-router/link.vue';
 
 import location from "@/sheep/utils/location.js"
-import uiEcharts from '@/uni_modules/ui-echarts'
+import uiEcharts from '@/pages_echarts/components/ui-echarts'
 
 
 // Vue.component('mescroll-body', MescrollBody)
