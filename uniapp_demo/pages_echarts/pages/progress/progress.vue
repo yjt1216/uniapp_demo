@@ -22,69 +22,38 @@
 			return {
 				leftOptions:{},
 				rightOptions:{},
+				userRegister:{
+					add_num: 11,
+					add_ratio: 0.1,
+					all_num: 11177,
+					common_ratio: -99.53,
+					old_num: 11166,
+					old_ratio: 99.9,
+				},
 			}
 		},
 		onLoad() {
 			
 		},
 		onReady() {
-			let leftData = [30];
-			let rightData = [70];
+			let leftData = [this.userRegister.add_num];
+			let rightData = [this.userRegister.old_num];
 			
-			let leftTitles = [
-				{
-				    text: '新增注册',
-				    x: 'center',
-				    top: '50%',
-				    textStyle: {
-				        color: '#7AC000',
-				        fontSize: 10,
-				        fontWeight: '300',
-				    },
-				},
-				{
-				    text: '30%',
-				    x: 'center',
-					top:'45%',
-				    textStyle: {
-				        fontSize: 12,
-				        color: '#505D6F',
-				        fontFamily: 'DINAlternate-Bold, DINAlternate',
-				        foontWeight: '500',
-				    },
-				},
-			];
-			let rightTitles = [
-				{
-				    text: '原有数量',
-				    x: 'center',
-				    top: '50%',
-				    textStyle: {
-				        color: '#FF8D42',
-				        fontSize: 10,
-				        fontWeight: '300',
-				    },
-				},
-				{
-				    text: '70%',
-				    x: 'center',
-					top:'45%',
-				    textStyle: {
-				        fontSize: 12,
-				        color: '#505D6F',
-				        fontFamily: 'DINAlternate-Bold, DINAlternate',
-				        foontWeight: '500',
-				    },
-				},
-			];
-			this.leftOptions = opt['leftProgress']['simple'];
+			let leftTitle = `${this.userRegister.add_num}/${this.userRegister.add_ratio}%`;
+			let rightTitle = `${this.userRegister.old_num}/${this.userRegister.old_ratio}%`;
+			
+			
+			
+			this.leftOptions = opt['progress']['simple'];
 			this.leftOptions.series[0].data = leftData;
-			this.leftOptions.title = leftTitles;
+			this.leftOptions.title.text = leftTitle;
 			
-			this.rightOptions = opt['rightProgress']['simple'];
+			this.rightOptions = opt['progress2']['simple'];
 			this.rightOptions.series[0].data = rightData;
-			this.rightOptions.title = rightTitles;
+			this.rightOptions.title.text = rightTitle;
 			
+			this.leftOptions.angleAxis.max = this.userRegister.all_num;
+			this.rightOptions.angleAxis.max = this.userRegister.all_num
 			
 		},
 		methods:{

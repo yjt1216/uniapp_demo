@@ -28,7 +28,7 @@
 	
 	let that = null;
 	import {trajectoryList,trajectoryStartStop,uploadTrajectory} from '@/api/home.js';
-	import PrivacyPopup from '@/components/privacy-popup/privacy-popup.vue'
+	import PrivacyPopup from '@/pages_map/components/privacy-popup/privacy-popup.vue'
 	
 	
 	export default {

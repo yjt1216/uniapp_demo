@@ -19,6 +19,9 @@
 			<view class="demo-li"> 进度图表 <text class="demo-tip"> echarts </text></view>
 		</navigator>
 		
+		<navigator url="/pages_echarts/pages/pies/pies">
+			<view class="demo-li"> 饼图表 <text class="demo-tip"> echarts </text></view>
+		</navigator>
 		
 		
 	</view>

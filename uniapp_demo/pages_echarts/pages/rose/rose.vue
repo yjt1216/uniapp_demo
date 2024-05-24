@@ -1,7 +1,11 @@
 <template>
 	<view>
 		<u-navbar title="玫瑰图表" :placeholder="true" :autoBack="true"></u-navbar>
-		<ui-echarts ref="echarts" :option="roseOptions"></ui-echarts>
+		
+		<view class="charts-box">
+			<ui-echarts ref="echarts" :option="roseOptions"></ui-echarts>
+		</view>
+		
 	</view>
 </template>
 
@@ -102,4 +106,11 @@
 </script>
 
 <style>
+	.charts-box{
+		margin: 10rpx;
+		margin-top: 100rpx;
+		width: 380rpx;
+		height: 400rpx;
+		/* background-color: palevioletred; */
+	}
 </style>

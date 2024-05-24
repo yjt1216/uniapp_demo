@@ -35,7 +35,7 @@
 		data(){
 			return {
 				barOptions:{},
-				barData:[],
+				
 				linearColor:[
 					["#4B65F8","#75CEFF"],
 					["#B5FEED","#1ABED5"],
@@ -48,6 +48,7 @@
 					["#FBF4D9","#D5A34C"],
 					["#C8E1FD","#505D6F"]
 				],
+				
 				patientAgeList:[
 					{
 						add_num: 90,
@@ -82,20 +83,17 @@
 				],
 			}
 		},
+		watch:{
+			patientAgeList(data){
+				this.getServerData(data);
+			}
+		},
 		onLoad() {
 			
 		},
 		onReady() {
-			this.barData =  [12, 94, 62, 60];
-			this.barOptions = opt['statck']['simple'];
-			// this.barOptions.color = linearColor;
 			
-			let newData = this.configColorData(this.patientAgeList,this.linearColor);
-			
-			this.barOptions.series[0].data = newData;
-			this.barOptions.series[1].data = newData;
-			this.barOptions.series[2].data = newData;
-			// console.log('渐变色',this.barOptions);
+			this.getServerData(this.patientAgeList);
 		},
 		methods:{
 			configColorData(barData,colorPairs){
@@ -127,10 +125,56 @@
 								
 				return newArray;
 			},
+			configTopColorData(barData){
+				const newArray = [];
+				
+				barData.forEach((item, index) => {
+				    // ["#EEF2FA","#AFC5FF"],
+				    newArray.push({
+				        value: item,
+				        name: `rose${index + 1}`,
+				        itemStyle: {
+				            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+				                { offset: 0, color: "#EEF2FA" },
+				                { offset: 1, color: "#AFC5FF" }
+				            ])
+				        }
+				    });
+				});
+								
+				return newArray;
+			},
 			getDotColor(index){
 				let colors = this.linearColor[index];
 				
 				return `linear-gradient(141deg, ${colors[0]} 0%, ${colors[1]} 100%)`;
+			},
+			getServerData(ageList){
+				this.barOptions = opt['statck2']['simple'];
+				// this.barOptions.color = linearColor;
+				
+				let newData = this.configColorData(ageList,this.linearColor);
+				
+				this.barOptions.series[0].data = newData;
+				this.barOptions.series[1].data = newData;
+				this.barOptions.series[2].data = newData;
+				
+				// 使用reduce方法计算add_num的总和
+				let sumOfAddNum = ageList.reduce((accumulator, currentValue) => {
+				    return accumulator + currentValue.add_num;
+				}, 0);
+				
+				this.barOptions.yAxis.max = sumOfAddNum;
+				
+				// console.log('渐变色sumOfAddNum',sumOfAddNum);
+				const sumArray = [];
+				ageList.forEach(() => {
+					sumArray.push(sumOfAddNum);
+				});
+				
+				let newSumData = this.configTopColorData(sumArray);
+				console.log('渐变色newSumData',newSumData);
+				this.barOptions.series[3].data = newSumData;
 			},
 		}
 	}

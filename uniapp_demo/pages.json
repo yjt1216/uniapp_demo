@@ -332,9 +332,7 @@
 				{
 					"path": "pages/segment_demo/segment_demo"
 				},
-				{
-					"path": "pages/map_demo/map_demo"
-				},
+				
 				{
 					"path": "pages/table_sort/table_sort"
 				}
@@ -344,30 +342,7 @@
 		{
 			"root": "bundle_c",
 			"pages": [
-				{
-					"path": "pages/amap_location/amap_location",
-					"style": {
-						"navigationBarTitleText": "高德地图"
-					}
-				},
-				{
-					"path": "pages/qqmap_location/qqmap_location",
-					"style": {
-						"navigationBarTitleText": "腾讯地图"
-					}
-				},
-				// {
-				// 	"path": "pages/qqmap_location/track_location",
-				// 	"style": {
-				// 		"navigationBarTitleText": "轨迹"
-				// 	}
-				// },
-				// {
-				// 	"path": "pages/qqmap_location/trajectory_location",
-				// 	"style": {
-				// 		"navigationBarTitleText": "轨迹"
-				// 	}
-				// },
+				
 				
 				{
 					"path": "pages/navi_search/navi_search",
@@ -377,12 +352,7 @@
 						"enablePullDownRefresh": false
 					}
 				},
-				{
-					"path": "pages/location_update/location_update",
-					"style": {
-						"navigationBarTitleText": "腾讯地图"
-					}
-				},
+				
 				{
 					"path": "pages/phone_record/phone_record",
 					"style": {
@@ -481,6 +451,44 @@
 				{
 					"path": "pages/rose/chart_rose"
 				}
+			]
+		},
+		{
+			"root": "pages_map",
+			"pages": [
+				{
+					"path": "pages/amap_location/amap_location",
+					"style": {
+						"navigationBarTitleText": "高德地图"
+					}
+				},
+				{
+					"path": "pages/qqmap_location/qqmap_location",
+					"style": {
+						"navigationBarTitleText": "腾讯地图"
+					}
+				},
+				{
+					"path": "pages/location_update/location_update",
+					"style": {
+						"navigationBarTitleText": "腾讯地图"
+					}
+				},
+				{
+					"path": "pages/map_demo/map_demo"
+				}
+				// {
+				// 	"path": "pages/qqmap_location/track_location",
+				// 	"style": {
+				// 		"navigationBarTitleText": "轨迹"
+				// 	}
+				// },
+				// {
+				// 	"path": "pages/qqmap_location/trajectory_location",
+				// 	"style": {
+				// 		"navigationBarTitleText": "轨迹"
+				// 	}
+				// },
 			]
 		}
 		

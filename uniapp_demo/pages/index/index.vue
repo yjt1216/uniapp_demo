@@ -15,7 +15,6 @@
 		</navigator>
 		
 		
-		
 		<navigator url="/pages_ucharts/pages/list/list">
 			<view class="demo-li"> 图表示例列表 <text class="demo-tip"> ucharts </text></view>
 		</navigator>
@@ -29,13 +28,6 @@
 			<view class="demo-li"> 模拟进度条 <text class="demo-tip"> 模拟 </text></view>
 		</navigator>
 		
-		
-		<navigator url="/bundle_b/pages/map_demo/map_demo">
-			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> chooseLocation </text></view>
-		</navigator>
-		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
-			<view class="demo-li"> 腾讯地图 <text class="demo-tip"> qqmap_location </text></view>
-		</navigator>
 		
 		<!-- 
 		

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-	import FlameChooseLocation from "bundle_b/components/Flame-chooseLocation/components/Flame-chooseLocation/Flame-chooseLocation";
+	import FlameChooseLocation from "pages_map/components/Flame-chooseLocation/components/Flame-chooseLocation/Flame-chooseLocation";
 	export default { //父vue页面传递给组件的参数获取方式
 		name: 'selectLoc',
 		components:{

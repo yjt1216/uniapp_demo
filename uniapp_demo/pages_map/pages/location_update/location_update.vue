@@ -23,7 +23,7 @@
 	let that = null;
 	
 	import {timeFormat} from '@/sheep/utils/date.js'
-	import PrivacyPopup from '@/bundle_c/components/privacy-popup/privacy-popup.vue'
+	import PrivacyPopup from '@/pages_map/components/privacy-popup/privacy-popup.vue'
 	// import trajectoryMap from '@/bundle_c/components/trajectory-map/trajectory-map.vue'
 	export default{
 		components:{

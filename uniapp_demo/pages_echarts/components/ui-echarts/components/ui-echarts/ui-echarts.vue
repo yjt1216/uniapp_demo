@@ -2,10 +2,14 @@
 	<view class="ui-echarts" :class="[customClass]" :style="wrapStyle">
 	<!-- #ifndef APP-NVUE -->
 		<!-- #ifdef MP-WEIXIN || MP-TOUTIAO -->
-		<canvas class="ui-echarts_canvas" :style="wrapStyle" :canvas-id="canvasId" :id="canvasId" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" type="2d" />
+		<canvas class="ui-echarts_canvas" :style="wrapStyle" :canvas-id="canvasId" :id="canvasId" 
+			@touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" type="2d">
+		</canvas>
 		<!-- #endif -->
 		<!-- #ifndef MP-WEIXIN || MP-TOUTIAO -->
-		<canvas class="ui-echarts_canvas" :style="wrapStyle" :canvas-id="canvasId" :id="canvasId" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" />
+		<canvas class="ui-echarts_canvas" :style="wrapStyle" :canvas-id="canvasId" :id="canvasId" 
+			@touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
+		</canvas>
 		<!-- #endif -->
 	<!-- #endif -->
 	<!-- #ifdef APP-NVUE -->

@@ -14,7 +14,7 @@
 </template>
 
 <script>
-	import amapChoose from "bundle_c/components/amap-choose/amap-choose.vue"
+	import amapChoose from "pages_map/components/amap-choose/amap-choose.vue"
 	export default {
 		components:{
 			amapChoose
