@@ -5,10 +5,11 @@ import  echarts from '@/pages_echarts/components/ui-echarts/static/echarts.min.j
 // 南丁格尔图表
 export const rose = {
 	simple: {
-		tooltip: {
-			trigger: 'item',
-			formatter: '{a} <br/>{b}: {c} ({d}%)'
-		},
+		// tooltip: {
+		// 	trigger: 'item',
+		// 	// formatter: '{a} <br/>{b}: {c} ({d}%)'
+		// 	formatter: '{d}%'
+		// },
 		title: {
 			text: '2673682',
 			left: 'center',
@@ -488,7 +489,7 @@ export const rose2 = {
 		// },
 		tooltip: {
 			trigger: 'item',
-			formatter: '{a} <br/>{b} : {c} ({d}%)'
+			formatter: '{b}%'
 		},
 		series: [
 			{
@@ -545,7 +546,7 @@ export const rose2 = {
 					normal: {
 						show: true,
 						position: 'inside', //标签的位置
-						formatter: "{d}%",
+						formatter: "{b}%",
 						textStyle: {
 							color: '#fff',
 							fontSize: 8,

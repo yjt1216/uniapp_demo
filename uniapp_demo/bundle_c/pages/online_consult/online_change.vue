@@ -167,7 +167,6 @@
 	.online-days{
 		overflow: hidden;
 		
-		
 		padding: 16rpx;
 		background-color: #fff;
 		.days-scroll{

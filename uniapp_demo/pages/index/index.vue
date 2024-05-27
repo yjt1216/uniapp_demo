@@ -24,10 +24,18 @@
 			<view class="demo-li"> echarts图表 <text class="demo-tip"> echarts </text></view>
 		</navigator> 
 		
-		<navigator url="/bundle_c/pages/progress_page/progress_page">
-			<view class="demo-li"> 模拟进度条 <text class="demo-tip"> 模拟 </text></view>
+		
+		<navigator url="/bundle_c/pages/online_consult/online_time">
+			<view class="demo-li"> 在线咨询时段 <text class="demo-tip"> time </text></view>
 		</navigator>
 		
+		<navigator url="/bundle_c/pages/online_consult/online_change">
+			<view class="demo-li"> 切换咨询时段 <text class="demo-tip"> time </text></view>
+		</navigator>
+		
+		<navigator url="/bundle_c/pages/online_consult/online_consult">
+			<view class="demo-li"> 切换咨询时段 <text class="demo-tip"> 七天一组 </text></view>
+		</navigator>
 		
 		<!-- 
 		
@@ -72,11 +80,9 @@
 		<navigator url="/bundle_c/pages/online_consult/online_consult">
 			<view class="demo-li">在线咨询<text class="demo-tip"> online </text></view>
 		</navigator>
-		<navigator url="/bundle_c/pages/online_consult/online_time">
-			<view class="demo-li">在线咨询时段<text class="demo-tip"> time </text></view>
-		</navigator>
-		<navigator url="/bundle_c/pages/online_consult/online_change">
-			<view class="demo-li">切换咨询时段<text class="demo-tip"> time </text></view>
+		
+		<navigator url="/bundle_c/pages/progress_page/progress_page">
+			<view class="demo-li"> 模拟进度条 <text class="demo-tip"> 模拟 </text></view>
 		</navigator>
 		
 		

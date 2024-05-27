@@ -1,15 +1,14 @@
 <template>
-	
 	<view class="w-time-picker" >
 		<u-navbar :auto-back="true" :placeholder="true" title="在线咨询时段"></u-navbar>
 		
 		
-		<view class="user-content title">
+		<!-- <view class="user-content title">
 			预约日期
-		</view>
-		<view class="online-days">
+		</view> -->
+		<!-- <view class="online-days">
 			<scroll-view scroll-x>
-				<view class="days-scroll">
+				<view class="week-container">
 					<view class="day-item" :class="{ 'not-clickable': !isClickable(day.week) }"
 						:style="{'color':dayIndex==index?theme:'#333','border-color':dayIndex==index?theme:'#ddd'}" 
 						v-for="(day,index) in dayList" 
@@ -19,7 +18,32 @@
 					</view>
 				</view>
 			</scroll-view>
+		</view> -->
+		<view class="booking-date">
+			<view>预约日期</view>
+			<view class="booking-right">
+				<u-icon name="arrow-left" color="#505D6F" size="12" @click="leftClick"></u-icon>
+				<u-icon name="arrow-right" color="#505D6F" size="12" @click="rightClick"></u-icon>
+			</view>
 		</view>
+		<view class="online-days">
+			<swiper class="swiper" :circular="true" :autoplay="false" :current="currentGroup">
+				<swiper-item v-for="(week, index) in groupedDays" :key="index">
+					<view class="week-container">
+						<view class="day-item" v-for="(day, idx) in week" 
+							:class="{ 'not-clickable': !isClickable(day.week) }"
+							:style="{'color':dayIndex==idx?theme:'#333','border-color':dayIndex==idx?theme:'#ddd'}" 
+							:key="idx" @tap="toggleDayIndex(day,idx)">
+							<view class="day-week">{{day.week}}</view>
+							<view class="day-date">{{day.month}}/{{day.day}}</view>
+						</view>
+					</view>
+				</swiper-item>
+			</swiper>
+		</view>
+		
+		
+		
 		<view class="user-content title">
 			预约时段
 		</view>
@@ -67,29 +91,31 @@
 				workDayList:["周一","周二","周三","周四","周五",],
 				//一周
 				dayList:[],
-				hourList:[],
-				dayIndex:0,
-				itemIndex:-1,
-				theme:"#fa800a",
+				// 分组后的日期数组，用于Swiper展示
+				groupedDays: [[]], 
+				hourList: [],
+				dayIndex: null,
+				itemIndex: -1,
+				theme: "#fa800a",
+				currentGroup: 0,
 				
-				
-				selectTime:[],
-				uniSelectTime:[],
+				selectTime: [],
+				uniSelectTime: [],
 				
 				/* 时间间隔 默认30分钟 */
-				step:60,
+				step: 60,
 				
 				/* 当天起始时间 */
-				startHour:8,
+				startHour: 8,
 				/* 当天截止时间 */
-				endHour:18,
+				endHour: 18,
 				/* 延后时间 默认延后2小时 */
-				afterHours:2,
+				afterHours: 2,
 				
-				afterDays:30,
+				afterDays: 30,
 				/* 通话时长 */
-				callDurationlist:[],
-				durationIndex:-1,
+				callDurationlist: [],
+				durationIndex: -1,
 			}
 		},
 		created(){
@@ -103,14 +129,22 @@
 			this.callDurationlist = transformedList;
 			console.log('初始化通话时长',this.callDurationlist);
 		},
-		
+		onReady() {
+			this.defaultChooseDate();
+		},
 		methods:{
 			isClickable(day){
 				return this.workDayList.includes(day);
 			},
 			submit(){
+				if(this.uniSelectTime.length === 0){
+					uni.showToast({
+						title:'请选择时间',
+						icon:'none'
+					});
+					return;
+				}
 				console.log('点击选择时间',this.uniSelectTime);
-				
 			},
 			/* 选择哪一天 */
 			toggleDayIndex(item,index){
@@ -126,21 +160,17 @@
 						icon:'none'
 					})
 				}
-				
-				
 			},
 			/* 选择哪一天的哪一个小时 */
 			toggleHourItem(item,index){
 				console.log('点击选择时间item',item);
 				if(!item.disabled){
-					
-					let tabItem=_this.dayList[_this.dayIndex];
-					let result=tabItem.year+"-"+tabItem.month+"-"+tabItem.day+" "+ item.label+":00";
+					let tabItem = _this.dayList[_this.dayIndex];
+					let result = tabItem.year+"-"+tabItem.month+"-"+tabItem.day+" "+ item.label+":00";
 					let date = tabItem.year+"-"+tabItem.month+"-"+tabItem.day
 					_this.itemIndex=index;
 					this.selectTime.push(result)
 					this.uniSelectTime = this.uniarr(this.selectTime)
-					
 				}
 			},
 			toggleDurationIndex(duration,index){
@@ -148,15 +178,33 @@
 				_this.durationIndex = index;
 			},
 			retTime(){
-				this.uniSelectTime.splice(0,this.uniSelectTime.length)
-				this.selectTime.splice(0,this.selectTime.length)
-				
+				this.uniSelectTime.splice(0,this.uniSelectTime.length);
+				this.selectTime.splice(0,this.selectTime.length);
 			},
 			forMatNumber(n){
 				return n<10?'0'+n:n
 			},
 			uniarr(arr){
 				return Array.from(new Set(arr))
+			},
+			leftClick(){
+				if (this.currentGroup > 0) {
+				    this.currentGroup--;
+				}
+				this.dayIndex = null;
+				// this.defaultChooseDate();
+			},
+			rightClick(){
+				if (this.currentGroup < this.groupedDays.length - 1) {
+				    this.currentGroup++;
+				}
+				//重置时间选择为null
+				this.dayIndex = null;
+				// this.defaultChooseDate();
+			},
+			defaultChooseDate(){
+				let defaultHour = this.hourList[0];
+				this.toggleHourItem(defaultHour,0);
 			},
 			initHours(flag){
 				/* 当前时间 */
@@ -182,28 +230,35 @@
 			},
 			
 			initDays(){
-				let aDate=new Date();
-				let weekList=["周日","周一","周二","周三","周四","周五","周六"];
+				let aDate = new Date();
+				let weekList = ["周日","周一","周二","周三","周四","周五","周六"];
 				_this.dayList.push({
-					year:aDate.getFullYear(),
-					month:_this.forMatNumber(aDate.getMonth()+1),
-					day:_this.forMatNumber(aDate.getDate()),
-					week:weekList[aDate.getDay()],
-					isToday:true
+					year: aDate.getFullYear(),
+					month: _this.forMatNumber(aDate.getMonth()+1),
+					day: _this.forMatNumber(aDate.getDate()),
+					week: weekList[aDate.getDay()],
+					isToday: true
 				})
-				for(let i=1;i<_this.afterDays*1;i++){
+				for(let i = 1;i<_this.afterDays*1;i++){
 					aDate.setDate(aDate.getDate()+1);
 					_this.dayList.push({
-						year:aDate.getFullYear(),
-						month:_this.forMatNumber(aDate.getMonth()+1),
-						day:_this.forMatNumber(aDate.getDate()),
-						week:weekList[aDate.getDay()],
-						isToday:false
+						year: aDate.getFullYear(),
+						month: _this.forMatNumber(aDate.getMonth()+1),
+						day: _this.forMatNumber(aDate.getDate()),
+						week: weekList[aDate.getDay()],
+						isToday: false
 					})
 				};
 				console.log('dayList',_this.dayList);
+				this.groupDays();
 			},
-			
+			// 将日期数组按每7个元素分组
+			groupDays() {
+				this.groupedDays = [];
+				for (let i = 0; i < this.dayList.length; i += 7) {
+					this.groupedDays.push(this.dayList.slice(i, i + 7));
+				}
+			},
 		}
 	}
 </script>
@@ -216,7 +271,6 @@
 		background-color: #fff;
 		display: flex;
 		flex-direction: column;
-		
 	}
 	.user-content{
 		margin: 20rpx;
@@ -224,6 +278,17 @@
 	.title{
 		color: #000000;
 		font-weight: bold;
+	}
+	.booking-date{
+		margin-top: 30rpx;
+		display: flex;
+		justify-content: space-between;
+		padding: 0 30rpx;
+		
+		.booking-right{
+			display: flex;
+			flex-direction: row;
+		}
 	}
 	.select-box{
 		display: flex;
@@ -264,10 +329,11 @@
 	.online-days{
 		overflow: hidden;
 		
-		
 		padding: 16rpx;
 		background-color: #fff;
-		.days-scroll{
+		.week-container{
+			display: flex;
+			flex-direction: row;
 			white-space: nowrap;
 		}
 		.day-item{
@@ -278,7 +344,6 @@
 			border-radius: 6rpx;
 			padding: 10rpx 0;
 			margin: 0 10rpx ;
-			
 			color:#333;
 			.day-week{
 				font-size: 22rpx;
