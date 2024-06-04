@@ -1,4 +1,4 @@
-<!-- 商品列表组件 <good-list :list="xx"></good-list> -->
+<!-- 商品列表组件 <su-good-list :list="xx"></su-good-list> -->
 <template>
 	<view class="good-list">
 		<view :id="'good'+good.id" class="good-li" v-for="good in list" :key="good.id">

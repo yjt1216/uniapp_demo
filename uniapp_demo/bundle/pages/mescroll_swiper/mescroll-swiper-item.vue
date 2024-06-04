@@ -6,7 +6,7 @@
 	<!-- top的高度等于悬浮菜单tabs的高度 -->
 	 <mescroll-uni @init="mescrollInit" :height="height" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
 		<!-- 数据列表 -->
-		<good-list :list="goods"></good-list>
+		<su-good-list :list="goods"> </su-good-list>
 	</mescroll-uni>
 </template>
 

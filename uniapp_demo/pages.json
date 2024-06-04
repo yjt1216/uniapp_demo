@@ -1,4 +1,12 @@
 {
+	"easycom": {
+		"autoscan": true,
+		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue",
+		"custom": {
+			"^su-(.*)": "@/sheep/ui/su-$1/su-$1.vue",
+			"^sc-(.*)": "@/sheep/components/sc-$1/sc-$1.vue"
+		}
+	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		// {
 		// 	"path": "pages/login/login_example",
@@ -195,24 +203,10 @@
 						"navigationBarTitleText": "pop box"
 					}
 				},
-				
-				{
-					"path": "pages/video_player/video_player",
-					"style": {
-						"navigationBarTitleText": "video"
-					}
-				},
 				{
 					"path": "pages/native_video/native_video",
 					"style": {
 						"navigationBarTitleText": "native video"
-					}
-				},
-				/* 直播 需申请权限 */
-				{
-					"path": "pages/video_live/video_live",
-					"style": {
-						"navigationStyle": "custom"
 					}
 				},
 				{
@@ -542,11 +536,7 @@
 		"backgroundColorTop": "#fafafa",
 		"backgroundColorBottom": "#fafafa"
 	},
-	"uniIdRouter": {},
-	"easycom": {
-		"autoscan": true,
-		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
-	}
+	"uniIdRouter": {}
 }
 
 

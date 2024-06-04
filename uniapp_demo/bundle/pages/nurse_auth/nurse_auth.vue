@@ -14,9 +14,9 @@
 			<u-form labelPosition="left"  :model="formData" ref="form" label-align="left">
 				<u-form-item label="所在地区" :label-style="{'font-size':'20rpx'}" labelWidth="80">
 					<view class="uni-list-cell-db">
-						<pick-regions :defaultRegion="defaultRegionCode" @getRegion="handleGetRegion">
+						<sc-pick-regions :defaultRegion="defaultRegionCode" @getRegion="handleGetRegion">
 							<view>{{formData.address}}</view>
-						</pick-regions>
+						</sc-pick-regions>
 					</view>
 					<u-icon
 						slot="right"

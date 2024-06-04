@@ -6,7 +6,7 @@
 		</view>
 		
 		 <mescroll-body @init="mescrollInit" top="90" @down="downCallback" @up="upCallback">
-			<good-list :list="goods"></good-list>
+			<su-good-list :list="goods"></su-good-list>
 		</mescroll-body>
 		
 		<!-- <y-tabbar ref="tabbar" native></y-tabbar> -->
