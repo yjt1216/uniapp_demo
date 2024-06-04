@@ -24,8 +24,6 @@
 			</view>
 		</view>
 		<u-popup ref="popup" type="dialog">
-			
-			
 			<view class="intercept-call">
 				<view class="call-title">提示信息</view>
 				<view class="call-sub-title">
@@ -44,9 +42,8 @@
 				<u-divider :hairline="false" :dashed="true"  line-color="#999"></u-divider>
 				<button class="call-cancel" @click="closeCall">取消</button>
 			</view>
-			
-			
 		</u-popup>
+		
 	</view>
 </template>
 

@@ -3,10 +3,6 @@
 		<!-- <u-navbar title="首页" bgColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></u-navbar> -->
 		<nav-bar title="首页" :back="false"  backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		
-		<!-- <view class="banner">
-			<ad-swipers height="340rpx" :lists="bannerList"></ad-swipers>
-		</view> -->
-		
 		<view class="group-title">功能示例</view>
 		
 		
@@ -29,16 +25,19 @@
 			<view class="demo-li"> 在线咨询时段 <text class="demo-tip"> time </text></view>
 		</navigator>
 		
-		<navigator url="/bundle_c/pages/online_consult/online_change">
-			<view class="demo-li"> 切换咨询时段 <text class="demo-tip"> time </text></view>
+		<navigator url="/bundle_c/pages/sticky/sticky">
+			<view class="demo-li"> 吸顶 <text class="demo-tip"> sticky </text></view>
 		</navigator>
+		
+		<!-- 
 		
 		<navigator url="/bundle_c/pages/online_consult/online_consult">
 			<view class="demo-li"> 切换咨询时段 <text class="demo-tip"> 七天一组 </text></view>
 		</navigator>
 		
-		<!-- 
-		
+		<navigator url="/bundle_c/pages/online_consult/online_change">
+			<view class="demo-li"> 切换咨询时段 <text class="demo-tip"> time </text></view>
+		</navigator>
 		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
 			<view class="demo-li"> 统计图 <text class="demo-tip"> chart_demo </text></view>
 		</navigator>
@@ -57,7 +56,6 @@
 		</navigator> 
 		
 		
-		
 		<navigator url="/bundle_c/pages/audio_play/audio_player">
 			<view class="demo-li">音频播放<text class="demo-tip"> audio player </text></view>
 		</navigator>
@@ -68,10 +66,7 @@
 		
 		<navigator url="/bundle_c/pages/audio_play/audio_list">
 			<view class="demo-li">音频列表<text class="demo-tip"> audio list </text></view>
-		</navigator> -->
-		
-		
-		<!-- 
+		</navigator> 
 		
 		<navigator url="/bundle_c/pages/phone_record/phone_record">
 			<view class="demo-li">phone record<text class="demo-tip"> 电话录音 </text></view>

@@ -2,127 +2,122 @@
 	<view class="table-demo" >
 		<u-navbar title="经营统计" :fixed="true" :placeholder="true" :autoBack="true"></u-navbar>
 		<!-- 筛选时间 -->
-		<view class="bunsiness-filte-box">
-			<!-- <filter-date></filter-date> -->
-			<view class="filter-warp">
-				<view class="grade-title">
-					<image
-					    class="icon_1"
-					    referrerpolicy="no-referrer"
-					    src="/pages_ucharts/static/chart/icon.png"
-					/>
-					<text class="text-group_1">经营数据</text>
-				</view>
-				<view class="grade-ul">
-					<view :class="['grade-li',filterObject.date_type == item.date_type ? 'grade-li-active' : '']"
-						v-for="(item,index) in gradeList" 
-						:key="index" @click="clickTagFun(item)">
-						{{item.label}}
+		<u-sticky>
+			<view class="bunsiness-filte-box">
+				<view class="filter-warp">
+					<view class="grade-title">
+						<image class="icon_1"
+						    referrerpolicy="no-referrer"
+						    src="/pages_ucharts/static/chart/icon.png">
+						</image>
+						<text class="text-group_1">经营数据</text>
 					</view>
-				</view>
-				<view class="filter-date-box" >
-					<scroll-view scroll-x style="white-space: nowrap;">
-						<view
-							v-if="filterObject.date_type == 1 "
-							class="grade-week"
-							:class="{active:filterObject.date_value==item.date_value}" 
-							v-for="(item, index) in weekFilter" :key="index" @tap="itemClick(item)">
-						    {{item.name}}
+					<view class="grade-ul">
+						<view :class="['grade-li',filterObject.date_type == item.date_type ? 'grade-li-active' : '']"
+							v-for="(item,index) in gradeList" 
+							:key="index" @click="clickTagFun(item)">
+							{{item.label}}
 						</view>
-						<view
-							v-if="filterObject.date_type == 2 "
-							class="grade-week"
-							:class="{active:filterObject.date_value==item.date_value}" 
-							v-for="(item, index) in monthFilter" :key="index" @tap="itemClick(item)">
-						    {{item.name}}
-						</view>
-						<view 
-							v-if="filterObject.date_type == 3 "
-							class="grade-quarter" :class="{active:filterObject.date_value==item.date_value}"
-							v-for="(item, index) in quarterFilter" :key="index" @tap="itemClick(item)">
-						   {{item.name}}
-						</view>
-						<view
-							v-if="filterObject.date_type == 4 "
-							class="grade-week"
-							:class="{active:filterObject.date_value==item.date_value}" 
-							v-for="(item, index) in yearFilter" :key="index" @tap="itemClick(item)">
-						    {{item.name}}
-						</view>
-					</scroll-view>
-				</view>
+					</view>
+					<view class="filter-date-box" >
+						<scroll-view scroll-x style="white-space: nowrap;">
+							<view v-if="filterObject.date_type == 1 "
+								class="grade-week"
+								:class="{active:filterObject.date_value==item.date_value}" 
+								v-for="(item, index) in weekFilter" :key="index" @tap="itemClick(item)">
+							    {{item.name}}
+							</view>
+							<view
+								v-if="filterObject.date_type == 2 "
+								class="grade-week"
+								:class="{active:filterObject.date_value==item.date_value}" 
+								v-for="(item, index) in monthFilter" :key="index" @tap="itemClick(item)">
+							    {{item.name}}
+							</view>
+							<view 
+								v-if="filterObject.date_type == 3 "
+								class="grade-quarter" :class="{active:filterObject.date_value==item.date_value}"
+								v-for="(item, index) in quarterFilter" :key="index" @tap="itemClick(item)">
+							   {{item.name}}
+							</view>
+							<view
+								v-if="filterObject.date_type == 4 "
+								class="grade-week"
+								:class="{active:filterObject.date_value==item.date_value}" 
+								v-for="(item, index) in yearFilter" :key="index" @tap="itemClick(item)">
+							    {{item.name}}
+							</view>
+						</scroll-view>
+					</view>
 				
-				<view class="chart-first">
-					<view class="amount-order-box">
-						<view class="amount-box">
-							<view style="margin-left: 10rpx;">金额</view>
-							<view style="align-self: center;">{{add_order_amount.amount}}</view>
-							<!-- <view style="align-self: center;">同比：{{add_order_amount.common_ratio}}</view> -->
-							<view style="align-self: center;">
-								同比：{{add_order_amount.common_ratio>0?'+'+add_order_amount.common_ratio:add_order_amount.common_ratio}}%
-							</view>
-						</view>
-						<!-- 设置间隔 -->
-						<view class="spacer" style="width: 30rpx;"></view>
-						<view class="order-box">
-							<view style="margin-left: 10rpx;">订单数</view>
-							<view style="align-self: center;">{{add_order_num.num}}</view>
-							<!-- <view style="align-self: center;">同比：{{add_order_amount.common_ratio}}</view> -->
-							<view style="align-self: center;">
-								同比：{{add_order_amount.common_ratio>0?'+'+add_order_amount.common_ratio:add_order_amount.common_ratio}}%
-							</view>
-						</view>
-					</view>
-					<view class="organ-nurse-box">
-						<view class="organ-box">
-							<view>新增护士</view>
-							<view class="uni-row">
-								<span class="text-font1">{{add_nurse.num}}</span>
-								<span class="text-font2">人</span>
-							</view>
-							<view class="uni-row">
-								<span class="text-color1">同比：</span>
-								<span class="text-color2">{{add_nurse.common_ratio}}</span>
-							</view>
-						</view>
-						<view class="spacer" style="width: 25rpx;"></view>
-						<view class="organ-box">
-							<view>新增机构</view>
-							<view class="uni-row">
-								<span class="text-font1">{{add_hospital.num}}</span>
-								<span class="text-font2">个</span>
-							</view>
-							<view class="uni-row">
-								<span class="text-color1">同比：</span>
-								<span class="text-color2">{{add_hospital.common_ratio}}</span>
-							</view>
-						</view>
-						<view class="spacer" style="width: 25rpx;"></view>
-						<view class="organ-box">
-							<view>新增用户</view>
-							<view class="uni-row">
-								<span class="text-font1">{{add_user.add_num}}</span>
-								<span class="text-font2">人</span>
-							</view>
-							<view class="uni-row">
-								<span class="text-color1">同比：</span>
-								<span class="text-color3">{{add_user.common_ratio}}</span>
-							</view>
-						</view>
-					</view>
-					
 				</view>
-				
+			</view>
+		</u-sticky>
+		
+		<view class="chart-first">
+			<view class="amount-order-box">
+				<view class="amount-box">
+					<view style="margin-left: 10rpx;">金额</view>
+					<view style="align-self: center;">{{add_order_amount.amount}}</view>
+					<!-- <view style="align-self: center;">同比：{{add_order_amount.common_ratio}}</view> -->
+					<view style="align-self: center;">
+						同比：{{add_order_amount.common_ratio>0?'+'+add_order_amount.common_ratio:add_order_amount.common_ratio}}%
+					</view>
+				</view>
+				<!-- 设置间隔 -->
+				<view class="spacer" style="width: 30rpx;"></view>
+				<view class="order-box">
+					<view style="margin-left: 10rpx;">订单数</view>
+					<view style="align-self: center;">{{add_order_num.num}}</view>
+					<!-- <view style="align-self: center;">同比：{{add_order_amount.common_ratio}}</view> -->
+					<view style="align-self: center;">
+						同比：{{add_order_amount.common_ratio>0?'+'+add_order_amount.common_ratio:add_order_amount.common_ratio}}%
+					</view>
+				</view>
+			</view>
+			<view class="organ-nurse-box">
+				<view class="organ-box">
+					<view>新增护士</view>
+					<view class="uni-row">
+						<span class="text-font1">{{add_nurse.num}}</span>
+						<span class="text-font2">人</span>
+					</view>
+					<view class="uni-row">
+						<span class="text-color1">同比：</span>
+						<span class="text-color2">{{add_nurse.common_ratio}}</span>
+					</view>
+				</view>
+				<view class="spacer" style="width: 25rpx;"></view>
+				<view class="organ-box">
+					<view>新增机构</view>
+					<view class="uni-row">
+						<span class="text-font1">{{add_hospital.num}}</span>
+						<span class="text-font2">个</span>
+					</view>
+					<view class="uni-row">
+						<span class="text-color1">同比：</span>
+						<span class="text-color2">{{add_hospital.common_ratio}}</span>
+					</view>
+				</view>
+				<view class="spacer" style="width: 25rpx;"></view>
+				<view class="organ-box">
+					<view>新增用户</view>
+					<view class="uni-row">
+						<span class="text-font1">{{add_user.add_num}}</span>
+						<span class="text-font2">人</span>
+					</view>
+					<view class="uni-row">
+						<span class="text-color1">同比：</span>
+						<span class="text-color3">{{add_user.common_ratio}}</span>
+					</view>
+				</view>
 			</view>
 		</view>
-		
 		
 		<view class="user-register-box">
 			<user-register></user-register>
 			<user-old></user-old>
 		</view>
-		
-		
 		
 		<!-- 机构销售额占比Top10 -->
 		<view class="organ-sales-box" v-if="isSalesChart">
@@ -268,8 +263,6 @@
 		
 		
 		
-		
-		
 	</view>
 </template>
 
@@ -297,7 +290,6 @@
 	
 	import moment from 'moment';
 	
-	
 	import serviceData from "@/sheep/mock/serviceData.json";
 	
 	export default {
@@ -312,7 +304,6 @@
 		},
 		data(){
 			return {
-				
 				/* 机构销售额 */
 				hospital_amount_list:[],
 				hospitalAmountData: {},
@@ -772,11 +763,11 @@
 		width: 3rpx;
 		background-color: #333;
 	}
-	.bunsiness-filte-box{
-		width: 100%;
-		height: 700rpx;
-		padding: 20rpx 0;
-	}
+	// .bunsiness-filte-box{
+	// 	width: 100%;
+	// 	height: 700rpx;
+	// 	padding: 20rpx 0;
+	// }
 	.service-cate-box{
 		box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.15);
 		background-color: rgba(255, 255, 255, 1);

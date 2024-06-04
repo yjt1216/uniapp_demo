@@ -60,9 +60,6 @@
 			</view>
 		</view>
 		
-		
-		
-		
 	</view>
 </template>
 

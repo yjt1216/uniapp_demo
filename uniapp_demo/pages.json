@@ -342,8 +342,6 @@
 		{
 			"root": "bundle_c",
 			"pages": [
-				
-				
 				{
 					"path": "pages/navi_search/navi_search",
 					"style" : {
@@ -398,6 +396,14 @@
 				
 				{
 					"path": "pages/progress_page/progress_page"
+				},
+				{
+					"path": "pages/sticky/sticky",
+					"style": {
+						"navigationBarBackgroundColor": "#FFFFFF",
+						"navigationBarTextStyle": "black",
+						"navigationBarTitleText": "Sticky粘性布局"
+					}
 				}
 			]
 		},
@@ -450,6 +456,9 @@
 				},
 				{
 					"path": "pages/rose/chart_rose"
+				},
+				{
+					"path": "pages/operate/operate_demo"
 				}
 			]
 		},
@@ -529,7 +538,9 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"backgroundColorTop": "#fafafa",
+		"backgroundColorBottom": "#fafafa"
 	},
 	"uniIdRouter": {},
 	"easycom": {

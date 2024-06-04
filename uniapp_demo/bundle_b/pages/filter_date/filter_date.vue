@@ -132,8 +132,6 @@
 
 <script>
 	import moment from 'moment';
-	import operateData from '@/sheep/mock/operate_chart.json';
-	
 	
 	export default {
 		
@@ -205,11 +203,11 @@
 			   		let  targetIndex = this.yearFilter.length;
 			   		let targetId = 'item-' + targetIndex;
 			   		uni.createSelectorQuery().select('#' + targetId)
-			   					.boundingClientRect(res => {
-			   							if (res) {
-			   								this.$refs.scrollView.scrollLeft = res.left;
-			   							}
-			   						}).exec();
+			   			.boundingClientRect(res => {
+			   				if (res) {
+			   					this.$refs.scrollView.scrollLeft = res.left;
+			   				}
+			   			}).exec();
 			   });
 			},
 			scrollToItem(index) {

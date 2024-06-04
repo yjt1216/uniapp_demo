@@ -82,7 +82,7 @@
 </template>
 
 <script>
-	let _this=null;
+	let _this = null;
 	import dateUtil from '@/sheep/utils/date.js';
 	export default {
 		data() {
@@ -120,8 +120,7 @@
 		},
 		created(){
 			_this=this;
-			_this.initDays();
-			_this.initHours();
+			_this.initTime();
 			
 			let durationList = ['5分钟','10分钟','15分钟','20分钟','25分钟','30分钟'];
 			let transformedList = durationList.map(duration => ({ name: duration }));
@@ -130,9 +129,13 @@
 			console.log('初始化通话时长',this.callDurationlist);
 		},
 		onReady() {
-			this.defaultChooseDate();
+			// this.defaultChooseDate();
 		},
 		methods:{
+			initTime(){
+				_this.initDays();
+				_this.initHours();
+			},
 			isClickable(day){
 				return this.workDayList.includes(day);
 			},
@@ -149,9 +152,15 @@
 			/* 选择哪一天 */
 			toggleDayIndex(item,index){
 				console.log('选择日期day',item);
+				if(_this.dayIndex === index){
+					_this.dayIndex = -1;
+					_this.itemIndex = -1;
+					_this.initTime();
+					return;
+				}
 				if(this.isClickable(item.week)){
-					_this.dayIndex=index;
-					_this.itemIndex=-1;
+					_this.dayIndex = index;
+					_this.itemIndex = -1;
 					_this.initHours(!item.isToday);
 				}else{
 					uni.showToast({
@@ -164,11 +173,12 @@
 			/* 选择哪一天的哪一个小时 */
 			toggleHourItem(item,index){
 				console.log('点击选择时间item',item);
-				if(!item.disabled){
+				
+				if(!item.disabled && _this.dayIndex > 0){
 					let tabItem = _this.dayList[_this.dayIndex];
 					let result = tabItem.year+"-"+tabItem.month+"-"+tabItem.day+" "+ item.label+":00";
 					let date = tabItem.year+"-"+tabItem.month+"-"+tabItem.day
-					_this.itemIndex=index;
+					_this.itemIndex = index;
 					this.selectTime.push(result)
 					this.uniSelectTime = this.uniarr(this.selectTime)
 				}
@@ -276,7 +286,7 @@
 		margin: 20rpx;
 	}
 	.title{
-		color: #000000;
+		color: #333;
 		font-weight: bold;
 	}
 	.booking-date{
@@ -286,8 +296,10 @@
 		padding: 0 30rpx;
 		
 		.booking-right{
+			width: 70rpx;
 			display: flex;
 			flex-direction: row;
+			justify-content: space-between;
 		}
 	}
 	.select-box{
@@ -328,7 +340,7 @@
 	}
 	.online-days{
 		overflow: hidden;
-		
+		height: 120rpx;
 		padding: 16rpx;
 		background-color: #fff;
 		.week-container{

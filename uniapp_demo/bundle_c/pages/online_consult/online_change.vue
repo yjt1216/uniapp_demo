@@ -26,13 +26,9 @@
 	export default {
 		data() {
 			return {
-				
 				dayList:[],
-				
 				dayIndex:0,
-				
 				theme:"#fa800a",
-				
 				afterDays:30,
 				/* 通话时长 */
 				callDurationlist:[],
