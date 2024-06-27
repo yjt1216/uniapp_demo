@@ -8,12 +8,6 @@
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		// {
-		// 	"path": "pages/login/login_example",
-		// 	"style": {
-		// 		"navigationStyle": "custom" 
-		// 	}
-		// },
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -60,41 +54,35 @@
 		},
 		{
 			"path": "pages/web_view/informed_consent",
-			// "style": {
-			// 	"subNVues":[{
-			// 		"id": "tanchu", // 唯一标识 
-			// 		 "path": "pages/index/index", // 页面路径  
-			// 		"style": {
-			// 			"position": "absolute",
-			// 			"right":"0%",
-			// 			"bottom": "20%",
-			// 			"width": "20%",
-			// 			"height": "5%",
-			// 			"zindex": 999999999999,
-			// 			"background": "#000"
-			// 		}
-			// 	}]
-			// }
 			"style": {
 				"navigationStyle": "custom"
 			}
-			
 		},
 		
-		{
-			"path": "pages/html_test/html_test",
-			"style": {
-				"navigationStyle": "custom" 
-			}
-		},
 		{
 			"path": "pages/web_view/webview_test"
 		}
 	],
 	"subPackages": [
 		{
-			"root": "bundle",
+			"root": "pages_custom",
 			"pages": [
+				{
+					"path": "pages/custom_list/custom_list"
+				},
+				{
+					"path": "pages/appraise_form/appraise_form",
+					"style": {
+						"navigationStyle": "custom" ,
+						"navigationBarTitleText": "评估表单"
+					}
+				},
+				{
+					"path": "pages/header_footer/header_footer",
+					"style": {
+						"navigationBarTitleText": "header footer"
+					}
+				},
 				{
 					"path": "pages/list_h/list_h",
 					"style": {
@@ -108,9 +96,21 @@
 					}
 				},
 				{
-					"path": "pages/user_intro/user_intro",
+					"path": "pages/list_input/list_input",
+					"style": {
+						"navigationBarTitleText": "多个input"
+					}
+				},
+				{
+					"path": "pages/list_h/list_left",
 					"style": {
 						"navigationStyle": "custom" 
+					}
+				},
+				{
+					"path": "pages/loading_page/loading_page",
+					"style": {
+						"navigationStyle": "custom"
 					}
 				},
 				{
@@ -120,81 +120,9 @@
 					}
 				},
 				{
-					"path": "pages/nurse_order/nurse_order",
+					"path": "pages/user_intro/user_intro",
 					"style": {
 						"navigationStyle": "custom" 
-					}
-				},
-				{
-					"path": "pages/service_order/service_order",
-					"style": {
-						"navigationStyle": "custom" 
-					}
-				},
-				
-				{
-					"path": "pages/upload_img/upload_photo",
-					"style": {
-						"navigationBarTitleText": "上传证件"
-					}
-				},
-				{
-					"path": "pages/list_input/list_input",
-					"style": {
-						"navigationBarTitleText": "多个input"
-					}
-				},
-				{
-					"path": "pages/appraise_form/appraise_form",
-					"style": {
-						"navigationStyle": "custom" ,
-						"navigationBarTitleText": "评估表单"
-					}
-				},
-				{
-					"path": "pages/header_footer/header_footer",
-					"style": {
-						
-						"navigationBarTitleText": "header footer"
-					}
-				},
-				
-				{
-					"path": "pages/take_photo/take_photo",
-					"style": {
-						"navigationBarTitleText": "拍照"
-					}
-				},
-				{
-					"path": "pages/choose_photo/choose_photo",
-					"style": {
-						"navigationBarTitleText": "选择照片"
-					}
-				},
-				{
-					"path": "pages/choose_photo/choose_images",
-					"style": {
-						"navigationBarTitleText": "选择照片"
-					}
-				},
-				
-				{
-					"path": "pages/take_photo/take_images",
-					"style": {
-						"navigationBarTitleText": "image"
-					}
-				},
-				{
-					"path": "pages/tag_page/tag-page",
-					"style": {
-						"navigationBarTitleText": "tag"
-					}
-				},
-				{
-					"path": "pages/files_upload/files_upload",
-					"style": {
-						"navigationStyle": "custom",
-						"navigationBarTitleText": "upload files"
 					}
 				},
 				{
@@ -204,81 +132,17 @@
 					}
 				},
 				{
-					"path": "pages/native_video/native_video",
+					"path": "pages/pop_box/pop_code",
 					"style": {
-						"navigationBarTitleText": "native video"
-					}
-				},
-				{
-					"path": "pages/action_sheet/action_sheet",
-					"style": {
-						"navigationStyle": "custom"
-					}
-				},
-				/* 身份认证 */
-				{
-					"path": "pages/nurse_auth/nurse_auth",
-					"style": {
-						"navigationStyle": "custom"
-					}
-				},
-				/* 签名 */
-				{
-					"path": "pages/sign_page/landscape_sign",
-					"style": {
-						"navigationStyle": "custom"
-					}
-				},
-				{
-					"path": "pages/sign_page/vertical_sign",
-					"style": {
-						"navigationStyle": "custom"
-					}
-				},
-				/* z-paging 加载数据list */
-				{
-					"path": "pages/loading_page/loading_page",
-					"style": {
-						"navigationStyle": "custom"
-					}
-				},
-				{
-					"path": "pages/wallet/wallet",
-					"style": {
-						"navigationStyle": "custom"
-					}
-				},
-				{
-					"path": "pages/drop_down/drop_down",
-					"style": {
-						"navigationBarTitleText": "筛选"
-						// "navigationStyle": "custom"
+						"navigationBarTitleText": "pop box"
 					}
 				},
 				{
 					"path": "pages/text_auto/text_auto",
 					"style": {
-						// "navigationBarTitleText": "文本"
 						"navigationStyle": "custom" 
 					}
 				},
-				{
-					"path": "pages/server_explan/server_explan",
-					"style": {
-						"navigationBarTitleText": "服务协议"
-					}
-				},
-				{
-					"path": "pages/list_h/list_left",
-					"style": {
-						"navigationStyle": "custom" 
-					}
-				}
-			]
-		},
-		{
-			"root": "bundle_b",
-			"pages": [
 				{
 					"path": "pages/filter_date/filter_date",
 					"style": {
@@ -286,56 +150,17 @@
 					}
 				},
 				{
-					"path": "pages/input_demo/input_demo",
-					"style": {
-						"navigationStyle": "custom" 
-					}
-				},
-				
-				{
-					"path": "pages/lesson_play/lesson_play",
-					"style": {
-						"navigationStyle": "custom" 
-					}
-				},
-				{
-					"path": "pages/pay/pay_page"
-				},
-				{
-					"path": "pages/pay/web_view"
-				},
-				{
 					"path":"pages/keyboard_pop/keyboard_pop"
 				},
-				{
-					"path": "pages/huabi/autograph_test"
-				},
-				{
-					"path": "pages/test_demo/test_demo"
-				},
-				{
-					"path": "pages/weixin_openid/weixin_openid"
-				},
+				
+				
 				{
 					"path": "pages/spread_code/spread_code"
 				},
 				
 				{
-					"path": "pages/test_demo/scroll_item"
-				},
-				{
-					"path": "pages/segment_demo/segment_demo"
-				},
-				
-				{
 					"path": "pages/table_sort/table_sort"
-				}
-				
-			]
-		},
-		{
-			"root": "bundle_c",
-			"pages": [
+				},
 				{
 					"path": "pages/navi_search/navi_search",
 					"style" : {
@@ -358,15 +183,31 @@
 					}
 				},
 				{
-					"path": "pages/online_consult/online_time",
+					"path": "pages/progress_page/progress_page"
+				},
+				{
+					"path": "pages/sticky/sticky",
 					"style": {
-						"navigationBarTitleText": "在线咨询时段"
+						"navigationBarBackgroundColor": "#FFFFFF",
+						"navigationBarTextStyle": "black",
+						"navigationBarTitleText": "Sticky粘性布局"
 					}
 				},
 				{
-					"path": "pages/online_consult/online_change",
+					"path": "pages/qr_code/qr_code"
+				}
+			]
+		},
+		{
+			"root": "pages_func",
+			"pages": [
+				{
+					"path": "pages/func_list/func_list"
+				},
+				{
+					"path": "pages/audio_play/audio_list",
 					"style": {
-						"navigationBarTitleText": "切换时段"
+						"navigationBarTitleText": "音频列表"
 					}
 				},
 				{
@@ -382,22 +223,19 @@
 					}
 				},
 				{
-					"path": "pages/audio_play/audio_list",
+					"path": "pages/native_video/native_video",
 					"style": {
-						"navigationBarTitleText": "音频列表"
+						"navigationBarTitleText": "native video"
 					}
 				},
-				
 				{
-					"path": "pages/progress_page/progress_page"
+					"path": "pages/choose_photo/choose_photo",
+					"style": {
+						"navigationBarTitleText": "选择照片"
+					}
 				},
 				{
-					"path": "pages/sticky/sticky",
-					"style": {
-						"navigationBarBackgroundColor": "#FFFFFF",
-						"navigationBarTextStyle": "black",
-						"navigationBarTitleText": "Sticky粘性布局"
-					}
+					"path": "pages/weixin_openid/weixin_openid"
 				}
 			]
 		},

@@ -1,9 +1,7 @@
 
 <template>
 	<view class="content">
-		<ljs-top
-			title="注册" backgroundColor="linear-gradient(to top right, #CDDC39, #8BC34A, #FFEB3B)">
-		</ljs-top>
+		
 		<view class="login_from">
 			
 			<view class="login_from_input">
@@ -43,9 +41,7 @@
 </template>
 
 <script>
-	
    export default {
-
 	   data(){
 			return {
 				/* 是否勾选协议 */
@@ -61,7 +57,6 @@
 			
 		},
 		methods: {
-			
 			moutcl(){
 				if( this.gouxSta == false){
 					this.gouxSta = true

@@ -1,15 +1,9 @@
 <template>
 	<view class="index-page">
-		<!-- <u-navbar title="首页" bgColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></u-navbar> -->
+		
 		<nav-bar title="首页" :back="false"  backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		
 		<view class="group-title">功能示例</view>
-		
-		
-		<navigator url="/bundle_b/pages/table_sort/table_sort">
-			<view class="demo-li"> 表格 <text class="demo-tip"> table </text></view>
-		</navigator>
-		
 		
 		<navigator url="/pages_ucharts/pages/list/list">
 			<view class="demo-li"> 图表示例列表 <text class="demo-tip"> ucharts </text></view>
@@ -21,261 +15,19 @@
 		</navigator> 
 		
 		
-		<navigator url="/bundle_c/pages/online_consult/online_time">
-			<view class="demo-li"> 在线咨询时段 <text class="demo-tip"> time </text></view>
+		<navigator url="/pages_func/pages/func_list/func_list">
+			<view class="demo-li"> 功能列表 <text class="demo-tip"> func list </text></view>
+		</navigator>
+		
+		<navigator url="/pages_custom/pages/custom_list/custom_list">
+			<view class="demo-li"> 自定义 <text class="demo-tip"> func list </text></view>
 		</navigator>
 		
 		<navigator url="/bundle_c/pages/sticky/sticky">
 			<view class="demo-li"> 吸顶 <text class="demo-tip"> sticky </text></view>
 		</navigator>
 		
-		<!-- 
 		
-		<navigator url="/bundle_c/pages/online_consult/online_consult">
-			<view class="demo-li"> 切换咨询时段 <text class="demo-tip"> 七天一组 </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/online_consult/online_change">
-			<view class="demo-li"> 切换咨询时段 <text class="demo-tip"> time </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
-			<view class="demo-li"> 统计图 <text class="demo-tip"> chart_demo </text></view>
-		</navigator>
-		
-		<navigator url="/bundle/pages/action_sheet/action_sheet">
-			<view class="demo-li">输入<text class="demo-tip"> textarea</text></view>
-		</navigator>
-		 <navigator url="/bundle/pages/upload_img/upload_photo">
-			<view class="demo-li">压缩并保存图片 <text class="demo-tip"> upload photo </text></view>
-		</navigator>
-		<navigator url="/bundle/pages/choose_photo/choose_images">
-			<view class="demo-li"> 选择图片<text class="demo-tip"> choose photo </text></view>
-		</navigator>
-		<navigator url="/bundle/pages/choose_photo/choose_photo">
-			<view class="demo-li"> 选择图片after<text class="demo-tip">uni choose 压缩 </text></view>
-		</navigator> 
-		
-		
-		<navigator url="/bundle_c/pages/audio_play/audio_player">
-			<view class="demo-li">音频播放<text class="demo-tip"> audio player </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/audio_play/audio_play">
-			<view class="demo-li">音频播放Luch<text class="demo-tip"> audio play test </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/audio_play/audio_list">
-			<view class="demo-li">音频列表<text class="demo-tip"> audio list </text></view>
-		</navigator> 
-		
-		<navigator url="/bundle_c/pages/phone_record/phone_record">
-			<view class="demo-li">phone record<text class="demo-tip"> 电话录音 </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/online_consult/online_consult">
-			<view class="demo-li">在线咨询<text class="demo-tip"> online </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/progress_page/progress_page">
-			<view class="demo-li"> 模拟进度条 <text class="demo-tip"> 模拟 </text></view>
-		</navigator>
-		
-		
-		
-		<navigator url="/bundle_c/pages/qqmap_location/trajectory_location">
-			<view class="demo-li">原版轨迹<text class="demo-tip"> 行程轨迹 </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/qqmap_location/qqmap_location">
-			<view class="demo-li">qqmap update<text class="demo-tip"> 行程轨迹1 </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/qqmap_location/track_location">
-			<view class="demo-li">track location<text class="demo-tip"> 行程轨迹2 </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/amap_location/amap_location">
-			<view class="demo-li"> 高德地图 <text class="demo-tip"> amap </text></view>
-		</navigator>
-		
-		
-		
-		
-		<navigator url="/bundle_c/pages/location_update/location_update">
-			<view class="demo-li">lcoation update<text class="demo-tip"> 后台定位 </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_c/pages/navi_search/navi_search">
-			<view class="demo-li">navi search<text class="demo-tip"> 导航栏搜索 </text></view>
-		</navigator>
-		
-		
-		
-		<navigator url="/bundle_b/pages/segment_demo/segment_demo">
-			<view class="demo-li"> 分段 <text class="demo-tip"> segment_demo </text></view>
-		</navigator>
-		
-		
-		<navigator url="/bundle_b/pages/filter_date/filter_date">
-			<view class="demo-li"> 筛选日期 <text class="demo-tip"> filter </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/test_demo/scroll_item">
-			<view class="demo-li"> 滚动特定item <text class="demo-tip"> scroll_item </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_b/pages/test_demo/test_demo">
-			<view class="demo-li"> 蓝湖代码 <text class="demo-tip"> test_demo </text></view>
-		</navigator>
-		<navigator url="/pages/login/login">
-			<view class="demo-li"> 登陆 <text class="demo-tip"> login </text></view>
-		</navigator>
-		<navigator url="/pages/login/login_example">
-			<view class="demo-li"> 登陆 <text class="demo-tip"> login example </text></view>
-		</navigator>
-		<view @click="shareClick">
-			<view class="demo-li"> 分享 <text class="demo-tip"> 点击share </text></view>
-		</view>
-		
-		<navigator url="/bundle_b/pages/input_demo/input_demo">
-			<view class="demo-li"> 输入框<text class="demo-tip"> input </text></view>
-		</navigator>
-		
-		
-		<navigator url="/bundle/pages/mescroll_swiper/mescroll_swiper">
-			<view class="demo-li">轮播图+商品列表 吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
-		</navigator>
-		<navigator url="/bundle/pages/nurse_order/nurse_order">
-			<view class="demo-li">护士订单<text class="demo-tip">可整体滑动 切换tab刷新列表,监听滚动实现</text></view>
-		</navigator>
-		
-		<navigator url="/bundle/pages/service_order/service_order">
-			<view class="demo-li">服务订单<text class="demo-tip"> 切换tab刷新列表,监听滚动实现</text></view>
-		</navigator>
-		
-		<navigator url="/bundle/pages/loading_page/loading_page">
-			<view class="demo-li">数据list 刷新加载<text class="demo-tip"> z-pagings</text></view>
-		</navigator>
-		
-		<navigator url="/bundle/pages/action_sheet/action_sheet">
-			<view class="demo-li">action sheet<text class="demo-tip"> 选择 </text></view>
-		</navigator> 
-		
-		<navigator url="/bundle/pages/sign_page/vertical_sign">
-			<view class="demo-li">竖屏签名<text class="demo-tip"> 签名界面</text></view>
-		</navigator>
-		<navigator url="/bundle/pages/sign_page/landscape_sign">
-			<view class="demo-li">横屏签名<text class="demo-tip"> 签名界面</text></view>
-		</navigator>
-		
-		<navigator url="/bundle_b/pages/huabi/autograph_test">
-			<view class="demo-li">签名<text class="demo-tip"> test</text></view>
-		</navigator>
-		
-		<navigator url="/pages/html_test/html_test">
-			<view class="demo-li">测试本地html<text class="demo-tip"> html_test</text></view>
-		</navigator>
-		<navigator url="/pages/web_view/informed_consent">
-			<view class="demo-li"> 知情同意书 <text class="demo-tip"> web view 底部按钮 </text></view>
-		</navigator>
-		<navigator url="/pages/web_view/webview_test">
-			<view class="demo-li"> 底部按钮 <text class="demo-tip"> web view  </text></view>
-		</navigator>
-		
-		<navigator url="/bundle/pages/list_input/list_input">
-			<view class="demo-li">input<text class="demo-tip"> 循环创建input 底部签名 返回文件路径</text></view>
-		</navigator>
-		
-		<navigator url="/bundle/pages/appraise_form/appraise_form">
-			<view class="demo-li">评估表单<text class="demo-tip"> 填空 单选 多选 签名</text></view>
-		</navigator>
-		
-		<navigator url="/bundle/pages/header_footer/header_footer">
-			<view class="demo-li">头部底部<text class="demo-tip"> 头部 数据列表list 底部 </text></view>
-		</navigator> -->
-		
-		<!-- 
-		<navigator url="/bundle/pages/take_photo/take_photo">
-			<view class="demo-li">take_photo<text class="demo-tip"> take photo </text></view>
-		</navigator> -->
-		<!-- <navigator url="/bundle/pages/tag_page/tag-page">
-			<view class="demo-li">tag_page<text class="demo-tip"> tag </text></view>
-		</navigator>
-		
-		
-		<navigator url="/bundle/pages/choose_date/choose_date">
-			<view class="demo-li"> choose date<text class="demo-tip"> 日期picker </text></view>
-		</navigator> 
-		<navigator url="/bundle/pages/pop_box/pop_box">
-			<view class="demo-li"> pop_box<text class="demo-tip"> 弹窗 </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_b/pages/keyboard_pop/keyboard_pop">
-			<view class="demo-li"> 键盘弹框顶起底部空间<text class="demo-tip"> keyboard </text></view>
-		</navigator>
-		
-		
-		
-		
-		
-		<navigator url="/bundle/pages/list_h/list_h">
-			<view class="demo-li"> list h<text class="demo-tip"> 水平滚动 </text></view>
-		</navigator>
-		<navigator url="/bundle/pages/list_h/list_water">
-			<view class="demo-li"> list water<text class="demo-tip"> 瀑布流 </text></view>
-		</navigator>
-		<navigator url="/bundle/pages/list_h/list_left">
-			<view class="demo-li"> list left<text class="demo-tip"> 左侧tabs </text></view>
-		</navigator>
-		
-		
-		<navigator url="/bundle_b/pages/lesson_play/lesson_play">
-			<view class="demo-li"> lesson action<text class="demo-tip"> 视频播放 </text></view>
-		</navigator>
-		<navigator url="/bundle/pages/video_player/video_player">
-			<view class="demo-li"> video player<text class="demo-tip"> video_player </text></view>
-		</navigator>
-		
-		
-		<navigator url="/bundle_b/pages/chart_demo/chart_demo">
-			<view class="demo-li"> chart统计 <text class="demo-tip"> 统计图 </text></view>
-		</navigator> 
-		
-		
-		<navigator url="/bundle_b/pages/pay/pay_page">
-			<view class="demo-li"> 支付UI <text class="demo-tip"> pay </text></view>
-		</navigator>
-		<navigator url="/bundle_b/pages/weixin_openid/weixin_openid">
-			<view class="demo-li"> 微信公众号 <text class="demo-tip"> open id </text></view>
-		</navigator>
-		
-		<navigator url="/bundle_b/pages/spread_code/spread_code">
-			<view class="demo-li"> 二维码生成 <text class="demo-tip"> QR code </text></view>
-		</navigator> 
-		
-		<navigator url="/bundle/pages/card_list/card_list">
-			<view class="demo-li"> 卡片list<text class="demo-tip"> 卡片 </text></view>
-		</navigator>
-		
-		
-		
-		<navigator url="/bundle/pages/user-intro/user-intro">
-			<view class="demo-li"> user-intro<text class="demo-tip"> user-intro </text></view>
-		</navigator> -->
-		
-		<!-- <navigator url="/bundle/pages/video_live/video_live">
-			<view class="demo-li"> video live <text class="demo-tip"> 直播 测试 </text></view>
-		</navigator> -->
-		
-		<!-- <navigator url="/bundle/pages/drop_down/drop_down">
-			<view class="demo-li"> drop_down <text class="demo-tip"> 筛选 </text></view>
-		</navigator>
-		
-		
-		<navigator url="/bundle/pages/wallet/wallet">
-			<view class="demo-li"> wallet <text class="demo-tip"> 我的钱包 </text></view>
-		</navigator> -->
-		
-		<!-- <y-tabbar ref="tabbar" native></y-tabbar> -->
 		
 	</view>
 </template>
@@ -433,14 +185,11 @@
 		flex-direction: column;
 		justify-content: center;
 	}
-	
-	.group-title {
-		font-size: 30upx;
-		padding: 24upx;
-		border-bottom: 1upx solid #eee;
-		color: red;
+	.group-title{
+		margin-top: 30rpx;
+		margin-left: 20rpx;
+		font-size: 30rpx;
 	}
-	
 	.demo-li {
 		font-size: 28upx;
 		padding: 24upx;

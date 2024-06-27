@@ -1,15 +1,8 @@
-├── pages                   // 页面
-│      ├── index            // 入口页面
-│      ├── user             // 用户相关
-│      ├── public           // 公共页面
-│      ├── activity         // 活动页面
-│      ├── app              // 积分、签到页面
-│      ├── chat             // 客服页面
-│      ├── commission       // 分销页面
-│      ├── coupon           // 优惠券页面
-│      ├── goods            // 商品页面
-│      ├── order            // 订单页面
-│      ├── pay              // 支付页面
+├── pages                   // 主页面
+├── pages_echarts           // 分包 echarts
+├── pages_ucharts           // 分包 ucharts
+├── pages_func              // 分包 常用功能
+├── pages_custom            // 分包 自定义
 ├── sheep                   // 底层依赖/工具库
 │      ├── api              // 服务端接口
 │      ├── components       // 自定义功能组件 sc-
@@ -173,203 +166,6 @@ MD5签名：
 
 
 
-{
-	action: ""
-	data: "https://data.szdepin.com/storage/file/2024/05/07/66399f0661245.png"
-	no: "1"
-	options: Array(1)
-	qTypeId: "q_photo"
-	qid: "1710317949763"
-	required: true
-	timestamp: "1710317949763"
-	title: "患处近期照片"
-}
-
-##玫瑰图花瓣颜色 渐变
-
- {
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#4B65F8' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#75CEFF' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-},
- {
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#B5FEED' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#1ABED5' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-},
- {
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#F76B1C' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#FFE483' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-},
- {
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#F65B4B' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#FFDDC8' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-},
- {
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#FBF4D9' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#D5A34C' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-},
-{
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#C8E1FD' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#505D6F' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-},
-{
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#F76B1C' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#FFE483' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-},
-{
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#F65B4B' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#FFDDC8' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-},
-{
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#FBF4D9' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#D5A34C' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-},
-{
-  type: 'linear',
-  x: 0,
-  y: 0,
-  x2: 0,
-  y2: 1,
-  colorStops: [{
-      offset: 0, color: '#C8E1FD' // 0% 处的颜色
-  }, {
-      offset: 1, color: '#505D6F' // 100% 处的颜色
-  }],
-  global: false // 缺省为 false
-}
-
-修改 u-charts.js 源码
-
-// 记录该省的数量
-const count = data[i].data.storeSym;
-​
-// 绘制省份名称
-point = coordinateToPoint(centerPoint[1], centerPoint[0], bounds, scale, xoffset, yoffset);
-context.beginPath();
-context.textAlign = 'left';
-context.setFontSize(fontSize)
-context.setFillStyle(data[i].textColor || opts.fontColor)
-// 记录省份名称x轴位置
-const x = point.x - measureText(text, fontSize, context) / 2
-// 如果该省份有数量，就将x位置偏移一点
-context.fillText(text, !count ? x : (x + fontSize / 4), point.y + fontSize / 2);
-context.closePath();
-context.stroke();
-// 省份绘制完成
-​
-// 如果有数量 开始绘制
-if (count) {
-    context.beginPath();
-    // 定义省份名称前面的圆点的中心 后续绘制以此为原点进行计算
-    const centerx = point.x - measureText(text, fontSize, context) / 2
-    const centery = point.y + fontSize / 2
-    // 绘制icon背景
-    context.moveTo(centerx, centery);
-    context.arc(centerx, centery - fontSize * 2, fontSize * 1, 45 * Math.PI/180, 135 * Math.PI/180, true);
-    context.lineTo(centerx, centery);
-    context.fillStyle = '#B9AF57';
-    context.fill();
-    context.closePath();
-​
-    // 绘制icon上的数量
-    context.beginPath();
-    context.textAlign = 'center';
-    context.setFontSize(fontSize)
-    context.setFillStyle(data[i].textColor || opts.fontColor)
-    context.fillStyle = '#FFFFFF'
-    // 因为icon大小是固定的，数量太大样式会有问题，如果太多的话显示 99+
-    context.fillText(count < 100 ? count : '99+', centerx, centery - fontSize * 1.5)
-    
-    // 绘制白色圆点
-    context.arc(centerx, centery, 1, 0, Math.PI * 2, false)
-    context.strokeStyle = 'transparent'
-    context.fillStyle = 'white'
-    context.fill()
-    context.closePath();
-    context.stroke();
-}
-
-
 马丽芳;安有同;白雪龙;别梦欣;曹晓丽;程光耀;陈海波;陈建奇;陈俊;陈林;陈燕强;
 陈亚萍;陈宜飞;陈振北;崔强;崔晓龙;崔学东;德品客服康康;德品客服谢谢;董香军;
 段荣启;范晨霞;房广认;范梦婷;范乃学;范秋雯;冯宇娇;高丽慧;葛秋菊;葛瑞龙;葛骁;葛小伟;
@@ -394,202 +190,56 @@ if (count) {
 	严为民;尹江涛;曾昭玮;翟雯静;张强;朱虹芸;朱嘉庆
 	
 	
-	
-	
-	
-	option = {
-			tooltip: {
-				trigger: 'item',
-				formatter: '{a} <br/>{b}: {c} ({d}%)'
-			},
-			title: {
-				text: '265849',
-				top: '45%',
-				textAlign: 'center',
-				left: '29%',
-				textStyle: {
-					color: '#fff',
-					fontSize: 15,
-					fontWeight: '400'
-				},
-				subtext: '销售额',
-				subtextStyle: {
-					color: '#fff',
-					fontSize: 14,
-					fontWeight: '400'
-				}
-			},
-			series: [
-				{
-					name: 'Access From',
-					type: 'pie',
-					center: ['30%', '50%'],
-					// radius: ['60%', '70%'],
-					radius: ['35%', '60%'],
-					labelLine: {
-						length: 35
-					},
-					label: {
-						normal: {
-							show: true,
-							position: 'inside', //标签的位置
-							formatter: "{d}%",
-							textStyle: {
-								color: '#fff'
-							}
-						},
-						emphasis: {
-							show: true,
-							textStyle: {
-								fontWeight: 'bold'
-							}
-						}
-					},
-					data: [
-						{ value: 1048, name: 'Baidu' },
-						{ value: 335, name: 'Direct' },
-						{ value: 310, name: 'Email' },
-						{ value: 251, name: 'Google' },
-						{ value: 234, name: 'Union Ads' },
-						{ value: 147, name: 'Bing' },
-						{ value: 135, name: 'Video Ads' },
-						{ value: 102, name: 'Others' }
-					]
-				},
-				{
-					// title背景层
-					name: '背景圆环',
-					z: 5,
-					backgroundColor: '#fff',
-					type: 'pie',
-					// left:'30%',
-					cursor: 'default',
-					center: ['30%', '50%'],
-					radius: '25%',
-					hoverAnimation: false,
-					legendHoverLink: false,
-					silent: true, //不响应和触发鼠标事件
-					labelLine: {
-						normal: {
-							show: false
-						}
-					},
-					data: [
-						{
-							value: 0,
-							itemStyle: {
-								normal: {
-									color: '#717171'
-								}
-							}
-						}
-					]
-				}
-			]
-		};
-		
-		
-		rose 
-		
-		option = {
-				
-				title: {
-					text: '265849',
-					textAlign: 'center',
-					left: '35%',
-					top: '33%',
-					textStyle: {
-						textAlign: 'center',
-						fill: '#505D6F',
-						fontSize: 10,
-						fontWeight: 400
-					},
-					subtext: '销售额',
-					subtextStyle: {
-						textAlign: 'center',
-						color: '#505D6F',
-						fontSize: 8,
-						fontWeight: '400'
-					}
-				},
-				
-				series: [
-					{
-						name: 'Radius Mode',
-						type: 'pie',
-						radius: ["15%", "40%"],
-						center: ['38%', '33%'],
-						roseType: 'radius',
-						itemStyle: {
-							borderRadius: 5,
-							normal:{
-								color: function (params) {
-									console.log('bottom打印渐变色配置',params);
-									var colorList = [
-										["#4B65F8","#75CEFF"],
-										["#B5FEED","#1ABED5"],
-										["#F76B1C","#FFE483"],
-										["#F65B4B","#FFDDC8"],
-										["#FBF4D9","#D5A34C"],
-										["#C8E1FD","#505D6F"],
-										["#F76B1C","#FFE483"],
-										["#F65B4B","#FFDDC8"],
-										["#FBF4D9","#D5A34C"],
-										["#C8E1FD","#505D6F"]
-									];
-									var index = params.dataIndex;
-									if (params.dataIndex >= colorList.length) {
-										index = params.dataIndex - colorList.length;
-									}
-									return new echarts.graphic.LinearGradient(0, 0, 0, 1,
-										[
-											{
-												offset: 0,
-												color: colorList[index][0]
-											},
-											{
-												  offset: 1,
-												  color: colorList[index][1]
-											}
-										]);
-								}
-							}
-						},
-						label: {
-							show: true,
-							formatter: '{name|{b}}\n{time|{c} %}',
-							lineHeight: 15,
-							rich: {
-								time: {
-									fontSize: 10,
-									color: '#999'
-								}
-							},
-							normal: {
-								show: true,
-								position: 'inside', //标签的位置
-								formatter: "{d}%",
-								textStyle: {
-									color: '#fff',
-									fontSize: 8,
-								},
-							},
-						},
-						emphasis: {
-							label: {
-								show: true
-							}
-						},
-						data: [
-							{ value: 40, name: 'rose 1' },
-							{ value: 33, name: 'rose 2' },
-							{ value: 28, name: 'rose 3' },
-							{ value: 22, name: 'rose 4' },
-							{ value: 20, name: 'rose 5' },
-							{ value: 15, name: 'rose 6' },
-							{ value: 12, name: 'rose 7' },
-							{ value: 10, name: 'rose 8' }
-						]
-					}
-				]
-			}
+
+### 提交类型
+
+| 提交类型   | 标题               | 描述                                                                                  |
+| ---------- | ------------------ | ------------------------------------------------------------------------------------- |
+| `feat`     | 特征               | 新功能、新特性                                                                        |
+| `fix`      | Bug 修复           | bug 修复                                                                              |
+| `docs`     | 文档               | 仅文档更改                                                                            |
+| `style`    | 风格               | 不影响代码含义的更改（空格、格式、缺少分号等）                                        |
+| `refactor` | 代码重构           | 重构，在不影响代码内部行为，功能下的代码修改                                          |
+| `perf`     | 性能改进           | 更改代码，以提高性能                                                                  |
+| `test`     | 测试               | 添加缺失的测试或纠正现有的测试                                                        |
+| `build`    | 构建               | 影响构建系统或外部依赖项的更改（示例范围：gulp、broccoli、npm）                       |
+| `ci`       | 持续集成           | 对我们的 CI 配置文件和脚本的更改（示例范围：Travis、Circle、BrowserStack、SauceLabs） |
+| `chore`    | 其他文件修改       | 不修改 src 或测试文件的其他更改                                                       |
+| `revert`   | 还原               | 恢复之前的提交                                                                        |
+| `release`  | 发布新版本         | \-                                                                                    |
+| `workflow` | 工作流相关文件修改 | \-                                                                                    |
+
+### 提交别名
+
+| 提交类型           | 映射到  | 标题     | 描述                       |
+| ------------------ | ------- | -------- | -------------------------- |
+| `initial`          | `feat`  | 最初的   | 初始提交                   |
+| `dependencies`     | `fix`   | 依赖项   | 更新依赖项                 |
+| `peerDependencies` | `fix`   | 对等依赖 | 更新对等依赖项             |
+| `devDependencies`  | `chore` | 开发依赖 | 更新开发依赖               |
+| `metadata`         | `fix`   | 元数据   | 更新元数据（package.json） |
+
+### 快捷别名提示
+
+1.  resolve a conflict：解决冲突
+2.  merge branch：合并分支
+3.  feat: [...] : 添加的新功能说明
+4.  fix: [...] : 修复的 bug 说明
+5.  initial project：初始化项目
+6.  style: [...] : 修改的样式范围
+7.  perf：[...] : 优化的范围
+8.  release : 发布新版本
+9.  docs: 文档修改
+10. refactor： 代码重构
+11. revert： 还原之前的版本
+12. dependencies： 依赖项修改
+13. devDependencies： 开发依赖修改
+14. review：复习，回顾
+15. strengthen: 加强，巩固
+
+## 
+
+### prettier  1.0.6 ----> 1.1.1
+### scss/sass编译 0.0.8 ----> 0.0.9
+### vue-devtools  0.0.5----> 0.0.6
+### HBuilderX uni-app自动化测试 0.2.2 -----> 1.8.5

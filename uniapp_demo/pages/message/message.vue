@@ -2,7 +2,7 @@
 	<view class="message">
 		<nav-bar title="消息" :back="false" backgroundColor="linear-gradient(to right, #39C9BC,#6DE8CC)"></nav-bar>
 		<view class="top-warp">
-			<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
+			<sc-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></sc-tabs>
 		</view>
 		
 		 <mescroll-body @init="mescrollInit" top="90" @down="downCallback" @up="upCallback">
