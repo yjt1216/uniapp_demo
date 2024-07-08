@@ -17,9 +17,22 @@
 			<view class="demo-li">视频播放<text class="demo-tip"> video player </text></view>
 		</navigator>
 		
-		<navigator url="/pages_custom/pages/choose_photo/choose_photo">
+		<navigator url="/pages_func/pages/choose_photo/choose_photo">
 			<view class="demo-li"> 选择图片after<text class="demo-tip">uni choose 压缩 </text></view>
 		</navigator> 
+		
+		<navigator url="/pages_func/pages/camera_beauty/camera_beauty">
+			<view class="demo-li"> 美颜 <text class="demo-tip"> camera_beauty </text></view>
+		</navigator>
+		
+		<navigator url="/pages_func/pages/short_video/short_video">
+			<view class="demo-li"> 短视频 <text class="demo-tip"> short_video </text></view>
+		</navigator>
+		
+		<navigator url="/pages_func/pages/input/input">
+			<view class="demo-li"> 输入框 <text class="demo-tip"> input </text></view>
+		</navigator>
+		
 		
 	</view>
 </template>

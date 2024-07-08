@@ -23,8 +23,13 @@
 		</navigator>
 		
 		<navigator url="/pages_ucharts/pages/rose/chart_rose">
-			<view class="demo-li"> 玫瑰图表 <text class="demo-tip"> ucharts </text></view>
+			<view class="demo-li"> 玫瑰图表 <text class="demo-tip"> ucharts 组件 </text></view>
 		</navigator>
+		
+		<navigator url="/pages_ucharts/pages/rose/rose_native">
+			<view class="demo-li"> 玫瑰图表 <text class="demo-tip"> ucharts 原生 </text></view>
+		</navigator>
+		
 		
 		<navigator url="/pages_ucharts/pages/map/chart_map">
 			<view class="demo-li"> 地图图表1 <text class="demo-tip"> ucharts </text></view>

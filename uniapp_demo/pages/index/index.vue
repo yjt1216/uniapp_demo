@@ -20,7 +20,7 @@
 		</navigator>
 		
 		<navigator url="/pages_custom/pages/custom_list/custom_list">
-			<view class="demo-li"> 自定义 <text class="demo-tip"> func list </text></view>
+			<view class="demo-li"> 自定义 <text class="demo-tip"> custom list </text></view>
 		</navigator>
 		
 		<navigator url="/bundle_c/pages/sticky/sticky">

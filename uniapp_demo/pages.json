@@ -236,6 +236,27 @@
 				},
 				{
 					"path": "pages/weixin_openid/weixin_openid"
+				},
+				{
+					"path": "pages/camera_beauty/camera_beauty"
+				},
+				{
+					"path": "pages/camera_beauty/camera"
+				},
+				{
+					"path": "pages/camera_beauty/image"
+				},
+				{
+					"path": "pages/short_video/short_video",
+					"style": {
+						"navigationStyle": "custom" ,
+						"app-plus" : {
+						    "titleNView" : false
+						}
+					}
+				},
+				{
+					"path": "pages/input/input"
 				}
 			]
 		},
@@ -288,6 +309,9 @@
 				},
 				{
 					"path": "pages/rose/chart_rose"
+				},
+				{
+					"path": "pages/rose/rose_native"
 				},
 				{
 					"path": "pages/operate/operate_demo"

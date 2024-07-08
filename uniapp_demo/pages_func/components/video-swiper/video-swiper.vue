@@ -1,0 +1,1446 @@
+<template>
+	<view>
+		<view>
+			<view class="video-box" :style="itemViewTopLength0">
+				<video :src="videoInfo_0.src" :style="fillScreen" :autoplay="my_false" :loop="my_true" 
+					:play-strategy="playStrategy" :codec="codec"
+					:controls="my_false" :enable-play-gesture="my_true" 
+					:objectFit="videoInfo_0.objectFit?videoInfo_0.objectFit:objectFit"
+					:show-fullscreen-btn="my_false" :enable-progress-gesture="my_false"
+					@timeupdate="timeupdate(0,$event)"
+					@ended='ended(1)' :show-play-btn="my_false" :show-progress="my_false" initial-time="1"
+					id='video_id_0' @play="playing(0)">
+				</video>
+				<cover-view v-if="!videoInfo_0.flag" :style="stopIcon"  class="cover-view-stop" >
+					<text class="iconfont cover-view-stop-text">&#xe60b;</text>
+				</cover-view>
+
+				<cover-view v-if="cover && videoInfo_0.coverStatus" :style="fillScreen" class="video-image">
+					<cover-image :mode="videoInfo_0.mode?videoInfo_0.mode:mode" :src="videoInfo_0.coverUrl"  :style="fillScreen"></cover-image>
+				</cover-view>
+
+				<cover-view v-if="!cover && videoInfo_0.coverStatus" :style="fillScreen" class="video-image-mask">
+				</cover-view>
+
+				<view class="video-action" @touchstart.stop='videotouchstart' @touchmove.stop="videotochmove"
+					@touchend.stop='videotouchend' @click.stop="videoClick"></view>
+
+				<cover-view class="cover-view-left">
+					<text class="view-left-text">@{{videoInfo_0.expert.nickName}}</text>
+					<view class="view-left-text-content">
+						<text class="text-content-text"
+							v-if="videoInfo_0.description">{{videoInfo_0.description}}</text>
+					</view>
+					<view style="flex-direction: row;" v-if="videoInfo_1.dubbedText">
+						<text class="iconfont view-left-icon">&#xe600;</text>
+						<view class="view-left-dubbedText">
+							<text class="view-left-dubbedText-text"
+								:style="{transform: `translateX(${translateX}px)`}">{{videoInfo_1.dubbedText}}</text>
+						</view>
+					</view>
+					<view class="text-content-advert" v-if="videoInfo_0.advert">
+						<text class="text-content-advert-text">广告</text>
+					</view>
+					<view class="seedetails" @click="tabDetail(0)" v-if="videoInfo_0.advert">
+						<text class="seedetails-text">查看详情></text>
+					</view>
+				</cover-view>
+
+				<cover-view class="cover-view-right">
+					<cover-view class="cover-view-right-head">
+						<cover-image class="avater" :src="videoInfo_0.expert.faceUrl" @click="tabHead(0)"></cover-image>
+						<cover-view class="cover-right-follow" v-if="!videoInfo_0.isFollow" @click="tabFollow(0)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe60d;</text>
+							</view>
+						</cover-view>
+						<cover-view class="cover-right-follow" v-else @click="tabFollow(0)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe69e;</text>
+							</view>
+						</cover-view>
+					</cover-view>
+					<text @click="tabLove(0)" :class="videoInfo_0.isLove?'red-heat':'white-heat'"
+						class="iconfont iconfont-size-heat ">&#xe64e;</text>
+					<text class="right-text">{{videoInfo_0.loveNum}}</text>
+					<text @click="tabComment(0)" class="iconfont iconfont-size">&#xe67c;</text>
+					<text class="right-text">{{videoInfo_0.commentNum}}</text>
+					<text @click="tabShare(0)" class="iconfont iconfont-size">&#xe633;</text>
+					<text class="right-text">{{videoInfo_0.shareNum}}</text>
+				</cover-view>
+				
+			</view>
+
+			<view class="video-box" :style="itemViewTopLength1">
+
+				<video :src="videoInfo_1.src" :style="fillScreen" :autoplay="my_false" :loop="my_true"
+					:play-strategy="playStrategy" :codec="codec"
+					:controls="my_false" :enable-play-gesture="my_true" :objectFit="videoInfo_1.objectFit?videoInfo_1.objectFit:objectFit"
+					:show-fullscreen-btn="my_false" :enable-progress-gesture="my_false" @timeupdate="timeupdate(1,$event)"
+					@ended='ended(2)' :show-play-btn="my_false" :show-progress="my_false" initial-time="1"
+					id='video_id_1' @play="playing(1)">
+				</video>
+				
+				<cover-view v-if="!videoInfo_1.flag" :style="stopIcon" class="cover-view-stop" >
+					<text class="iconfont cover-view-stop-text">&#xe60b;</text>
+				</cover-view>
+
+				<cover-view v-if="cover && videoInfo_1.coverStatus" :style="fillScreen" class="video-image">
+					<cover-image :mode="videoInfo_1.mode?videoInfo_1.mode:mode" :src="videoInfo_1.coverUrl" :style="fillScreen"></cover-image>
+				</cover-view>
+
+				<cover-view v-if="!cover && videoInfo_1.coverStatus" :style="fillScreen" class="video-image-mask">
+				</cover-view>
+
+				<view class="video-action" @touchstart='videotouchstart' @touchmove="videotochmove"
+					@touchend='videotouchend' @click="videoClick"></view>
+
+				<cover-view class="cover-view-left">
+
+					<text class="view-left-text">@{{videoInfo_1.expert.nickName}}</text>
+					<view class="view-left-text-content">
+						<text class="text-content-text"
+							v-if="videoInfo_1.description">{{videoInfo_1.description}}</text>
+					</view>
+					<view style="flex-direction: row;" v-if="videoInfo_1.dubbedText">
+						<text class="iconfont view-left-icon">&#xe600;</text>
+						<view class="view-left-dubbedText">
+							<text class="view-left-dubbedText-text"
+								:style="{transform: `translateX(${translateX}px)`}">{{videoInfo_1.dubbedText}}</text>
+						</view>
+					</view>
+					<view class="text-content-advert" v-if="videoInfo_1.advert">
+						<text class="text-content-advert-text">广告</text>
+					</view>
+					<view class="seedetails" @click="tabDetail(1)" v-if="videoInfo_1.advert">
+						<text class="seedetails-text">查看详情></text>
+					</view>
+
+				</cover-view>
+
+				<cover-view class="cover-view-right">
+					<cover-view class="cover-view-right-head">
+						<cover-image class="avater" :src="videoInfo_1.expert.faceUrl" @click="tabHead(1)"></cover-image>
+						<cover-view class="cover-right-follow" v-if="!videoInfo_1.isFollow" @click="tabFollow(1)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe60d;</text>
+							</view>
+						</cover-view>
+						<cover-view class="cover-right-follow" v-else @click="tabFollow(1)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe69e;</text>
+							</view>
+						</cover-view>
+					</cover-view>
+
+					<text @click="tabLove(1)" :class="videoInfo_1.isLove?'red-heat':'white-heat'"
+						class="iconfont iconfont-size-heat ">&#xe64e;</text>
+					<text class="right-text">{{videoInfo_1.loveNum}}</text>
+					<text @click="tabComment(1)" class="iconfont iconfont-size">&#xe67c;</text>
+					<text class="right-text">{{videoInfo_1.commentNum}}</text>
+					<text @click="tabShare(1)" class="iconfont iconfont-size">&#xe633;</text>
+					<text class="right-text">{{videoInfo_1.shareNum}}</text>
+				</cover-view>
+				
+			</view>
+
+			<view class="video-box" :style="itemViewTopLength2">
+				<video :src="videoInfo_2.src" :style="fillScreen" :autoplay="my_false" :loop="my_true"
+					:play-strategy="playStrategy" :codec="codec"
+					:controls="my_false" :enable-play-gesture="my_true" :objectFit="videoInfo_2.objectFit?videoInfo_2.objectFit:objectFit"
+					:show-fullscreen-btn="my_false" :enable-progress-gesture="my_false" @timeupdate="timeupdate(2,$event)"
+					@ended='ended(2)' :show-play-btn="my_false" :show-progress="my_false" initial-time="1"
+					id='video_id_2' @play="playing(2)">
+				</video>
+				
+				<cover-view v-if="!videoInfo_2.flag" class="cover-view-stop" :style="stopIcon">
+					<text class="iconfont cover-view-stop-text">&#xe60b;</text>
+				</cover-view>
+
+				<cover-view v-if="cover && videoInfo_2.coverStatus" :style="fillScreen" class="video-image">
+					<cover-image :mode="videoInfo_2.mode?videoInfo_2.mode:mode"  :src="videoInfo_2.coverUrl"  :style="fillScreen"></cover-image>
+				</cover-view>
+
+				<cover-view v-if="!cover && videoInfo_2.coverStatus" :style="fillScreen" class="video-image-mask">
+				</cover-view>
+
+				<view class="video-action" @touchstart='videotouchstart' @touchmove="videotochmove"
+					@touchend='videotouchend' @click="videoClick"></view>
+
+				<cover-view class="cover-view-left">
+
+					<text class="view-left-text">@{{videoInfo_2.expert.nickName}}</text>
+					<view class="view-left-text-content">
+						<text class="text-content-text"
+							v-if="videoInfo_2.description">{{videoInfo_2.description}}</text>
+					</view>
+					<view style="flex-direction: row;" v-if="videoInfo_2.dubbedText">
+						<text class="iconfont view-left-icon">&#xe600;</text>
+						<view class="view-left-dubbedText">
+							<text class="view-left-dubbedText-text"
+								:style="{transform: `translateX(${translateX}px)`}">{{videoInfo_2.dubbedText}}</text>
+						</view>
+					</view>
+					<view class="text-content-advert" v-if="videoInfo_2.advert">
+						<text class="text-content-advert-text">广告</text>
+					</view>
+					<view class="seedetails" @click="tabDetail(2)" v-if="videoInfo_2.advert">
+						<text class="seedetails-text">查看详情></text>
+					</view>
+
+				</cover-view>
+
+				<cover-view class="cover-view-right">
+					<cover-view class="cover-view-right-head">
+						<cover-image class="avater" :src="videoInfo_2.expert.faceUrl" @click="tabHead(2)"></cover-image>
+						<cover-view class="cover-right-follow" v-if="!videoInfo_2.isFollow" @click="tabFollow(2)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe60d;</text>
+							</view>
+						</cover-view>
+						<cover-view class="cover-right-follow" v-else @click="tabFollow(2)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe69e;</text>
+							</view>
+						</cover-view>
+					</cover-view>
+
+					<text @click="tabLove(2)" :class="videoInfo_2.isLove?'red-heat':'white-heat'"
+						class="iconfont iconfont-size-heat ">&#xe64e;</text>
+					<text class="right-text">{{videoInfo_2.loveNum}}</text>
+					<text @click="tabComment(2)" class="iconfont iconfont-size">&#xe67c;</text>
+					<text class="right-text">{{videoInfo_2.commentNum}}</text>
+					<text @click="tabShare(2)" class="iconfont iconfont-size">&#xe633;</text>
+					<text class="right-text">{{videoInfo_2.shareNum}}</text>
+				</cover-view>
+			</view>
+
+			<view class="video-box" :style="itemViewTopLength3">
+				<video :src="videoInfo_3.src" :style="fillScreen" :autoplay="my_false" :loop="my_true"
+					:play-strategy="playStrategy" :codec="codec"
+					:controls="my_false" :enable-play-gesture="my_true" :objectFit="videoInfo_3.objectFit?videoInfo_3.objectFit:objectFit"
+					:show-fullscreen-btn="my_false" :enable-progress-gesture="my_false" @timeupdate="timeupdate(3,$event)"
+					@ended='ended(3)' :show-play-btn="my_false" :show-progress="my_false" initial-time="1"
+					id='video_id_3' @play="playing(3)">
+				</video>
+				
+				<cover-view v-if="!videoInfo_3.flag" class="cover-view-stop" :style="stopIcon">
+					<text class="iconfont cover-view-stop-text">&#xe60b;</text>
+				</cover-view>
+
+				<cover-view v-if="cover && videoInfo_3.coverStatus" :style="fillScreen" class="video-image">
+					<cover-image :mode="videoInfo_3.mode?videoInfo_3.mode:mode"  :src="videoInfo_3.coverUrl" :style="fillScreen"></cover-image>
+				</cover-view>
+
+				<cover-view v-if="!cover && videoInfo_3.coverStatus" :style="fillScreen" class="video-image-mask">
+				</cover-view>
+
+				<view class="video-action" @touchstart='videotouchstart' @touchmove="videotochmove"
+					@touchend='videotouchend' @click="videoClick"></view>
+
+				<cover-view class="cover-view-left">
+
+					<!-- <text class="view-left-text">@{{videoInfo_3.expert.nickName}}</text> -->
+					<view class="view-left-text-content">
+						<text class="text-content-text"
+							v-if="videoInfo_3.description">{{videoInfo_3.description}}</text>
+					</view>
+					<view style="flex-direction: row;" v-if="videoInfo_3.dubbedText">
+						<text class="iconfont view-left-icon">&#xe600;</text>
+						<view class="view-left-dubbedText">
+							<text class="view-left-dubbedText-text"
+								:style="{transform: `translateX(${translateX}px)`}">{{videoInfo_3.dubbedText}}</text>
+						</view>
+					</view>
+					<view class="text-content-advert" v-if="videoInfo_3.advert">
+						<text class="text-content-advert-text">广告</text>
+					</view>
+					<view class="seedetails" @click="tabDetail(3)" v-if="videoInfo_3.advert">
+						<text class="seedetails-text">查看详情></text>
+					</view>
+
+				</cover-view>
+
+				<cover-view class="cover-view-right">
+					<cover-view class="cover-view-right-head">
+						<cover-image class="avater" :src="videoInfo_3.expert.faceUrl" @click="tabHead(3)"></cover-image>
+						<cover-view class="cover-right-follow" v-if="!videoInfo_3.isFollow" @click="tabFollow(3)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe60d;</text>
+							</view>
+						</cover-view>
+						<cover-view class="cover-right-follow" v-else @click="tabFollow(3)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe69e;</text>
+							</view>
+						</cover-view>
+					</cover-view>
+
+					<text @click="tabLove(3)" :class="videoInfo_3.isLove?'red-heat':'white-heat'"
+						class="iconfont iconfont-size-heat ">&#xe64e;</text>
+					<text class="right-text">{{videoInfo_3.loveNum}}</text>
+					<text @click="tabComment(3)" class="iconfont iconfont-size">&#xe67c;</text>
+					<text class="right-text">{{videoInfo_3.commentNum}}</text>
+					<text @click="tabShare(3)" class="iconfont iconfont-size">&#xe633;</text>
+					<text class="right-text">{{videoInfo_3.shareNum}}</text>
+				</cover-view>
+				
+			</view>
+
+			<view class="video-box" :style="itemViewTopLength4">
+				<video :src="videoInfo_4.src" :style="fillScreen" :autoplay="my_false" :loop="my_true"
+					:play-strategy="playStrategy" :codec="codec"
+					:controls="my_false" :enable-play-gesture="my_true" :objectFit="videoInfo_4.objectFit?videoInfo_4.objectFit:objectFit"
+					:show-fullscreen-btn="my_false" :enable-progress-gesture="my_false" @timeupdate="timeupdate(4,$event)"
+					@ended='ended(4)' :show-play-btn="my_false" :show-progress="my_false" initial-time="1"
+					id='video_id_4' @play="playing(4)">
+				</video>
+				
+				<cover-view v-if="!videoInfo_4.flag" class="cover-view-stop" :style="stopIcon">
+					<text class="iconfont cover-view-stop-text">&#xe60b;</text>
+				</cover-view>
+
+				<cover-view v-if="cover && videoInfo_4.coverStatus" :style="fillScreen" class="video-image">
+					<cover-image :mode="videoInfo_4.mode?videoInfo_4.mode:mode"  :src="videoInfo_4.coverUrl"  :style="fillScreen"></cover-image>
+				</cover-view>
+
+				<cover-view v-if="!cover && videoInfo_4.coverStatus" :style="fillScreen" class="video-image-mask">
+				</cover-view>
+
+				<view class="video-action" @touchstart='videotouchstart' @touchmove="videotochmove"
+					@touchend='videotouchend' @click="videoClick"></view>
+				<cover-view class="cover-view-left">
+
+					<text class="view-left-text">@{{videoInfo_4.expert.nickName}}</text>
+					<view class="view-left-text-content">
+						<text class="text-content-text"
+							v-if="videoInfo_4.description">{{videoInfo_4.description}}</text>
+					</view>
+					<view style="flex-direction: row;" v-if="videoInfo_4.dubbedText">
+						<text class="iconfont view-left-icon">&#xe600;</text>
+						<view class="view-left-dubbedText">
+							<text class="view-left-dubbedText-text"
+								:style="{transform: `translateX(${translateX}px)`}">{{videoInfo_4.dubbedText}}</text>
+						</view>
+					</view>
+					<view class="text-content-advert" v-if="videoInfo_4.advert">
+						<text class="text-content-advert-text">广告</text>
+					</view>
+					<view class="seedetails" @click="tabDetail(4)" v-if="videoInfo_4.advert">
+						<text class="seedetails-text">查看详情></text>
+					</view>
+
+				</cover-view>
+
+				<cover-view class="cover-view-right">
+					<cover-view class="cover-view-right-head">
+						<cover-image class="avater" :src="videoInfo_4.expert.faceUrl" @click="tabHead(4)"></cover-image>
+						<cover-view class="cover-right-follow" v-if="!videoInfo_4.isFollow" @click="tabFollow(4)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe60d;</text>
+							</view>
+						</cover-view>
+						<cover-view class="cover-right-follow" v-else @click="tabFollow(4)">
+							<view class="right-follow-box">
+								<view class="right-follow-bg"></view>
+								<text class="iconfont right-follow">&#xe69e;</text>
+							</view>
+						</cover-view>
+					</cover-view>
+
+					<text @click="tabLove(4)" :class="videoInfo_4.isLove?'red-heat':'white-heat'"
+						class="iconfont iconfont-size-heat ">&#xe64e;</text>
+					<text class="right-text">{{videoInfo_4.loveNum}}</text>
+					<text @click="tabComment(4)" class="iconfont iconfont-size">&#xe67c;</text>
+					<text class="right-text">{{videoInfo_4.commentNum}}</text>
+					<text @click="tabShare(4)" class="iconfont iconfont-size">&#xe633;</text>
+					<text class="right-text">{{videoInfo_4.shareNum}}</text>
+				</cover-view>
+				
+			</view>
+			
+			<template v-if="videoFlag">
+				<cover-view v-if="showProgress && moveView && progress>1 && showOther" class="progress-bar-box" :style="{width:pointMove ? barWidth : pointLeft+'px'}" >
+					<cover-view class="progress-bar"></cover-view>
+					<cover-view class="progress-bar-point"></cover-view>
+				</cover-view>
+				<cover-view v-if="showProgress && moveView && progress>1 && showOther" class="progress-bar-box" :style="{width:winWidth+'px'}" >
+					<cover-view class="progress-bar-bg"></cover-view>
+				</cover-view>
+			</template>
+			<template v-else>
+				<cover-view v-if="showProgress && moveView && progress>1 && showOther" class="progress-bar-box-active" :style="{width:pointMove ? barWidth : pointLeft+'px'}" >
+					<cover-view class="progress-bar-active"></cover-view>
+					<cover-view class="progress-bar-point-active"></cover-view>
+				</cover-view>
+			</template>
+		</view>
+		<view v-if="showProgress" @touchstart='progressTouchstart' @touchmove="progressTochmove"
+				@touchend='progressTouchend' class="move-point" :style="{left:pointMove ? barWidth : pointLeft+'px'}" ></view>
+		<comment ref="refComment" :commentStatus="commentStatus" @mask="hide" @tapCommentLove="tapCommentLove($event)"
+			@send="send($event)" @setCommentList="setCommentList($event)"></comment>
+		<share ref="refShare" :shareStatus="shareStatus" @mask="hide" @share="tapShare($event)"></share>
+		<top-text ref="refTopText" @live="tabLive" @search="tabSearch" @active="tabActive"></top-text>
+	</view>
+</template>
+
+<script>
+	import comment from './components/comment.vue'
+	import share from './components/share.vue'
+	import topText from './components/top-text.vue'
+	var slidingStatus = false;
+	var startPageY, endPageY;
+	let musicTimer = null;
+	let videoPlayingStatus = false
+	let initVideoInfo = {
+		expert: {},
+		src: "",
+		coverStatus: true,
+		cover: false,
+		nickName: "昵称",
+		detail: "描述",
+		loveNum: 0,
+		commentNum: 0,
+		shareNum: 0,
+		dubbedText: "优美音乐"
+	}
+	export default {
+		components: {
+			comment,
+			share,
+			topText
+		},
+		props: {
+			cover: {
+				type: Boolean,
+				default: false
+			},
+			preview: {
+				type: Boolean,
+				default: false
+			},
+			timingFunction: {
+				type: String,
+				default: "linear"
+			},
+			progressTime: {
+				type: Number,
+				default: 10
+			}
+		},
+		data() {
+			return {
+				progress: 0,
+				moveView: true,
+				showProgress: false,
+				showOther: true,
+				commentStatus: false,
+				shareStatus: false,
+				translateX: '10',
+				my_true: true,
+				my_false: false,
+				boxHeight: 0,
+				objectFit: "fill", //视频表现形式 可参考video组件的object-fit属性 contain：包含，fill：填充，cover：覆盖
+				mode: "scaleToFill", //封面图缩放模式 可参考image组件的mode属性
+				winWidth: 1,
+				winHeight: 1,
+				videoIndex: 0,
+				viewTop: 0,
+				viewTopPostion: 0,
+				videoList: [],
+				videoListLength: 0,
+				itemViewTop0: 0,
+				itemViewTop1: 0,
+				itemViewTop2: 0,
+				itemViewTop3: 0,
+				itemViewTop4: 0,
+				videoInfo_0: initVideoInfo,
+				videoInfo_1: initVideoInfo,
+				videoInfo_2: initVideoInfo,
+				videoInfo_3: initVideoInfo,
+				videoInfo_4: initVideoInfo,
+				topViewStatus: false,
+				playStrategy: 2,
+				codec: 'hardware',
+				time: 1,
+				videotouchstartTimestamp: 0,
+				videotouchendTimestamp: 0,
+				videoFlag: true,
+				pointLeftPosition: 0,
+				pointLeft: 0,
+				pointStart: 0,
+				pointEnd: 0,
+				pointMove:true
+			};
+		},
+		beforeCreate() {
+			// #ifndef MP
+			var domModule = weex.requireModule('dom');
+			domModule.addRule('fontFace', {
+				'fontFamily': "iconfont",
+				'src': "url('https://at.alicdn.com/t/font_2751880_q0v3w2s8zds.ttf?t=1629251162076') format('truetype')"
+			});
+			// #endif
+			
+		},
+		created() {
+			// #ifdef APP
+			plus.screen.lockOrientation("portrait-primary")
+			// #endif
+			
+			this.__init()
+		},
+		computed: {
+			viewTopLength() {
+				return `height:${this.boxHeight}px;top:${this.viewTop}px;`
+			},
+			fillScreen() {
+				let style = `height:${this.winHeight}px;width:${this.winWidth}px;`
+				return style
+			},
+			itemViewTopLength0() {
+				return `height:${this.winHeight}px;top:${this.itemViewTop0}px;`
+			},
+			itemViewTopLength1() {
+				return `height:${this.winHeight}px;top:${this.itemViewTop1}px;`
+			},
+			itemViewTopLength2() {
+				return `height:${this.winHeight}px;top:${this.itemViewTop2}px;`
+			},
+			itemViewTopLength3() {
+				return `height:${this.winHeight}px;top:${this.itemViewTop3}px;`
+			},
+			itemViewTopLength4() {
+				return `height:${this.winHeight}px;top:${this.itemViewTop4}px;`
+			},
+			barWidth() {
+				let width = 0
+				if (this.time) {
+					if (this.pointMove) {
+						width = parseInt(this.progress / this.time * parseInt(this.winWidth));
+						this.pointLeft = width;
+						this.pointLeftPosition = width;
+					}
+				}
+				return `${width}px`
+			}
+		},
+		methods: {
+			__init() {
+				this.getSystemInfo()
+			},
+			previewVideo(index, list) {
+				if (!Array.isArray(list)) {
+					uni.navigateBack({
+						delta: 1
+					})
+					return
+				}
+				if (list.length == 0) {
+					uni.navigateBack({
+						delta: 1
+					})
+					return
+				}
+				this.videoList = list
+				this.videoIndex = index
+				this.videoListLength = list.length
+				if (this.videoIndex > 1 && this.videoIndex < this.videoListLength - 2) {
+					let a = -3
+					for (let i = 0; i < 5; i++) {
+						a++
+						if (this.videoList[this.videoIndex + a]) {
+							this['videoInfo_' + (this.videoIndex + a) % 5] = this.videoList[this.videoIndex + a]
+						}
+					}
+					this.previewSetHeight(1)
+				} else if (this.videoListLength < 6) {
+					for (let i = 0; i < 5; i++) {
+						if (this.videoList[i]) {
+							this['videoInfo_' + i] = this.videoList[i]
+						}
+					}
+					this.previewSetHeight(2)
+				} else if (this.videoIndex > (this.videoListLength - 3)) {
+					let a = -6
+					for (let i = 0; i < 5; i++) {
+						a++
+						if (this.videoList[this.videoListLength + a]) {
+							this['videoInfo_' + (this.videoListLength + a) % 5] = this.videoList[this.videoListLength + a]
+						}
+					}
+					this.previewSetHeight(3)
+				} else if (this.videoIndex < 2) {
+					for (let i = 0; i < 5; i++) {
+						if (this.videoList[i]) {
+							this['videoInfo_' + i] = this.videoList[i]
+						}
+					}
+					this.previewSetHeight(4)
+				}
+			},
+			previewSetHeight(tab) {
+				var _this = this;
+				uni.getSystemInfo({
+					success: function(res) {
+						_this.winWidth = res.windowWidth;
+						_this.winHeight = res.windowHeight;
+
+						_this.boxHeight = res.windowHeight * _this.videoListLength
+						_this.viewTop = -res.windowHeight * _this.videoIndex
+						_this.viewTopPostion = -res.windowHeight * _this.videoIndex
+						switch (tab) {
+							case 1:
+								_this['itemViewTop' + (_this.videoIndex - 2) % 5] = res.windowHeight * (_this
+									.videoIndex - 2)
+								_this['itemViewTop' + (_this.videoIndex - 1) % 5] = res.windowHeight * (_this
+									.videoIndex - 1)
+								_this['itemViewTop' + (_this.videoIndex) % 5] = res.windowHeight * _this
+									.videoIndex
+								_this['itemViewTop' + (_this.videoIndex + 1) % 5] = res.windowHeight * (_this
+									.videoIndex + 1)
+								_this['itemViewTop' + (_this.videoIndex + 2) % 5] = res.windowHeight * (_this
+									.videoIndex + 2)
+								break;
+							case 2:
+								_this.itemViewTop0 = 0
+								_this.itemViewTop1 = res.windowHeight * 1
+								_this.itemViewTop2 = res.windowHeight * 2
+								_this.itemViewTop3 = res.windowHeight * 3
+								_this.itemViewTop4 = res.windowHeight * 4
+
+								break;
+							case 3:
+								_this['itemViewTop' + (_this.videoListLength - 5) % 5] = res.windowHeight * (_this
+									.videoListLength - 5)
+								_this['itemViewTop' + (_this.videoListLength - 4) % 5] = res.windowHeight * (_this
+									.videoListLength - 4)
+								_this['itemViewTop' + (_this.videoListLength - 3) % 5] = res.windowHeight * (_this
+									.videoListLength - 3)
+								_this['itemViewTop' + (_this.videoListLength - 2) % 5] = res.windowHeight * (_this
+									.videoListLength - 2)
+								_this['itemViewTop' + (_this.videoListLength - 1) % 5] = res.windowHeight * (_this
+									.videoListLength - 1)
+								break;
+							case 4:
+								_this.itemViewTop0 = 0
+								_this.itemViewTop1 = res.windowHeight
+								_this.itemViewTop2 = res.windowHeight * 2
+								_this.itemViewTop3 = res.windowHeight * 3
+								_this.itemViewTop4 = res.windowHeight * 4
+								break;
+						}
+						setTimeout(() => {
+							_this.playVideo(_this.videoIndex % 5, true)
+						}, 500)
+					},
+				})
+			},
+			stop() {
+				this.stopVideo(this.videoIndex % 5, true)
+				clearInterval(musicTimer)
+			},
+			init(list) {
+				if (this.preview) return
+				this.videoList = list
+				this.videoListLength = this.videoList.length;
+				this.boxHeight = this.videoListLength * this.winHeight
+				for (let i = 0; i < 5; i++) {
+					if (this.videoList[i]) {
+						this['videoInfo_' + i] = this.videoList[i]
+					}
+				}
+				setTimeout(() => {
+					this.playVideo(0)
+				}, 500)
+			},
+			tabLive() {
+				let item = this.videoList[this.videoIndex]
+				this.$emit('tapLive', item)
+			},
+			tabSearch() {
+				this.$emit('tapSearch')
+			},
+			tabActive(num) {
+				this.$refs.refComment.changeData()
+				this.$emit('tapActive', num)
+			},
+			setRecommendNum(num) {
+				this.$refs.refTopText.setRecommendNum(num)
+			},
+			setPlaceNum(num) {
+				this.$refs.refTopText.setPlaceNum(num)
+			},
+			setFollowNum(num) {
+				this.$refs.refTopText.setFollowNum(num)
+			},
+			setPlace(place) {
+				this.$refs.refTopText.setPlace(place)
+			},
+			topShow(status) {
+				if (status) {
+					this.topViewStatus = true
+				} else {
+					this.topViewStatus = false
+				}
+				this.$refs.refTopText.topShow(status)
+			},
+			showLive(status) {
+				this.$refs.refTopText.showLive(status)
+			},
+			tabHead() {
+				let item = this.videoList[this.videoIndex]
+				this.$emit("tapHead", item)
+			},
+			tabFollow() {
+				let item = this.videoList[this.videoIndex]
+				this.$emit("tapFollow", item)
+			},
+			tabLove(i) {
+				let item = this.videoList[this.videoIndex]
+				this.$emit("tapLove", item)
+			},
+			tabComment() {
+				this.showOther = false
+				let item = this.videoList[this.videoIndex]
+				this.commentStatus = true
+				this.$emit("tapComment", item)
+			},
+			tabShare() {
+				this.showOther = false
+				this.shareStatus = true
+			},
+			tapShare(e) {
+				let item = this.videoList[this.videoIndex]
+				this.$emit("tapShare", {
+					video: item,
+					type: e
+				})
+			},
+			tabDetail() {
+				let item = this.videoList[this.videoIndex]
+				this.$emit("tapDetail", item)
+			},
+			tapCommentLove(e) {
+				let item = this.videoList[this.videoIndex]
+				this.$emit("tapCommentLove", {
+					comment: e,
+					video: item
+				})
+			},
+			send(e) {
+				let item = this.videoList[this.videoIndex]
+				this.$emit("send", {
+					text: e,
+					video: item
+				})
+			},
+			setCommentList(e) {
+				let item = this.videoList[this.videoIndex]
+				this.$emit("setCommentList", {
+					comment: e,
+					video: item
+				})
+			},
+			frontAddData(item) {
+				this.$refs.refComment.frontAddData(item)
+			},
+			commentInit(arrlist, check) {
+				let item = this.videoList[this.videoIndex]
+				this.$refs.refComment.init(arrlist, check)
+			},
+			changeCommentLove() {
+				this.$refs.refComment.changeCommentLove()
+			},
+			sendOver() {
+				this.$refs.refComment.sendOver()
+			},
+			setCommentData(arrlist, check) {
+				this.$refs.refComment.setCommentData(arrlist, check)
+			},
+			setTabBarHeight(height){
+			    this.$refs.refComment.setTabBarHeight(height)
+			},
+			changeLove() {
+				this.videoList[this.videoIndex].isLove = !this.videoList[this.videoIndex].isLove
+				if (this.videoList[this.videoIndex].isLove) {
+					this.videoList[this.videoIndex].loveNum++
+					return
+				}
+				this.videoList[this.videoIndex].loveNum--
+			},
+			changeFollow() {
+				this.videoList[this.videoIndex].isFollow = !this.videoList[this.videoIndex].isFollow
+			},
+			setShareFriend(data) {
+				this.$refs.refShare.setFriend(data)
+			},
+			setShareType(data) {
+				this.$refs.refShare.setType(data)
+			},
+			setShareAction(data) {
+				this.$refs.refShare.setAction(data)
+			},
+			hide() {
+				this.showOther = true
+				this.commentStatus = false
+				this.shareStatus = false
+			},
+			progressTouchstart(e) {
+				this.pointMove = false
+				this.pointStart = e.changedTouches[0].screenX
+			},
+			progressTochmove(e) {
+				let sliding = e.changedTouches[0].screenX - this.pointStart + this.pointLeftPosition
+				let minWidth = parseInt(1 / parseInt(this.time) * this.winWidth)
+				let maxWidth = parseInt( (parseInt(this.time) - 1) / parseInt(this.time) * this.winWidth)
+				if(sliding < minWidth) {
+					this.pointLeft = minWidth
+					this.progress = minWidth
+				} else if(sliding > maxWidth){
+					this.pointLeft = maxWidth
+					this.progress = maxWidth
+				} else {
+					this.pointLeft = sliding
+				}
+			},
+			progressTouchend(e) {
+				this.pointLeftPosition = this.pointLeft
+				let s = parseInt(parseInt(this.pointLeft) / this.winWidth * parseInt(this.time))
+				let i = this.videoIndex % 5
+				this.progress = s
+				uni.createVideoContext("video_id_" + i, this).seek(s)
+				uni.createVideoContext("video_id_" + i, this).play()
+				this.pointMove = true
+			},
+			videoClick() {
+				let num = this.videoIndex % 5
+				if (this["videoInfo_" + num].flag) {
+					this.stopVideo(num, true)
+				} else {
+					this.playVideo(num, true)
+				}
+			},
+			videotouchstart(e) {
+				this.videotouchendTimestamp = this.videotouchstartTimestamp
+				this.videotouchstartTimestamp = e.timestamp
+				if((this.videotouchstartTimestamp - this.videotouchendTimestamp) < 500) return
+				if (slidingStatus) return
+				startPageY = e.changedTouches[0].screenY;
+			},
+			videotochmove(e) {
+				if((this.videotouchstartTimestamp - this.videotouchendTimestamp) < 500) return
+				if (slidingStatus) return
+				endPageY = e.changedTouches[0].screenY;
+				let sliding = endPageY - startPageY
+				if (sliding > 20 || sliding < -20) {
+					this.moveView = false
+				} else {
+					this.moveView = true
+				}
+				if (this.videoIndex == 0 && sliding > 50) {
+					this.viewTop = 50
+				} else if (this.videoIndex == this.videoListLength - 1 && sliding < 0) {
+					this.viewTop = this.viewTopPostion
+				} else {
+					this.viewTop = this.viewTopPostion + sliding
+				}
+			},
+			videotouchend(e) {
+				if((this.videotouchstartTimestamp - this.videotouchendTimestamp) < 500) return
+				if (slidingStatus) return
+				this.moveView = true
+				endPageY = e.changedTouches[0].screenY;
+				let sliding = endPageY - startPageY
+				// console.log("sliding",sliding)
+				if ((sliding >= -40 && sliding < 0) || (sliding <= 40 && sliding > 0)) {
+					slidingStatus = true
+					this.moveView = true
+					this.videoSlidingReset(sliding)
+					return
+				}
+				//上滑
+				if (sliding < -30) {
+					slidingStatus = true
+					if (this.videoIndex == this.videoListLength - 1) {
+						this.videoSlidingReset(sliding)
+						uni.showToast({
+							title: "这是最后一个视频",
+							icon: "none"
+						})
+						return
+					}
+					this.moveView = false
+					this.$refs.refComment.changeData()
+					this.videoSlidingToTop(sliding)
+					return
+				}
+				//下滑
+				if (sliding > 30) {
+					slidingStatus = true
+					if (this.videoIndex == 0) {
+						this.videoSlidingReset(sliding)
+						this.$emit('refresh')
+						return
+					}
+					this.moveView = false
+					this.$refs.refComment.changeData()
+					this.videoSlidingToBottom(sliding)
+				}
+			},
+			// 向上滑动动画
+			videoSlidingToTop(sliding) {
+				this.stopVideo(this.videoIndex % 5)
+				if (this.videoIndex != this.videoListLength - 1) {
+					this.videoIndex++
+				}
+				let item = this.videoList[this.videoIndex]
+				this.$emit('change', {
+					position: 'top',
+					video: item,
+					index: this.videoIndex
+				})
+				//每次刷到了数组最后第四个视频，就给videoList 添加数据
+				if (this.videoIndex == (this.videoListLength - 4)) {
+					this.setVideo()
+				}
+				if (this.videoListLength > 5) {
+					this.sortItemView(sliding)
+				}
+				this.viewTopPostion = this.viewTopPostion - this.winHeight
+				setTimeout(() => {
+					this.playVideo(this.videoIndex % 5)
+				}, 5)
+				if(this.timingFunction!=="linear" && this.timingFunction!=="ease"){
+					this.timingFunction="linear"
+				}
+				let s,ss
+				switch (this.timingFunction) {
+					case "linear":
+						s = 3
+						ss = 35
+						break
+					case "ease":
+						s = 15
+						ss = 20
+						break
+					}
+				let timer = setInterval(() => {
+					this.viewTop = this.viewTop - ss
+					if (this.viewTop < (this.viewTopPostion + 10)) {
+						this.viewTop = this.viewTopPostion
+						clearInterval(timer)
+						slidingStatus = false
+						this.slidingCallback()
+					}
+					if(this.timingFunction == "ease"){
+						s--
+						if (s < 3) {
+							s = 3
+						}
+						ss++
+						if (ss > 35) {
+							ss = 35
+						}
+					}
+				}, s)
+			},
+			// 向下滑动动画
+			videoSlidingToBottom(sliding) {
+				this.stopVideo(this.videoIndex % 5)
+				if (this.videoIndex != 0) {
+					this.videoIndex--
+				}
+				let item = this.videoList[this.videoIndex]
+				this.$emit('change', {
+					position: 'bottom',
+					video: item,
+					index: this.videoIndex
+				})
+				if (this.videoListLength > 5) {
+					this.sortItemView(sliding)
+				}
+				this.viewTopPostion = this.viewTopPostion + this.winHeight
+				setTimeout(() => {
+					this.playVideo(this.videoIndex % 5)
+				}, 5)
+				if(this.timingFunction!=="linear" && this.timingFunction!=="ease" ){
+					this.timingFunction="linear"
+				}
+				let s,ss
+				switch (this.timingFunction) {
+					case "linear":
+						s = 3
+						ss = 35
+						break
+					case "ease":
+						s = 15
+						ss = 20
+						break
+					}
+				let timer = setInterval(() => {
+					this.viewTop = this.viewTop + ss
+					if (this.viewTop > (this.viewTopPostion - 10)) {
+						this.viewTop = this.viewTopPostion
+						clearInterval(timer)
+						slidingStatus = false
+						this.slidingCallback()
+					}
+					if(this.timingFunction == "ease"){
+						s--
+						if (s < 3) {
+							s = 3
+						}
+						ss++
+						if (ss > 35) {
+							ss = 35
+						}
+					}
+				}, s)
+			},
+
+			// 如果滑动的小，就恢复到原位置
+			videoSlidingReset(sliding) {
+				this.viewTop = this.viewTopPostion
+				slidingStatus = false
+			},
+			getSystemInfo() {
+				var _this = this;
+				uni.getSystemInfo({
+					success: function(res) {
+						_this.winWidth = res.windowWidth;
+						_this.winHeight = res.windowHeight;
+						let p = uni.upx2px(150)
+						_this.stopIcon = `left:${(res.windowWidth - p)/2}px;top:${(res.windowHeight - p)/2}px;`
+						if (this.preview) return
+						_this.itemViewTop1 = res.windowHeight
+						_this.itemViewTop2 = res.windowHeight * 2
+						_this.itemViewTop3 = res.windowHeight * 3
+						_this.itemViewTop4 = res.windowHeight * 4
+						_this.boxHeight = res.windowHeight * 5
+					},
+				})
+			},
+
+			slidingCallback() {
+				this.progress = 0
+			},
+			//滑动组件排序
+			sortItemView(silding) {
+				// 向上滑动
+				if (silding < 0) {
+					if (this.videoIndex > 2 && this.videoIndex < this.videoListLength - 2) {
+						let i = (this.videoIndex - 3) % 5
+						this["itemViewTop" + i] = this["itemViewTop" + i] + this.winHeight * 5
+						this['videoInfo_' + i] = this.videoList[this.videoIndex + 2]
+					}
+					return
+				}
+				// 向下滑动
+				if (silding > 0) {
+					if (this.videoIndex > 1 && this.videoIndex < this.videoListLength - 3) {
+						let i = (this.videoIndex + 3) % 5
+						this["itemViewTop" + i] = this["itemViewTop" + i] - this.winHeight * 5
+						this['videoInfo_' + i] = this.videoList[this.videoIndex - 2]
+					}
+				}
+			},
+			playVideo(num, control) {
+				videoPlayingStatus = true
+				this["videoInfo_" + num].flag = true
+				let t = this.preview ? 350 : 400
+				setTimeout(()=>{
+					uni.createVideoContext("video_id_" + num, this).play()
+				},t)
+				clearInterval(musicTimer)
+				this.translateX = 10
+				this.animateTranslateX(num)
+				this.videoFlag = true
+			},
+			stopVideo(num, control) {
+				if (!control) {
+					this['videoInfo_' + num].coverStatus = true
+					setTimeout(()=>{
+						this['videoInfo_' + num].coverStatus = true
+					},600)
+					uni.createVideoContext("video_id_" + num, this).stop()
+				} else {
+					uni.createVideoContext("video_id_" + num, this).pause()
+				}
+				this.translateX = 10
+				clearInterval(musicTimer)
+				this["videoInfo_" + num].flag = false
+				this.videoFlag = false
+			},
+			setVideo() {
+				// let pageNo = parseInt(this.videoListLength / 5) + 2
+				this.$emit('setVideoList', {
+					item: this.videoList[this.videoIndex]
+				})
+			},
+			setVideoData(list) {
+				this.videoList = [...this.videoList, ...list]
+				this.videoListLength = this.videoList.length
+				this.boxHeight = this.videoListLength * this.winHeight
+			},
+			playing(i) {
+				setTimeout(() => {
+					this['videoInfo_' + i].coverStatus = false
+					this.moveView = true
+					slidingStatus = false
+				}, 600)
+			},
+			timeupdate(i,e) {
+				if(videoPlayingStatus) {
+					slidingStatus = false
+					videoPlayingStatus = false
+					setTimeout(() => {
+						this['videoInfo_' + i].coverStatus = false
+						this.moveView = true
+					}, 200)
+				}
+				this["videoInfo_" + i].flag = true
+				this.videoFlag = true
+				if(e.detail.duration >= this.progressTime) {
+					this.time = e.detail.duration
+					this.progress = e.detail.currentTime
+					this.showProgress = true
+				} else {
+					this.showProgress = false
+				}
+			},
+			ended() {
+				this.progress = 0
+			},
+			animateTranslateX(i) {
+				let num = this['videoInfo_' + i].dubbedText.length * 9
+				musicTimer = setInterval(() => {
+					this.translateX--
+					if (this.translateX == -(num + 20)) {
+						this.translateX = num
+					}
+				}, 100)
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	.view-box {
+		position: fixed;
+		left: 0;
+		right: 0;
+		background-color: #000000;
+	}
+
+	.video-box {
+		position: absolute;
+		left: 0;
+		right: 0;
+		z-index: 2000;
+	}
+
+	.video-size {
+		width: 100%;
+		height: 100%;
+	}
+
+	.video-image {
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 2001;
+	}
+
+	.video-image-mask {
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 2001;
+		background-color: #000000;
+	}
+
+	.video-action {
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 2008;
+	}
+
+	.cover-view-left {
+		position: absolute;
+		margin-left: 22rpx;
+		width: 556rpx;
+		bottom: 43px;
+		z-index: 9999;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	.view-left-text {
+		color: #FFFFFF;
+		font-size: 18px;
+		margin-bottom: 10rpx;
+		font-weight: bold;
+	}
+
+	.view-left-text-content {
+		padding-right: 70rpx;
+	}
+
+	.text-content-text {
+		color: #eee;
+		font-size: 14px;
+		lines: 2;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		line-height: 50rpx;
+	}
+
+	.view-left-icon {
+		color: #eee;
+		font-size: 20px;
+	}
+
+	.view-left-dubbedText {
+		color: #FFFFFF;
+		margin-left: 40rpx;
+		font-size: 16px;
+		width: 300rpx;
+		flex-direction: row;
+	}
+
+	.view-left-dubbedText-text {
+		color: #d0d1d5;
+		font-size: 16px;
+		line-height: 50rpx;
+	}
+
+	.text-content-advert {
+		justify-content: flex-end;
+		width: 540rpx;
+		height: 56rpx;
+	}
+
+	.text-content-advert-text {
+		margin-left: 480rpx;
+		width: 60rpx;
+		font-size: 20rpx;
+		color: #FFFFFF;
+		border: 1px #FFFFFF solid;
+		text-align: center;
+	}
+
+	.seedetails {
+		width: 540rpx;
+		height: 56rpx;
+		text-align: center;
+		background-color: rgba(77, 170, 201, 0.8);
+		border-radius: 6px;
+		margin-top: 10px;
+	}
+
+	.seedetails-text {
+		font-size: 14px;
+		color: #fafbff;
+		text-align: center;
+		line-height: 56rpx;
+	}
+	
+	.cover-view-stop {
+		position: absolute;
+		z-index: 9999;
+		width: 150rpx;
+		height: 200rpx;
+	}
+	
+	.cover-view-stop-text {
+		position: absolute;
+		z-index: 9999;
+		color: #f3f3f3;
+		opacity: 0.6;
+		font-size: 150rpx;
+	}
+	
+	.cover-view-right {
+		position: absolute;
+		bottom: 23px;
+		right: 15rpx;
+		width: 92rpx;
+		height: 780rpx;
+		z-index: 9999;
+	}
+
+	.cover-view-right-head {
+		height: 130rpx;
+		z-index: 9999;
+	}
+
+	.avater {
+		width: 92rpx;
+		height: 92rpx;
+		border-radius: 100%;
+		border-width: 1rpx;
+		border-color: #aaa;
+		border-style: solid;
+	}
+
+	.iconfont {
+		font-family: iconfont;
+	}
+
+	.cover-right-follow {
+		margin-top: -20rpx;
+		height: 60rpx;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.right-follow-box {
+		width: 45rpx;
+		height: 50rpx;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.right-follow-bg {
+		border-radius: 100%;
+		width: 33rpx;
+		height: 30rpx;
+		background-color: #FFFFFF;
+	}
+
+	.right-follow {
+		color: #F25011;
+		font-size: 40rpx;
+		margin-top: -39rpx;
+	}
+
+	.iconfont-size-heat {
+		margin-top: 48rpx;
+		font-size: 90rpx;
+		text-align: center;
+	}
+
+	.white-heat {
+		color: #eee;
+	}
+
+	.red-heat {
+		color: #FF1B00;
+	}
+
+	.iconfont-size-music {
+		margin-top: 57rpx;
+		color: #666666;
+		font-size: 92rpx;
+		text-align: center;
+	}
+
+	.iconfont-size {
+		margin-top: 40rpx;
+		color: #eee;
+		font-size: 70rpx;
+		text-align: center;
+	}
+
+	.right-text {
+		color: #FFFFFF;
+		font-size: 11px;
+		text-align: center;
+	}
+	
+	.progress-bar {
+		height: 1px;
+		background-color: #84817e;
+		flex: 1;
+		opacity: 0.8;
+	}
+	
+	.progress-bar-point {
+		width: 3px;
+		height: 3px;
+		border-radius: 100%;
+		background-color: #c3bdbb;
+		margin-left: -2px;
+		opacity: 0.8;
+	}
+	
+	.progress-bar-box {
+		width: 100%;
+		height: 3px;
+		z-index: 999;
+		position: fixed;
+		bottom: 0px;
+		left: 0;
+		flex-direction: row;
+		align-items: center;
+	}
+	
+	.progress-bar-bg {
+		height: 1px;
+		background-color: #716e6c;
+		flex: 1;
+		opacity: 0.3;
+	}
+	
+	.progress-bar-bg-active {
+		height: 2px;
+		background-color: #716e6c;
+		flex: 1;
+		opacity: 0.3;
+	}
+	
+	.progress-bar-box-active {
+		width: 100%;
+		height: 6px;
+		z-index: 999;
+		position: fixed;
+		bottom: 0px;
+		left: 0;
+		flex-direction: row;
+		align-items: center;
+	}
+	
+	.progress-bar-active {
+		height: 2px;
+		background-color: #ded8d6;
+		flex: 1;
+	}
+	
+	.progress-bar-point-active {
+		width: 6px;
+		height: 6px;
+		border-radius: 100%;
+		background-color: #ded8d6;
+		margin-left: -4px;
+	}
+	
+	.move-point {
+		width: 30px;
+		height: 25px;
+		z-index: 99999999;
+		position: fixed;
+		bottom: 0px;
+	}
+
+	.bg-white {
+		/* background-color: #000000;
+		border-radius: 100%; */
+	}
+</style>
