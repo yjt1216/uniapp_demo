@@ -33,6 +33,10 @@
 			<view class="demo-li"> 输入框 <text class="demo-tip"> input </text></view>
 		</navigator>
 		
+		<navigator url="/pages_func/pages/web_view/web_view">
+			<view class="demo-li"> 同意书 <text class="demo-tip"> web_view </text></view>
+		</navigator>
+		
 		
 	</view>
 </template>

@@ -257,6 +257,9 @@
 				},
 				{
 					"path": "pages/input/input"
+				},
+				{
+					"path": "pages/web_view/web_view"
 				}
 			]
 		},

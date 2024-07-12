@@ -243,3 +243,25 @@ MD5签名：
 ### scss/sass编译 0.0.8 ----> 0.0.9
 ### vue-devtools  0.0.5----> 0.0.6
 ### HBuilderX uni-app自动化测试 0.2.2 -----> 1.8.5
+
+
+
+
+{
+	"apFilePaths":[
+		"https://resource/5a7ffe25d447a392 bf1fd4e736a8984d.image"
+	],
+	"filePaths": [
+		"https://resource/5a7ffe25d447a392bf1fd4e736a8984d.image"
+	],
+	"files": [
+		{
+			"fileType":"jpg", 
+			"path":"https://resource/5a7ffe25d447a392bf1fd4e736a8984d image" ,
+			"size":88823
+		}
+	],
+	"scene": "assets",
+	"success": true, 
+	"tempFilePaths" :["https://resource/5a7ffe25d447a392bf1fd4e736a8984dimage" ]
+}
