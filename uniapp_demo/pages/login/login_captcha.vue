@@ -54,13 +54,13 @@
 				this.$refs.captcha.open();
 			},
 			verifyCodeClick() {
-				// if (!this.mobile || this.mobile.length == 0) {
-				// 	uni.showToast({
-				// 		title:'请填写手机号码',
-				// 		icon:'none'
-				// 	});
-				// 	return;
-				// }
+				if (!this.mobile || this.mobile.length == 0) {
+					uni.showToast({
+						title:'请填写手机号码',
+						icon:'none'
+					});
+					return;
+				}
 				// if (!utils.isCorrectPhoneNumber(this.mobile)) {
 				// 	this.$warnToast("请填写正确的手机号码");
 				// 	return;

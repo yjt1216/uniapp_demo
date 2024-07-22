@@ -77,7 +77,6 @@ export function chooseFile({
                 count: multiple ? Math.min(maxCount, 9) : 1,
                 sourceType: capture,
                 sizeType,
-				camera:'back',
                 success: (res) => resolve(formatImage(res)),
                 fail: reject
             })

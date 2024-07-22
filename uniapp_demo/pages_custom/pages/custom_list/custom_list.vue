@@ -13,6 +13,11 @@
 			<view class="demo-li">头部底部<text class="demo-tip"> 头部 数据列表list 底部 </text></view>
 		</navigator>
 		 
+		 
+		 <navigator url="/pages_custom/pages/verification/verification">
+		 	<view class="demo-li">图形验证码<text class="demo-tip"> verification </text></view>
+		 </navigator>
+		 
 		<!-- <navigator url="/pages_custom/pages/online_consult/online_consult">
 			<view class="demo-li"> 切换咨询时段 <text class="demo-tip"> 七天一组 </text></view>
 		</navigator>

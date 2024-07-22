@@ -15,17 +15,23 @@
         data() {
             return {
                 indicator: false, //滑动显示条
-                list: [{
-                    thumb: "https://cdn.uviewui.com/uview/goods/1.jpg"
-                }, {
-                    thumb: "https://cdn.uviewui.com/uview/goods/2.jpg"
-                }, {
-                    thumb: "https://cdn.uviewui.com/uview/goods/3.jpg"
-                }, {
-                    thumb: "https://cdn.uviewui.com/uview/goods/4.jpg"
-                }, {
-                    thumb: "https://cdn.uviewui.com/uview/goods/5.jpg"
-                }],
+                list: [
+					{
+						thumb: "https://cdn.uviewui.com/uview/goods/1.jpg"
+					}, 
+					{
+						thumb: "https://cdn.uviewui.com/uview/goods/2.jpg"
+					}, 
+					{
+						thumb: "https://cdn.uviewui.com/uview/goods/3.jpg"
+					}, 
+					{
+						thumb: "https://cdn.uviewui.com/uview/goods/4.jpg"
+					}, 
+					{
+						thumb: "https://cdn.uviewui.com/uview/goods/5.jpg"
+					},
+				],
 				listImageH:'/static/list_h.png',
             }
         }

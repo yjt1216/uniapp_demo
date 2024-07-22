@@ -33,7 +33,8 @@
 								<u-input v-if="item.isSelect && item.title == '其他'" class="radio-bottom-input"
 									placeholder="请输入原因"
 									border="bottom"  
-									@input="inputData($event, question.title)"></u-input>
+									v-model="question.draft"
+									@input="inputData($event, question)"></u-input>
 							</view>
 						</u-radio-group>
 						
@@ -63,7 +64,7 @@
 									<text class="u-block__title"> {{question.title}}</text>
 								</view>
 								<view class="space-fill"></view>
-								<u-input class="downCheck" border="bottom"  @input="inputData($event, question.title)"></u-input>
+								<u-input class="downCheck" v-model="question.draft" border="bottom"  @input="inputData($event, question)"></u-input>
 							</view>
 						</template>
 					</view>
@@ -77,7 +78,7 @@
 									<text class="u-block__title"> {{question.title}}</text>
 								</view>
 								<view class="space-fill"></view>
-								<u-input class="downCheck" border="bottom"  @input="inputData($event, question.title)"></u-input>
+								<u-input class="downCheck" border="bottom"  v-model="question.draft"  @input="inputData($event, question)"></u-input>
 							</view>
 						</template>
 					</view>
@@ -87,7 +88,6 @@
 			</scroll-view>
 		</view>
 
-
 		<view class="footer">
 			<button class="submit-btn"  @click="submitAppraiseFun">提交评估</button>
 		</view>
@@ -95,6 +95,7 @@
 	</view>
 </template>
 <script>
+import { apiAssessFromData } from '../../../api/mock';
 	export default {
 		data() {
 			return {
@@ -112,19 +113,36 @@
 				imgUrl: ''
 			};
 		},
-		onBackPress(event) {
-			console.log('导航栏返回 拦截event',event)
-		},
 		
 		onLoad() {
-			//this.getFormData()
+			let _this = this;
+			let questionList = uni.getStorageSync('assess-form');
+			console.log('缓存中数据是否存在',questionList);
+			if(!questionList){
+				_this.getFormData();
+			}else{
+				_this.questionList = questionList;
+				
+				questionList.forEach(formItem=>{
+					// 草稿数据 用户缓存之前填写的内容 是否存在
+					var draftInfo = formItem.draft;
+					if(draftInfo.length > 0){
+						_this.formData[formItem.title] = draftInfo;
+					}
+				});
+				console.log('缓存中数据是否存在',_this.formData);
+			}
+			
 		},
 		methods: {
 			naviLeftClick(){
-				console.log('导航栏返回 拦截')
-				var pages = getCurrentPages();
-				console.log('导航栏pages',pages)
-				uni.navigateBack()
+				console.log('naviLeftClick 导航栏返回 拦截')
+				// var pages = getCurrentPages();
+				// console.log('naviLeftClick 导航栏pages',pages)
+				// 存储草稿数据
+				uni.setStorageSync('assess-form',this.questionList);
+				
+				uni.navigateBack();
 			},
 			signatureChange(e) {
 			    this.imgUrl = e
@@ -135,9 +153,8 @@
 			},
 			select(e){
 				console.log(e);
-				
 			},
-			/* 获取评估表单数据 */
+			/* 获取评估表单数据 apiAssessFromData */
 			getFormData() {
 				apiAssessFromData().then(res=>{
 					console.log('评估表单res',res)
@@ -155,17 +172,19 @@
 					var formList = []
 					formList = questions
 					formList.forEach(formItem=>{
-						var itemOptions = formItem.options
+						var itemOptions = formItem.options;
+						// 草稿数据 用户缓存当前填写的内容
+						formItem['draft'] = '';
 						itemOptions.forEach(options=>{
-							options['isSelect'] = false
+							options['isSelect'] = false;
 						})
 						
 					})
 					
-					console.log('表单添加select属性',formList)
+					console.log('表单添加select属性',formList);
 					this.questionList = formList
 				}).catch((err)=>{
-					console.log('评估表单err',err)
+					console.log('评估表单err',err);
 				})
 			},
 			nextStep() {
@@ -173,10 +192,14 @@
 			  this.$emit("personData", this.formData);
 			  console.log('input list 中数据list',this.formData)
 			},
-			inputData(event, dataValue) {
+			inputData(event, question) {
 			  // var value = event.target.value;
-			  console.log('填空题event ',event,dataValue)
-			  this.formData[dataValue] = event;
+			  // console.log('填空题event: ',event,question.title)
+			  this.formData[question.title] = event;
+			  question.draft = event;
+			  console.log('填空题event-2 : ', this.questionList);
+			  uni.setStorageSync('assess-form',this.questionList);
+			  
 			},
 			/* 单选题 */
 			radioChange(event, question,index){
@@ -210,7 +233,11 @@
 			
 			/* 提交评估 */
 			submitAppraiseFun() {
-				console.log('提交评估单 --- ',this.signValue)
+				console.log('提交评估单 --- ',this.formData);
+				
+				// 提交评估后 清空当前评估单数据
+				uni.removeStorageSync('assess-form');
+				
 			},
 			async startSign() {
 				let s = await this.$refs.sign.getSyncSignature();

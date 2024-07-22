@@ -26,7 +26,9 @@
 			<template >
 			  <view class="flex align-center person_item">
 				<text>{{ item.name }}</text>
-				<u-input class="downCheck" border="bottom" :placeholder="item.placeValue"  @input="inputData($event, item.dataValue)"></u-input>
+				<u-input class="downCheck" border="bottom" :placeholder="item.placeValue"
+					:autoBlur="true" @blur="saveInputData"	@input="inputData($event, item.dataValue)">
+				</u-input>
 			  </view>
 			</template>
 			
@@ -59,7 +61,6 @@
 			<text class="option-required"> * </text> 
 			<text class="u-block__title"> 护理人员签名确认 </text>
 		</view>
-		
 		
 	  
     </view>
@@ -95,35 +96,40 @@
 						icon: "none",
 						type: "input",
 						dataValue: "nameValue",
-						placeValue: '请输入姓名'
+						placeValue: '请输入姓名',
+						value:''
 					},
 					{
 					  name: "性别",
 					  icon: "none",
 					  type: "input",
 					  dataValue: "sexValue",
-					  placeValue: '请输入性别'
+					  placeValue: '请输入性别',
+					  value:''
 					},
 					{
 					  name: "年龄",
 					  icon: "none",
 					  type: "input",
 					  dataValue: "ageValue",
-					  placeValue: '请输入年龄'
+					  placeValue: '请输入年龄',
+					  value:''
 					},
 					{
 					  name: "电话",
 					  icon: "none",
 					  type: "input",
 					  dataValue: "telValue",
-					  placeValue: '请输入电话'
+					  placeValue: '请输入电话',
+					  value:''
 					},
 					{
 					  name: "身份证号",
 					  icon: "none",
 					  type: "input",
 					  dataValue: "idValue",
-					  placeValue: '请输入身份证号码'
+					  placeValue: '请输入身份证号码',
+					  value:''
 					},
 				  ],
 				redioList:[
@@ -324,7 +330,7 @@
 			},
 			inputData(event, dataValue) {
 			  // var value = event.target.value;
-			  console.log('event ',event,dataValue)
+			  console.log('event ',event,dataValue);
 			  this.formData[dataValue] = event;
 			},
 			/* 签名 */
@@ -351,7 +357,10 @@
 			},
 			checkboxClick(name) {
 				this.checkboxs[name].checked = !this.checkboxs[name].checked
-			}
+			},
+			saveInputData(){
+				
+			},
 		},
 	};
 </script>

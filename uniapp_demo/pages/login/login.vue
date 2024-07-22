@@ -24,8 +24,11 @@
 				<u-input placeholder="请输入登录账号" v-model="value" type="number" clearable />
 			</view>
 			<view class="uni-form-item uni-column">
-				<u-input placeholder="请输入验证码" v-model="value" type="number" />
-				
+				<u-input placeholder="请输入图形验证码" v-model="value" type="number" />
+				<jp-verification-literalness @getCode="getCode"></jp-verification-literalness>
+			</view>
+			<view class="uni-form-item uni-column">
+				<u-input placeholder="请输入手机验证码" v-model="value" type="number" />
 				<label class="regFrom_tom_yzlabel" :style="{ color : QzyzmStare?'#cccccc':'#2ebbfe'}" @click="QzyzmFun">{{Qztime}}{{Qztext}}</label>
 			</view>
 			<button form-type="submit" class="loginbtn" type="default">登录</button>
@@ -77,6 +80,9 @@
 			}
 		},
 		methods:{
+			getCode(){
+				
+			},
 			//登录提交
 			formSubmit(){
 				console.log("页面跳转")

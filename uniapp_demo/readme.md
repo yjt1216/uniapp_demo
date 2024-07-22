@@ -22,63 +22,6 @@
 ├── uni_modules             // dcloud第三方插件
 
 
-微护护士端：iOS端
-
-bundleID : com.szdepin.dpweiyihu
-公钥：b3c82ef1a5616fa2ad575fea46502417296a4f42aa68cab39a98fe2eb75372323e17aecc5d2abc7f09a8a006b5b10387b02a185cb9955dbedcc9e3107f084b2ce15d75bd03f5aca6b5cc3c4e0718c8b89acaa46c2ddf4b68fce4d9dae7aba2e837b13b87ec2c67b3208bca9de6695403092504edba38c58716d580ebd1b34c571e9a3afa400585cfe879a6b3ccc03dba6edf2365e2708f2c2cf17fc0135fd40f1ecb2f50b3ad24457d6dbfb5a7f89add60a60694b0a4244fde5c736e655076e9142951e0eedf0e326e7909245d7848aeb2eeb4e1b22aeea53a8e3c6dd90e4f7251182f16f5d8f06980e2d68da4a803a15a679e71308c3f09b5022850be3dda3b
-SHA-1：943CBA833B4157F5DA66295806FCC53E12DFA7F6
-iOS服务域名：https://didi.wellnurse.cn
-
-
-
-培训护理：iOS端
-
-bundleID : com.depin.www.cultivate
-
-公钥：b3c82ef1a5616fa2ad575fea46502417296a4f42aa68cab39a98fe2eb75372323e17aecc5d2abc7f09a8a006b5b10387b02a185cb9955dbedcc9e3107f084b2ce15d75bd03f5aca6b5cc3c4e0718c8b89acaa46c2ddf4b68fce4d9dae7aba2e837b13b87ec2c67b3208bca9de6695403092504edba38c58716d580ebd1b34c571e9a3afa400585cfe879a6b3ccc03dba6edf2365e2708f2c2cf17fc0135fd40f1ecb2f50b3ad24457d6dbfb5a7f89add60a60694b0a4244fde5c736e655076e9142951e0eedf0e326e7909245d7848aeb2eeb4e1b22aeea53a8e3c6dd90e4f7251182f16f5d8f06980e2d68da4a803a15a679e71308c3f09b5022850be3dda3b
-SHA-1：943CBA833B4157F5DA66295806FCC53E12DFA7F6
-iOS服务域名：http://36.152.50.211:8088
-
-
-培训护理 安卓端：
-
-包名：
-模数(公钥): 
-MD5签名：
-
-
-德知 iOS端
-
-
-bundleID : com.dePin.www.staffTraining
-
-公钥：b3c82ef1a5616fa2ad575fea46502417296a4f42aa68cab39a98fe2eb75372323e17aecc5d2abc7f09a8a006b5b10387b02a185cb9955dbedcc9e3107f084b2ce15d75bd03f5aca6b5cc3c4e0718c8b89acaa46c2ddf4b68fce4d9dae7aba2e837b13b87ec2c67b3208bca9de6695403092504edba38c58716d580ebd1b34c571e9a3afa400585cfe879a6b3ccc03dba6edf2365e2708f2c2cf17fc0135fd40f1ecb2f50b3ad24457d6dbfb5a7f89add60a60694b0a4244fde5c736e655076e9142951e0eedf0e326e7909245d7848aeb2eeb4e1b22aeea53a8e3c6dd90e4f7251182f16f5d8f06980e2d68da4a803a15a679e71308c3f09b5022850be3dda3b
-SHA-1：943CBA833B4157F5DA66295806FCC53E12DFA7F6
-iOS服务域名：http://121.229.160.27:8690
-
-
-德品微护 iOS端：
-
-bundleID : com.szdepin.dpweihu
-
-公钥：b3c82ef1a5616fa2ad575fea46502417296a4f42aa68cab39a98fe2eb75372323e17aecc5d2abc7f09a8a006b5b10387b02a185cb9955dbedcc9e3107f084b2ce15d75bd03f5aca6b5cc3c4e0718c8b89acaa46c2ddf4b68fce4d9dae7aba2e837b13b87ec2c67b3208bca9de6695403092504edba38c58716d580ebd1b34c571e9a3afa400585cfe879a6b3ccc03dba6edf2365e2708f2c2cf17fc0135fd40f1ecb2f50b3ad24457d6dbfb5a7f89add60a60694b0a4244fde5c736e655076e9142951e0eedf0e326e7909245d7848aeb2eeb4e1b22aeea53a8e3c6dd90e4f7251182f16f5d8f06980e2d68da4a803a15a679e71308c3f09b5022850be3dda3b
-SHA-1：943CBA833B4157F5DA66295806FCC53E12DFA7F6
-iOS服务域名：http://121.229.160.27:8690
-
-
-德品微护 安卓端：
-
-包名：com.depin.www.yuanwaiUserFlutter.yuanwaiUserFlutter
-模数(公钥): 
-MD5签名：
-
-
-微护小护士
-
-微护小护士	苏ICP备2023002682号-2A	
-
-
-
 
 
 **标题：**
@@ -245,23 +188,3 @@ MD5签名：
 ### HBuilderX uni-app自动化测试 0.2.2 -----> 1.8.5
 
 
-
-
-{
-	"apFilePaths":[
-		"https://resource/5a7ffe25d447a392 bf1fd4e736a8984d.image"
-	],
-	"filePaths": [
-		"https://resource/5a7ffe25d447a392bf1fd4e736a8984d.image"
-	],
-	"files": [
-		{
-			"fileType":"jpg", 
-			"path":"https://resource/5a7ffe25d447a392bf1fd4e736a8984d image" ,
-			"size":88823
-		}
-	],
-	"scene": "assets",
-	"success": true, 
-	"tempFilePaths" :["https://resource/5a7ffe25d447a392bf1fd4e736a8984dimage" ]
-}
