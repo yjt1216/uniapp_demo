@@ -34,7 +34,8 @@
 									placeholder="请输入原因"
 									border="bottom"  
 									v-model="question.draft"
-									@input="inputData($event, question)"></u-input>
+									@input="inputData($event, question)">
+								</u-input>
 							</view>
 						</u-radio-group>
 						
@@ -50,7 +51,8 @@
 							<view class="space-fill"></view>
 							<u-checkbox-group placement="column" >
 								<u-checkbox v-for="(checkItem,checkQIndex) in question.options" :customStyle="{marginBottom:'8px'}" :key="checkQIndex" 
-								:label="checkItem.no + '、' + checkItem.title" :name="checkItem.title" @change="checkboxChange($event, question.title)"></u-checkbox>
+									:label="checkItem.no + '、' + checkItem.title" :name="checkItem.title" @change="checkboxChange($event, question.title)">
+								</u-checkbox>
 							</u-checkbox-group>
 						</template>
 					</view>
@@ -91,29 +93,18 @@
 		<view class="footer">
 			<button class="submit-btn"  @click="submitAppraiseFun">提交评估</button>
 		</view>
-
 	</view>
 </template>
 <script>
-import { apiAssessFromData } from '../../../api/mock';
+	import { apiAssessFromData } from '../../../api/mock';
 	export default {
 		data() {
 			return {
 				formData: {},
 				// 评估表单list
 				questionList: [],
-				/* 签名 base64 数据类型 */
-				signValue: '',
-				settings:{ //签名设置
-				    width: '750',//签名区域的宽
-				    height: '500',//签名区域的高
-				    lineWidth:3,//签名时线宽
-				    textColor:'#007AFF' //签名文字颜色
-				},
-				imgUrl: ''
 			};
 		},
-		
 		onLoad() {
 			let _this = this;
 			let questionList = uni.getStorageSync('assess-form');
@@ -144,9 +135,7 @@ import { apiAssessFromData } from '../../../api/mock';
 				
 				uni.navigateBack();
 			},
-			signatureChange(e) {
-			    this.imgUrl = e
-			},
+			
 			/* radio-group */
 			radioChangeFun(e){
 				console.log('评估表单radioChangeFun',e)
@@ -348,37 +337,8 @@ import { apiAssessFromData } from '../../../api/mock';
 			color: white;
 		}
 		
-		.xuanxiang{
-			width: 100%;
-			display: flex;
-			flex-direction: row;
-			align-items: flex-start;
-			justify-content: space-between;
-			margin-top: 10rpx;
-		}
-		
-		.xuanxiang .s{
-			width:90%;
-			word-break: break-all;
-			font-size: 36upx;
-		}
-		
-		.xuanxiang .s2{
-			width:50%;
-			word-break: break-all;
-		}
-		
-		
 	}
-	.preview{
-	    margin: 10rpx;
-	    border: 1rpx solid #aaaaaa;
-	    border-radius: 10rpx;
-	}
-	.text {
-	    margin: 20rpx;
-	    color: #aaaaaa;
-	}
+	
 	
 </style>
 

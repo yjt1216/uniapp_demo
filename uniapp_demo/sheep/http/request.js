@@ -59,7 +59,6 @@ service.interceptors.request.use(
 			// console.log('请求拦截 url',config.url)
 			config.url += paramsToStr(config.params)
 		}
-		
 		config.header.token = store.getters.token
 		//console.log('请求拦截config',config)
 		return config

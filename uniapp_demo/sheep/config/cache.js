@@ -1,92 +1,52 @@
-// cache-tool.js
-export default {
-  // 设置缓存
-  set(key, value) {
-    return new Promise((resolve, reject) => {
-      uni.setStorage({
-        key,
-        data: value,
-        success() {
-          resolve();
-        },
-        fail(err) {
-          reject(err);
-        },
-      });
-    });
-  },
+const Cache = {
+    // 设置缓存(expire为缓存时效，单位为秒)
+    set(key, value, expire) {
+        const now = this.time();
+        let data = {
+            expire: expire ? (now + expire * 1000) : 0, // 转换为毫秒
+            value
+        };
 
-  // 获取缓存
-  get(key) {
-    return new Promise((resolve, reject) => {
-      uni.getStorage({
-        key,
-        success(res) {
-          resolve(res.data);
-        },
-        fail(err) {
-          reject(err);
-        },
-      });
-    });
-  },
+        // 直接存储JSON字符串
+        uni.setStorageSync(key, JSON.stringify(data));
+        return true; // 假设存储成功，返回true
+    },
+    get(key) {
+        try {
+            const dataStr = uni.getStorageSync(key);
+            if (!dataStr) {
+                return false; // 如果没有找到缓存项，返回false
+            }
+            const data = JSON.parse(dataStr);
+            if (data.expire && data.expire < this.time()) {
+                // 如果过期，从缓存中删除并返回false
+                uni.removeStorageSync(key);
+                return false;
+            } else {
+                return data.value; // 返回缓存的值
+            }
+        } catch (e) {
+            return false; // 如果解析缓存项时出错，返回false
+        }
+    },
+    // 其他方法保持不变...
 
-  // 删除缓存
-  remove(key) {
-    return new Promise((resolve, reject) => {
-      uni.removeStorage({
-        key,
-        success() {
-          resolve();
-        },
-        fail(err) {
-          reject(err);
-        },
-      });
-    });
-  },
+    // 移除特定缓存项
+    remove(key) {
+        if (key) {
+            uni.removeStorageSync(key);
+        }
+    },
 
-  // 检查键是否存在
-  containsKey(key) {
-    return new Promise((resolve) => {
-      uni.getStorageInfo({
-        success(info) {
-          const keys = info.keys;
-          resolve(keys.includes(key));
-        },
-      });
-    });
-  },
+    // 清空所有缓存
+    removeAll() {
+        uni.clearStorage();
+    },
+
+    // 获取当前时间戳（秒为单位）
+    time() {
+        return Math.round(new Date() / 1000);
+    }
 };
 
-/* 
- 
- // 在你的页面或组件中导入缓存工具
- import CacheTool from '@/utils/cache-tool';
- 
- // 在 A 页面保存 open_id
- CacheTool.set('open_id', 'your_open_id')
-   .then(() => {
-     console.log('open_id saved successfully');
-   })
-   .catch((err) => {
-     console.error('Failed to save open_id:', err);
-   });
- 
- // 在 B 页面获取 open_id
- CacheTool.get('open_id')
-   .then((open_id) => {
-     if (open_id) {
-       console.log('open_id retrieved:', open_id);
-       // 进行后续操作
-     } else {
-       console.log('open_id not found or expired');
-       // 可能需要重新获取
-     }
-   })
-   .catch((err) => {
-     console.error('Failed to retrieve open_id:', err);
-   });
- 
- 
- */
+export default Cache;
