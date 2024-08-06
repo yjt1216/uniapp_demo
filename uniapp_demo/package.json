@@ -1,26 +1,34 @@
 {
-    "id": "helang-compress",
-    "name": "图片压缩 - 可以自定义压缩尺寸和压缩质量",
-    "displayName": "图片压缩 - 可以自定义压缩尺寸和压缩质量",
-    "version": "1.1.5",
-    "description": "简单实用的图片压缩插件，对大体积图片的压缩率显著。能大大的提高图片上传速度。",
-    "keywords": [
-        "图片",
-        "压缩",
-        "批量压缩"
-    ],
-    "dcloudext": {
-        "category": [
-            "前端组件",
-            "通用组件"
-        ]
-    },
-    "dependencies": {
-        "addressit": "^1.8.2",
-        "crypto-js": "^4.2.0",
-        "gcoord": "^1.0.6",
-        "luch-request": "^3.1.1",
-        "moment": "^2.30.1",
-        "tencentcloud-webar-wx": "^1.0.6"
-    }
+  "id": "t-datetime",
+  "displayName": "日历时间选择器",
+  "version": "1.0.2",
+  "description": "日历+时间的组合式选择器",
+  "keywords": [
+    "日历",
+    "时间",
+    "选择器"
+  ],
+  "dcloudext": {
+    "category": [
+      "前端组件",
+      "通用组件"
+    ]
+  },
+  "name": "uniapp_demo",
+  "main": "main.js",
+  "dependencies": {
+    "addressit": "^1.8.2",
+    "cog": "^1.1.0",
+    "crypto-js": "^4.2.0",
+    "gcoord": "^1.0.6",
+    "luch-request": "^3.1.1",
+    "moment": "^2.30.1",
+    "tencentcloud-webar-wx": "^1.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }

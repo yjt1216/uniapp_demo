@@ -164,6 +164,9 @@
 						var itemOptions = formItem.options;
 						// 草稿数据 用户缓存当前填写的内容
 						formItem['draft'] = '';
+						if(itemOptions[0].title === 'date' && formItem.qTypeId === 'q_text'){
+							formItem['draft'] = '';
+						}
 						itemOptions.forEach(options=>{
 							options['isSelect'] = false;
 						})

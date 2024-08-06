@@ -204,6 +204,12 @@
 				},
 				{
 					"path": "pages/verification/verification"
+				},
+				{
+					"path": "pages/calendar_form/calendar_form",
+					"style": {
+						"navigationBarTitleText": "calendar"
+					}
 				}
 			]
 		},

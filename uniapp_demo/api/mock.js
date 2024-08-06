@@ -6,8 +6,9 @@
 
 // 模拟数据
 import goods from "./goods.js";
-import orders from "./orders.js"
-import assessFormData from './assess_form.js'
+import orders from "./orders.js";
+import assessFormData from './assess_form.js';
+import calendarFormData from './calendar_form.js';
 
 // 获取新闻列表
 export function apiNewList(pageNum, pageSize) {
@@ -239,6 +240,25 @@ export function apiAssessFromData() {
 		},1000)
 	})
 }
+
+
+/* 评估表单数据 */
+export function apiCalendarFromData() {
+	return new Promise((resolute, reject)=>{
+		//延时一秒,模拟联网
+		setTimeout(()=> {
+			try{
+				let data = calendarFormData
+				
+				resolute(data);
+			} catch (e) {
+				//模拟接口请求失败
+				reject(e);
+			}
+		},1000)
+	})
+}
+
 
 /* 评估订单数据 */
 export function apiOrderData(params) {

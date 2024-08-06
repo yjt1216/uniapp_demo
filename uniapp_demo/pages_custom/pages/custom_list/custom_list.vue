@@ -5,6 +5,10 @@
 			<view class="demo-li">评估表单<text class="demo-tip"> 填空 单选 多选 签名</text></view>
 		</navigator> 
 		
+		<navigator url="/pages_custom/pages/calendar_form/calendar_form">
+			<view class="demo-li">calendar<text class="demo-tip"> 填空 单选 多选 签名</text></view>
+		</navigator>
+		
 		<navigator url="/pages_custom/pages/filter_date/filter_date">
 			<view class="demo-li"> 筛选日期 <text class="demo-tip"> filter </text></view>
 		</navigator>
